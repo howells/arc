@@ -38,7 +38,18 @@ CROSS-CUTTING
 ## Installation
 
 ```bash
-claude plugins add github:howells/arc
+# Add the marketplace
+/plugin marketplace add howells/arc
+
+# Install the plugin
+/plugin install arc@howells-arc
+```
+
+Or via CLI:
+
+```bash
+claude plugin marketplace add howells/arc
+claude plugin install arc@howells-arc
 ```
 
 ## Getting Started
