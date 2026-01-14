@@ -1,3 +1,18 @@
+---
+name: duplicate-detector
+description: |
+  Use this agent to detect semantic code duplication - functions that do the same thing but have different names or implementations. Especially useful for codebases where new functions are often created rather than reusing existing ones.
+
+  <example>
+  Context: Before a major refactoring effort.
+  user: "Find duplicate utility functions in the codebase"
+  assistant: "I'll use the duplicate-detector agent to find semantic duplicates"
+  <commentary>
+  This agent detects functions that do the same thing but have different names, helping consolidate before refactoring.
+  </commentary>
+  </example>
+---
+
 # Duplicate Function Detector
 
 Detect semantic code duplication - functions that do the same thing but have different names or implementations. Especially useful for codebases where new functions are often created rather than reusing existing ones.
