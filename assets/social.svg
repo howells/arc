@@ -1,0 +1,42 @@
+<svg width="1280" height="640" viewBox="0 0 1280 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="arc" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="50%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#db2777"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1280" height="640" fill="#fafafa"/>
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.04">
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#000" stroke-width="1"/>
+    </pattern>
+    <rect width="1280" height="640" fill="url(#grid)"/>
+  </g>
+
+  <!-- The Arc - main visual element -->
+  <path d="M 240 420 Q 640 80 1040 420" stroke="url(#arc)" stroke-width="4" fill="none" stroke-linecap="round"/>
+
+  <!-- Start point -->
+  <circle cx="240" cy="420" r="8" fill="#2563eb"/>
+  <text x="240" y="460" fill="#888" font-family="system-ui, -apple-system, sans-serif" font-size="16" text-anchor="middle">idea</text>
+
+  <!-- End point -->
+  <circle cx="1040" cy="420" r="8" fill="#db2777"/>
+  <text x="1040" y="460" fill="#888" font-family="system-ui, -apple-system, sans-serif" font-size="16" text-anchor="middle">shipped</text>
+
+  <!-- Midpoint markers along the arc -->
+  <circle cx="440" cy="246" r="4" fill="#4f46e5" opacity="0.5"/>
+  <circle cx="640" cy="170" r="4" fill="#7c3aed" opacity="0.5"/>
+  <circle cx="840" cy="246" r="4" fill="#9333ea" opacity="0.5"/>
+
+  <!-- Title -->
+  <text x="640" y="540" fill="#111" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="600" text-anchor="middle">Arc</text>
+
+  <!-- Subtitle -->
+  <text x="640" y="585" fill="#666" font-family="system-ui, -apple-system, sans-serif" font-size="20" text-anchor="middle">Claude Code plugin — From idea to working implementation</text>
+</svg>
