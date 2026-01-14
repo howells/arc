@@ -215,6 +215,22 @@ Task general-purpose model: haiku: "Run test suite and report results"
 
 Wait for all agents to complete. If issues found, fix before proceeding.
 
+## Phase 5b: E2E Tests (If Created)
+
+If e2e tests were created as part of this implementation:
+
+**Spawn dedicated agent to run and fix e2e tests:**
+```
+Task e2e-test-runner model: sonnet: "Run e2e tests for the feature we just implemented. Fix any failures and iterate until all pass."
+```
+
+**Why a separate agent?**
+- E2E tests produce verbose output (traces, screenshots, DOM snapshots)
+- Fixing may require multiple iterations
+- Keeps main conversation context clean
+
+Wait for agent to complete. Review its summary of fixes applied.
+
 ## Phase 6: Expert Review (Optional)
 
 For significant features, offer parallel review:

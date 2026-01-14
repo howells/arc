@@ -83,6 +83,16 @@ Follow `disciplines/verification-before-completion.md`:
 
 Only then claim completion.
 
+### Step 5b: E2E Tests (If Any)
+
+If e2e tests exist for the changed code:
+
+```
+Task e2e-test-runner model: sonnet: "Run e2e tests and fix any failures"
+```
+
+Spawning a separate agent keeps verbose e2e output from filling context.
+
 ### Step 6: Offer Next Steps
 
 "Build complete. Would you like to:"
