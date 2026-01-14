@@ -5,6 +5,7 @@
 
 PLUGIN_JSON=".claude-plugin/plugin.json"
 MARKETPLACE_JSON=".claude-plugin/marketplace.json"
+PACKAGE_JSON="package.json"
 
 # Get current version from plugin.json
 current_version=$(grep -o '"version": "[^"]*"' "$PLUGIN_JSON" | head -1 | cut -d'"' -f4)
@@ -20,7 +21,10 @@ sed -i '' "s/\"version\": \"$current_version\"/\"version\": \"$new_version\"/" "
 # Update marketplace.json (has two version fields)
 sed -i '' "s/\"version\": \"$current_version\"/\"version\": \"$new_version\"/g" "$MARKETPLACE_JSON"
 
+# Update package.json
+sed -i '' "s/\"version\": \"$current_version\"/\"version\": \"$new_version\"/" "$PACKAGE_JSON"
+
 # Stage the updated files
-git add "$PLUGIN_JSON" "$MARKETPLACE_JSON"
+git add "$PLUGIN_JSON" "$MARKETPLACE_JSON" "$PACKAGE_JSON"
 
 echo "📦 Auto-bumped version: $current_version → $new_version"
