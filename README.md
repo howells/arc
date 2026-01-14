@@ -38,7 +38,8 @@ CROSS-CUTTING
 ## Installation
 
 ```
-/plugin install arc@howells/arc
+/plugin marketplace add howells/arc
+/plugin install arc@howells-arc
 ```
 
 ## Getting Started
