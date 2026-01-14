@@ -1,0 +1,55 @@
+<svg width="1200" height="320" viewBox="0 0 1200 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Arc</title>
+  <desc id="desc">The full arc from idea to shipped code.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="320" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0B1020" />
+      <stop offset="1" stop-color="#05070F" />
+    </linearGradient>
+    <radialGradient id="spot" cx="78%" cy="28%" r="70%">
+      <stop offset="0" stop-color="#60A5FA" stop-opacity="0.22" />
+      <stop offset="0.55" stop-color="#A78BFA" stop-opacity="0.10" />
+      <stop offset="1" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="arcGrad" x1="700" y1="250" x2="1120" y2="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#A78BFA" />
+      <stop offset="0.25" stop-color="#22D3EE" />
+      <stop offset="0.5" stop-color="#60A5FA" />
+      <stop offset="0.75" stop-color="#34D399" />
+      <stop offset="1" stop-color="#FBBF24" />
+    </linearGradient>
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="10" />
+    </filter>
+  </defs>
+
+  <rect width="1200" height="320" rx="24" fill="url(#bg)" />
+  <rect width="1200" height="320" rx="24" fill="url(#spot)" />
+  <rect x="0.5" y="0.5" width="1199" height="319" rx="23.5" stroke="#FFFFFF" stroke-opacity="0.08" />
+
+  <g font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;">
+    <text x="80" y="160" font-size="92" font-weight="750" letter-spacing="-1.2" fill="#FFFFFF">Arc</text>
+    <text x="80" y="212" font-size="22" fill="#CBD5E1">The full arc from idea to shipped code.</text>
+    <text x="80" y="245" font-size="16" fill="#94A3B8">A Claude Code plugin.</text>
+  </g>
+
+  <g>
+    <path d="M 700 250 C 780 80 1040 80 1120 250" fill="none" stroke="url(#arcGrad)" stroke-width="22" stroke-linecap="round" opacity="0.22" filter="url(#blur)" />
+    <path d="M 700 250 C 780 80 1040 80 1120 250" fill="none" stroke="url(#arcGrad)" stroke-width="10" stroke-linecap="round" />
+
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, &quot;Liberation Mono&quot;, &quot;Courier New&quot;, monospace" font-size="14" font-weight="650" text-anchor="middle">
+      <text x="700" y="232" fill="#A78BFA">/vision</text>
+      <text x="788.1" y="136" fill="#22D3EE">/ideate</text>
+      <text x="910" y="104" fill="#60A5FA">/detail</text>
+      <text x="1031.9" y="136" fill="#34D399">/implement</text>
+      <text x="1120" y="232" fill="#FBBF24">/letsgo</text>
+    </g>
+
+    <circle cx="700" cy="250" r="7.5" fill="#05070F" stroke="#A78BFA" stroke-width="3" />
+    <circle cx="788.1" cy="154.4" r="7.5" fill="#05070F" stroke="#22D3EE" stroke-width="3" />
+    <circle cx="910" cy="122.5" r="7.5" fill="#05070F" stroke="#60A5FA" stroke-width="3" />
+    <circle cx="1031.9" cy="154.4" r="7.5" fill="#05070F" stroke="#34D399" stroke-width="3" />
+    <circle cx="1120" cy="250" r="8.5" fill="#FBBF24" />
+    <path d="M 1115.5 250.5 L 1119.2 254.2 L 1126.3 243.6" fill="none" stroke="#05070F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>
