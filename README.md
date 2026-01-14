@@ -1,11 +1,11 @@
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/spline.svg">
-    <img alt="Arc" src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/spline.svg" width="64" height="64">
-  </picture>
+  <img alt="Arc" src="./assets/logo-light.svg#gh-light-mode-only" width="48" height="48">
+  <img alt="Arc" src="./assets/logo-dark.svg#gh-dark-mode-only" width="48" height="48">
 </p>
 
 <h1 align="center">Arc</h1>
+
+<br>
 
 The full arc from idea to shipped code. A [Claude Code](https://docs.anthropic.com/en/docs/claude-code) plugin.
 
