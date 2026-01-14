@@ -3,4 +3,4 @@ description: Create distinctive, production-grade frontend interfaces. Use when 
 argument-hint: "[component or page to build]"
 ---
 
-Invoke the frontend-design skill for: $ARGUMENTS
+Invoke the design skill for: $ARGUMENTS

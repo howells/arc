@@ -89,7 +89,7 @@ All domain knowledge in `references/`:
 - [design-phases.md](references/design-phases.md) - Understanding → exploration → design → review → finalize
 - [review-patterns.md](references/review-patterns.md) - Socratic review, collaborative simplification
 - [ascii-ui-patterns.md](references/ascii-ui-patterns.md) - UI wireframe patterns and examples
-- [frontend-design skill](../../frontend-design/SKILL.md) - Aesthetic direction, typography, anti-generic-AI principles
+- [design skill](../../design/SKILL.md) - Aesthetic direction, typography, anti-generic-AI principles
 
 **Implementation:**
 - [testing-patterns.md](references/testing-patterns.md) - Vitest, Playwright, TDD cycle
