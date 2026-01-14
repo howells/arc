@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Validate plugin structure first
+.husky/validate-plugin.sh || exit 1
+
 # Auto-bump plugin version on every commit
 # This ensures Claude Code re-indexes commands after plugin updates
 

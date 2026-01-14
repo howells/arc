@@ -38,7 +38,7 @@ Ask: "Want to proceed anyway, adjust the approach, or dive into full design mode
 
 - Proceed anyway → Done, user continues
 - Adjust → Discuss adjustments, then done
-- Full design mode → Route to `workflows/full-design.md`
+- Full design mode → Route to `workflows/ideate.md`
 </process>
 
 <success_criteria>
