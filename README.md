@@ -32,7 +32,7 @@ CROSS-CUTTING
         /document   - Feature documentation
         /suggest    - Opinionated next-step recommendations
 
-TOOLS   /c          - Smart commit + push with auto-splitting
+TOOLS   /commit     - Smart commit + push with auto-splitting
 ```
 
 ## Key Principles
@@ -159,7 +159,7 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/tasklist` | Manage backlog | `docs/tasklist.md` |
 | `/document` | Document features | `docs/features/<feature>.md` |
 | `/suggest` | What to work on next | Recommendations |
-| `/c` | Commit and push changes | Git commits |
+| `/commit` | Commit and push changes | Git commits |
 
 ## Agents
 
