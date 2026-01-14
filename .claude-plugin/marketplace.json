@@ -1,0 +1,24 @@
+{
+  "name": "howells-arc",
+  "owner": {
+    "name": "Daniel Howells"
+  },
+  "metadata": {
+    "description": "The full arc from idea to shipped code",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "arc",
+      "source": ".",
+      "description": "Complete development lifecycle from vision to shipped code",
+      "version": "1.0.0",
+      "author": {
+        "name": "Daniel Howells"
+      },
+      "repository": "https://github.com/howells/arc",
+      "license": "MIT",
+      "keywords": ["design", "planning", "tdd", "implementation", "review", "workflow"]
+    }
+  ]
+}
