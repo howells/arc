@@ -5,9 +5,9 @@ description: Turn ideas into validated designs through collaborative dialogue wi
 
 <required_reading>
 **Read these reference files NOW:**
-1. references/design-phases.md
-2. references/review-patterns.md
-3. references/frontend-design.md (if UI work involved)
+1. ${CLAUDE_PLUGIN_ROOT}/references/design-phases.md
+2. ${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md
+3. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
 </required_reading>
 
 <process>
@@ -139,7 +139,7 @@ Present micro-review findings immediately. Incorporate feedback before next sect
 <ui_wireframes>
 **For any UI work, establish aesthetic direction BEFORE wireframes.**
 
-See `references/frontend-design.md` for full principles.
+See `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` for full principles.
 
 <aesthetic_direction>
 **Ask the user (one at a time):**
@@ -166,7 +166,7 @@ See `references/frontend-design.md` for full principles.
 
 **Then create ASCII wireframes:**
 
-See `references/ascii-ui-patterns.md` for patterns.
+See `${CLAUDE_PLUGIN_ROOT}/references/ascii-ui-patterns.md` for patterns.
 
 **Why ASCII:**
 - Forces thinking about layout and flow
@@ -216,7 +216,7 @@ Subagent: [appropriate agent from reviewer_selection]
 
 **Transform findings into collaborative questions:**
 
-See `references/review-patterns.md` for the Socratic approach.
+See `${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md` for the Socratic approach.
 
 Instead of presenting reviewer critiques:
 - Turn findings into exploratory questions
@@ -283,19 +283,19 @@ git commit -m "docs: add <topic> design plan"
 
 **Implementation handoff:**
 
-Before implementation, set up an isolated workspace. Follow `disciplines/using-git-worktrees.md`:
+Before implementation, set up an isolated workspace. Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`:
 
 ```
 "Design ready! I recommend creating a feature branch and worktree to keep main clean and allow easy rollback."
 ```
 
 Options:
-1. **Set up worktree and continue** (Recommended) → Follow `disciplines/using-git-worktrees.md`, then route to `/arc:detail`
+1. **Set up worktree and continue** (Recommended) → Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`, then route to `/arc:detail`
 2. **Skip worktree, just plan** → Route to `/arc:detail` directly
 3. **Done for now** → Just the design
 
 **If setting up worktree:**
-1. Follow the directory selection process in `disciplines/using-git-worktrees.md`
+1. Follow the directory selection process in `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`
 2. Create branch: `feature/<topic-slug>`
 3. Run project setup (auto-detect from package.json, Cargo.toml, etc.)
 4. Verify clean baseline (tests pass)

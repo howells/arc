@@ -5,8 +5,8 @@ description: Execute an implementation plan task-by-task with TDD. Reads plan fr
 
 <required_reading>
 **Read these reference files NOW:**
-1. references/testing-patterns.md
-2. references/frontend-design.md (if UI work involved)
+1. ${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md
+2. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
 </required_reading>
 
 <process>
@@ -259,7 +259,7 @@ If yes, spawn in parallel (all use sonnet for balanced cost/quality):
 - architecture-strategist or domain-specific reviewer (model: sonnet)
 - security-sentinel if auth/data involved (model: sonnet)
 
-Present findings as Socratic questions (see `references/review-patterns.md`).
+Present findings as Socratic questions (see `${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md`).
 
 ## Phase 7: Ship
 

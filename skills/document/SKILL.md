@@ -5,8 +5,8 @@ description: Capture solved problems as searchable documentation. Builds institu
 
 <required_reading>
 **Read these reference files NOW:**
-- references/solution-schema.md
-- templates/solution-template.md
+- ${CLAUDE_PLUGIN_ROOT}/references/solution-schema.md
+- ${CLAUDE_PLUGIN_ROOT}/templates/solution-template.md
 </required_reading>
 
 <objective>
@@ -82,7 +82,7 @@ Examples:
 mkdir -p docs/solutions/[category]
 ```
 
-Use `templates/solution-template.md` structure:
+Use `${CLAUDE_PLUGIN_ROOT}/templates/solution-template.md` structure:
 
 ```markdown
 ---

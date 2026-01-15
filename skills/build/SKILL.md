@@ -40,7 +40,7 @@ git branch --show-current
 ```
 
 Options:
-1. **Yes, set up worktree** (Recommended for multi-file changes) → Follow `disciplines/using-git-worktrees.md`
+1. **Yes, set up worktree** (Recommended for multi-file changes) → Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`
 2. **No, work on main** → Proceed (fine for trivial single-file fixes)
 
 ### Step 2: Quick Mental Model
@@ -54,7 +54,7 @@ Share with user: "Here's my approach: [2-3 bullets]. Sound right?"
 
 ### Step 3: Build with TDD
 
-Follow `disciplines/test-driven-development.md`:
+Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/test-driven-development.md`:
 
 For each piece:
 1. Write failing test
@@ -75,7 +75,7 @@ Fix issues immediately.
 
 ### Step 5: Verify Before Done
 
-Follow `disciplines/verification-before-completion.md`:
+Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/verification-before-completion.md`:
 - Run full test suite
 - Check all tests pass
 - Confirm no TypeScript errors

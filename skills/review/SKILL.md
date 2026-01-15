@@ -5,7 +5,7 @@ description: Run expert review on a plan. Spawns parallel reviewer agents and pr
 
 <required_reading>
 **Read these reference files NOW:**
-1. references/review-patterns.md
+1. ${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md
 </required_reading>
 
 <process>
@@ -64,28 +64,28 @@ ls .ruler/ 2>/dev/null || grep -l "@materia/" src/**/*.ts 2>/dev/null && echo "d
 **Select reviewers based on project type:**
 
 **Daniel's projects:**
-- agents/review/daniel-reviewer.md
-- agents/review/code-simplicity-reviewer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/daniel-reviewer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/code-simplicity-reviewer.md
 
 **TypeScript/React:**
-- agents/review/daniel-reviewer.md
-- agents/review/senior-reviewer.md
-- agents/review/architecture-strategist.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/daniel-reviewer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/senior-reviewer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/architecture-strategist.md
 
 **Next.js:**
-- agents/review/lee-nextjs-reviewer.md
-- agents/review/daniel-reviewer.md
-- agents/review/senior-reviewer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/lee-nextjs-reviewer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/daniel-reviewer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/senior-reviewer.md
 
 **Python:**
-- agents/review/senior-reviewer.md
-- agents/review/performance-oracle.md
-- agents/review/architecture-strategist.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/senior-reviewer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/performance-oracle.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/architecture-strategist.md
 
 **General/Unknown:**
-- agents/review/senior-reviewer.md
-- agents/review/architecture-strategist.md
-- agents/review/code-simplicity-reviewer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/senior-reviewer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/architecture-strategist.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/code-simplicity-reviewer.md
 
 ## Phase 3: Run Parallel Expert Review
 
@@ -107,7 +107,7 @@ Task [reviewer-3] model: sonnet: "Review this plan for [specialty concerns]..."
 
 **Transform findings into Socratic questions:**
 
-See `references/review-patterns.md` for approach.
+See `${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md` for approach.
 
 Instead of presenting critiques:
 - Turn findings into exploratory questions

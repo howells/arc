@@ -5,9 +5,9 @@ description: Create a detailed implementation plan with exact file paths, test c
 
 <required_reading>
 **Read these reference files NOW:**
-1. references/testing-patterns.md
-2. references/task-granularity.md
-3. references/frontend-design.md (if UI work involved)
+1. ${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md
+2. ${CLAUDE_PLUGIN_ROOT}/references/task-granularity.md
+3. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
 </required_reading>
 
 <process>
@@ -244,7 +244,7 @@ git branch --show-current
 ```
 
 Options:
-1. **Set up worktree and execute** (Recommended) → Follow `disciplines/using-git-worktrees.md`, then route to `/arc:implement`
+1. **Set up worktree and execute** (Recommended) → Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`, then route to `/arc:implement`
 2. **Execute on current branch** → Route to `/arc:implement` directly
 3. **Review plan first** → Open for user review, then decide
 4. **Done for now** → End session

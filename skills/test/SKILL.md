@@ -115,7 +115,7 @@ Report results. If failures, offer to debug.
 
 ### For "Fix Failing Tests"
 
-Follow `disciplines/systematic-debugging.md`:
+Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/systematic-debugging.md`:
 1. Read error message carefully
 2. Understand what test expects
 3. Determine if test or code is wrong
@@ -123,7 +123,7 @@ Follow `disciplines/systematic-debugging.md`:
 
 ## Test Patterns
 
-From `references/testing-patterns.md`:
+From `${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md`:
 
 **Good tests:**
 - Test behavior, not implementation

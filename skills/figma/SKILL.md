@@ -9,7 +9,7 @@ Implement UI components directly from Figma designs using the Figma MCP.
 
 ## Process
 
-Follow the instructions in `agents/design/figma-implement.md`:
+Follow the instructions in `${CLAUDE_PLUGIN_ROOT}/agents/design/figma-implement.md`:
 
 1. **Extract Design Intent** — Use Figma MCP to get specs (colors, typography, spacing, shadows, component hierarchy)
 

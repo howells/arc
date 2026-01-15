@@ -44,7 +44,7 @@ Ask one at a time:
 
 ### Step 4: ASCII Wireframe First
 
-Before any code, create ASCII wireframe. See `references/ascii-ui-patterns.md`.
+Before any code, create ASCII wireframe. See `${CLAUDE_PLUGIN_ROOT}/references/ascii-ui-patterns.md`.
 
 ```
 ┌─────────────────────────────────┐
@@ -67,7 +67,7 @@ Options:
 
 ### Anti-Patterns to Avoid
 
-From `references/frontend-design.md`:
+From `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md`:
 - Inter, Roboto, Arial, system-ui defaults
 - Purple-to-blue gradients on white
 - White backgrounds with gray cards
