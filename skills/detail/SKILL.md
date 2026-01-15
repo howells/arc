@@ -7,7 +7,8 @@ description: Create a detailed implementation plan with exact file paths, test c
 **Read these reference files NOW:**
 1. ${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md
 2. ${CLAUDE_PLUGIN_ROOT}/references/task-granularity.md
-3. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
+3. ${CLAUDE_PLUGIN_ROOT}/references/model-strategy.md
+4. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
 </required_reading>
 
 <process>
@@ -55,7 +56,7 @@ Extract:
 **Spawn agents to find existing code to leverage:**
 
 ```
-Task Explore: "Find existing patterns in this codebase that we can
+Task Explore model: haiku: "Find existing patterns in this codebase that we can
 reuse for: [list components/features from design].
 Look for: similar components, utility functions, hooks, types, test patterns.
 
@@ -71,13 +72,13 @@ List 5-10 files most critical to understand before implementing:
 - `file.ts` — why it matters
 "
 
-Task Explore: "Analyze coding conventions in this project. What naming patterns,
+Task Explore model: haiku: "Analyze coding conventions in this project. What naming patterns,
 file organization, and architectural patterns should new code follow?"
 ```
 
 **If using unfamiliar libraries/APIs:**
 ```
-Task general-purpose: "Gather documentation and best practices for
+Task general-purpose model: haiku: "Gather documentation and best practices for
 [library name] focusing on [specific feature needed]."
 ```
 

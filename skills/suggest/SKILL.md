@@ -28,7 +28,7 @@ If tasklist has items in "Up Next":
 
 Spawn exploration agent:
 ```
-Task Explore: "Analyze this codebase for:
+Task Explore model: haiku: "Analyze this codebase for:
 - Incomplete features (TODOs, FIXMEs)
 - Technical debt (outdated patterns, missing tests)
 - Quality issues (type escapes, inconsistencies)

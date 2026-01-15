@@ -1,6 +1,21 @@
 # Model Strategy for Agents
 
-This skill uses different models for different agent tasks to optimize cost vs quality.
+**Always specify a model when spawning agents.** This optimizes cost and speed without sacrificing quality where it matters.
+
+## Quick Reference
+
+| Task Type | Model | Why |
+|-----------|-------|-----|
+| Explore codebase | haiku | Pattern matching, file finding |
+| Search memory | haiku | Simple retrieval |
+| Git history analysis | haiku | Mechanical parsing |
+| Gather docs | haiku | Fetch and summarize |
+| Run TS/lint checks | haiku | Mechanical error fixing |
+| Code review | sonnet | Needs judgment |
+| Debug failing tests | sonnet | Requires reasoning |
+| Security analysis | sonnet | Pattern recognition + context |
+| UI/design review | opus | Aesthetic judgment |
+| Architecture decisions | opus | Complex trade-offs |
 
 ## Model Tiers
 

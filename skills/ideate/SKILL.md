@@ -7,7 +7,8 @@ description: Turn ideas into validated designs through collaborative dialogue wi
 **Read these reference files NOW:**
 1. ${CLAUDE_PLUGIN_ROOT}/references/design-phases.md
 2. ${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md
-3. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
+3. ${CLAUDE_PLUGIN_ROOT}/references/model-strategy.md
+4. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
 </required_reading>
 
 <process>
@@ -15,14 +16,14 @@ description: Turn ideas into validated designs through collaborative dialogue wi
 
 **Search episodic memory for past decisions:**
 ```
-Task episodic-memory:search-conversations: "Search for past conversations
+Task episodic-memory:search-conversations model: haiku: "Search for past conversations
 about [topic/feature]. Look for: previous design decisions, rejected
 approaches, lessons learned, related features."
 ```
 
 **Spawn Explore agent for codebase understanding (in parallel):**
 ```
-Task Explore: "Analyze codebase structure, key patterns, and conventions.
+Task Explore model: haiku: "Analyze codebase structure, key patterns, and conventions.
 Focus on: architecture patterns, component organization, state management,
 testing approach, and any similar features that already exist.
 
@@ -41,7 +42,7 @@ List 5-10 files most critical to understand before implementing:
 
 **If extending existing feature, also spawn:**
 ```
-Task git-history-analyzer: "Analyze git history for [related files/feature].
+Task git-history-analyzer model: haiku: "Analyze git history for [related files/feature].
 Look for: why patterns exist, key contributors, evolution of approach,
 any gotchas or issues that were fixed."
 ```
