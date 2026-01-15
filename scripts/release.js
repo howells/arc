@@ -95,15 +95,21 @@ function detectBumpType(commits) {
 }
 
 function categorizeCommit(message) {
+  // Breaking changes always shown
+  if (/BREAKING CHANGE/.test(message) || /^[a-z]+!:/.test(message)) return 'Breaking';
+  // User-facing changes
   if (/^feat(\(.+\))?:/.test(message)) return 'Added';
   if (/^fix(\(.+\))?:/.test(message)) return 'Fixed';
-  if (/^docs(\(.+\))?:/.test(message)) return 'Documentation';
   if (/^refactor(\(.+\))?:/.test(message)) return 'Changed';
   if (/^perf(\(.+\))?:/.test(message)) return 'Performance';
-  if (/^test(\(.+\))?:/.test(message)) return 'Testing';
-  if (/^chore(\(.+\))?:/.test(message)) return 'Maintenance';
-  if (/BREAKING CHANGE/.test(message) || /^[a-z]+!:/.test(message)) return 'Breaking';
-  return 'Other';
+  // Internal changes - skip from changelog
+  if (/^docs(\(.+\))?:/.test(message)) return null;
+  if (/^test(\(.+\))?:/.test(message)) return null;
+  if (/^chore(\(.+\))?:/.test(message)) return null;
+  if (/^ci(\(.+\))?:/.test(message)) return null;
+  if (/^build(\(.+\))?:/.test(message)) return null;
+  if (/^style(\(.+\))?:/.test(message)) return null;
+  return null; // Skip uncategorized commits
 }
 
 function formatCommit(message) {
@@ -118,13 +124,20 @@ function generateChangelog(newVersion, commits) {
   const grouped = {};
   for (const commit of commits) {
     const category = categorizeCommit(commit);
+    if (!category) continue; // Skip internal/non-user-facing commits
     if (!grouped[category]) grouped[category] = [];
     grouped[category].push(formatCommit(commit));
   }
 
+  // If no user-facing changes, skip changelog entry
+  if (Object.keys(grouped).length === 0) {
+    console.log('ℹ️  No user-facing changes to document');
+    return;
+  }
+
   let entry = `## [${newVersion}] - ${date}\n\n`;
 
-  const order = ['Breaking', 'Added', 'Changed', 'Fixed', 'Performance', 'Documentation', 'Testing', 'Maintenance', 'Other'];
+  const order = ['Breaking', 'Added', 'Changed', 'Fixed', 'Performance'];
 
   for (const category of order) {
     if (grouped[category]?.length) {
@@ -213,3 +226,4 @@ console.log(`✓ Created tag v${newVersion}`);
 console.log(`\n✨ Release v${newVersion} ready!`);
 console.log('\nNext steps:');
 console.log(`   git push origin main --tags`);
+console.log('\n   GitHub Action will create the release automatically.');
