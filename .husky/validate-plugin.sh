@@ -144,11 +144,14 @@ ok "Naming conventions checked"
 echo "Checking internal references..."
 while IFS= read -r -d '' f; do
   # Extract references like agents/review/foo.md or disciplines/bar.md
-  refs=$(grep -oE "(agents|disciplines|workflows|references)/[a-z0-9/_-]+\.md" "$f" 2>/dev/null || true)
+  # Handles both plain paths and ${CLAUDE_PLUGIN_ROOT}/ prefixed paths
+  refs=$(grep -oE "(\\\$\{CLAUDE_PLUGIN_ROOT\}/)?(agents|disciplines|workflows|references|templates)/[a-z0-9/_-]+\.md" "$f" 2>/dev/null || true)
   for ref in $refs; do
-    # Check relative to skills/arc/
-    if [ ! -f "skills/arc/$ref" ]; then
-      warn "$f references '$ref' which doesn't exist"
+    # Strip ${CLAUDE_PLUGIN_ROOT}/ prefix if present
+    clean_ref=$(echo "$ref" | sed 's/\${CLAUDE_PLUGIN_ROOT}\///')
+    # Check at plugin root level
+    if [ ! -f "$clean_ref" ]; then
+      warn "$f references '$clean_ref' which doesn't exist"
     fi
   done
 done < <(find skills -name "*.md" -print0 2>/dev/null)
