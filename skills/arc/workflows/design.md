@@ -61,7 +61,7 @@ Ask: "Does this layout feel right?"
 ### Step 5: Build or Hand Off
 
 Options:
-1. **Build now** → Use /build or /implement
+1. **Build now** → Use /arc:build or /implement
 2. **Create plan** → Invoke detail workflow
 3. **Just the design** → Save to docs/plans/ and stop
 

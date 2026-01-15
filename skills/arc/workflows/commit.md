@@ -3,7 +3,7 @@
 Commit and push changes, intelligently splitting into separate commits when changes span multiple domains.
 
 Usage:
-- `/commit` - Auto-analyze and commit (may create multiple commits)
+- `/arc:commit` - Auto-analyze and commit (may create multiple commits)
 - `/commit [message]` - Single commit with provided message
 
 $ARGUMENTS will contain the optional commit message.

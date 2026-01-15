@@ -57,7 +57,7 @@ Present top 3-5 suggestions:
 
 ### 1. [Top recommendation]
 **Why:** [Brief rationale]
-**Command:** /ideate [topic] or /build [thing]
+**Command:** /arc:ideate [topic] or /arc:build [thing]
 
 ### 2. [Second recommendation]
 **Why:** [Brief rationale]
@@ -90,8 +90,8 @@ If user picks one, invoke the relevant command.
 
 ## What Suggest is NOT
 
-- Not a code review (use /deslop or expert-review)
-- Not a test runner (use /test)
-- Not a planner (use /ideate)
+- Not a code review (use /arc:deslop or expert-review)
+- Not a test runner (use /arc:test)
+- Not a planner (use /arc:ideate)
 
 It's a compass, not a map.

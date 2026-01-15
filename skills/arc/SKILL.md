@@ -10,58 +10,58 @@ The full arc from idea to shipped code.
 ## Command Hierarchy
 
 ```
-WHY     /vision     - High-level goals (500-700 words)
+WHY     /arc:vision     - High-level goals (500-700 words)
           ↓
-WHAT    /ideate     - From idea to working implementation
+WHAT    /arc:ideate     - From idea to working implementation
           ↓
-HOW     /detail     - Detailed implementation plan
+HOW     /arc:detail     - Detailed implementation plan
           ↓
-DO      /implement  - Execute the plan with TDD
-        /design     - UI/UX design with wireframes
-        /build      - Quick build (no formal plan)
-        /test       - Test strategy and execution
-        /letsgo     - Production readiness checklist
-        /deslop     - Remove LLM artifacts
+DO      /arc:implement  - Execute the plan with TDD
+        /arc:design     - UI/UX design with wireframes
+        /arc:build      - Quick build (no formal plan)
+        /arc:test       - Test strategy and execution
+        /arc:letsgo     - Production readiness checklist
+        /arc:deslop     - Remove LLM artifacts
 
 CROSS-CUTTING
-        /review     - Review a plan for feasibility
-        /tasklist   - Persistent task backlog
-        /document   - Feature documentation
-        /suggest    - Opinionated next-step recommendations
+        /arc:review     - Review a plan for feasibility
+        /arc:tasklist   - Persistent task backlog
+        /arc:document   - Feature documentation
+        /arc:suggest    - Opinionated next-step recommendations
 
-TOOLS   /commit     - Smart commit + push with auto-splitting
+TOOLS   /arc:commit     - Smart commit + push with auto-splitting
 ```
 
 ## Primary Flow
 
-The main entry point is `/ideate`, which can flow all the way through:
+The main entry point is `/arc:ideate`, which can flow all the way through:
 
 ```
-/ideate → /detail → /implement
+/arc:ideate → /arc:detail → /arc:implement
 ```
 
 Each step asks if the user wants to continue to the next. The user can also enter at any point:
-- Have a design doc already? Start at `/detail`
-- Have an implementation plan? Start at `/implement`
+- Have a design doc already? Start at `/arc:detail`
+- Have an implementation plan? Start at `/arc:implement`
 
 ## Quick Reference
 
 | Command | When to use | Output location |
 |---------|-------------|-----------------|
-| /vision | Starting a new project | `docs/vision.md` |
-| /ideate | From idea to working implementation | `docs/plans/YYYY-MM-DD-<feature>.md` |
-| /detail | Create implementation plan | `docs/plans/YYYY-MM-DD-<feature>-impl.md` |
-| /implement | Execute a plan | Code changes |
-| /design | UI/UX work | Wireframes + code |
-| /build | Quick implementation | Code changes |
-| /test | Test strategy | Test files |
-| /letsgo | Ship to production | Deployment |
-| /deslop | Clean LLM artifacts | Code cleanup |
-| /review | Review a plan | Updated plan file |
-| /tasklist | Manage backlog | `docs/tasklist.md` |
-| /document | Document features | `docs/features/<feature>.md` |
-| /suggest | What to work on next | Recommendations |
-| /commit | Commit and push changes | Git commits |
+| /arc:vision | Starting a new project | `docs/arc:vision.md` |
+| /arc:ideate | From idea to working implementation | `docs/plans/YYYY-MM-DD-<feature>.md` |
+| /arc:detail | Create implementation plan | `docs/plans/YYYY-MM-DD-<feature>-impl.md` |
+| /arc:implement | Execute a plan | Code changes |
+| /arc:design | UI/UX work | Wireframes + code |
+| /arc:build | Quick implementation | Code changes |
+| /arc:test | Test strategy | Test files |
+| /arc:letsgo | Ship to production | Deployment |
+| /arc:deslop | Clean LLM artifacts | Code cleanup |
+| /arc:review | Review a plan | Updated plan file |
+| /arc:tasklist | Manage backlog | `docs/arc:tasklist.md` |
+| /arc:document | Document features | `docs/features/<feature>.md` |
+| /arc:suggest | What to work on next | Recommendations |
+| /arc:commit | Commit and push changes | Git commits |
 
 ## Routing
 
@@ -69,23 +69,23 @@ Commands are handled by workflows in `workflows/`:
 
 | Command | Workflow |
 |---------|----------|
-| /vision | `workflows/vision.md` |
-| /ideate | `workflows/ideate.md` |
-| /detail | `workflows/detail.md` |
-| /implement | `workflows/implement.md` |
-| /design | `workflows/design.md` |
-| /build | `workflows/build.md` |
-| /test | `workflows/test.md` |
-| /letsgo | `workflows/letsgo.md` |
-| /deslop | `workflows/deslop.md` |
-| /review | `workflows/review.md` |
-| /tasklist | `workflows/tasklist.md` |
-| /document | `workflows/document.md` |
-| /suggest | `workflows/suggest.md` |
-| /commit | `workflows/commit.md` |
+| /arc:vision | `workflows/arc:vision.md` |
+| /arc:ideate | `workflows/arc:ideate.md` |
+| /arc:detail | `workflows/arc:detail.md` |
+| /arc:implement | `workflows/arc:implement.md` |
+| /arc:design | `workflows/arc:design.md` |
+| /arc:build | `workflows/arc:build.md` |
+| /arc:test | `workflows/arc:test.md` |
+| /arc:letsgo | `workflows/arc:letsgo.md` |
+| /arc:deslop | `workflows/arc:deslop.md` |
+| /arc:review | `workflows/arc:review.md` |
+| /arc:tasklist | `workflows/arc:tasklist.md` |
+| /arc:document | `workflows/arc:document.md` |
+| /arc:suggest | `workflows/arc:suggest.md` |
+| /arc:commit | `workflows/arc:commit.md` |
 
 Supporting workflows:
-- `workflows/expert-review.md` - Parallel expert review (used by `/ideate` and `/review`)
+- `workflows/expert-review.md` - Parallel expert review (used by `/arc:ideate` and `/arc:review`)
 - `workflows/quick-validation.md` - Fast sanity check
 
 ## Essential Principles
@@ -103,44 +103,44 @@ Don't overwhelm. Prefer multiple choice when possible.
 Suggest simplifications, but don't force them.
 
 **TDD for implementation.**
-Write tests first, then make them pass. See `disciplines/test-driven-development.md`.
+Write tests first, then make them pass. See `disciplines/arc:test-driven-development.md`.
 
 ## Reviewer Selection
 
-Select reviewers based on detected project type. Use local agent definitions in `agents/review/`.
+Select reviewers based on detected project type. Use local agent definitions in `agents/arc:review/`.
 
-See `references/model-strategy.md` for which AI model to use for different tasks (haiku for mechanical, sonnet for review, opus for creative/design).
+See `references/model-strategy.md` for which AI model to use for different tasks (haiku for mechanical, sonnet for review, opus for creative/arc:design).
 
 **Daniel's projects (detected by `@materia/` imports or `.ruler/` directory):**
-- `agents/review/daniel-reviewer.md`
-- `agents/review/code-simplicity-reviewer.md`
+- `agents/arc:review/daniel-reviewer.md`
+- `agents/arc:review/code-simplicity-reviewer.md`
 
 **TypeScript/React projects:**
-- `agents/review/daniel-reviewer.md`
-- `agents/review/senior-reviewer.md`
-- `agents/review/architecture-strategist.md`
+- `agents/arc:review/daniel-reviewer.md`
+- `agents/arc:review/senior-reviewer.md`
+- `agents/arc:review/architecture-strategist.md`
 
 **Next.js projects:**
-- `agents/review/lee-nextjs-reviewer.md`
-- `agents/review/daniel-reviewer.md`
-- `agents/review/senior-reviewer.md`
+- `agents/arc:review/lee-nextjs-reviewer.md`
+- `agents/arc:review/daniel-reviewer.md`
+- `agents/arc:review/senior-reviewer.md`
 
 **Python projects:**
-- `agents/review/senior-reviewer.md`
-- `agents/review/performance-oracle.md`
-- `agents/review/architecture-strategist.md`
+- `agents/arc:review/senior-reviewer.md`
+- `agents/arc:review/performance-oracle.md`
+- `agents/arc:review/architecture-strategist.md`
 
 **General/Unknown:**
-- `agents/review/senior-reviewer.md`
-- `agents/review/architecture-strategist.md`
-- `agents/review/code-simplicity-reviewer.md`
+- `agents/arc:review/senior-reviewer.md`
+- `agents/arc:review/architecture-strategist.md`
+- `agents/arc:review/code-simplicity-reviewer.md`
 
 **Specialized agents:**
-- `agents/review/security-sentinel.md` — Security audits
-- `agents/review/data-integrity-guardian.md` — Database/migration reviews
+- `agents/arc:review/security-sentinel.md` — Security audits
+- `agents/arc:review/data-integrity-guardian.md` — Database/migration reviews
 - `agents/research/git-history-analyzer.md` — Git archaeology
 - `agents/research/duplicate-detector.md` — Find semantic code duplication
-- `agents/design/figma-implement.md` — Implement UI from Figma designs
+- `agents/arc:design/figma-implement.md` — Implement UI from Figma designs
 - `agents/workflow/spec-flow-analyzer.md` — Spec analysis
 
 ## Directory Structure
@@ -187,13 +187,13 @@ skills/arc/
 
 Commands work together:
 
-- `/suggest` reads `/tasklist`, codebase, and `/vision` (priority cascade)
-- `/ideate` can flow to `/detail` → `/implement`
-- `/review` uses `workflows/expert-review.md` to review Claude Code plans or plans from `docs/plans/`
-- `/build` suggests `/ideate` if scope is too large
-- `/letsgo` runs `/test` and `/deslop` as part of quality checks
-- `/implement` follows `disciplines/test-driven-development.md`
-- Any command can add to `/tasklist`
+- `/arc:suggest` reads `/arc:tasklist`, codebase, and `/arc:vision` (priority cascade)
+- `/arc:ideate` can flow to `/arc:detail` → `/arc:implement`
+- `/arc:review` uses `workflows/expert-review.md` to review Claude Code plans or plans from `docs/plans/`
+- `/arc:build` suggests `/arc:ideate` if scope is too large
+- `/arc:letsgo` runs `/arc:test` and `/arc:deslop` as part of quality checks
+- `/arc:implement` follows `disciplines/arc:test-driven-development.md`
+- Any command can add to `/arc:tasklist`
 
 ## Knowledge Loop
 
@@ -204,4 +204,4 @@ vision → ideate → detail → implement → encounter problem → solve → d
                     informs future design sessions
 ```
 
-When starting `/ideate`, episodic-memory searches `docs/` to surface past learnings.
+When starting `/arc:ideate`, episodic-memory searches `docs/` to surface past learnings.

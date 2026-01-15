@@ -50,7 +50,7 @@ Go through each category. Check status, note gaps.
 - [ ] All tests passing
 - [ ] No TypeScript errors
 - [ ] No lint errors
-- [ ] /deslop run (no LLM artifacts)
+- [ ] /arc:deslop run (no LLM artifacts)
 
 ### Legal & Compliance
 - [ ] Privacy policy (if collecting data)

@@ -1,15 +1,15 @@
 # Arc Plugin
 
-The full arc from idea to shipped code. This plugin provides 13 commands for the complete development lifecycle.
+The full arc from idea to shipped code. This plugin provides 15 commands for the complete development lifecycle.
 
 ## Structure
 
 ```
 arc/
 ├── .claude-plugin/
-│   └── manifest.json      # Plugin metadata
+│   └── plugin.json        # Plugin metadata
 ├── skills/
-│   └── arc/               # Main skill
+│   └── arc/               # Main skill (commands auto-registered as /arc:*)
 │       ├── SKILL.md       # Router and principles
 │       ├── workflows/     # Command implementations
 │       │   ├── vision.md
@@ -25,7 +25,8 @@ arc/
 │       │   ├── review.md
 │       │   ├── tasklist.md
 │       │   ├── document.md
-│       │   └── suggest.md
+│       │   ├── suggest.md
+│       │   └── commit.md
 │       ├── agents/        # Specialized reviewers
 │       │   ├── review/
 │       │   ├── research/
@@ -34,21 +35,6 @@ arc/
 │       ├── disciplines/   # Implementation methodologies
 │       ├── references/    # Domain knowledge
 │       └── templates/     # Output templates
-├── commands/              # Slash commands
-│   ├── vision.md
-│   ├── ideate.md
-│   ├── detail.md
-│   ├── implement.md
-│   ├── design.md
-│   ├── figma.md
-│   ├── build.md
-│   ├── test.md
-│   ├── letsgo.md
-│   ├── deslop.md
-│   ├── review.md
-│   ├── tasklist.md
-│   ├── document.md
-│   └── suggest.md
 ├── CLAUDE.md              # This file
 ├── README.md              # Documentation
 └── LICENSE                # MIT
@@ -56,19 +42,22 @@ arc/
 
 ## Command Hierarchy
 
+All commands use the `/arc:` namespace prefix:
+
 ```
-WHY     /vision     - High-level goals
-WHAT    /ideate     - From idea to working implementation
-HOW     /detail     - Detailed implementation plan
-DO      /implement, /design, /figma, /build, /test, /letsgo, /deslop
-CROSS   /review, /tasklist, /document, /suggest
+WHY     /arc:vision     - High-level goals
+WHAT    /arc:ideate     - From idea to working implementation
+HOW     /arc:detail     - Detailed implementation plan
+DO      /arc:implement, /arc:design, /arc:figma, /arc:build, /arc:test, /arc:letsgo, /arc:deslop
+CROSS   /arc:review, /arc:tasklist, /arc:document, /arc:suggest
+TOOLS   /arc:commit     - Smart commit + push
 ```
 
 ## Development
 
 To test changes locally:
 1. Edit workflows in `skills/arc/workflows/`
-2. Run the corresponding command (e.g., `/ideate`)
+2. Run the corresponding command (e.g., `/arc:ideate`)
 3. Iterate based on results
 
 ## Key Principles

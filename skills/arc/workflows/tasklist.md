@@ -93,7 +93,7 @@ git commit -m "docs: update tasklist"
 
 ## Interop
 
-- **/suggest** reads tasklist as primary source
-- **/ideate** can add follow-up tasks
-- **/implement** can add discovered tasks
+- **/arc:suggest** reads tasklist as primary source
+- **/arc:ideate** can add follow-up tasks
+- **/arc:implement** can add discovered tasks
 - Any workflow can add to tasklist

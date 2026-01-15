@@ -8,7 +8,7 @@
 
 **Plan can come from multiple sources:**
 
-1. **Passed as argument** — Plan file path or content provided by calling workflow (e.g., from `/review`)
+1. **Passed as argument** — Plan file path or content provided by calling workflow (e.g., from `/arc:review`)
    - If file path → read the file
    - If content → use directly
 

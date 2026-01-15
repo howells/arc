@@ -74,6 +74,6 @@ git commit -m "docs: add project vision"
 
 ## Interop
 
-- **/ideate** reads vision for context
-- **/suggest** references vision as lowest-priority source
-- **/letsgo** checks vision alignment
+- **/arc:ideate** reads vision for context
+- **/arc:suggest** references vision as lowest-priority source
+- **/arc:letsgo** checks vision alignment

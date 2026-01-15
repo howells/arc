@@ -20,7 +20,7 @@ Read the request. Consider:
 **If scope is large** (>5 files, multiple features, new patterns):
 ```
 "This looks substantial. It would benefit from proper design and planning.
-Want me to run /ideate instead?"
+Want me to run /arc:ideate instead?"
 ```
 Wait for response. If yes, invoke ideate workflow.
 
@@ -96,14 +96,14 @@ Spawning a separate agent keeps verbose e2e output from filling context.
 ### Step 6: Offer Next Steps
 
 "Build complete. Would you like to:"
-1. Run /test to verify coverage
-2. Run /document to capture what we built
-3. Add follow-up items to /tasklist
+1. Run /arc:test to verify coverage
+2. Run /arc:document to capture what we built
+3. Add follow-up items to /arc:tasklist
 4. Done for now
 
 ## What Build is NOT
 
-- Not for large features (use /ideate)
-- Not for exploratory work (use /ideate)
+- Not for large features (use /arc:ideate)
+- Not for exploratory work (use /arc:ideate)
 - Not for things needing design review
 - Not a shortcut to skip quality

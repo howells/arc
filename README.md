@@ -14,26 +14,26 @@ The full arc from idea to shipped code. A [Claude Code](https://docs.anthropic.c
 Arc provides 15 commands covering the complete development lifecycle:
 
 ```
-WHY     /vision     - High-level goals (500-700 words)
+WHY     /arc:vision     - High-level goals (500-700 words)
           ↓
-WHAT    /ideate     - From idea to working implementation
+WHAT    /arc:ideate     - From idea to working implementation
           ↓
-HOW     /detail     - Detailed implementation plan
+HOW     /arc:detail     - Detailed implementation plan
           ↓
-DO      /implement  - Execute the plan with TDD
-        /design     - UI/UX design with wireframes
-        /build      - Quick build (no formal plan)
-        /test       - Test strategy and execution
-        /letsgo     - Production readiness checklist
-        /deslop     - Remove LLM artifacts
+DO      /arc:implement  - Execute the plan with TDD
+        /arc:design     - UI/UX design with wireframes
+        /arc:build      - Quick build (no formal plan)
+        /arc:test       - Test strategy and execution
+        /arc:letsgo     - Production readiness checklist
+        /arc:deslop     - Remove LLM artifacts
 
 CROSS-CUTTING
-        /review     - Review a plan for feasibility
-        /tasklist   - Persistent task backlog
-        /document   - Feature documentation
-        /suggest    - Opinionated next-step recommendations
+        /arc:review     - Review a plan for feasibility
+        /arc:tasklist   - Persistent task backlog
+        /arc:document   - Feature documentation
+        /arc:suggest    - Opinionated next-step recommendations
 
-TOOLS   /commit     - Smart commit + push with auto-splitting
+TOOLS   /arc:commit     - Smart commit + push with auto-splitting
 ```
 
 ## Key Principles
@@ -58,9 +58,9 @@ Arc uses these plugins for enhanced functionality:
 
 | Plugin | Used by |
 |--------|---------|
-| **Figma** | `/ideate`, `/detail`, `/figma` |
-| **Context7** | `/implement` |
-| **Episodic Memory** | `/ideate`, `/document` |
+| **Figma** | `/arc:ideate`, `/arc:detail`, `/arc:figma` |
+| **Context7** | `/arc:implement` |
+| **Episodic Memory** | `/arc:ideate`, `/arc:document` |
 | **Chrome** | `figma-implement` agent |
 
 ```
@@ -95,16 +95,16 @@ This starts an interactive Claude Code session in your terminal.
 Commands start with `/`. Type the command and press Enter:
 
 ```
-/ideate add user authentication with magic links
+/arc:ideate add user authentication with magic links
 ```
 
 Claude will ask clarifying questions, explore your codebase, and create a design document.
 
 ### 3. Follow the flow
 
-Arc commands chain together. After `/ideate` creates a design:
-- Claude asks if you want to continue to `/detail` (implementation plan)
-- Then to `/implement` (write the code with TDD)
+Arc commands chain together. After `/arc:ideate` creates a design:
+- Claude asks if you want to continue to `/arc:detail` (implementation plan)
+- Then to `/arc:implement` (write the code with TDD)
 
 You can also jump in at any point if you already have docs.
 
@@ -112,16 +112,16 @@ You can also jump in at any point if you already have docs.
 
 ```bash
 # Design a new feature (full flow)
-/ideate add a notification system
+/arc:ideate add a notification system
 
 # Quick build without formal planning
-/build add a logout button to the header
+/arc:build add a logout button to the header
 
 # Get suggestions for what to work on
-/suggest
+/arc:suggest
 
 # Ship to production
-/letsgo
+/arc:letsgo
 ```
 
 ### Tips for Newcomers
@@ -133,35 +133,35 @@ You can also jump in at any point if you already have docs.
 
 ## Primary Flow
 
-The main entry point is `/ideate`, which can flow all the way through:
+The main entry point is `/arc:ideate`, which can flow all the way through:
 
 ```
-/ideate → /detail → /implement
+/arc:ideate → /arc:detail → /arc:implement
 ```
 
 Each step asks if you want to continue. You can also enter at any point:
-- Have a design doc already? Start at `/detail`
-- Have an implementation plan? Start at `/implement`
+- Have a design doc already? Start at `/arc:detail`
+- Have an implementation plan? Start at `/arc:implement`
 
 ## Commands
 
 | Command | When to use | Output |
 |---------|-------------|--------|
-| `/vision` | Starting a new project | `docs/vision.md` |
-| `/ideate` | From idea to working implementation | `docs/plans/YYYY-MM-DD-<feature>.md` |
-| `/detail` | Create implementation plan | `docs/plans/YYYY-MM-DD-<feature>-impl.md` |
-| `/implement` | Execute a plan | Code changes |
-| `/design` | UI/UX work | Wireframes + code |
-| `/figma` | Implement from Figma | Code matching design |
-| `/build` | Quick implementation | Code changes |
-| `/test` | Test strategy | Test files |
-| `/letsgo` | Ship to production | Deployment |
-| `/deslop` | Clean LLM artifacts | Code cleanup |
-| `/review` | Review a plan for feasibility | Updated plan file |
-| `/tasklist` | Manage backlog | `docs/tasklist.md` |
-| `/document` | Document features | `docs/features/<feature>.md` |
-| `/suggest` | What to work on next | Recommendations |
-| `/commit` | Commit and push changes | Git commits |
+| `/arc:vision` | Starting a new project | `docs/vision.md` |
+| `/arc:ideate` | From idea to working implementation | `docs/plans/YYYY-MM-DD-<feature>.md` |
+| `/arc:detail` | Create implementation plan | `docs/plans/YYYY-MM-DD-<feature>-impl.md` |
+| `/arc:implement` | Execute a plan | Code changes |
+| `/arc:design` | UI/UX work | Wireframes + code |
+| `/arc:figma` | Implement from Figma | Code matching design |
+| `/arc:build` | Quick implementation | Code changes |
+| `/arc:test` | Test strategy | Test files |
+| `/arc:letsgo` | Ship to production | Deployment |
+| `/arc:deslop` | Clean LLM artifacts | Code cleanup |
+| `/arc:review` | Review a plan for feasibility | Updated plan file |
+| `/arc:tasklist` | Manage backlog | `docs/tasklist.md` |
+| `/arc:document` | Document features | `docs/features/<feature>.md` |
+| `/arc:suggest` | What to work on next | Recommendations |
+| `/arc:commit` | Commit and push changes | Git commits |
 
 ## Agents
 
@@ -188,11 +188,11 @@ Implementation methodologies in `skills/arc/disciplines/`:
 
 Commands work together:
 
-- `/suggest` reads `/tasklist`, codebase, and `/vision` (priority cascade)
-- `/ideate` can flow to `/detail` → `/implement`
-- `/build` suggests `/ideate` if scope is too large
-- `/letsgo` runs `/test` and `/deslop` as part of quality checks
-- Any command can add to `/tasklist`
+- `/arc:suggest` reads `/arc:tasklist`, codebase, and `/arc:vision` (priority cascade)
+- `/arc:ideate` can flow to `/arc:detail` → `/arc:implement`
+- `/arc:build` suggests `/arc:ideate` if scope is too large
+- `/arc:letsgo` runs `/arc:test` and `/arc:deslop` as part of quality checks
+- Any command can add to `/arc:tasklist`
 
 ## Acknowledgments
 
