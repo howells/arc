@@ -44,6 +44,72 @@ pnpm exec playwright test --reporter=list
 pnpm exec cypress run
 ```
 
+### Step 2.5: Fail Fast & Verbose
+
+**Tests must fail fast.** A single hanging test should not kill an entire suite. This is critical when hitting real endpoints.
+
+**Playwright config (playwright.config.ts):**
+```typescript
+export default defineConfig({
+  // Global timeout per test - fail fast, don't hang
+  timeout: 30_000, // 30s max per test
+
+  // Expect assertions timeout
+  expect: {
+    timeout: 5_000, // 5s max to find elements
+  },
+
+  // Fail the entire suite on first failure (optional, faster feedback)
+  // maxFailures: 1,
+
+  // Verbose output
+  reporter: [['list'], ['html', { open: 'never' }]],
+
+  // Retries for flaky tests hitting real endpoints
+  retries: process.env.CI ? 2 : 0,
+
+  // Don't retry forever - fail fast on genuine issues
+  use: {
+    actionTimeout: 10_000, // 10s max per action (click, fill, etc.)
+    navigationTimeout: 15_000, // 15s max for page loads
+  },
+});
+```
+
+**Key principles:**
+
+| Setting | Purpose | Recommendation |
+|---------|---------|----------------|
+| `timeout` | Max time per test | 30s for most tests, extend only if genuinely slow |
+| `actionTimeout` | Max time per click/fill/etc | 10s - if an element takes longer, something's wrong |
+| `expect.timeout` | Max time for assertions | 5s default, adjust per-assertion if needed |
+| `retries` | Handle flaky network | 1-2 in CI, 0 locally to surface real issues |
+
+**Per-test timeout override (when genuinely slow):**
+```typescript
+test('slow endpoint test', async ({ page }) => {
+  test.setTimeout(60_000); // Only this test gets 60s
+  // ...
+});
+```
+
+**Never:**
+- Set global timeout to minutes "just in case"
+- Retry 5+ times to mask flaky tests
+- Use `test.slow()` as a crutch for poor test design
+
+**Verbose output flags:**
+```bash
+# Playwright - see every step
+pnpm exec playwright test --reporter=list
+
+# Debug mode - step through
+pnpm exec playwright test --debug
+
+# Show browser
+pnpm exec playwright test --headed
+```
+
 ### Step 3: Analyze Failures
 
 For each failure:
