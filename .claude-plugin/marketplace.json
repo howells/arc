@@ -5,20 +5,27 @@
   },
   "metadata": {
     "description": "The full arc from idea to shipped code",
-    "version": "1.0.36"
+    "version": "1.0.37"
   },
   "plugins": [
     {
       "name": "arc",
       "source": "./",
       "description": "Complete development lifecycle from vision to shipped code",
-      "version": "1.0.36",
+      "version": "1.0.37",
       "author": {
         "name": "Daniel Howells"
       },
       "repository": "https://github.com/howells/arc",
       "license": "MIT",
-      "keywords": ["design", "planning", "tdd", "implementation", "review", "workflow"]
+      "keywords": [
+        "design",
+        "planning",
+        "tdd",
+        "implementation",
+        "review",
+        "workflow"
+      ]
     }
   ]
 }
