@@ -79,7 +79,7 @@ while IFS= read -r -d '' f; do
   if ! head -"$frontmatter_end" "$f" | grep -q "^description:"; then
     error "$f missing 'description:' in frontmatter"
   fi
-done < <(find skills/*/agents -name "*.md" -print0 2>/dev/null)
+done < <(find agents -name "*.md" -print0 2>/dev/null)
 ok "Agents checked ($agent_count files)"
 
 # 4. Check skill SKILL.md files
@@ -105,7 +105,7 @@ ok "Commands checked"
 
 # 6. Check for hardcoded paths
 echo "Checking for hardcoded paths..."
-hardcoded=$(grep -r "/Users/\|/home/" skills/ commands/ .claude-plugin/ 2>/dev/null | grep -v ".git" | head -5 || true)
+hardcoded=$(grep -r "/Users/\|/home/" skills/ commands/ agents/ .claude-plugin/ 2>/dev/null | grep -v ".git" | head -5 || true)
 if [ -n "$hardcoded" ]; then
   echo "$hardcoded"
   error "Found hardcoded paths (use relative paths or \${CLAUDE_PLUGIN_ROOT})"
@@ -137,7 +137,7 @@ while IFS= read -r -d '' f; do
       error "$f name '$name' has consecutive hyphens"
     fi
   fi
-done < <(find skills/*/agents -name "*.md" -print0 2>/dev/null)
+done < <(find agents -name "*.md" -print0 2>/dev/null)
 ok "Naming conventions checked"
 
 # 9. Check for orphaned references
