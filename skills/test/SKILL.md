@@ -3,6 +3,18 @@ name: test
 description: Test strategy and execution. Create test plans, run test suites, or fix failing tests. Supports vitest, playwright, jest, and cypress.
 ---
 
+<rules_context>
+**Check for project testing rules:**
+
+```bash
+ls .ruler/testing.md 2>/dev/null
+```
+
+**If `.ruler/testing.md` exists:** Read it for MUST/SHOULD/NEVER constraints on testing patterns, frameworks, and conventions.
+
+**If `.ruler/` doesn't exist:** Continue without rules — they're optional.
+</rules_context>
+
 # Test Workflow
 
 Create or review test strategy. Optionally run test suite. Supports vitest and playwright primarily.

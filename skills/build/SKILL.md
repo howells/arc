@@ -3,6 +3,29 @@ name: build
 description: Quick build for small-to-medium scope work without formal planning. Still uses TDD and verification disciplines.
 ---
 
+<rules_context>
+**Check for project coding rules:**
+
+```bash
+ls .ruler/ 2>/dev/null
+```
+
+**If `.ruler/` exists, detect stack and read relevant rules:**
+
+| Check | Read from `.ruler/` |
+|-------|---------------------|
+| Always | code-style.md |
+| `next.config.*` exists | nextjs.md |
+| `react` in package.json | react.md |
+| `tailwindcss` in package.json | tailwind.md |
+| `.ts` or `.tsx` files | typescript.md |
+| `vitest` or `jest` in package.json | testing.md |
+
+These rules define MUST/SHOULD/NEVER constraints. Follow them during implementation.
+
+**If `.ruler/` doesn't exist:** Continue without rules — they're optional.
+</rules_context>
+
 # Build Workflow
 
 Quick build for small-to-medium scope work. No formal plan, but still uses TDD and verification disciplines.

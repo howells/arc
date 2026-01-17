@@ -9,6 +9,34 @@ description: Execute an implementation plan task-by-task with TDD. Reads plan fr
 2. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
 </required_reading>
 
+<rules_context>
+**Check for project coding rules:**
+
+```bash
+ls .ruler/ 2>/dev/null
+```
+
+**If `.ruler/` exists, detect stack and read relevant rules:**
+
+| Check | Read from `.ruler/` |
+|-------|---------------------|
+| Always | code-style.md |
+| `next.config.*` exists | nextjs.md |
+| `react` in package.json | react.md |
+| `tailwindcss` in package.json | tailwind.md |
+| `.ts` or `.tsx` files | typescript.md |
+| `vitest` or `jest` in package.json | testing.md |
+
+These rules define MUST/SHOULD/NEVER constraints. Follow them during implementation.
+
+**If `.ruler/` doesn't exist:**
+```
+No coding rules found. Run /arc:rules to set up standards, or continue without rules.
+```
+
+Rules are optional — proceed without them if the user prefers.
+</rules_context>
+
 <process>
 ## Phase 1: Setup
 
