@@ -5,14 +5,14 @@
   },
   "metadata": {
     "description": "The full arc from idea to shipped code",
-    "version": "1.0.37"
+    "version": "1.0.38"
   },
   "plugins": [
     {
       "name": "arc",
       "source": "./",
       "description": "Complete development lifecycle from vision to shipped code",
-      "version": "1.0.37",
+      "version": "1.0.38",
       "author": {
         "name": "Daniel Howells"
       },
