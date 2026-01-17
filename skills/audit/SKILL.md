@@ -3,12 +3,15 @@ name: audit
 description: Comprehensive codebase audit. Spawns specialized reviewers in parallel against a scoped portion of the codebase, consolidates findings, and generates an actionable report.
 ---
 
+<required_reading>
+**Read these reference files NOW:**
+1. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
+</required_reading>
+
 <rules_context>
 **Check for project coding rules:**
 
-```bash
-ls .ruler/ 2>/dev/null
-```
+**Use Glob tool:** `.ruler/*.md`
 
 **If `.ruler/` exists, detect stack and read relevant rules:**
 
@@ -36,30 +39,25 @@ Pass relevant rules to each reviewer agent.
   - Both (e.g., `apps/web --security`)
 
 **If no scope provided:**
-```bash
-# Check for monorepo structure
-ls apps/ packages/ 2>/dev/null && echo "monorepo"
-ls src/ 2>/dev/null && echo "standard"
-```
 
-- Monorepo → audit `apps/` and `packages/`
-- Standard → audit `src/`
+**Use Glob tool to detect structure:**
+- `apps/*`, `packages/*` → monorepo (audit both)
+- `src/*` → standard (audit src/)
 - Neither → audit current directory
 
-**Detect project type:**
-```bash
-# Framework detection
-grep -l '"next"' package.json 2>/dev/null && echo "nextjs"
-grep -l '"react"' package.json 2>/dev/null && echo "react"
-ls requirements.txt pyproject.toml 2>/dev/null && echo "python"
-ls Cargo.toml 2>/dev/null && echo "rust"
-ls go.mod 2>/dev/null && echo "go"
-```
+**Detect project type with Glob + Grep:**
+
+| Check | Tool | Pattern |
+|-------|------|---------|
+| Next.js | Grep | `"next"` in `package.json` |
+| React | Grep | `"react"` in `package.json` |
+| Python | Glob | `requirements.txt`, `pyproject.toml` |
+| Rust | Glob | `Cargo.toml` |
+| Go | Glob | `go.mod` |
 
 **Check for database/migrations:**
-```bash
-ls prisma/ drizzle/ migrations/ 2>/dev/null && echo "has-db"
-```
+
+**Use Glob tool:** `prisma/*`, `drizzle/*`, `migrations/*` → has-db
 
 **Summarize detection:**
 ```

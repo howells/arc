@@ -9,19 +9,17 @@ description: Turn ideas into validated designs through collaborative dialogue wi
 2. ${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md
 3. ${CLAUDE_PLUGIN_ROOT}/references/model-strategy.md
 4. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
+5. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
 </required_reading>
 
 <process>
 ## Phase 1: Context Gathering
 
 **Read progress journal and solutions for past decisions:**
-```bash
-# Recent progress
-head -50 docs/progress.md 2>/dev/null
 
-# Past solutions that might be relevant
-ls docs/solutions/**/*.md 2>/dev/null | head -10
-```
+**Use Read tool:** `docs/progress.md` (first 50 lines)
+
+**Use Glob tool:** `docs/solutions/**/*.md` — find past solutions that might be relevant
 
 **Spawn Explore agent for codebase understanding (in parallel):**
 ```

@@ -6,11 +6,9 @@ description: Test strategy and execution. Create test plans, run test suites, or
 <rules_context>
 **Check for project testing rules:**
 
-```bash
-ls .ruler/testing.md 2>/dev/null
-```
+**Use Glob tool:** `.ruler/testing.md`
 
-**If `.ruler/testing.md` exists:** Read it for MUST/SHOULD/NEVER constraints on testing patterns, frameworks, and conventions.
+**If file exists:** Read it for MUST/SHOULD/NEVER constraints on testing patterns, frameworks, and conventions.
 
 **If `.ruler/` doesn't exist:** Continue without rules — they're optional.
 </rules_context>
@@ -23,13 +21,14 @@ Create or review test strategy. Optionally run test suite. Supports vitest and p
 
 ### Step 1: Detect Test Setup
 
-```bash
-# Check for test frameworks
-ls vitest.config.* 2>/dev/null && echo "vitest"
-ls playwright.config.* 2>/dev/null && echo "playwright"
-ls jest.config.* 2>/dev/null && echo "jest"
-ls cypress.config.* 2>/dev/null && echo "cypress"
-```
+**Use Glob tool to find test framework config:**
+
+| Glob Pattern | Framework |
+|-------------|-----------|
+| `vitest.config.*` | vitest |
+| `playwright.config.*` | playwright |
+| `jest.config.*` | jest |
+| `cypress.config.*` | cypress |
 
 ### Step 2: Determine Intent
 
@@ -41,16 +40,13 @@ ls cypress.config.* 2>/dev/null && echo "cypress"
 
 ### For "Review Strategy"
 
-Analyze:
-```bash
-# Count test files
-find . -name "*.test.*" -o -name "*.spec.*" | wc -l
+**Analyze test coverage:**
 
-# Check coverage config
-grep -r "coverage" vitest.config.* playwright.config.* 2>/dev/null
-```
+**Use Glob tool:** `**/*.test.*`, `**/*.spec.*` — count test files
 
-Report:
+**Use Grep tool:** Pattern `coverage` in `vitest.config.*`, `playwright.config.*` — check coverage config
+
+**Report:**
 - Number of test files
 - Unit vs E2E balance
 - Coverage gaps (if measurable)

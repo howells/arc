@@ -11,11 +11,9 @@ Create or review a 500-700 word vision document that captures the high-level goa
 
 ### Step 1: Check for Existing Vision
 
-```bash
-ls docs/vision.md 2>/dev/null
-```
+**Use Read tool:** `docs/vision.md`
 
-**If exists:** Read it, then ask:
+**If file exists:** Read it, then ask:
 "I found an existing vision document. Would you like to:"
 1. Review and discuss it
 2. Update it based on new direction

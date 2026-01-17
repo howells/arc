@@ -17,16 +17,14 @@ Analyze tasklist, codebase, and vision to give opinionated recommendations for w
 
 ### Step 1: Read Tasklist
 
-```bash
-cat docs/tasklist.md 2>/dev/null
-```
+**Use Read tool:** `docs/tasklist.md`
 
 If tasklist has items in "Up Next":
 → Recommend those first with brief rationale
 
 ### Step 2: Analyze Codebase
 
-Spawn exploration agent:
+**Use Task tool to spawn exploration agent:**
 ```
 Task Explore model: haiku: "Analyze this codebase for:
 - Incomplete features (TODOs, FIXMEs)
@@ -41,9 +39,8 @@ Prioritize by impact."
 ### Step 3: Read Vision (if needed)
 
 Only if tasklist is empty AND codebase analysis found nothing urgent:
-```bash
-cat docs/vision.md 2>/dev/null
-```
+
+**Use Read tool:** `docs/vision.md`
 
 Compare vision goals to current state. Identify gaps.
 

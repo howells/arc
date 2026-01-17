@@ -34,9 +34,8 @@ The progress journal maintains a lightweight record of what Arc has done, decisi
 ### Viewing Progress
 
 **If no arguments:**
-```bash
-head -100 docs/progress.md 2>/dev/null
-```
+
+**Use Read tool:** `docs/progress.md` (first 100 lines)
 
 Show the 10 most recent entries with summary:
 ```
@@ -74,9 +73,8 @@ Append to journal:
 **If journal exceeds 50 entries or ~20KB:**
 
 1. Count entries:
-   ```bash
-   grep -c "^## [0-9]" docs/progress.md
-   ```
+
+   **Use Grep tool:** Pattern `^## [0-9]` in `docs/progress.md` with output_mode: "count"
 
 2. If >50 entries, offer to archive:
    ```
@@ -134,9 +132,7 @@ mv /tmp/progress-entry.md docs/progress.md
 
 **Skills that benefit from progress context should read recent entries first.**
 
-```bash
-head -50 docs/progress.md 2>/dev/null
-```
+**Use Read tool:** `docs/progress.md` (first 50 lines)
 
 Look for:
 - Recent work on related features

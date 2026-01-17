@@ -6,6 +6,8 @@ description: Run expert review on a plan. Spawns parallel reviewer agents and pr
 <required_reading>
 **Read these reference files NOW:**
 1. ${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md
+2. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
+3. ${CLAUDE_PLUGIN_ROOT}/disciplines/receiving-code-review.md
 </required_reading>
 
 <process>
@@ -27,10 +29,10 @@ description: Run expert review on a plan. Spawns parallel reviewer agents and pr
    - If found → extract the plan content and proceed to Phase 2
 
 2. **Search docs/plans/ folder** — Look for plan files
-   ```bash
-   ls -t docs/plans/*.md | head -10
-   ```
-   - Sort by modification time (newest first)
+
+   **Use Glob tool:** `docs/plans/*.md`
+
+   - Sort results by modification time (newest first)
    - Show all plan files (design, implementation, etc.)
 
 3. **Present options if multiple found:**
@@ -51,15 +53,16 @@ description: Run expert review on a plan. Spawns parallel reviewer agents and pr
 
 **Detect project type for reviewer selection:**
 
-```bash
-# Check for framework indicators
-grep -l "next" package.json 2>/dev/null && echo "nextjs"
-grep -l "react" package.json 2>/dev/null && echo "react"
-ls requirements.txt pyproject.toml 2>/dev/null && echo "python"
+**Use Grep tool on `package.json`:**
+- Pattern: `"next"` → nextjs
+- Pattern: `"react"` → react
 
-# Check for Daniel's projects
-ls .ruler/ 2>/dev/null || grep -l "@materia/" src/**/*.ts 2>/dev/null && echo "daniel-project"
-```
+**Use Glob tool:**
+- `requirements.txt`, `pyproject.toml` → python
+- `.ruler/*.md` → daniel-project (has coding rules)
+
+**Use Grep tool on `src/**/*.ts`:**
+- Pattern: `@materia/` → daniel-project
 
 **Select reviewers based on project type:**
 

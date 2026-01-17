@@ -7,14 +7,15 @@ description: Execute an implementation plan task-by-task with TDD. Reads plan fr
 **Read these reference files NOW:**
 1. ${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md
 2. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
+3. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
+4. ${CLAUDE_PLUGIN_ROOT}/disciplines/finishing-a-development-branch.md
+5. ${CLAUDE_PLUGIN_ROOT}/disciplines/receiving-code-review.md
 </required_reading>
 
 <rules_context>
 **Check for project coding rules:**
 
-```bash
-ls .ruler/ 2>/dev/null
-```
+**Use Glob tool:** `.ruler/*.md`
 
 **If `.ruler/` exists, detect stack and read relevant rules:**
 
@@ -360,10 +361,8 @@ git worktree remove .worktrees/<feature-name>
 </when_to_stop>
 
 <progress_context>
-**Read progress journal for context:**
-```bash
-head -50 docs/progress.md 2>/dev/null
-```
+**Use Read tool:** `docs/progress.md` (first 50 lines)
+
 Look for related ideate/detail sessions and any prior implementation attempts.
 </progress_context>
 

@@ -16,9 +16,7 @@ Clean up the docs/plans/ folder by analyzing which plans have been implemented. 
 
 ### Step 1: Discover Plans
 
-```bash
-ls docs/plans/*.md 2>/dev/null
-```
+**Use Glob tool:** `docs/plans/*.md`
 
 **Handle empty states:**
 - No `docs/plans/`: "No plans folder found. Nothing to tidy!"
@@ -47,16 +45,14 @@ For each plan file:
 
 **3. Check implementation status:**
 
+**Use Glob tool:** Check if planned files exist (use paths from plan)
+
+**Use Bash for git history:**
 ```bash
-# Check if created files exist
-ls [file-paths] 2>/dev/null
-
-# Check git history after plan date
 git log --after="YYYY-MM-DD" --oneline -- [file-paths]
-
-# Check for key identifiers
-grep -l "identifier" [file-paths] 2>/dev/null
 ```
+
+**Use Grep tool:** Pattern `identifier` in `[file-paths]` — check for key identifiers
 
 **4. Determine status:**
 

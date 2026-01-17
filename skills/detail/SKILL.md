@@ -14,25 +14,17 @@ description: Create a detailed implementation plan with exact file paths, test c
 <process>
 ## Step 1: Detect Project Stack
 
-**Run detection in parallel:**
+**Use Glob tool to detect in parallel:**
 
-```bash
-# Test frameworks
-ls vitest.config.* 2>/dev/null    # vitest
-ls playwright.config.* 2>/dev/null # playwright
-ls jest.config.* 2>/dev/null       # jest
-ls cypress.config.* 2>/dev/null    # cypress
+| Check | Glob Pattern |
+|-------|-------------|
+| Test frameworks | `vitest.config.*`, `playwright.config.*`, `jest.config.*`, `cypress.config.*` |
+| Package manager | `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json` |
+| Python project | `requirements.txt`, `pyproject.toml` |
 
-# Package manager
-ls pnpm-lock.yaml 2>/dev/null      # pnpm
-ls yarn.lock 2>/dev/null           # yarn
-ls package-lock.json 2>/dev/null   # npm
-
-# Framework
-grep -l "next" package.json 2>/dev/null   # Next.js
-grep -l "react" package.json 2>/dev/null  # React
-ls requirements.txt pyproject.toml 2>/dev/null  # Python
-```
+**Use Grep tool on `package.json`:**
+- Pattern: `"next"` → Next.js
+- Pattern: `"react"` → React
 
 **Record detected stack:**
 - Test runner: [vitest/jest/playwright/cypress/pytest]
@@ -279,10 +271,8 @@ Options:
 </process>
 
 <progress_context>
-**Read progress journal for context:**
-```bash
-head -50 docs/progress.md 2>/dev/null
-```
+**Use Read tool:** `docs/progress.md` (first 50 lines)
+
 Look for related ideate sessions or prior work on this feature.
 </progress_context>
 

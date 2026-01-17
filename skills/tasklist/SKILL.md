@@ -15,12 +15,10 @@ Manage a persistent task backlog that survives across sessions. Git-committed, a
 
 ### Step 1: Check for Existing Tasklist
 
-```bash
-ls docs/tasklist.md 2>/dev/null
-```
+**Use Read tool:** `docs/tasklist.md`
 
-**If exists:** Read it.
-**If not:** Create with template.
+**If file exists:** Read and proceed.
+**If not exists:** Create with template using Write tool.
 
 ### Step 2: Determine Action
 

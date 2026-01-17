@@ -14,9 +14,7 @@ Apply Arc's coding standards to the current project.
 
 ## Step 1: Check for existing rules
 
-```bash
-ls -la .ruler/ 2>/dev/null
-```
+**Use Glob tool:** `.ruler/*.md`
 
 **If `.ruler/` does not exist:** Go to Step 2 (Fresh Install)
 

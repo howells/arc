@@ -6,9 +6,7 @@ description: Quick build for small-to-medium scope work without formal planning.
 <rules_context>
 **Check for project coding rules:**
 
-```bash
-ls .ruler/ 2>/dev/null
-```
+**Use Glob tool:** `.ruler/*.md`
 
 **If `.ruler/` exists, detect stack and read relevant rules:**
 
@@ -132,10 +130,8 @@ Skill vercel-react-best-practices: "Quick review of [component/feature] for perf
 4. Done for now
 
 <progress_context>
-**Read progress journal for context:**
-```bash
-head -50 docs/progress.md 2>/dev/null
-```
+**Use Read tool:** `docs/progress.md` (first 50 lines)
+
 Check for related prior work.
 </progress_context>
 
