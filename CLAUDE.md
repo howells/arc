@@ -1,6 +1,6 @@
 # Arc Plugin
 
-The full arc from idea to shipped code. This plugin provides 17 commands for the complete development lifecycle.
+The full arc from idea to shipped code. This plugin provides 19 commands for the complete development lifecycle.
 
 ## Structure
 
@@ -25,7 +25,9 @@ arc/
 │   ├── tasklist/SKILL.md   # /arc:tasklist
 │   ├── document/SKILL.md   # /arc:document
 │   ├── suggest/SKILL.md    # /arc:suggest
-│   └── commit/SKILL.md     # /arc:commit
+│   ├── commit/SKILL.md     # /arc:commit
+│   ├── rules/SKILL.md      # /arc:rules
+│   └── tidy/SKILL.md       # /arc:tidy
 ├── agents/                  # Specialized reviewers
 │   ├── review/
 │   ├── research/
@@ -48,8 +50,8 @@ WHY     /arc:vision     - High-level goals
 WHAT    /arc:ideate     - From idea to working implementation
 HOW     /arc:detail     - Detailed implementation plan
 DO      /arc:implement, /arc:design, /arc:figma, /arc:build, /arc:test, /arc:letsgo, /arc:deslop
-CROSS   /arc:review, /arc:audit, /arc:progress, /arc:tasklist, /arc:document, /arc:suggest
-TOOLS   /arc:commit     - Smart commit + push
+CROSS   /arc:review, /arc:audit, /arc:progress, /arc:tasklist, /arc:document, /arc:suggest, /arc:tidy
+TOOLS   /arc:commit, /arc:rules
 ```
 
 ## Development

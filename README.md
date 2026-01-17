@@ -11,7 +11,7 @@ The full arc from idea to shipped code. A [Claude Code](https://docs.anthropic.c
 
 ## What It Does
 
-Arc provides 17 commands covering the complete development lifecycle:
+Arc provides 19 commands covering the complete development lifecycle:
 
 ```
 WHY     /arc:vision     - High-level goals (500-700 words)
@@ -34,8 +34,10 @@ CROSS-CUTTING
         /arc:tasklist   - Persistent task backlog
         /arc:document   - Feature documentation
         /arc:suggest    - Opinionated next-step recommendations
+        /arc:tidy       - Clean up completed plans
 
 TOOLS   /arc:commit     - Smart commit + push with auto-splitting
+        /arc:rules      - Apply coding standards to project
 ```
 
 ## Key Principles
@@ -183,6 +185,8 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:document` | Document features | `docs/features/<feature>.md` |
 | `/arc:suggest` | What to work on next | Recommendations |
 | `/arc:commit` | Commit and push changes | Git commits |
+| `/arc:rules` | Apply coding standards | `.ruler/` directory |
+| `/arc:tidy` | Clean up completed plans | Archived/deleted plans |
 
 ## Agents
 
@@ -203,7 +207,10 @@ Implementation methodologies in `disciplines/`:
 - **systematic-debugging** — Methodical bug investigation
 - **verification-before-completion** — Prove it works before claiming done
 - **using-git-worktrees** — Isolated development branches
+- **finishing-a-development-branch** — Cleanup after work complete
 - **subagent-driven-development** — Parallel agent execution
+- **dispatching-parallel-agents** — Efficient multi-agent coordination
+- **receiving-code-review** — Handling review feedback
 
 ## Interop
 
