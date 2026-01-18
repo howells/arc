@@ -4,6 +4,8 @@ description: |
   Run expert review on a plan with parallel reviewer agents. Presents findings as Socratic questions.
   Use when asked to "review the plan", "get feedback on the design", "check this approach",
   or before implementation to validate architectural decisions.
+
+  Optional argument: reviewer name (e.g., `/arc:review daniel-product-engineer` to use a specific reviewer)
 license: MIT
 metadata:
   author: howells
@@ -17,6 +19,23 @@ metadata:
 </required_reading>
 
 <process>
+## Phase 0: Check for Specific Reviewer
+
+**If argument provided** (e.g., `daniel-product-engineer`):
+- Look for `${CLAUDE_PLUGIN_ROOT}/agents/review/{argument}.md`
+- If found → use only this reviewer, skip Phase 2 detection
+- If not found → list available reviewers from `${CLAUDE_PLUGIN_ROOT}/agents/review/` and ask user to pick
+
+**Available reviewers:**
+- `daniel-product-engineer` — Type safety, UI completeness, React patterns
+- `lee-nextjs-reviewer` — Next.js App Router, server-first architecture
+- `senior-reviewer` — Asymmetric strictness, review discipline
+- `architecture-strategist` — System design, component boundaries
+- `code-simplicity-reviewer` — YAGNI, minimalism
+- `performance-oracle` — Bottlenecks, scalability
+- `security-sentinel` — Vulnerabilities, OWASP
+- `data-integrity-guardian` — Migrations, transactions
+
 ## Phase 1: Find the Plan
 
 **Check if plan file path provided as argument:**
@@ -57,6 +76,8 @@ metadata:
 
 ## Phase 2: Detect Project Type
 
+**Skip if specific reviewer provided in Phase 0.**
+
 **Detect project type for reviewer selection:**
 
 **Use Grep tool on `package.json`:**
@@ -96,9 +117,11 @@ metadata:
 - ${CLAUDE_PLUGIN_ROOT}/agents/review/architecture-strategist.md
 - ${CLAUDE_PLUGIN_ROOT}/agents/review/code-simplicity-reviewer.md
 
-## Phase 3: Run Parallel Expert Review
+## Phase 3: Run Expert Review
 
-Spawn 3 reviewer agents in parallel:
+**If specific reviewer from Phase 0:** Spawn single reviewer agent.
+
+**Otherwise:** Spawn 3 reviewer agents in parallel:
 
 ```
 Task [reviewer-1] model: sonnet: "Review this plan for [specialty concerns].
