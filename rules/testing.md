@@ -59,8 +59,10 @@ Key features:
 
 - MUST: Use `data-testid` attributes for E2E test selectors.
 - MUST: Configure Playwright to use `testid` as the attribute name.
+- MUST: Use kebab-case for test IDs, matching component filenames (see react.md "Component Attributes").
 - NEVER: Select by text content, CSS classes, or DOM structure—these change frequently.
 - SHOULD: Use semantic locators (`getByRole`, `getByLabel`) for accessible elements.
+- SHOULD: Prefix child element test IDs with the parent component name: `user-profile-edit`, `product-card-add-to-cart`.
 
 ```ts
 // playwright.config.ts

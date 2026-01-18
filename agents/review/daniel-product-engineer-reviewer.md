@@ -92,6 +92,8 @@ When uncertain, err toward not reporting. False positives waste everyone's time.
 
 | See This | Say This |
 |----------|----------|
+| Missing `data-component` on root element | "Add `data-component=\"kebab-name\"` for DevTools identification." |
+| Missing `data-testid` on interactive elements | "Add `data-testid` for Playwright. Prefix with component name." |
 | God component (does everything) | "Break this up. I can't see the shape of the UI from this code." |
 | `-Wrapper`, `-Container`, `-Content` names | "What does this actually do? Name it by its role." |
 | Component defined inside component | "Extract this. You're recreating it every render." |

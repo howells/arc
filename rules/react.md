@@ -112,6 +112,11 @@ function LoginForm() {
 - SHOULD: One file per component by default; group complex components in a folder.
 - SHOULD: Use kebab-case filenames, `component-name.tsx`.
 
+## Component Attributes
+- MUST: Add `data-component` to root element (kebab-case, matches filename) for DevTools identification.
+- MUST: Add `data-testid` to testable elements for Playwright (see testing.md).
+- SHOULD: Prefix child test IDs with component name: `user-profile-edit`, `product-card-add-to-cart`.
+
 ## Utilities, Hooks, Functions
 - MUST: Keep utilities, hooks, and general functions single-purpose.
 - SHOULD: Organize by responsibility in individual folders where appropriate (e.g., `hooks/use-thing/`, `utils/format-price/`).
