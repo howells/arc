@@ -1,13 +1,16 @@
 ---
 name: audit
 description: |
-  Comprehensive codebase audit with parallel specialized reviewers. Generates actionable reports.
+  Comprehensive codebase audit with specialized reviewers. Generates actionable reports.
   Use when asked to "audit the codebase", "review code quality", "check for issues",
   "security review", or "performance audit". Accepts path scope like "apps/web".
+
+  Reviewers run in batches of 2 by default to avoid resource exhaustion.
+  Use --parallel to run all reviewers simultaneously (resource-intensive).
 license: MIT
 metadata:
   author: howells
-  argument-hint: <path-or-focus>
+  argument-hint: <path-or-focus> [--parallel]
 ---
 
 <required_reading>
@@ -43,7 +46,8 @@ Pass relevant rules to each reviewer agent.
 - `$ARGUMENTS` may contain:
   - A path (e.g., `apps/web`, `packages/ui`, `src/`)
   - A focus flag (e.g., `--security`, `--performance`, `--architecture`)
-  - Both (e.g., `apps/web --security`)
+  - `--parallel` flag to run all reviewers simultaneously (resource-intensive)
+  - Combinations (e.g., `apps/web --security`, `src/ --parallel`)
 
 **If no scope provided:**
 
@@ -73,6 +77,7 @@ Project type: [Next.js / React / Python / etc.]
 Has database: [yes/no]
 Coding rules: [yes/no]
 Focus: [all / security / performance / architecture]
+Execution mode: [batched (default) / parallel]
 ```
 
 ## Phase 2: Select Reviewers
@@ -98,7 +103,7 @@ Focus: [all / security / performance / architecture]
 
 **Final reviewer list:** Select 4-6 reviewers based on context.
 
-## Phase 3: Run Parallel Audit
+## Phase 3: Run Audit
 
 **Read agent prompts:**
 For each selected reviewer, read:
@@ -106,7 +111,25 @@ For each selected reviewer, read:
 ${CLAUDE_PLUGIN_ROOT}/agents/review/[reviewer-name].md
 ```
 
-**Spawn reviewers in parallel:**
+**Execution strategy:**
+
+By default, reviewers run in **batches of 2** to avoid resource exhaustion on large codebases. If `--parallel` flag is set, all reviewers run simultaneously.
+
+### Batched Execution (Default)
+
+Split reviewers into batches of 2. Run each batch, wait for completion, then run next batch.
+
+**Example with 6 reviewers:**
+```
+Batch 1: security-sentinel, performance-oracle
+  → Wait for both to complete
+Batch 2: architecture-strategist, daniel-product-engineer-reviewer
+  → Wait for both to complete
+Batch 3: lee-nextjs-reviewer, senior-reviewer
+  → Wait for both to complete
+```
+
+**For each batch, spawn 2 agents in parallel:**
 ```
 Task [security-sentinel] model: sonnet: "
 Audit the following codebase for security issues.
@@ -140,15 +163,26 @@ Audit the following codebase for performance issues.
 [similar structure]
 Focus on: N+1 queries, missing indexes, memory leaks, bundle size, render performance.
 "
-
-Task [architecture-strategist] model: sonnet: "
-Audit the following codebase for architectural issues.
-[similar structure]
-Focus on: Component boundaries, coupling, abstraction levels, scalability concerns.
-"
-
-[Additional reviewers as selected...]
 ```
+
+**Wait for batch to complete before starting next batch.**
+
+Repeat for remaining batches:
+- Batch 2: architecture-strategist + UI reviewer (if applicable)
+- Batch 3: remaining reviewers
+
+### Parallel Execution (--parallel flag)
+
+Only if `--parallel` flag is explicitly set, spawn all reviewers simultaneously:
+
+```
+Task [security-sentinel] model: sonnet: "..."
+Task [performance-oracle] model: sonnet: "..."
+Task [architecture-strategist] model: sonnet: "..."
+[All additional reviewers in same message...]
+```
+
+⚠️ **Warning:** Parallel execution spawns 4-6 Claude instances simultaneously. This can cause system unresponsiveness on resource-constrained machines or large codebases.
 
 **Wait for all agents to complete.**
 
@@ -321,6 +355,7 @@ After completing the audit, append to progress journal:
 - Critical: [N] issues
 - High: [N] issues
 - Reviewers: [list]
+- Execution mode: [batched / parallel]
 **Next:** [Create tasks / Focus on critical / Done]
 
 ---
@@ -331,8 +366,9 @@ After completing the audit, append to progress journal:
 Audit is complete when:
 - [ ] Scope detected (path, full codebase, or focus flag)
 - [ ] Project type detected
+- [ ] Execution mode determined (batched default, or --parallel)
 - [ ] 4-6 reviewers selected based on context
-- [ ] All reviewers spawned in parallel
+- [ ] Reviewers run in batches of 2 (or all at once if --parallel)
 - [ ] All reviewers completed
 - [ ] Findings consolidated and deduplicated
 - [ ] Report generated in `docs/audits/`
