@@ -11,7 +11,7 @@ metadata:
 
 # Design Workflow
 
-Create distinctive, non-generic UI. Avoids AI slop (Inter, purple gradients, cookie-cutter layouts).
+Create distinctive, non-generic UI. Avoids AI slop (purple gradients, cookie-cutter layouts).
 
 ## Prerequisites
 
@@ -48,7 +48,7 @@ Ask one at a time:
 ## Aesthetic Direction
 - **Tone**: [chosen]
 - **Memorable element**: [what stands out]
-- **Typography**: [display] + [body] (NOT Inter/Roboto/Arial)
+- **Typography**: [display] + [body] (NOT Roboto/Arial/system-ui)
 - **Color strategy**: [approach - NOT purple gradients]
 - **Motion**: [where animation matters]
 ```
@@ -114,13 +114,7 @@ The goal: **never commit UI code without visually verifying it looks correct.**
 
 ### Anti-Patterns to Avoid
 
-From `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md`:
-- Inter, Roboto, Arial, system-ui defaults
-- Purple-to-blue gradients on white
-- White backgrounds with gray cards
-- Rounded corners on everything
-- Generic Heroicons
-- Cookie-cutter component patterns
+See `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` for the full list of anti-patterns and the design review checklist.
 
 ### Step 6: Optional UI Compliance Review
 

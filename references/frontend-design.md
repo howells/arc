@@ -54,6 +54,12 @@ Frontend work requires intentional aesthetic direction. Generic "AI slop" (purpl
 
 **If user has a fonts folder**, check it for available licensed fonts before selecting. Pair a display font with a refined body font.
 
+## Icons
+
+**Recommended:** Lucide icons for consistency and quality. They're well-designed, comprehensive, and work well at all sizes.
+
+**Avoid:** Mixing icon libraries or using low-quality/inconsistent icon sets.
+
 ## Color
 
 **Never:** Purple-to-blue gradients on white (AI cliché)
@@ -101,8 +107,50 @@ Elegance = executing the vision fully, not hedging.
 - White backgrounds with gray cards
 - Predictable grid layouts
 - Rounded corners on everything
-- Generic icons (Heroicons defaults, etc.)
+- Mixed or inconsistent icon styles
 - Cookie-cutter component patterns
 - Safe, forgettable choices
 
 **If you catch yourself making any of these choices, stop and reconsider.**
+
+## Design Review Checklist
+
+Use this checklist when reviewing UI implementations.
+
+### Red Flags (Fail)
+
+These indicate generic "AI slop" design:
+
+- [ ] Uses Roboto/Arial/system-ui as primary font
+- [ ] Purple-to-blue gradient present (the AI cliché)
+- [ ] White background + gray cards pattern throughout
+- [ ] Uniform rounded corners on everything (no variation)
+- [ ] Mixed or inconsistent icon styles across the UI
+- [ ] Could be mistaken for any AI-generated landing page
+- [ ] No discernible aesthetic direction
+- [ ] Cookie-cutter hero → features → testimonials → CTA layout
+
+### Yellow Flags (Question)
+
+These warrant discussion:
+
+- [ ] No memorable element identified — what makes this stick?
+- [ ] Typography pairing unclear or default-feeling
+- [ ] Color palette lacks cohesion or intention
+- [ ] Motion is scattered micro-interactions, not orchestrated
+- [ ] Spacing feels arbitrary rather than systematic
+- [ ] Layout is "safe" — no unexpected decisions
+- [ ] Illustrations feel stock rather than curated
+
+### Green Flags (Pass)
+
+These indicate intentional design:
+
+- [ ] Clear aesthetic direction that could be articulated
+- [ ] Typography choices are deliberate and create hierarchy
+- [ ] Color palette reinforces the intended tone
+- [ ] At least one memorable/distinctive element
+- [ ] Layout has at least one unexpected decision
+- [ ] Spacing is consistent and generous where needed
+- [ ] Motion (if present) is purposeful and orchestrated
+- [ ] Would not be mistaken for a generic template

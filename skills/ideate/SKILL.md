@@ -165,7 +165,7 @@ See `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` for full principles.
 ## Aesthetic Direction
 - **Tone**: [chosen direction]
 - **Memorable element**: [what stands out]
-- **Typography**: [display font] + [body font] (avoid Inter/Roboto/Arial)
+- **Typography**: [display font] + [body font] (avoid Roboto/Arial/system-ui)
 - **Color strategy**: [approach - NOT purple gradients on white]
 - **Motion**: [where animation matters most]
 ```

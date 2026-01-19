@@ -190,7 +190,7 @@ ASCII Wireframe (from design):
 └─────────────────┘
 
 Implementation Notes:
-- AVOID: Inter/Roboto, purple gradients, generic shadows
+- AVOID: Roboto/Arial/system-ui, purple gradients, generic shadows
 - ENSURE: The hover effect is the memorable moment
 
 Files:

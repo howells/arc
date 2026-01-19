@@ -214,7 +214,7 @@ mcp__figma__get_screenshot: fileKey, nodeId
 **After each UI task, quick self-check:**
 - [ ] Would a designer call this "generic AI slop"?
 - [ ] Is the memorable element actually memorable?
-- [ ] Did I avoid Inter/Roboto/Arial and purple gradients?
+- [ ] Did I avoid Roboto/Arial/system-ui and purple gradients?
 
 **After completing ALL UI tasks — INVOKE ARC:DESIGN FOR REVIEW:**
 
