@@ -10,7 +10,7 @@ description: |
 license: MIT
 metadata:
   author: howells
-  argument-hint: <path-or-focus> [--parallel]
+  argument-hint: <path-or-focus> [--parallel] [--security|--performance|--architecture|--design]
 ---
 
 <required_reading>
@@ -45,9 +45,9 @@ Pass relevant rules to each reviewer agent.
 **Parse arguments:**
 - `$ARGUMENTS` may contain:
   - A path (e.g., `apps/web`, `packages/ui`, `src/`)
-  - A focus flag (e.g., `--security`, `--performance`, `--architecture`)
+  - A focus flag (e.g., `--security`, `--performance`, `--architecture`, `--design`)
   - `--parallel` flag to run all reviewers simultaneously (resource-intensive)
-  - Combinations (e.g., `apps/web --security`, `src/ --parallel`)
+  - Combinations (e.g., `apps/web --security`, `src/ --parallel`, `--design`)
 
 **If no scope provided:**
 
@@ -70,38 +70,86 @@ Pass relevant rules to each reviewer agent.
 
 **Use Glob tool:** `prisma/*`, `drizzle/*`, `migrations/*` → has-db
 
+**Run dependency vulnerability scan (critical/high only):**
+
+```bash
+# Node.js projects
+npm audit --json 2>/dev/null | jq '[.vulnerabilities | to_entries[] | select(.value.severity == "critical" or .value.severity == "high")] | length'
+
+# Python projects
+pip-audit --format json 2>/dev/null | jq '[.[] | select(.vulns[].fix_versions)] | length'
+
+# Or use: pnpm audit --json, yarn audit --json
+```
+
+Only surface **critical** and **high** severity vulnerabilities. Ignore moderate/low — they create noise without actionable urgency.
+
+**Detect project scale:**
+
+Use file counts to determine appropriate audit depth:
+
+```bash
+# Count source files (exclude node_modules, .git, dist, build)
+find . -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" -o -name "*.py" -o -name "*.go" -o -name "*.rs" \) | grep -v node_modules | grep -v .git | wc -l
+```
+
+| File Count | Scale | Audit Approach |
+|------------|-------|----------------|
+| < 20 files | Small | 2-3 reviewers max, skip architecture/simplicity |
+| 20-100 files | Medium | 3-4 reviewers, standard audit |
+| > 100 files | Large | Full reviewer suite, batched execution |
+
+**Scale-appropriate signals:**
+- Small projects: Skip `architecture-strategist` (no complex boundaries to review)
+- Small projects: Skip `code-simplicity-reviewer` (not enough code to over-engineer)
+- No tests present + small project: Don't flag missing tests as critical
+- Single developer: Skip `senior-reviewer` (no code review discipline needed)
+
 **Summarize detection:**
 ```
 Scope: [path or "full codebase"]
 Project type: [Next.js / React / Python / etc.]
+Project scale: [small / medium / large]
 Has database: [yes/no]
+Has tests: [yes/no]
 Coding rules: [yes/no]
-Focus: [all / security / performance / architecture]
+Focus: [all / security / performance / architecture / design]
 Execution mode: [batched (default) / parallel]
 ```
 
 ## Phase 2: Select Reviewers
 
-**Base reviewer selection by project type:**
+**Base reviewer selection by project scale:**
 
-| Project Type | Core Reviewers |
-|--------------|----------------|
-| Next.js | security-sentinel, performance-oracle, architecture-strategist, lee-nextjs-reviewer, daniel-product-engineer-reviewer |
-| React/TypeScript | security-sentinel, performance-oracle, architecture-strategist, daniel-product-engineer-reviewer, senior-reviewer |
-| Python | security-sentinel, performance-oracle, architecture-strategist, senior-reviewer |
-| Rust/Go | security-sentinel, performance-oracle, architecture-strategist, senior-reviewer |
-| General | security-sentinel, performance-oracle, architecture-strategist, senior-reviewer |
+| Scale | Core Reviewers |
+|-------|----------------|
+| Small | security-sentinel, performance-oracle |
+| Medium | security-sentinel, performance-oracle, architecture-strategist |
+| Large | security-sentinel, performance-oracle, architecture-strategist, senior-reviewer |
+
+**Add framework-specific reviewers (medium/large only):**
+
+| Project Type | Additional Reviewers |
+|--------------|---------------------|
+| Next.js | lee-nextjs-reviewer, daniel-product-engineer-reviewer |
+| React/TypeScript | daniel-product-engineer-reviewer |
+| Python/Rust/Go | (none additional) |
 
 **Conditional additions:**
 - If scope includes DB/migrations → add `data-integrity-guardian`
-- If monorepo with shared packages → add `code-simplicity-reviewer`
+- If monorepo with shared packages (large only) → add `code-simplicity-reviewer`
+- If UI-heavy (React/Next.js, medium/large) → add `design-quality-reviewer`
 
 **Focus flag overrides:**
 - `--security` → only `security-sentinel`
 - `--performance` → only `performance-oracle`
 - `--architecture` → only `architecture-strategist`
+- `--design` → only `design-quality-reviewer`
 
-**Final reviewer list:** Select 4-6 reviewers based on context.
+**Final reviewer list:**
+- Small projects: 2-3 reviewers
+- Medium projects: 3-4 reviewers
+- Large projects: 4-6 reviewers
 
 ## Phase 3: Run Audit
 
@@ -128,6 +176,20 @@ Batch 2: architecture-strategist, daniel-product-engineer-reviewer
 Batch 3: lee-nextjs-reviewer, senior-reviewer
   → Wait for both to complete
 ```
+
+**Model selection per reviewer:**
+
+| Reviewer | Model | Why |
+|----------|-------|-----|
+| security-sentinel | sonnet | Pattern recognition + context |
+| performance-oracle | sonnet | Algorithmic reasoning |
+| architecture-strategist | sonnet | Structural analysis |
+| daniel-product-engineer-reviewer | sonnet | Code quality judgment |
+| lee-nextjs-reviewer | sonnet | Framework pattern recognition |
+| senior-reviewer | sonnet | Code review reasoning |
+| code-simplicity-reviewer | sonnet | Complexity analysis |
+| data-integrity-guardian | sonnet | Data safety reasoning |
+| **design-quality-reviewer** | **opus** | **Aesthetic judgment requires premium model** |
 
 **For each batch, spawn 2 agents in parallel:**
 ```
@@ -162,6 +224,12 @@ Task [performance-oracle] model: sonnet: "
 Audit the following codebase for performance issues.
 [similar structure]
 Focus on: N+1 queries, missing indexes, memory leaks, bundle size, render performance.
+"
+
+Task [design-quality-reviewer] model: opus: "
+Review UI implementation for visual design quality.
+[similar structure]
+Focus on: aesthetic direction, memorable elements, typography, color cohesion, AI slop patterns.
 "
 ```
 
@@ -201,11 +269,12 @@ Task [architecture-strategist] model: sonnet: "..."
 4. **Low** — Suggestions, minor improvements
 
 **Group by domain:**
-- Security (from security-sentinel)
+- Security (from security-sentinel + dependency scan)
 - Performance (from performance-oracle)
 - Architecture (from architecture-strategist)
 - Code Quality (from senior-reviewer, code-simplicity-reviewer)
-- UI/UX (from daniel-product-engineer-reviewer, lee-nextjs-reviewer)
+- UI/UX Code (from daniel-product-engineer-reviewer, lee-nextjs-reviewer)
+- Design Quality (from design-quality-reviewer) — visual/aesthetic concerns
 - Data Integrity (from data-integrity-guardian)
 
 ## Phase 5: Generate Report
@@ -281,8 +350,11 @@ File: `docs/audits/YYYY-MM-DD-[scope-slug]-audit.md`
 ### Code Quality
 [Summary of code quality findings]
 
-### UI/UX
-[Summary of UI/UX findings, if applicable]
+### UI/UX Code
+[Summary of UI/UX code findings, if applicable]
+
+### Design Quality
+[Summary of visual/aesthetic findings, if applicable]
 
 ### Data Integrity
 [Summary of data integrity findings, if applicable]
