@@ -108,6 +108,23 @@ Consider extracting to a new file/module when you see multiple of these:
 - Prefer composition over configuration (multiple simple components over one with many props)
 - Extract hooks when component logic gets complex
 
+## 9. IMPORT HYGIENE (see `${CLAUDE_PLUGIN_ROOT}/references/architecture-patterns.md`)
+
+**Deep imports = architectural smell**
+```typescript
+// RED FLAG — 5+ levels deep means something is wrong
+import { thing } from "../../../../../../../apps/web/lib/thing";
+```
+- 1-2 levels: Normal
+- 3-4 levels: Suspicious, consider shared location
+- 5+ levels: Refactor — move to package or restructure
+
+**One-way dependencies**
+- Apps can import from packages
+- Packages NEVER import from apps
+- Lower packages don't import from higher packages
+- This prevents circular dependencies and keeps the codebase predictable
+
 ## When Reviewing Code
 
 1. Start with the most critical issues (regressions, deletions, breaking changes)
