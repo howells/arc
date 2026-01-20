@@ -18,7 +18,7 @@ arc/
 │   ├── build/SKILL.md      # /arc:build
 │   ├── test/SKILL.md       # /arc:test
 │   ├── letsgo/SKILL.md     # /arc:letsgo
-│   ├── deslop/SKILL.md     # /arc:deslop
+│   ├── legal/SKILL.md      # /arc:legal
 │   ├── review/SKILL.md     # /arc:review
 │   ├── audit/SKILL.md      # /arc:audit
 │   ├── progress/SKILL.md   # /arc:progress
@@ -49,7 +49,7 @@ All commands use the `/arc:` namespace prefix:
 WHY     /arc:vision     - High-level goals
 WHAT    /arc:ideate     - From idea to working implementation
 HOW     /arc:detail     - Detailed implementation plan
-DO      /arc:implement, /arc:design, /arc:figma, /arc:build, /arc:test, /arc:letsgo, /arc:deslop
+DO      /arc:implement, /arc:design, /arc:figma, /arc:build, /arc:test, /arc:letsgo, /arc:legal
 CROSS   /arc:review, /arc:audit, /arc:progress, /arc:tasklist, /arc:document, /arc:suggest, /arc:tidy
 TOOLS   /arc:commit, /arc:rules
 ```
