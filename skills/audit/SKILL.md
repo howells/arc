@@ -139,12 +139,14 @@ Execution mode: [batched (default) / parallel]
 - If scope includes DB/migrations → add `data-integrity-guardian`
 - If monorepo with shared packages (large only) → add `code-simplicity-reviewer`
 - If UI-heavy (React/Next.js, medium/large) → add `design-quality-reviewer`
+- If recent AI-assisted work or branch audit → add `llm-artifact-reviewer` (deslop)
 
 **Focus flag overrides:**
 - `--security` → only `security-sentinel`
 - `--performance` → only `performance-oracle`
 - `--architecture` → only `architecture-strategist`
 - `--design` → only `design-quality-reviewer`
+- `--deslop` → only `llm-artifact-reviewer`
 
 **Final reviewer list:**
 - Small projects: 2-3 reviewers
@@ -190,6 +192,7 @@ Batch 3: lee-nextjs-reviewer, senior-reviewer
 | code-simplicity-reviewer | sonnet | Complexity analysis |
 | data-integrity-guardian | sonnet | Data safety reasoning |
 | **design-quality-reviewer** | **opus** | **Aesthetic judgment requires premium model** |
+| llm-artifact-reviewer | sonnet | Pattern recognition for AI artifacts |
 
 **For each batch, spawn 2 agents in parallel:**
 ```
@@ -273,6 +276,7 @@ Task [architecture-strategist] model: sonnet: "..."
 - Performance (from performance-oracle)
 - Architecture (from architecture-strategist)
 - Code Quality (from senior-reviewer, code-simplicity-reviewer)
+- LLM Artifacts (from llm-artifact-reviewer) — AI-generated slop
 - UI/UX Code (from daniel-product-engineer-reviewer, lee-nextjs-reviewer)
 - Design Quality (from design-quality-reviewer) — visual/aesthetic concerns
 - Data Integrity (from data-integrity-guardian)
@@ -349,6 +353,9 @@ File: `docs/audits/YYYY-MM-DD-[scope-slug]-audit.md`
 
 ### Code Quality
 [Summary of code quality findings]
+
+### LLM Artifacts
+[Summary of AI-generated slop: unnecessary comments, defensive checks in trusted codepaths, type escapes]
 
 ### UI/UX Code
 [Summary of UI/UX code findings, if applicable]
