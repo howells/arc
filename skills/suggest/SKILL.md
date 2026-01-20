@@ -9,6 +9,12 @@ metadata:
   author: howells
 ---
 
+<progress_context>
+**Use Read tool:** `docs/progress.md` (first 50 lines)
+
+Check what was recently worked on to avoid re-suggesting completed work.
+</progress_context>
+
 # Suggest Workflow
 
 Analyze tasklist, codebase, and vision to give opinionated recommendations for what to work on next.

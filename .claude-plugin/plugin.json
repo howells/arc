@@ -1,10 +1,9 @@
 {
   "name": "arc",
-  "version": "1.0.51",
+  "version": "1.0.52",
   "description": "The full arc from idea to shipped code. Combines design, planning, TDD execution, expert review, and knowledge capture into one unified development workflow.",
   "skills": "./skills/",
   "commands": "./commands/",
-  "hooks": "./hooks/hooks.json",
   "author": {
     "name": "Daniel Howells",
     "url": "https://github.com/howells"

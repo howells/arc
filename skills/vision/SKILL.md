@@ -13,6 +13,12 @@ metadata:
 
 Create or review a 500-700 word vision document that captures the high-level goals and purpose of the app or codebase.
 
+<progress_context>
+**Use Read tool:** `docs/progress.md` (first 50 lines)
+
+Check for recent work that might inform vision decisions.
+</progress_context>
+
 ## Process
 
 ### Step 1: Check for Existing Vision

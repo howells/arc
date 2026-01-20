@@ -19,6 +19,12 @@ metadata:
 **If `.ruler/` doesn't exist:** Continue without rules — they're optional.
 </rules_context>
 
+<progress_context>
+**Use Read tool:** `docs/progress.md` (first 50 lines)
+
+Check for recently implemented features that need testing.
+</progress_context>
+
 # Test Workflow
 
 Create or review test strategy. Optionally run test suite. Supports vitest and playwright primarily.

@@ -18,6 +18,12 @@ metadata:
 1. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
 </required_reading>
 
+<progress_context>
+**Use Read tool:** `docs/progress.md` (first 50 lines)
+
+Check for recent changes that should be included in audit scope.
+</progress_context>
+
 <rules_context>
 **Check for project coding rules:**
 

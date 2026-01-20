@@ -15,6 +15,12 @@ metadata:
 - ${CLAUDE_PLUGIN_ROOT}/templates/solution-template.md
 </required_reading>
 
+<progress_context>
+**Use Read tool:** `docs/progress.md` (first 50 lines)
+
+Check if similar problems were already documented.
+</progress_context>
+
 <objective>
 Capture solved problems as searchable documentation immediately after confirmation. Builds institutional knowledge that informs future design sessions.
 </objective>

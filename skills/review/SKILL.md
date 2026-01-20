@@ -18,6 +18,12 @@ metadata:
 3. ${CLAUDE_PLUGIN_ROOT}/disciplines/receiving-code-review.md
 </required_reading>
 
+<progress_context>
+**Use Read tool:** `docs/progress.md` (first 50 lines)
+
+Check for context on what led to the plan being reviewed.
+</progress_context>
+
 <process>
 ## Phase 0: Check for Specific Reviewer
 

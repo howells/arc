@@ -9,6 +9,12 @@ metadata:
   author: howells
 ---
 
+<progress_context>
+**Use Read tool:** `docs/progress.md` (first 50 lines)
+
+Check what's been done recently — ensures nothing is missed before shipping.
+</progress_context>
+
 # Letsgo Workflow
 
 Prepare a codebase for production. Generates a **tailored checklist** based on project detection and user input—not a generic one-size-fits-all list.

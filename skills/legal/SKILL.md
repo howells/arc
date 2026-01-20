@@ -10,6 +10,12 @@ metadata:
   author: howells
 ---
 
+<progress_context>
+**Use Read tool:** `docs/progress.md` (first 50 lines)
+
+Check for recent feature work that might affect data collection scope.
+</progress_context>
+
 # Legal Pages Workflow
 
 Generate comprehensive legal pages (Privacy Policy, Terms of Service, Cookie Policy) through a guided, interactive process. Combines automatic project detection with user questions to create tailored documents.

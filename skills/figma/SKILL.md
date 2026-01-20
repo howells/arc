@@ -82,6 +82,29 @@ mcp__figma__get_screenshot: fileKey, nodeId
 - Shadows, borders, radii
 - Component structure
 
+<progress_context>
+**Use Read tool:** `docs/progress.md` (first 50 lines)
+
+Check for related prior UI/design work.
+</progress_context>
+
+<progress_append>
+After completing the Figma implementation, append to progress journal:
+
+```markdown
+## YYYY-MM-DD HH:MM — /arc:figma
+**Task:** [Component/screen implemented from Figma]
+**Outcome:** [Complete / In Progress / Blocked]
+**Files:** [Key files created/modified]
+**Decisions:**
+- [Design system tokens used]
+- [Any deviations from design and why]
+**Next:** [Follow-up work if any]
+
+---
+```
+</progress_append>
+
 ## Interop
 
 - Use **/arc:design** if you need to create a design from scratch (no Figma reference)

@@ -13,6 +13,12 @@ metadata:
 
 Create distinctive, non-generic UI. Avoids AI slop (purple gradients, cookie-cutter layouts).
 
+<progress_context>
+**Use Read tool:** `docs/progress.md` (first 50 lines)
+
+Check for related prior design work and aesthetic decisions.
+</progress_context>
+
 ## Prerequisites
 
 - **Dev server running** — Ensure the app is running locally so you can visually verify changes

@@ -10,6 +10,12 @@ metadata:
   argument-hint: <optional-message>
 ---
 
+<progress_context>
+**Use Read tool:** `docs/progress.md` (first 50 lines)
+
+Check recent work context to inform commit message writing.
+</progress_context>
+
 # Commit Changes
 
 Commit and push changes, intelligently splitting into separate commits when changes span multiple domains.
