@@ -14,7 +14,28 @@ metadata:
 
 Implement UI components directly from Figma designs using the Figma MCP.
 
+## Prerequisites — CHECK FIRST
+
+**Before doing anything else, verify Figma MCP is available:**
+
+1. **Check MCP Server Installation**
+   - Look for `mcp__figma__*` tools in your available tools
+   - If no Figma MCP tools exist, **STOP** and notify the user:
+     > "The Figma MCP server is not installed. To use /arc:figma, you need to install the Figma MCP server. See: https://github.com/figma/figma-mcp"
+
+2. **Check Authentication**
+   - Attempt a simple Figma MCP call (e.g., `mcp__figma__get_design_context` with the provided file)
+   - If you receive an authentication error, **STOP** and notify the user:
+     > "The Figma MCP server needs authentication. Please configure your Figma access token in the MCP server settings."
+
+3. **Do NOT proceed** if either check fails
+   - Do not attempt to implement designs without Figma access
+   - Do not guess at design specs
+   - Simply halt and inform the user what's needed
+
 ## Process
+
+**Only proceed with the following if Figma MCP is available and authenticated.**
 
 Follow the instructions in `${CLAUDE_PLUGIN_ROOT}/agents/design/figma-implement.md`:
 
