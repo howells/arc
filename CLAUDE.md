@@ -1,6 +1,6 @@
 # Arc Plugin
 
-The full arc from idea to shipped code. This plugin provides 19 commands for the complete development lifecycle.
+The full arc from idea to shipped code. This plugin provides 20 commands for the complete development lifecycle.
 
 ## Structure
 
@@ -9,6 +9,7 @@ arc/
 ├── .claude-plugin/
 │   └── plugin.json         # Plugin metadata
 ├── skills/                  # Each skill = one /arc:* command
+│   ├── arc/SKILL.md        # /arc:arc (main entry point)
 │   ├── vision/SKILL.md     # /arc:vision
 │   ├── ideate/SKILL.md     # /arc:ideate
 │   ├── detail/SKILL.md     # /arc:detail
@@ -46,6 +47,7 @@ arc/
 All commands use the `/arc:` namespace prefix:
 
 ```
+ENTRY   /arc:arc        - Main entry point, routes to right workflow
 WHY     /arc:vision     - High-level goals
 WHAT    /arc:ideate     - From idea to working implementation
 HOW     /arc:detail     - Detailed implementation plan

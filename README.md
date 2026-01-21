@@ -11,9 +11,11 @@ The full arc from idea to shipped code. A [Claude Code](https://docs.anthropic.c
 
 ## What It Does
 
-Arc provides 19 commands covering the complete development lifecycle:
+Arc provides 20 commands covering the complete development lifecycle:
 
 ```
+ENTRY   /arc:arc      - Main entry point, routes to right workflow
+          ↓
 WHY     /arc:vision     - High-level goals (500-700 words)
           ↓
 WHAT    /arc:ideate     - From idea to working implementation
@@ -25,11 +27,11 @@ DO      /arc:implement  - Execute the plan with TDD
         /arc:build      - Quick build (no formal plan)
         /arc:test       - Test strategy and execution
         /arc:letsgo     - Production readiness checklist
-        /arc:deslop     - Remove LLM artifacts
+        /arc:legal      - Generate privacy policy and terms
 
 CROSS-CUTTING
         /arc:review     - Review a plan for feasibility
-        /arc:audit      - Comprehensive codebase audit
+        /arc:audit      - Comprehensive codebase audit (includes deslop)
         /arc:progress   - Session journal for knowledge persistence
         /arc:tasklist   - Persistent task backlog
         /arc:document   - Feature documentation
@@ -168,6 +170,7 @@ Each step asks if you want to continue. You can also enter at any point:
 
 | Command | When to use | Output |
 |---------|-------------|--------|
+| `/arc:arc` | Main entry point, routes to workflow | Context-aware guidance |
 | `/arc:vision` | Starting a new project | `docs/vision.md` |
 | `/arc:ideate` | From idea to working implementation | `docs/plans/YYYY-MM-DD-<feature>.md` |
 | `/arc:detail` | Create implementation plan | `docs/plans/YYYY-MM-DD-<feature>-impl.md` |
@@ -177,7 +180,7 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:build` | Quick implementation | Code changes |
 | `/arc:test` | Test strategy | Test files |
 | `/arc:letsgo` | Ship to production | Deployment |
-| `/arc:deslop` | Clean LLM artifacts | Code cleanup |
+| `/arc:legal` | Generate legal pages | Privacy policy, ToS, cookies |
 | `/arc:review` | Review a plan for feasibility | Updated plan file |
 | `/arc:audit` | Comprehensive codebase audit | `docs/audits/YYYY-MM-DD-*.md` |
 | `/arc:progress` | View/manage session journal | `docs/progress.md` |
@@ -190,12 +193,12 @@ Each step asks if you want to continue. You can also enter at any point:
 
 ## Agents
 
-Arc includes 14 specialized agents:
+Arc includes 16 specialized agents:
 
 | Category | Agents |
 |----------|--------|
 | **Research** | framework-docs-researcher, git-history-analyzer, duplicate-detector |
-| **Review** | architecture-strategist, code-simplicity-reviewer, daniel-product-engineer-reviewer, data-integrity-guardian, lee-nextjs-reviewer, performance-oracle, security-sentinel, senior-reviewer |
+| **Review** | architecture-strategist, code-simplicity-reviewer, daniel-product-engineer-reviewer, data-integrity-guardian, design-quality-reviewer, lee-nextjs-reviewer, llm-artifact-reviewer, performance-oracle, security-sentinel, senior-reviewer |
 | **Design** | figma-implement |
 | **Workflow** | spec-flow-analyzer, e2e-test-runner |
 
@@ -219,7 +222,7 @@ Commands work together:
 - `/arc:suggest` reads `/arc:tasklist`, codebase, and `/arc:vision` (priority cascade)
 - `/arc:ideate` can flow to `/arc:detail` → `/arc:implement`
 - `/arc:build` suggests `/arc:ideate` if scope is too large
-- `/arc:letsgo` runs `/arc:test` and `/arc:deslop` as part of quality checks
+- `/arc:letsgo` runs `/arc:test` and `/arc:audit --deslop` as part of quality checks
 - Any command can add to `/arc:tasklist`
 
 ## Acknowledgments
