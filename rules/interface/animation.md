@@ -1,192 +1,151 @@
 # Interface: Animation
 
-## Core Principles
+## Core Rules
 
-- MUST: Honor `prefers-reduced-motion` (provide reduced variant)
-- MUST: Animate compositor-friendly props only (`transform`, `opacity`)
-- MUST: Every animation answers "Why does this exist?" — if no clear answer, don't animate
-- MUST: Animations are interruptible and input-driven (avoid autoplay)
-- MUST: Correct `transform-origin` (motion starts where it "physically" should)
-- SHOULD: Prefer CSS for simple transitions; use `motion/react` when JS control is required
-- SHOULD: Add animation only when explicitly requested or clearly purposeful
-- NEVER: Animate for "delight" without function — users have goals, not expectations of entertainment
+- MUST: Honor `prefers-reduced-motion`
+- MUST: Animate only `transform` and `opacity`
+- MUST: Every animation answers "why does this exist?"
+- MUST: Correct `transform-origin` for element's entry point
+- SHOULD: CSS for simple transitions; `motion/react` when JS control needed
+- NEVER: Animate for "delight" without function
 
-## Easing Selection
+## Easing Decision
 
-Easing is the most important part of any animation. Match easing to animation type:
+| Context | Easing | Curve |
+|---------|--------|-------|
+| Entering/appearing | `ease-out` | `cubic-bezier(0.23, 1, 0.32, 1)` |
+| Exiting/disappearing | `ease-in` | `cubic-bezier(0.4, 0, 1, 1)` |
+| Moving while visible | `ease-in-out` | `cubic-bezier(0.4, 0, 0.2, 1)` |
+| Color/opacity only | `linear` | — |
+| Interactive/gesture | `spring` | See presets below |
 
-| Animation Type | Easing | Why |
-|----------------|--------|-----|
-| **Entering** screen | `ease-out` | Fast start feels responsive |
-| **Leaving** screen | `ease-in` | Slow start, accelerates away |
-| **Moving** while visible | `ease-in-out` | Natural acceleration/deceleration |
-| **Color/opacity** changes | `linear` | No movement, perceptually linear |
-| **Interactive** elements | `spring` | Alive, responsive, interruptible |
+- NEVER: Use `ease-in` for enter animations
 
-- MUST: Use `ease-out` for user-initiated actions (dropdowns, modals, tooltips)
-- MUST: Use `ease-in` only for exit animations
-- SHOULD: Use springs for drag, gestures, and interactive elements
-- NEVER: Use `ease-in` for entering animations (feels sluggish)
+### Easing Variables
 
 ```css
-/* Entering */
-transition: transform 200ms ease-out;
-transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+--ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+--ease-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
+--ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+--ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+--ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
 
-/* Moving */
-transition: transform 300ms ease-in-out;
-transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
-
-/* Exiting */
-transition: opacity 200ms ease-in;
+--ease-in-out-quad: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+--ease-in-out-cubic: cubic-bezier(0.645, 0.045, 0.355, 1);
+--ease-in-out-quart: cubic-bezier(0.77, 0, 0.175, 1);
 ```
 
-## Duration Guidelines
+Order: quad → cubic → quart → quint → expo (subtle → dramatic)
 
-- SHOULD: Default to 200ms for most UI interactions
-- SHOULD: Keep duration under 200ms for immediacy
-- SHOULD: Skip animations for frequent, low-novelty interactions
-- MUST: Avoid transitions when switching themes (flash of intermediate state)
+## Duration
 
-| Animation Type | Duration |
-|----------------|----------|
-| Micro-interactions (hover, click) | 100–200ms |
-| Small UI (dropdowns, tooltips) | 150–300ms |
-| Medium (modals, panels) | 200–400ms |
-| Large (page transitions) | 300–500ms |
+| Element | Duration |
+|---------|----------|
+| Micro (hover, click) | 100–150ms |
+| Small (tooltip, dropdown) | 150–200ms |
+| Medium (modal, panel) | 200–300ms |
+| Large (page transition) | 300–400ms |
 
-**Frequency Rule:** The more often users see an animation, the shorter (or absent) it should be. A 200ms hover animation feels fine in a demo but becomes friction when triggered 50 times per day.
+- SHOULD: Default to 200ms
+- MUST: Skip animation if user triggers 100+ times/day
+- MUST: Paired elements share identical duration and easing
 
-## Spring Animations
-
-Springs feel more natural because real-world objects don't have fixed durations. Use for interactive, gesture-driven, or interruptible animations.
-
-### Presets
+## Spring Presets
 
 ```jsx
-// Snappy (buttons, UI responses)
+// Snappy (buttons, toggles)
 { type: "spring", stiffness: 400, damping: 25 }
 
-// Gentle (subtle movements)
+// Gentle (subtle movement)
 { type: "spring", stiffness: 200, damping: 20 }
 
-// Bouncy (playful, use sparingly)
+// Bouncy (use sparingly)
 { type: "spring", stiffness: 300, damping: 10 }
-
-// Apple-style (duration/bounce model)
-{ type: "spring", duration: 0.4, bounce: 0.2 }
 ```
 
-### When to Use Springs
-
-- SHOULD: Use springs for interactive elements (buttons, toggles, sliders)
-- SHOULD: Use springs for drag and drop, pull-to-refresh, gestures
-- SHOULD: Use springs when animations may be interrupted mid-flight
-- SHOULD: Use tweens for fixed timing (video sync, staggered sequences)
-- SHOULD: Use tweens for opacity-only or very short (<100ms) animations
+Use springs for: drag/drop, gestures, interruptible animations.
+Use tweens for: fixed timing, opacity-only, <100ms.
 
 ## Scale Values
 
-Use consistent scale transforms across the UI:
+| Element | Scale |
+|---------|-------|
+| Modal/dialog | `0.95`–`0.98` |
+| Button press | `0.97`–`0.98` |
+| Card/list item | `0.98`–`0.99` |
+| Tooltip | `0.95` |
 
-| Element | Scale on press/hide |
-|---------|---------------------|
-| Dialogs, modals | `0.95`–`0.98` + opacity |
-| Buttons | `0.96`–`0.98` |
-| Cards, list items | `0.98`–`0.99` |
-| Tooltips, popovers | `0.95` + opacity |
+- NEVER: Scale from `0` — minimum `0.95`
 
+## Patterns
+
+### Modal Entry
 ```jsx
-// Button press
-whileHover={{ scale: 1.02 }}
-whileTap={{ scale: 0.98 }}
-transition={{ type: "spring", stiffness: 400, damping: 17 }}
-```
-
-- NEVER: Animate from `scale(0)` — always start from at least `0.95`
-- SHOULD: Combine scale with opacity for enter/exit animations
-
-## Common Patterns
-
-### Fade + Slide Up (Modal Entry)
-
-```jsx
-initial={{ opacity: 0, y: 20 }}
-animate={{ opacity: 1, y: 0 }}
-exit={{ opacity: 0, y: 10 }}
-transition={{ type: "spring", damping: 25, stiffness: 300 }}
+initial={{ opacity: 0, y: 20, scale: 0.98 }}
+animate={{ opacity: 1, y: 0, scale: 1 }}
+exit={{ opacity: 0, y: 10, scale: 0.98 }}
 ```
 
 ### Dropdown
-
 ```jsx
-initial={{ opacity: 0, scale: 0.95, y: -10 }}
+initial={{ opacity: 0, scale: 0.95, y: -8 }}
 animate={{ opacity: 1, scale: 1, y: 0 }}
-exit={{ opacity: 0, scale: 0.95, y: -10 }}
 transition={{ duration: 0.15, ease: "easeOut" }}
+style={{ transformOrigin: "top" }}
 ```
 
 ### Staggered List
-
 ```jsx
-const container = {
-  visible: { transition: { staggerChildren: 0.03 } }
-};
-
-const item = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0 }
-};
+const container = { visible: { transition: { staggerChildren: 0.03 } } };
+const item = { hidden: { opacity: 0, y: 8 }, visible: { opacity: 1, y: 0 } };
 ```
 
-- SHOULD: Use `staggerChildren: 0.03–0.05` for list reveals
-- SHOULD: Keep stagger delays short to avoid sluggishness
+### AnimatePresence
 
-## Performance
+| Mode | Use |
+|------|-----|
+| `sync` | Default, simultaneous enter/exit |
+| `wait` | Exit completes before enter |
+| `popLayout` | Exiting element pops from layout |
 
-- MUST: Animate only `transform` and `opacity` (GPU-composited)
-- MUST: Pause looping animations when off-screen (Intersection Observer)
-- NEVER: Animate `width`, `height`, `top`, `left`, `margin`, `padding` (trigger layout)
-- SHOULD: Use `will-change: transform` sparingly for known animations
-- SHOULD: Prefer CSS/WAAPI over JS for simple animations (hardware acceleration)
+Use `popLayout` for lists with exit animations.
 
-| Don't Animate | Animate Instead |
-|---------------|-----------------|
-| `width` | `scaleX` |
-| `height` | `scaleY` |
-| `top`/`left` | `translateX`/`translateY` |
-| `margin` | `transform` + padding |
+### Drag Dismiss
+```jsx
+onDragEnd={(_, info) => {
+  if (info.velocity.x > 500 || Math.abs(info.offset.x) > 100) dismiss();
+}}
+```
 
-```css
-/* Force GPU acceleration (use sparingly) */
-.animated {
-  will-change: transform;
-  /* or */
-  transform: translateZ(0);
+## Theme Switching
+
+- MUST: Disable transitions during theme change
+
+```js
+function setTheme(theme) {
+  document.documentElement.classList.add('no-transitions');
+  document.documentElement.setAttribute('data-theme', theme);
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      document.documentElement.classList.remove('no-transitions');
+    });
+  });
 }
 ```
 
-## Accessibility
+```css
+.no-transitions, .no-transitions * { transition: none !important; }
+```
 
-- MUST: Respect `prefers-reduced-motion` system preference
-- MUST: Provide functional UI without animation (animation enhances, never gates)
-- SHOULD: Use opacity fades as reduced-motion fallback (still conveys change)
-- NEVER: Use flashing animations (especially >3Hz)
+## Reduced Motion
 
-### Safe Properties (Reduced Motion)
+- MUST: Provide reduced-motion fallback for every animation
+- SHOULD: Use opacity fade as fallback
 
-- Opacity fades
-- Small color changes
-- Subtle scale (under 10%)
-
-### Problematic (Require Caution)
-
-- Large movements across screen
-- Parallax effects
-- Zoom animations
-- Spinning/rotating elements
-
-### Implementation
+```jsx
+const shouldReduce = useReducedMotion();
+<motion.div animate={{ opacity: 1, y: shouldReduce ? 0 : 20 }} />
+```
 
 ```css
 @media (prefers-reduced-motion: reduce) {
@@ -197,39 +156,62 @@ const item = {
 }
 ```
 
-```jsx
-import { useReducedMotion } from "framer-motion";
+## Troubleshooting
 
-const shouldReduceMotion = useReducedMotion();
+| Problem | Fix |
+|---------|-----|
+| Buttons feel dead | `active:scale-[0.97]` |
+| Element appears from nowhere | Start at `scale(0.95)`, not `0` |
+| Jittery/shaky animation | Add `will-change: transform` |
+| Hover causes flicker | Animate child, not parent |
+| Popover scales from wrong point | Set `transform-origin` to trigger location |
+| Sequential tooltips feel slow | Skip delay after first (warm state) |
+| Touch targets too small | 44px minimum via pseudo-element |
+| Something still feels off | Subtle blur (<20px) can mask issues |
+| Hover fires on mobile | `@media (hover: hover) and (pointer: fine)` |
 
-<motion.div
-  animate={{ opacity: 1, y: shouldReduceMotion ? 0 : 20 }}
-  transition={{ duration: shouldReduceMotion ? 0 : 0.3 }}
-/>
-```
+## Performance
 
-## Anti-Patterns
+- MUST: Animate only `transform`, `opacity`
+- MUST: Pause looping animations when off-screen
+- NEVER: Animate `width`, `height`, `top`, `left`, `margin`, `padding`
 
-| Anti-Pattern | Problem | Fix |
-|--------------|---------|-----|
-| Delight trap | Bouncy animations everywhere without purpose | Ask "why does this exist?" |
-| Over-animation | Too many things moving at once | Animate one thing at a time |
-| Wrong easing | ease-in for entering feels sluggish | Match easing to animation type |
-| Too slow | Demo-friendly timing becomes friction | Consider frequency of use |
-| Inconsistent timing | Same elements at different speeds | Define timing tokens |
-| Expensive properties | Animating width/height causes jank | Use transform/opacity only |
+| Don't | Do |
+|-------|-----|
+| `width` | `scaleX` |
+| `height` | `scaleY` |
+| `top`/`left` | `translate` |
 
-## Scroll Behavior
+### Performance Tiers
+
+| Tier | Techniques | Thread |
+|------|------------|--------|
+| **S** | `transform`, `opacity`, `filter`, `clip-path` via CSS/WAAPI/Motion | Compositor |
+| **A** | Same values via rAF/GSAP on layered elements | Main |
+| **B** | FLIP/layout animations (setup + S/A) | Main → Compositor |
+| **C** | `background-color`, CSS variables, SVG `d` | Paint |
+| **D** | `width`, `height`, `margin`, layout | Full pipeline |
+| **F** | Style/layout thrashing | Avoid completely |
+
+- MUST: Prefer `motion/react` (uses WAAPI) — S-Tier, smooth under main thread load
+- SHOULD: Avoid rAF-based libraries (GSAP, anime.js) — A-Tier, vulnerable to jank
+
+### CSS Variables Warning
+
+- NEVER: Animate CSS variables for `transform`/`opacity` — always triggers paint (C-Tier)
+- NEVER: Animate global CSS variables — inheritance triggers style recalc on ALL descendants (F-Tier)
 
 ```css
-html {
-  scroll-behavior: smooth;
-}
+/* F-Tier: Inheritance bomb */
+html { --progress: 0; }
+.box { transform: translateY(calc(var(--progress) * 100px)); }
 
-[id] {
-  scroll-margin-top: 80px; /* Account for fixed header */
+/* Safe: Disable inheritance */
+@property --progress {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
 }
 ```
 
-- SHOULD: Use `scroll-behavior: smooth` with appropriate `scroll-margin-top`
-- SHOULD: Consider disabling smooth scroll for reduced-motion users
+If you must use CSS variables, use `@property { inherits: false }` to prevent cascade.

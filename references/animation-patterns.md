@@ -218,6 +218,48 @@ const getY = (index) => index * -10;
 />
 ```
 
+### AnimatePresence Modes
+
+| Mode | Behavior |
+|------|----------|
+| `sync` (default) | Entering and exiting elements animate simultaneously |
+| `wait` | Wait for exit animation to complete before entering |
+| `popLayout` | Exiting elements are popped from layout flow immediately |
+
+Use `popLayout` when an element has an exit animation and is in a group of elements. This prevents layout jumps during exit:
+
+```jsx
+<AnimatePresence mode="popLayout">
+  {items.map((item) => (
+    <motion.div
+      key={item.id}
+      layout
+      exit={{ opacity: 0, scale: 0.95 }}
+    />
+  ))}
+</AnimatePresence>
+```
+
+### Velocity-Based Drag Gestures
+
+When implementing drag-to-dismiss, use velocity to detect quick swipes (not just distance):
+
+```jsx
+onDragEnd={(_, info) => {
+  const velocity = Math.abs(info.velocity.x);
+  const offset = Math.abs(info.offset.x);
+
+  // Either fast enough OR far enough
+  const shouldDismiss = velocity > 500 || offset > 100;
+
+  if (shouldDismiss) {
+    dismiss();
+  }
+}}
+```
+
+Velocity threshold of ~500px/s feels natural. Distance threshold of ~100px is a good fallback for slow drags.
+
 ## Component Patterns
 
 ### Button Press

@@ -15,6 +15,7 @@ UI/UX guidelines for building polished, accessible interfaces.
 | [interactions.md](interactions.md) | User interaction patterns |
 | [animation.md](animation.md) | Motion and transitions |
 | [performance.md](performance.md) | UI performance optimization |
+| [marketing.md](marketing.md) | Marketing page guidelines |
 | [content-accessibility.md](content-accessibility.md) | Accessible content |
 
 ## Related References
@@ -24,6 +25,7 @@ UI/UX guidelines for building polished, accessible interfaces.
 | [design-philosophy.md](../../references/design-philosophy.md) | Timeless design principles |
 | [frontend-design.md](../../references/frontend-design.md) | Fonts, component checklist, anti-patterns |
 | [animation-patterns.md](../../references/animation-patterns.md) | Deep animation patterns and frameworks |
+| [component-design.md](../../references/component-design.md) | React component patterns |
 | [ascii-ui-patterns.md](../../references/ascii-ui-patterns.md) | ASCII wireframe patterns |
 | [tailwind-v4.md](../../references/tailwind-v4.md) | Tailwind v4 migration guide |
 

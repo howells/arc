@@ -2,35 +2,68 @@
 
 ## Principles
 
-- SHOULD: Test iOS Low Power Mode and macOS Safari
-- MUST: Measure reliably (disable extensions that skew runtime)
-- MUST: Track and minimize re-renders (React DevTools/React Scan)
 - MUST: Profile with CPU/network throttling
-- MUST: Batch layout reads/writes; avoid unnecessary reflows/repaints
-- MUST: Mutations (`POST/PATCH/DELETE`) target <500 ms
-- SHOULD: Prefer uncontrolled inputs; make controlled loops cheap (keystroke cost)
-- MUST: Virtualize large lists (e.g., TanStack Virtual or `virtua`)
-- MUST: Preload only above-the-fold images; lazy-load the rest
-- MUST: Prevent CLS from images (explicit dimensions or reserved space)
+- MUST: Measure reliably (disable extensions that skew runtime)
+- MUST: Track re-renders (React DevTools/React Scan)
+- MUST: Batch layout reads/writes — avoid reflows/repaints
+- MUST: Mutations (`POST/PATCH/DELETE`) < 500ms
+- MUST: Virtualize large lists (`@tanstack/react-virtual` or `virtua`)
+- MUST: Preload above-fold images; lazy-load rest
+- MUST: Prevent CLS (explicit image dimensions)
+- SHOULD: Test iOS Low Power Mode and macOS Safari
+- SHOULD: Prefer uncontrolled inputs; make controlled loops cheap
 
-## CSS Performance
+## CSS
 
-- SHOULD: Avoid large `blur()` values on filters/backdrops (GPU-heavy)
-- SHOULD: Replace blurred rectangles with radial gradients when possible (avoids banding)
-- SHOULD: Use `transform: translateZ(0)` sparingly for GPU layer promotion
-- SHOULD: Toggle `will-change` only during unperformant scroll animations, then remove
+- SHOULD: Avoid large `blur()` values (GPU-heavy)
+- SHOULD: Replace blurred rectangles with radial gradients
+- SHOULD: `transform: translateZ(0)` sparingly for GPU layer promotion
+- SHOULD: Toggle `will-change` only during scroll, then remove
+
+### Transitions
+
+- NEVER: `transition: all` — causes accidental animations
 
 ```css
-/* Only during scroll */
-.scrolling .heavy-element {
-  will-change: transform;
-}
+/* Bad */
+.button { transition: all 200ms ease; }
+
+/* Good */
+.button { transition: background-color 200ms ease, transform 200ms ease; }
 ```
+
+Or Tailwind: `transition-colors duration-200` instead of `transition-all`
+
+### CSS Variables
+
+- NEVER: Animate global CSS variables — triggers style recalc on ALL descendants (F-Tier)
+- CSS variables ALWAYS trigger paint, even inside `opacity: var(--x)`
+- If unavoidable, use `@property { inherits: false }` to prevent cascade
+
+### Thrashing (F-Tier)
+
+- NEVER: Interleave DOM reads and writes (read-write-read-write)
+- MUST: Batch all reads, then all writes
+
+```js
+// Bad: Thrashing
+element.style.width = "100px"
+const width = element.offsetWidth // Forces layout
+element.style.width = width * 2 + "px"
+
+// Good: Batched
+const width = element.offsetWidth // Read first
+element.style.width = width * 2 + "px" // Then write
+```
+
+### Theme Switching
+
+- MUST: Disable transitions during theme change (see `animation.md`)
 
 ## Video & Media
 
-- MUST: Pause/unmount off-screen videos (especially on iOS)
-- MUST: Use `muted` and `playsinline` for iOS autoplay:
+- MUST: Pause/unmount off-screen videos (especially iOS)
+- MUST: `muted playsinline` for iOS autoplay:
 
 ```html
 <video autoplay loop muted playsinline>
@@ -38,7 +71,22 @@
 </video>
 ```
 
-## React-Specific
+## React
 
-- SHOULD: Use refs for real-time DOM updates that bypass render cycles (e.g., mouse position, scroll)
-- SHOULD: Detect and adapt to user device capabilities and network conditions
+- SHOULD: Refs for real-time DOM updates that bypass render (mouse position, scroll)
+- SHOULD: Detect/adapt to device capabilities and network conditions
+
+### Motion/Framer Motion
+
+Motion uses WAAPI (S-Tier) for most animations. However, "independent transforms" (`x`, `y`, `rotate`, `scale`) use a main-thread approach (A-Tier).
+
+```jsx
+// S-Tier: WAAPI, compositor thread
+<motion.div animate={{ transform: "translateX(100px)" }} />
+<motion.div animate={{ opacity: 1 }} />
+
+// A-Tier: Main thread (independent transforms)
+<motion.div animate={{ x: 100 }} />
+```
+
+For performance-critical transforms, prefer string syntax to ensure WAAPI.

@@ -2,7 +2,7 @@
 
 ## Rendering
 
-- MUST: Apply font smoothing for legibility:
+- MUST: `antialiased` class on body (Tailwind) or:
 
 ```css
 body {
@@ -15,49 +15,55 @@ body {
 - MUST: Prevent iOS landscape zoom:
 
 ```css
-html {
-  -webkit-text-size-adjust: 100%;
-}
+html { -webkit-text-size-adjust: 100%; }
 ```
 
 ## Font Weight
 
-- MUST: Minimum body font weight: 400
-- SHOULD: Medium headings: 500–600 weight
-- MUST: Maintain consistent weight on hover/selection (no layout shift from bold)
+| Usage | Weight |
+|-------|--------|
+| Body minimum | 400 |
+| Headings | 500–600 |
+
+- MUST: No weight change on hover/selection (prevents layout shift)
+- SHOULD: Define as CSS variables:
+
+```css
+:root {
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}
+```
+
+## Letter Spacing
+
+Larger text needs tighter spacing; smaller text looser. Font-dependent.
+
+```tsx
+// Handle in Text component
+<Text size="lg">Heading</Text> // Pairs size with optimal letter-spacing
+```
 
 ## Fluid Sizing
 
-- SHOULD: Use `clamp()` for responsive typography:
+- SHOULD: Use `clamp()`:
 
 ```css
-h1 {
-  font-size: clamp(2rem, 5vw, 4.5rem);
-}
-
-p {
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
-}
+h1 { font-size: clamp(2rem, 5vw, 4.5rem); }
+p { font-size: clamp(1rem, 2.5vw, 1.25rem); }
 ```
 
 ## Numeric Content
 
-- MUST: Use tabular figures for aligned numbers:
-
-```css
-.table-cell,
-.timer,
-.price {
-  font-variant-numeric: tabular-nums;
-}
-```
-
-- SHOULD: Use a monospace font (like Geist Mono) for numeric comparisons
+- MUST: `tabular-nums` (Tailwind) for aligned numbers in tables, timers, prices
+- SHOULD: Monospace font (Geist Mono) for numeric comparisons
 
 ## Font Loading
 
-- SHOULD: Subset fonts based on language and content to reduce payload
-- MUST: Use `font-display: swap` or `optional` to prevent invisible text
+- MUST: `font-display: swap` or `optional` (prevents invisible text)
+- SHOULD: Subset fonts by language
 - SHOULD: Preload critical fonts:
 
 ```html
@@ -66,7 +72,7 @@ p {
 
 ## Selection
 
-- SHOULD: Style `::selection` for brand consistency:
+- SHOULD: Style `::selection` for brand:
 
 ```css
 ::selection {
@@ -75,17 +81,19 @@ p {
 }
 ```
 
-- MUST: Unset gradients on `::selection` (not supported, looks broken)
+- MUST: Unset gradients on `::selection` (not supported)
 
 ## Text Wrapping
 
-- SHOULD: Use `text-balance` on headings (native orphan/widow control)
-- SHOULD: Use `text-pretty` on body/paragraph text
-- SHOULD: Use `truncate` or `line-clamp-*` for dense UI with predictable overflow
+| Element | Class/Property |
+|---------|---------------|
+| Headings | `text-balance` |
+| Body text | `text-pretty` |
+| Dense UI | `truncate` or `line-clamp-*` |
 
 ## Content Formatting
 
-- MUST: Use the ellipsis character `…` (not `...`)
-- MUST: Use curly quotes `"` `"` and `'` `'` (not straight quotes)
+- MUST: Ellipsis character `…` (not `...`)
+- MUST: Curly quotes `"` `"` and `'` `'` (not straight)
+- MUST: Non-breaking spaces for units: `10\u00A0MB`, `⌘\u00A0K`
 - SHOULD: Avoid widows/orphans in headings
-- MUST: Use non-breaking spaces to glue units: `10\u00A0MB`, `⌘\u00A0K`
