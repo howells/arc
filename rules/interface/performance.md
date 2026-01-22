@@ -1,9 +1,5 @@
 # Interface: Performance
 
-Source references:
-- Vercel Web Interface Guidelines: https://vercel.com/design/guidelines
-- Rauno Freiberg: https://interfaces.rauno.me/
-
 ## Principles
 
 - SHOULD: Test iOS Low Power Mode and macOS Safari

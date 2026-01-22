@@ -2,8 +2,6 @@
 
 Deep patterns and decision frameworks for web animation. Companion to `rules/interface/animation.md`.
 
-Source: animations.dev by Emil Kowalski
-
 ## The Three Pillars
 
 Great animations are:

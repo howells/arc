@@ -1,9 +1,5 @@
 # Interface: Design
 
-Source references:
-- Vercel Design – Web Interface Guidelines: https://vercel.com/design/guidelines
-- Web Interface Guidelines: https://github.com/vercel-labs/web-interface-guidelines
-
 ## Visual Design
 - SHOULD: Layered shadows (ambient + direct)
   - *Example:* `shadow-[0_2px_4px_rgba(0,0,0,0.05),0_12px_24px_rgba(0,0,0,0.1)]`

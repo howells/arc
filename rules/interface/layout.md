@@ -1,9 +1,5 @@
 # Interface: Layout
 
-Source references:
-- Vercel Design – Web Interface Guidelines: https://vercel.com/design/guidelines
-- Web Interface Guidelines: https://github.com/vercel-labs/web-interface-guidelines
-
 ## Principles
 - SHOULD: Optical alignment; adjust by ±1px when perception beats geometry
 - MUST: Deliberate alignment to grid/baseline/edges/optical centers—no accidental placement

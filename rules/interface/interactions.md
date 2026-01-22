@@ -1,9 +1,5 @@
 # Interface: Interactions
 
-Source references:
-- Vercel Web Interface Guidelines: https://vercel.com/design/guidelines
-- Rauno Freiberg: https://interfaces.rauno.me/
-
 ## Keyboard
 - MUST: Full keyboard support per WAI-ARIA APG patterns
   - https://www.w3.org/WAI/ARIA/apg/patterns/

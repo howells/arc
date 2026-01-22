@@ -1,10 +1,5 @@
 # Interface: Animation
 
-Source references:
-- animations.dev by Emil Kowalski
-- Vercel Web Interface Guidelines: https://vercel.com/design/guidelines
-- Rauno Freiberg: https://interfaces.rauno.me/
-
 ## Core Principles
 
 - MUST: Honor `prefers-reduced-motion` (provide reduced variant)

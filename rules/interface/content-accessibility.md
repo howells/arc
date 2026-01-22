@@ -1,9 +1,5 @@
 # Interface: Content & Accessibility
 
-Source references:
-- Vercel Web Interface Guidelines: https://vercel.com/design/guidelines
-- Rauno Freiberg: https://interfaces.rauno.me/
-
 ## ARIA
 
 - NEVER: Use `aria-hidden="true"` on focusable elements

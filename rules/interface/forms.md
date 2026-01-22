@@ -1,9 +1,5 @@
 # Interface: Forms
 
-Source references:
-- Vercel Design – Web Interface Guidelines: https://vercel.com/design/guidelines
-- Web Interface Guidelines: https://github.com/vercel-labs/web-interface-guidelines
-
 ## Behavior
 - MUST: Hydration-safe inputs (no lost focus/value)
 - NEVER: Block paste in `<input>/<textarea>`
