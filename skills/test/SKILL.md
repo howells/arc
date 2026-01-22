@@ -42,6 +42,24 @@ Create or review test strategy. Optionally run test suite. Supports vitest and p
 | `jest.config.*` | jest |
 | `cypress.config.*` | cypress |
 
+### Step 1b: Verify Fail-Fast Configuration
+
+**Tests must fail fast.** Don't waste time waiting.
+
+**Check playwright.config.ts has sensible timeouts:**
+- `timeout: 30_000` (30s max per test)
+- `actionTimeout: 10_000` (10s per action)
+- `expect.timeout: 5_000` (5s for assertions)
+
+**If tests hit LLM APIs:** Use tighter timeouts (5-10s). See `${CLAUDE_PLUGIN_ROOT}/references/llm-api-testing.md`
+
+**Never:**
+- Set global timeout to minutes "just in case"
+- Retry 5+ times to mask flaky tests
+- Use arbitrary sleeps
+
+**Reference:** `${CLAUDE_PLUGIN_ROOT}/agents/workflow/e2e-test-runner.md` for full Playwright config
+
 ### Step 2: Determine Intent
 
 "What would you like to do?"
@@ -141,6 +159,19 @@ Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/systematic-debugging.md`:
 3. Determine if test or code is wrong
 4. Fix at source
 
+**CRITICAL: Never blame "network issues" vaguely.**
+
+It is almost NEVER a network problem. Common actual causes:
+
+| Error Pattern | Likely Cause | NOT the cause |
+|---------------|--------------|---------------|
+| "ECONNREFUSED" | Server not running, wrong URL | "Network issues" |
+| "Timeout" | Slow operation OR payload too large | "Network issues" |
+| "400 Bad Request" | Invalid payload format | "Network issues" |
+| "500 Server Error" | Bug in your code | "Network issues" |
+
+**For LLM API failures:** See `${CLAUDE_PLUGIN_ROOT}/references/llm-api-testing.md`
+
 ## Test Patterns
 
 From `${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md`:
@@ -155,6 +186,18 @@ From `${CLAUDE_PLUGIN_ROOT}/references/testing-patterns.md`:
 - Testing mock behavior
 - Vague names ("test1", "it works")
 - Implementation details in assertions
+
+## LLM API Testing
+
+When tests call LLM APIs (OpenRouter, OpenAI, Anthropic, etc.), follow the guidance in:
+
+`${CLAUDE_PLUGIN_ROOT}/references/llm-api-testing.md`
+
+Key points:
+- Validate payloads with schema before sending
+- Use fast models (-flash, -mini) for tests
+- Set aggressive timeouts (5-10s)
+- Never conclude "network issues" without evidence
 
 <progress_append>
 After running tests or creating strategy, append to progress journal:

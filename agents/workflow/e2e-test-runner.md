@@ -175,6 +175,11 @@ Repeat Steps 3-4 until all tests pass.
 | Text mismatch | Content changed | Update expected text |
 | Click intercepted | Overlay/modal blocking | Wait for overlay to close, or click through |
 | Navigation timeout | Slow page load | Increase timeout or add waitForLoadState |
+| "ECONNREFUSED" / "Network error" | Server not running, wrong port | Start server, check URL |
+| LLM API timeout | Payload too large OR model overloaded | Reduce input, try faster model |
+| "413 Payload Too Large" | Request body exceeds limit | Truncate input, remove images |
+
+**For LLM API failures:** See `${CLAUDE_PLUGIN_ROOT}/references/llm-api-testing.md` — payload size is the most common culprit.
 
 ## Selector Strategy
 
