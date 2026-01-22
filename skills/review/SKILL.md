@@ -215,6 +215,16 @@ If reviewed an **implementation plan**:
 - "Ready to implement?" → `/arc:implement`
 - "Done for now" → end
 
+## Phase 7: Cleanup
+
+**Kill orphaned subagent processes:**
+
+After spawning reviewer agents, some may not exit cleanly. Run cleanup:
+
+```bash
+${CLAUDE_PLUGIN_ROOT}/scripts/cleanup-orphaned-agents.sh
+```
+
 </process>
 
 <progress_append>
@@ -246,4 +256,5 @@ Review is complete when:
 - [ ] Remaining arc shown (based on plan type)
 - [ ] User chose next step (detail/implement or done)
 - [ ] Progress journal updated
+- [ ] Orphaned agents cleaned up
 </success_criteria>

@@ -438,6 +438,18 @@ If user selects:
 - **Deep dive** → Show full findings for selected domain
 - **Done** → End session
 
+## Phase 7: Cleanup
+
+**Kill orphaned subagent processes:**
+
+After spawning multiple reviewer agents, some may not exit cleanly. Run cleanup to prevent memory accumulation:
+
+```bash
+${CLAUDE_PLUGIN_ROOT}/scripts/cleanup-orphaned-agents.sh
+```
+
+This is especially important after `--parallel` runs or when auditing large codebases.
+
 </process>
 
 <progress_append>
@@ -473,4 +485,5 @@ Audit is complete when:
 - [ ] Summary presented to user
 - [ ] Next steps offered
 - [ ] Progress journal updated
+- [ ] Orphaned agents cleaned up (run cleanup script)
 </success_criteria>
