@@ -22,6 +22,9 @@ metadata:
 - ${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md — Visual principles
 - ${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md — Color methodology
 - ${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md — Spacing system
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/layout.md — Layout patterns
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/animation.md — If motion is involved
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/marketing.md — If marketing pages
 </required_reading>
 
 <process>

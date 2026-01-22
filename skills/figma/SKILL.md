@@ -20,7 +20,12 @@ Implement UI components directly from Figma designs using the Figma MCP.
 - ${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md — Color methodology
 - ${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md — Spacing system
 - ${CLAUDE_PLUGIN_ROOT}/rules/interface/typography.md — Typography rules
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/layout.md — Layout patterns
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/animation.md — If implementing motion
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/forms.md — If implementing forms
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/interactions.md — Touch, keyboard, hover
 - ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md — Fonts and anti-patterns
+- ${CLAUDE_PLUGIN_ROOT}/references/component-design.md — React component patterns
 </required_reading>
 
 ## Prerequisites — CHECK FIRST

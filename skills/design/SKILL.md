@@ -23,11 +23,16 @@ Then load relevant rules based on the task:
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md` — Color palettes
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md` — Spacing system
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/typography.md` — Typography rules
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/layout.md` — Layout patterns, z-index
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/animation.md` — If motion is involved
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/forms.md` — If designing forms
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/interactions.md` — Touch, keyboard, hover patterns
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/marketing.md` — If designing marketing pages
 
 Also load references:
 - `${CLAUDE_PLUGIN_ROOT}/references/design-philosophy.md` — Timeless principles
 - `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` — Fonts, checklist, anti-patterns
+- `${CLAUDE_PLUGIN_ROOT}/references/component-design.md` — React component patterns
 </rules_context>
 
 <progress_context>

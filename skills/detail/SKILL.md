@@ -19,7 +19,12 @@ metadata:
 **For UI work, also load interface rules:**
 - ${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md — Visual principles
 - ${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md — Color methodology
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md — Spacing system
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/layout.md — Layout patterns
 - ${CLAUDE_PLUGIN_ROOT}/rules/interface/animation.md — Motion rules
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/forms.md — If forms involved
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/interactions.md — Interaction patterns
+- ${CLAUDE_PLUGIN_ROOT}/references/component-design.md — React component patterns
 </required_reading>
 
 <process>

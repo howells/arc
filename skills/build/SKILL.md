@@ -33,12 +33,15 @@ These rules define MUST/SHOULD/NEVER constraints. Follow them during implementat
 
 | Check | Read from `${CLAUDE_PLUGIN_ROOT}/rules/interface/` |
 |-------|---------------------------------------------------|
-| Building components/pages | design.md, colors.md, spacing.md |
+| Building components/pages | design.md, colors.md, spacing.md, layout.md |
 | Typography changes | typography.md |
-| Adding animations | animation.md |
-| Form work | forms.md |
+| Adding animations | animation.md, performance.md |
+| Form work | forms.md, interactions.md |
+| Interactive elements | interactions.md |
+| Marketing pages | marketing.md |
 
 Reference: `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` for fonts and anti-patterns.
+Reference: `${CLAUDE_PLUGIN_ROOT}/references/component-design.md` for React component patterns.
 Reference: `${CLAUDE_PLUGIN_ROOT}/references/tailwind-v4.md` for Tailwind v4 syntax (if using Tailwind).
 </rules_context>
 
