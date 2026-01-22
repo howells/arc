@@ -24,30 +24,34 @@ All rule docs use RFC 2119 terms (MUST/SHOULD/NEVER). Files are lowercase/kebab-
 |------|---------|
 | [versions.md](versions.md) | **Mandatory version requirements** |
 | [code-style.md](code-style.md) | Formatting, syntax, naming |
-| [typescript.md](Areas/Build/rules/typescript.md) | Type definitions and safety |
+| [typescript.md](typescript.md) | Type definitions and safety |
 | [react.md](react.md) | Component patterns and hooks |
-| [nextjs.md](Areas/Build/rules/nextjs.md) | App Router, assets, structure |
-| [tailwind.md](Areas/Build/rules/tailwind.md) | Tailwind v4 configuration |
+| [nextjs.md](nextjs.md) | App Router, assets, structure |
+| [tailwind.md](tailwind.md) | Tailwind v4 configuration |
 
 ### Workflow Rules
 | File | Purpose |
 |------|---------|
-| [testing.md](Areas/Build/rules/testing.md) | Unit, integration, E2E tests |
+| [testing.md](testing.md) | Unit, integration, E2E tests |
 | [git.md](git.md) | Commits, PRs, workflow |
 | [env.md](env.md) | Environment variable handling |
-| [turborepo.md](Areas/Build/rules/turborepo.md) | Monorepo package patterns |
+| [turborepo.md](turborepo.md) | Monorepo package patterns |
 | [integrations.md](integrations.md) | External service adapters |
 
 ### Interface Guidelines
 | File | Purpose |
 |------|---------|
-| [interface/animation.md](Areas/Build/rules/interface/animation.md) | Motion and transitions |
-| [interface/forms.md](Areas/Build/rules/interface/forms.md) | Form behavior and validation |
-| [interface/interactions.md](interactions.md) | Keyboard, touch, navigation |
-| [interface/layout.md](layout.md) | Alignment, responsive, safe areas |
-| [interface/design.md](design.md) | Visual design, contrast, shadows |
-| [interface/performance.md](performance.md) | Rendering, loading, CLS |
-| [interface/content-accessibility.md](content-accessibility.md) | ARIA, content, a11y |
+| [interface/index.md](interface/index.md) | Interface rules index |
+| [interface/design.md](interface/design.md) | Visual design, contrast, shadows |
+| [interface/colors.md](interface/colors.md) | Color palettes and methodology |
+| [interface/spacing.md](interface/spacing.md) | Spacing system and layout |
+| [interface/typography.md](interface/typography.md) | Type hierarchy and rendering |
+| [interface/layout.md](interface/layout.md) | Alignment, responsive, safe areas |
+| [interface/forms.md](interface/forms.md) | Form behavior and validation |
+| [interface/interactions.md](interface/interactions.md) | Keyboard, touch, navigation |
+| [interface/animation.md](interface/animation.md) | Motion and transitions |
+| [interface/performance.md](interface/performance.md) | Rendering, loading, CLS |
+| [interface/content-accessibility.md](interface/content-accessibility.md) | ARIA, content, a11y |
 
 ## Customization
 

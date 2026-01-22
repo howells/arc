@@ -71,10 +71,19 @@ Frontend work requires intentional aesthetic direction. Generic "AI slop" (purpl
 
 ## Motion
 
+See [Animation Patterns Reference](animation-patterns.md) for comprehensive guidance.
+
+**Key principles:**
 - Focus on high-impact moments (page load, reveals)
 - One well-orchestrated animation > scattered micro-interactions
-- Use `animation-delay` for staggered reveals
-- CSS-only when possible; Motion library for React
+- Every animation must answer: "Why does this exist?"
+- Use `ease-out` for entering, `ease-in` for exiting, springs for interactive
+- CSS-only when possible; `motion/react` when JS control required
+
+**Quick decisions:**
+- Entering screen → ease-out (200ms)
+- Interactive elements → spring ({ stiffness: 400, damping: 25 })
+- Staggered lists → staggerChildren: 0.03-0.05
 
 ## Spatial Composition
 
@@ -137,7 +146,7 @@ These warrant discussion:
 - [ ] No memorable element identified — what makes this stick?
 - [ ] Typography pairing unclear or default-feeling
 - [ ] Color palette lacks cohesion or intention
-- [ ] Motion is scattered micro-interactions, not orchestrated
+- [ ] Motion is scattered micro-interactions, not orchestrated (see [animation-patterns.md](animation-patterns.md))
 - [ ] Spacing feels arbitrary rather than systematic
 - [ ] Layout is "safe" — no unexpected decisions
 - [ ] Illustrations feel stock rather than curated
