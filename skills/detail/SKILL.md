@@ -15,6 +15,11 @@ metadata:
 2. ${CLAUDE_PLUGIN_ROOT}/references/task-granularity.md
 3. ${CLAUDE_PLUGIN_ROOT}/references/model-strategy.md
 4. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
+
+**For UI work, also load interface rules:**
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md — Visual principles
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md — Color methodology
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/animation.md — Motion rules
 </required_reading>
 
 <process>

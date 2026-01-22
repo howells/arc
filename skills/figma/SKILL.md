@@ -14,6 +14,15 @@ metadata:
 
 Implement UI components directly from Figma designs using the Figma MCP.
 
+<required_reading>
+**Load interface rules for UI implementation:**
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md — Visual principles
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md — Color methodology
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md — Spacing system
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/typography.md — Typography rules
+- ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md — Fonts and anti-patterns
+</required_reading>
+
 ## Prerequisites — CHECK FIRST
 
 **Before doing anything else, verify Figma MCP is available:**

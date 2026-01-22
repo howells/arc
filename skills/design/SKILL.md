@@ -13,6 +13,23 @@ metadata:
 
 Create distinctive, non-generic UI. Avoids AI slop (purple gradients, cookie-cutter layouts).
 
+<rules_context>
+**Load interface rules for UI work:**
+
+**Use Read tool:** `${CLAUDE_PLUGIN_ROOT}/rules/interface/index.md`
+
+Then load relevant rules based on the task:
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md` — Visual principles
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md` — Color palettes
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md` — Spacing system
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/typography.md` — Typography rules
+- `${CLAUDE_PLUGIN_ROOT}/rules/interface/animation.md` — If motion is involved
+
+Also load references:
+- `${CLAUDE_PLUGIN_ROOT}/references/design-philosophy.md` — Timeless principles
+- `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` — Fonts, checklist, anti-patterns
+</rules_context>
+
 <progress_context>
 **Use Read tool:** `docs/progress.md` (first 50 lines)
 

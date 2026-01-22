@@ -15,7 +15,13 @@ metadata:
 2. ${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md
 3. ${CLAUDE_PLUGIN_ROOT}/references/model-strategy.md
 4. ${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md (if UI work involved)
-5. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
+5. ${CLAUDE_PLUGIN_ROOT}/references/design-philosophy.md (if UI work involved)
+6. ${CLAUDE_PLUGIN_ROOT}/disciplines/dispatching-parallel-agents.md
+
+**For UI work, also load interface rules:**
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md — Visual principles
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md — Color methodology
+- ${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md — Spacing system
 </required_reading>
 
 <process>

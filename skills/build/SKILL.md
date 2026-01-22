@@ -28,6 +28,18 @@ metadata:
 These rules define MUST/SHOULD/NEVER constraints. Follow them during implementation.
 
 **If `.ruler/` doesn't exist:** Continue without rules — they're optional.
+
+**For UI/frontend work, also load interface rules:**
+
+| Check | Read from `${CLAUDE_PLUGIN_ROOT}/rules/interface/` |
+|-------|---------------------------------------------------|
+| Building components/pages | design.md, colors.md, spacing.md |
+| Typography changes | typography.md |
+| Adding animations | animation.md |
+| Form work | forms.md |
+
+Reference: `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` for fonts and anti-patterns.
+Reference: `${CLAUDE_PLUGIN_ROOT}/references/tailwind-v4.md` for Tailwind v4 syntax (if using Tailwind).
 </rules_context>
 
 # Build Workflow

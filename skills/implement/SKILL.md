@@ -42,6 +42,19 @@ No coding rules found. Run /arc:rules to set up standards, or continue without r
 ```
 
 Rules are optional — proceed without them if the user prefers.
+
+**For UI/frontend work, also load interface rules:**
+
+| Check | Read from `${CLAUDE_PLUGIN_ROOT}/rules/interface/` |
+|-------|---------------------------------------------------|
+| Building components/pages | design.md, colors.md, spacing.md |
+| Typography changes | typography.md |
+| Adding animations | animation.md |
+| Form work | forms.md |
+
+Reference: `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` for fonts and anti-patterns.
+Reference: `${CLAUDE_PLUGIN_ROOT}/references/animation-patterns.md` for motion design.
+Reference: `${CLAUDE_PLUGIN_ROOT}/references/tailwind-v4.md` for Tailwind v4 syntax (if using Tailwind).
 </rules_context>
 
 <process>
