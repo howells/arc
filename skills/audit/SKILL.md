@@ -43,6 +43,18 @@ Check for recent changes that should be included in audit scope.
 Pass relevant rules to each reviewer agent.
 
 **If `.ruler/` doesn't exist:** Continue without rules — they're optional.
+
+**For UI/frontend audits, also load interface rules:**
+
+| Reviewer | Rules to Pass |
+|----------|---------------|
+| design-quality-reviewer | design.md, colors.md, typography.md, marketing.md |
+| daniel-product-engineer-reviewer | forms.md, interactions.md, animation.md, performance.md |
+| lee-nextjs-reviewer | layout.md, performance.md |
+
+Rules location: `${CLAUDE_PLUGIN_ROOT}/rules/interface/`
+
+Pass relevant rules to each UI reviewer in their prompt. These inform what to look for, not mandates to redesign.
 </rules_context>
 
 <process>
