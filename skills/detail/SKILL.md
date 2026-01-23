@@ -8,16 +8,17 @@ license: MIT
 metadata:
   author: howells
 website:
-  desc: Implementation plans
-  summary: Create detailed implementation plans with exact file paths and TDD cycles.
+  order: 4
+  desc: Spec → task breakdown
+  summary: Turn your spec into a step-by-step implementation plan with exact file paths, test cases, and a clear order of operations.
   what: |
-    Detail takes a design (from /arc:ideate or a spec you provide) and produces a step-by-step implementation plan with exact file paths, test code, and TDD cycles. The output is a markdown file ready for /arc:implement.
+    Detail takes your spec and breaks it into ordered tasks. Each task specifies exactly which files to create or modify, what test to write first, and what "done" looks like. The output is a markdown plan file—a recipe precise enough that /arc:implement can execute it task by task. You review it, tweak it, then run.
   why: |
-    The gap between 'what to build' and 'how to build it' is where projects stall. Detail bridges that gap with actionable, sequenced tasks.
+    "I know what I want but not where to start" is where projects stall. Detail does the breakdown for you—turning a spec into a checklist you can execute without thinking about what comes next.
   decisions:
-    - Exact file paths, not 'create a service for X'. Specificity eliminates ambiguity.
-    - Test code included in the plan. You know what success looks like before you start.
-    - Task dependencies explicit. You can see the critical path.
+    - Exact file paths, not vague descriptions. "Create src/lib/auth.ts" not "add authentication".
+    - Test-first by design. Each task starts with the test that proves it works.
+    - Human-reviewable. It's a markdown file you can read, edit, and approve before execution.
 ---
 
 <required_reading>
@@ -302,6 +303,15 @@ Options:
 
 Look for related ideate sessions or prior work on this feature.
 </progress_context>
+
+<tasklist_context>
+**Use Read tool:** `docs/tasklist.md`
+
+Check if this feature relates to existing tasklist items:
+- If found → Note which items this plan will address
+- If multiple related items → Consider combining or sequencing them
+- Helps ensure implementation plan covers all related work
+</tasklist_context>
 
 <progress_append>
 After creating the implementation plan, append to progress journal:

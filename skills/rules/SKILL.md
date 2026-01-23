@@ -8,15 +8,16 @@ license: MIT
 metadata:
   author: howells
 website:
+  order: 20
   desc: Apply standards
-  summary: Apply Arc's coding rules to the current project. Copies rules to .ruler/ directory.
+  summary: Apply Arc's coding standards to your project. TypeScript, React, Next.js, testing patterns, UI conventions—all in .ruler/ where every AI tool can read them.
   what: |
-    Rules copies Arc's coding standards (TypeScript, React, Next.js, Tailwind, testing patterns, etc.) to your project's .ruler/ directory. These rules inform Arc's code generation and review processes.
+    Rules copies Arc's coding standards to your project's .ruler/ directory: TypeScript patterns, React conventions, Next.js best practices, Tailwind usage, testing strategies, and UI design guidelines. Every Arc skill reads from .ruler/ when generating or reviewing code—so the AI follows your project's standards, not generic ones.
   why: |
-    Consistency requires shared standards. Rules gives every Arc skill the same playbook for code style, patterns, and conventions. It also enables distribution to other AI agents via Ruler.
+    Without shared standards, every AI-generated file is inconsistent. Rules puts the playbook in one place that all AI tools can read. Combined with Ruler (optional), these standards propagate to Copilot, Cursor, and other agents—so your whole toolchain follows the same conventions.
   decisions:
     - Copy, not symlink. Projects can customize rules for their needs.
-    - Backup on update. Customizations are never lost.
+    - Backup on update. Your customizations are never lost.
     - Optional Ruler integration. Distributes rules to Copilot, Cursor, and other agents.
 ---
 

@@ -8,6 +8,7 @@ license: MIT
 metadata:
   author: howells
 website:
+  order: 7
   desc: Quick implementation
   summary: Fast implementation for small-to-medium scope work without formal planning.
   what: |

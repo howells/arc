@@ -8,16 +8,17 @@ license: MIT
 metadata:
   author: howells
 website:
-  desc: Test strategy
-  summary: Create test plans, run test suites, or fix failing tests across frameworks.
+  order: 10
+  desc: Run & fix tests
+  summary: Run your tests, fix failures, or create a test strategy. Supports vitest, jest, playwright, and cypress—with special handling for flaky e2e tests.
   what: |
-    Test can analyze your codebase for coverage gaps, suggest missing test cases, run your test suite (vitest, playwright, jest, cypress), and help fix failing tests. It understands the difference between unit, integration, and e2e tests.
+    Test runs your test suite and helps fix what's broken. For unit tests (vitest, jest), it's straightforward—run, read failures, fix. For e2e tests (playwright, cypress), it spawns a dedicated agent that can handle the verbose output, retry flaky tests, and work through failures methodically. It can also analyze your codebase and suggest where tests are missing.
   why: |
-    Testing is often an afterthought. Having a dedicated command that understands test strategy—not just test execution—elevates testing to a first-class concern.
+    E2e tests are painful—slow, flaky, verbose output that fills your context. Test handles this by running playwright/cypress in a background agent that can retry, screenshot failures, and fix issues without overwhelming your main session. For unit tests, it's simpler but still useful: run, diagnose, fix.
   decisions:
-    - Framework-agnostic. Detects what you're using rather than forcing a choice.
-    - Suggests tests that catch bugs, not tests that inflate coverage numbers.
-    - Fixing tests means understanding why they fail, not just making them pass.
+    - Framework detection is automatic. It finds your test config and runs the right thing.
+    - E2e tests get special treatment. Background agent handles retries and verbose output.
+    - Fixes understand root causes. Not just making tests pass—understanding why they failed.
   agents:
     - e2e-test-runner
 ---

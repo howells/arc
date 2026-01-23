@@ -10,16 +10,17 @@ license: MIT
 metadata:
   author: howells
 website:
-  desc: Expert feedback
-  summary: Run expert review on a plan with parallel specialized reviewer agents.
+  order: 5
+  desc: Get expert eyes
+  summary: Get feedback from specialized reviewers—security, performance, architecture, and more. Runs automatically during ideate, or on-demand for any code.
   what: |
-    Review spawns multiple reviewer agents in parallel—each reviews your plan through their specialized lens and presents findings as questions, not mandates.
+    Review spins up specialized agents based on what it's looking at—a new auth flow gets security and architecture reviewers, a database change gets the data engineer. Each agent reviews independently, then their feedback is consolidated into a prioritized list of concrete items: things to fix, questions to answer, risks to consider.
   why: |
-    No single reviewer catches everything. Parallel specialized reviewers simulate the breadth of a real code review without the coordination overhead.
+    No single perspective catches everything. Review gives you a panel of experts without the scheduling overhead. It runs automatically at the end of /arc:ideate, but you can also invoke it on an entire app, a specific file, or a plan you're unsure about.
   decisions:
-    - Findings as questions, not mandates. 'Have you considered X?' rather than 'You must do X.'
-    - Parallel execution for speed. Reviews complete in the time of the slowest reviewer, not the sum.
-    - Specialization over generalization. Each reviewer has deep domain knowledge in one area.
+    - Runs during ideate automatically. You don't have to remember to ask for review.
+    - Agent selection is dynamic. It picks reviewers based on what the code touches.
+    - Output is prioritized and concrete. Not vague concerns—specific items you can act on.
   agents:
     - security-engineer
     - performance-engineer

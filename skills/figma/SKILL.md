@@ -9,16 +9,17 @@ metadata:
   author: howells
   argument-hint: <figma-url-or-description>
 website:
-  desc: Design → code
-  summary: Implement UI directly from Figma designs using the Figma MCP with pixel-perfect fidelity.
+  order: 9
+  desc: Figma → code
+  summary: Implement UI from Figma designs. Requires the Figma MCP server—install via `npx @anthropic/create-mcp@latest`.
   what: |
-    Figma connects to your Figma file via the Figma MCP server, extracts design tokens and component structure, and generates React components that match the design exactly. It handles spacing, typography, colors, and responsive breakpoints.
+    Figma reads your design file via the Figma MCP server, extracts layout structure, colors, typography, and spacing, then generates React components. It's not magic—expect some nudging to get things right—but it beats eyeballing a screenshot. Install the MCP with `npx @anthropic/create-mcp@latest` and select Figma.
   why: |
-    Design-to-code handoff is where fidelity dies. Figma eliminates the telephone game by reading the source of truth directly.
+    Design-to-code handoff usually means eyeballing a mockup and guessing at spacing. Figma reads the actual design file, so you're working from real values. It's not perfect, but it gets you 80% there and you can refine from a working baseline.
   decisions:
-    - Requires Figma MCP server connection. No screenshot-based guessing.
-    - Extracts design tokens first, then components. Systematic over ad-hoc.
-    - Pixel-perfect means pixel-perfect. Visual diff verification against the source design.
+    - Requires Figma MCP. Run `npx @anthropic/create-mcp@latest` and select Figma to install.
+    - Works best with clean Figma files. Auto-layout and named layers help.
+    - Expect iteration. It gets you close, then you refine.
   agents:
     - figma-implement
 ---

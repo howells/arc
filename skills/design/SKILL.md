@@ -8,16 +8,17 @@ license: MIT
 metadata:
   author: howells
 website:
-  desc: Distinctive UI
-  summary: Create distinctive, non-generic UI designs with aesthetic direction and wireframes.
+  order: 8
+  desc: Visual design direction
+  summary: Establish the visual identity for your UI—colors, typography, spacing, tone. Comes with opinionated references to avoid generic AI aesthetics.
   what: |
-    Design produces an aesthetic direction document with color palette, typography, spacing system, and ASCII wireframes. It actively avoids AI slop patterns—Inter font, purple gradients, cookie-cutter hero sections. Uses Chrome MCP to screenshot and verify as you build.
+    Design walks you through visual decisions: What's the tone? What makes this memorable? From there it produces a design direction document—color palette, typography scale, spacing system, and ASCII wireframes for key screens. It draws from built-in references on font pairing, component patterns, and animation. As you build, it can screenshot via Chrome to verify implementation matches intent.
   why: |
-    AI-generated UI tends toward a recognizable sameness. Design fights this by establishing strong aesthetic opinions upfront and verifying implementation against them visually.
+    AI-generated UI tends toward the same safe choices—the same gradients, the same card layouts, the same hero sections. Design fights this by forcing you to make distinctive choices upfront and documenting them. The references help you avoid common pitfalls and give the AI better taste.
   decisions:
-    - ASCII wireframes over mockup tools—they're version-controllable and force focus on structure over polish.
-    - Explicit anti-patterns list. Naming what to avoid is as important as naming what to do.
-    - Visual verification via screenshots catches drift between design intent and implementation.
+    - Opinionated references built in. Font choices, spacing scales, animation patterns—not starting from scratch.
+    - ASCII wireframes over mockups. Version-controllable, forces focus on structure.
+    - Visual verification via screenshots. Catches when implementation drifts from intent.
 ---
 
 # Design Workflow

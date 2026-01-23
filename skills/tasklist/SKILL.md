@@ -9,16 +9,17 @@ metadata:
   author: howells
   argument-hint: <add|review|done> <task>
 website:
-  desc: Persistent backlog
-  summary: Persistent task backlog that survives across sessions. Git-committed, always available.
+  order: 16
+  desc: Task backlog
+  summary: A simple markdown backlog that lives with your code. Add tasks, prioritize, mark done—persists across sessions.
   what: |
-    Tasklist maintains a simple markdown file (docs/tasklist.md) with your backlog. It's git-tracked, so it persists across sessions and machines. Add tasks, prioritize, mark done — all without leaving the terminal.
+    Tasklist maintains a markdown file (docs/tasklist.md) with your backlog. It's git-tracked, so it persists across sessions and machines. Add tasks, prioritize, mark done—all from the terminal. Arc reads it to understand what's queued up.
   why: |
-    Memory is the enemy. You have great ideas at 2am, in the shower, during a meeting. Without capture, they're gone. Tasklist is the simplest possible backlog that actually gets used.
+    Ideas slip away if you don't write them down. Tasklist is the simplest backlog that actually gets used—a markdown file, no setup, no separate tool. It travels with your code and Arc checks it to know what's next.
   decisions:
     - Markdown file over database. Readable, diffable, portable.
-    - Git-committed. Your backlog travels with your code.
-    - Simple priority sections (Up Next / Backlog / Ideas). No Jira-style complexity.
+    - Git-committed. Backlog travels with your code.
+    - Simple sections: Up Next, Backlog, Ideas. No Jira complexity.
 ---
 
 # Tasklist Workflow

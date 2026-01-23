@@ -8,16 +8,17 @@ license: MIT
 metadata:
   author: howells
 website:
-  desc: Idea → validated design
-  summary: Turn rough ideas into validated designs through collaborative dialogue with built-in expert review.
+  order: 3
+  desc: Idea → spec
+  summary: Talk through your idea with a thinking partner who already knows your codebase. End up with a clear spec of what to build.
   what: |
-    Ideate explores your codebase first to understand existing patterns, then asks clarifying questions to shape your idea into a concrete design. It runs parallel reviewer agents to catch issues early—before you write any code.
+    Ideate is a conversation with a thinking partner who's already read your code. You describe what you want, it asks clarifying questions, and together you arrive at a concrete spec—user flows, data models, edge cases. Expert reviewers then check for issues before you write any code.
   why: |
-    Most features fail not in implementation but in conception. Ideate forces you to think through the design with an informed collaborator, catching architectural mistakes when they're cheap to fix.
+    Vague ideas lead to wasted code. Ideate forces you to get specific—what exactly happens when a user clicks that button?—so you're not making it up as you implement. The conversation surfaces gaps you didn't know you had.
   decisions:
-    - Codebase exploration happens automatically before any questions—context first, design second.
-    - Reviewers present findings as Socratic questions rather than mandates. You stay in control.
-    - One question at a time to avoid overwhelming. Depth over breadth.
+    - Knows your codebase first. Asks informed questions, not generic ones.
+    - One question at a time. A real conversation, not a form to fill out.
+    - Output is a spec, not code. Implementation comes later with /arc:detail.
   agents:
     - security-engineer
     - performance-engineer
@@ -50,6 +51,11 @@ website:
 **Use Read tool:** `docs/progress.md` (first 50 lines)
 
 **Use Glob tool:** `docs/solutions/**/*.md` — find past solutions that might be relevant
+
+**Use Read tool:** `docs/tasklist.md` — check if this idea already exists:
+- If found in "Up Next" or "Backlog" → mention it: "This is already in your tasklist under [section]"
+- If found in "Ideas" → offer to promote it: "This was an idea you captured before. Ready to design it?"
+- If not found → continue normally
 
 **Spawn Explore agent for codebase understanding (in parallel):**
 ```
@@ -355,6 +361,19 @@ I recommend setting up a worktree first so the implementation plan lives with yo
 - Route to `/arc:detail` directly
 - Implementation plan will be created on current branch
 </process>
+
+<tasklist_append>
+**After completing the design, offer to update tasklist:**
+
+"Design complete. Should I update your tasklist?"
+
+If yes:
+1. **If this feature was in tasklist** → Move to "Up Next" (if not already there)
+2. **If follow-up tasks identified** → Add to "Backlog" (e.g., "Implement [feature]", "Write tests for [feature]")
+3. **If new ideas surfaced** → Add to "Ideas" section
+
+Use Edit tool on `docs/tasklist.md` to make updates.
+</tasklist_append>
 
 <progress_append>
 After completing the design, append to progress journal:

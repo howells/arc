@@ -8,16 +8,17 @@ license: MIT
 metadata:
   author: howells
 website:
-  desc: Plan-driven TDD
-  summary: Execute an implementation plan task-by-task with test-driven development.
+  order: 6
+  desc: Execute the plan
+  summary: Execute your plan task by task. Tests first, then implementation—and with an LLM, writing tests is finally easy.
   what: |
-    Implement reads from a detailed plan file (created by /arc:detail), then works through each task systematically: write test, implement, verify. It runs TypeScript and lint checks after each task to catch issues immediately.
+    Implement takes your plan from /arc:detail and executes it task by task. For each task: write the test, make it pass, run type checks and lint. The AI writes the tests for you—TDD used to be tedious, but LLMs make it trivial. You get the benefits of test coverage without the friction.
   why: |
-    Complex features need structure. A plan creates shared understanding and an audit trail. TDD ensures each piece works before moving on. The combination produces reliable, reviewable code.
+    TDD produces better code, but developers skip it because writing tests is boring. LLMs remove that excuse. Implement enforces the discipline—test first, then code—while the AI handles the tedious parts. You end up with tested, working code and a clean git history.
   decisions:
-    - Plan files live in docs/plans/ and are git-committed—they're documentation, not throwaway notes.
-    - Strict task ordering. No skipping ahead, no parallel work within a plan.
-    - Continuous quality checks mean you never accumulate technical debt during implementation.
+    - Test-first is mandatory. The AI writes them, so there's no reason to skip.
+    - One task at a time. Each task is committed before moving to the next.
+    - Quality gates after every task. TypeScript and lint errors don't accumulate.
 ---
 
 <required_reading>
@@ -398,6 +399,31 @@ git worktree remove .worktrees/<feature-name>
 
 Look for related ideate/detail sessions and any prior implementation attempts.
 </progress_context>
+
+<tasklist_context>
+**Use Read tool:** `docs/tasklist.md`
+
+Check if this work relates to an existing tasklist item:
+- If found → Note which item is being worked on
+- Track for marking complete when implementation finishes
+</tasklist_context>
+
+<tasklist_update>
+**After implementation completes (or pauses):**
+
+1. **If feature complete** → Mark related tasklist item as done:
+   - Change `- [ ]` to `- [x]` with date
+   - Or move to "## Completed" section
+
+2. **If discovered new tasks during implementation** → Add to tasklist:
+   - Bugs found → Add to "Up Next" or "Backlog"
+   - Future improvements → Add to "Ideas"
+   - Technical debt → Add to "Backlog"
+
+3. **If blocked** → Add blocker to tasklist as high-priority item
+
+Use Edit tool on `docs/tasklist.md` to make updates.
+</tasklist_update>
 
 <progress_append>
 After completing implementation (or pausing), append to progress journal:

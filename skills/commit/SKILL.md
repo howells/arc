@@ -9,16 +9,17 @@ metadata:
   author: howells
   argument-hint: <optional-message>
 website:
+  order: 14
   desc: Smart commits
-  summary: Smart commit and push with auto-splitting across domains.
+  summary: Commit your changes with auto-splitting. Groups related changes into atomic commits with clear messages—so your git history actually makes sense.
   what: |
-    Commit analyzes your staged changes and automatically splits them into atomic commits by domain (feature, refactor, test, docs, config). Each commit gets a clear message following conventional commit format.
+    Commit looks at your staged changes and groups them logically—feature code in one commit, tests in another, config changes in a third. Each gets a clear message following conventional commit format (feat:, fix:, refactor:, etc.). The result is a git history you can actually read, bisect, and cherry-pick from.
   why: |
-    Good commit hygiene makes history readable and bisecting possible. Most developers batch unrelated changes because splitting is tedious. Commit removes that friction.
+    Messy commits make git history useless. You can't bisect to find a bug if every commit touches 15 unrelated files. You can't revert a broken feature if it's tangled with a refactor. Developers know this but batch changes anyway because splitting is tedious. Commit does the tedious part—you get clean history without the effort.
   decisions:
-    - Domain detection via file paths and change patterns. No manual tagging required.
-    - Atomic commits over monolithic. Each commit should be independently revertable.
-    - Conventional commit messages for automated changelog generation.
+    - Auto-detects domains. Feature code, tests, docs, config—grouped by what changed.
+    - Conventional commit format. Enables automated changelogs and clear history.
+    - Each commit is atomic. Independently revertable, cherry-pickable, bisectable.
 ---
 
 <progress_context>

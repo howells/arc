@@ -8,6 +8,7 @@ license: MIT
 metadata:
   author: howells
 website:
+  order: 18
   desc: Capture solutions
   summary: Capture solved problems as searchable documentation for future reference.
   what: |
@@ -177,6 +178,22 @@ ideate (design) → implement → encounter problem → solve → /arc:document 
 
 When starting new ideate sessions, the progress journal and `docs/solutions/` are read to surface past learnings and context.
 </integration>
+
+<tasklist_append>
+**After documenting a solution, offer to add prevention tasks:**
+
+If the solution includes prevention steps that require action:
+```
+"This solution has prevention steps. Add them to your tasklist?"
+```
+
+If yes, add to `docs/tasklist.md` under "Backlog" or "Ideas":
+- "Add [validation/check] to prevent [problem]"
+- "Refactor [area] to avoid [issue]"
+- "Add test for [edge case]"
+
+Prevention tasks help ensure the problem doesn't recur.
+</tasklist_append>
 
 <progress_append>
 After documenting a solution, append to progress journal:

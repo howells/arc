@@ -8,6 +8,7 @@ license: MIT
 metadata:
   author: howells
 website:
+  order: 17
   desc: Opinionated next steps
   summary: Opinionated recommendations for what to work on next based on tasklist and codebase.
   what: |

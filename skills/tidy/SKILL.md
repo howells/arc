@@ -8,6 +8,7 @@ license: MIT
 metadata:
   author: howells
 website:
+  order: 19
   desc: Plan cleanup
   summary: Clean up completed plans in docs/plans/. Archives or deletes finished plans.
   what: |

@@ -9,16 +9,17 @@ license: MIT
 metadata:
   author: howells
 website:
-  desc: Legal pages
-  summary: Generate Privacy Policy, Terms of Service, and Cookie Policy pages through guided questions.
+  order: 12
+  desc: Privacy & terms
+  summary: Generate Privacy Policy, Terms of Service, and Cookie Policy. Scans your codebase first so it knows what data you actually collect.
   what: |
-    Legal scans your codebase for data collection patterns (analytics, auth, forms), then asks targeted questions about your business and data practices. It generates comprehensive legal documents tailored to your actual implementation.
+    Legal scans your codebase to see what you're actually doing—analytics, auth providers, payment processing, form submissions, cookies. Then it asks a few targeted questions about your business (company name, contact email, jurisdiction). The output is markdown pages ready to drop into your site. Not boilerplate—tailored to your actual implementation.
   why: |
-    Legal pages are required but writing them is tedious and error-prone. Legal generates starting points based on what your app actually does—but they must still be reviewed by a qualified lawyer.
+    Every app needs legal pages, but most developers copy-paste generic templates that don't match what their app actually does. Legal generates accurate starting points based on your real data practices. Still needs lawyer review before launch—these are templates, not legal advice.
   decisions:
-    - Scans codebase first. Knows you're using Stripe before asking about payments.
-    - Interactive questions fill gaps. 5 rounds max to avoid fatigue.
-    - Explicit disclaimer: these are templates, not legal advice. Lawyer review required.
+    - Codebase scan first. Detects Stripe, Google Analytics, auth providers—knows your stack.
+    - Minimal questions. Only asks what it can't infer from code.
+    - Output is markdown. Drop into your site, style to match.
 ---
 
 <progress_context>

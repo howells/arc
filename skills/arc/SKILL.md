@@ -8,16 +8,17 @@ license: MIT
 metadata:
   author: howells
 website:
-  desc: Main entry point
-  summary: The front door to Arc. Understands your codebase and routes to the right workflow.
+  order: 1
+  desc: Start here
+  summary: Start here—whether it's an empty folder or an existing codebase. Arc understands your context and guides you to what's next.
   what: |
-    Arc gathers context about your project (structure, patterns, existing plans, recent progress), then asks what you want to do. Based on your answer, it routes to the appropriate workflow—ideate for new features, build for quick work, implement for planned tasks.
+    Arc works in an empty folder or a mature codebase. It gathers context (or notes the absence of it), then kicks off an interactive process to figure out what you're building and how to get there. You'll end up in the right workflow—vision for new projects, ideate for new features, build for quick work.
   why: |
-    Starting is the hardest part. Arc removes the friction of choosing where to begin by understanding context first and making an informed recommendation.
+    Starting is the hardest part. Arc removes the "where do I begin?" paralysis by meeting you where you are—blank slate or legacy monolith—and guiding you forward through conversation.
   decisions:
-    - Context gathering happens automatically. You don't need to explain your codebase.
-    - Routes to workflows, doesn't try to do everything. Each workflow has clear purpose.
-    - Checks for existing artifacts (vision, tasklist, plans) to avoid redundant work.
+    - Works with nothing. An empty folder is a valid starting point.
+    - Interactive, not prescriptive. Asks what you want to build rather than assuming.
+    - Context-aware routing. Existing plans, tasklists, and code inform the recommendation.
 ---
 
 # /arc

@@ -9,16 +9,17 @@ metadata:
   author: howells
   argument-hint: <note-to-add>
 website:
-  desc: Session memory
-  summary: View and manage the progress journal for knowledge persistence across sessions.
+  order: 15
+  desc: Session journal
+  summary: A running log of what Arc has done. Every skill appends to it, so you (and the AI) always know where you left off.
   what: |
-    Progress maintains a journal (docs/progress.md) of what Arc has done — tasks completed, decisions made, files changed. Every Arc skill appends to it, creating a timeline of your project's evolution.
+    Progress maintains a journal at docs/progress.md—a timeline of what's been done. Tasks completed, decisions made, files changed. Every Arc skill appends to it automatically. When you start a new session, Arc reads the recent entries to understand context. You can also add manual notes or review what happened.
   why: |
-    Context dies between sessions. You spend the first 10 minutes of every session remembering what you did yesterday. Progress gives Arc (and you) instant context on where you left off.
+    LLMs have no memory between sessions. Without a record, every conversation starts from zero—you re-explain context, the AI re-explores your codebase. Progress fixes this. Arc writes down what it did, so the next session picks up where the last one left off. Come back after a week and the journal tells you (and the AI) exactly what was happening.
   decisions:
-    - Auto-appended by all skills. Zero friction to maintain.
-    - Newest first. Recent context is most valuable.
-    - Auto-archive at 50 entries. Keeps the journal scannable.
+    - Auto-maintained. Every Arc skill appends—you never have to remember to write notes.
+    - Newest first. Recent context is what matters when resuming.
+    - Auto-archives at 50 entries. Old history moves to progress-archive.md.
 ---
 
 # /arc:progress

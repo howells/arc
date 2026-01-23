@@ -8,27 +8,27 @@ The full arc from idea to shipped code. This plugin provides 20 commands for the
 arc/
 ├── .claude-plugin/
 │   └── plugin.json         # Plugin metadata
-├── skills/                  # Each skill = one /arc:* command
-│   ├── arc/SKILL.md        # /arc:arc (main entry point)
-│   ├── vision/SKILL.md     # /arc:vision
-│   ├── ideate/SKILL.md     # /arc:ideate
-│   ├── detail/SKILL.md     # /arc:detail
-│   ├── implement/SKILL.md  # /arc:implement
-│   ├── design/SKILL.md     # /arc:design
-│   ├── figma/SKILL.md      # /arc:figma
-│   ├── build/SKILL.md      # /arc:build
-│   ├── test/SKILL.md       # /arc:test
-│   ├── letsgo/SKILL.md     # /arc:letsgo
-│   ├── legal/SKILL.md      # /arc:legal
-│   ├── review/SKILL.md     # /arc:review
-│   ├── audit/SKILL.md      # /arc:audit
-│   ├── progress/SKILL.md   # /arc:progress
-│   ├── tasklist/SKILL.md   # /arc:tasklist
-│   ├── document/SKILL.md   # /arc:document
-│   ├── suggest/SKILL.md    # /arc:suggest
-│   ├── commit/SKILL.md     # /arc:commit
-│   ├── rules/SKILL.md      # /arc:rules
-│   └── tidy/SKILL.md       # /arc:tidy
+├── skills/                  # Each skill = one /arc:* command (in workflow order)
+│   ├── arc/SKILL.md        # 1. Entry point
+│   ├── vision/SKILL.md     # 2. Foundation: project goals
+│   ├── ideate/SKILL.md     # 3. Design: idea → validated design
+│   ├── detail/SKILL.md     # 4. Plan: design → implementation plan
+│   ├── review/SKILL.md     # 5. Review: validate before execution
+│   ├── implement/SKILL.md  # 6. Execute: TDD implementation
+│   ├── build/SKILL.md      # 6. Execute: quick builds
+│   ├── design/SKILL.md     # 6. Execute: distinctive UI
+│   ├── figma/SKILL.md      # 6. Execute: from Figma designs
+│   ├── test/SKILL.md       # 7. Test: strategy & execution
+│   ├── letsgo/SKILL.md     # 8. Ship: production readiness
+│   ├── legal/SKILL.md      # 8. Ship: privacy policy, ToS
+│   ├── audit/SKILL.md      # Cross-cutting: codebase audit
+│   ├── commit/SKILL.md     # Cross-cutting: smart commits
+│   ├── progress/SKILL.md   # Cross-cutting: session journal
+│   ├── tasklist/SKILL.md   # Cross-cutting: persistent backlog
+│   ├── suggest/SKILL.md    # Cross-cutting: what to work on
+│   ├── document/SKILL.md   # Cross-cutting: capture solutions
+│   ├── tidy/SKILL.md       # Cross-cutting: cleanup plans
+│   └── rules/SKILL.md      # Cross-cutting: coding standards
 ├── agents/                  # Specialized reviewers
 │   ├── review/
 │   ├── research/
@@ -42,18 +42,33 @@ arc/
 └── LICENSE                  # MIT
 ```
 
-## Command Hierarchy
+## Command Workflow
 
-All commands use the `/arc:` namespace prefix:
+All commands use the `/arc:` namespace prefix. The typical workflow:
 
 ```
-ENTRY   /arc:arc        - Main entry point, routes to right workflow
-WHY     /arc:vision     - High-level goals
-WHAT    /arc:ideate     - From idea to working implementation
-HOW     /arc:detail     - Detailed implementation plan
-DO      /arc:implement, /arc:design, /arc:figma, /arc:build, /arc:test, /arc:letsgo, /arc:legal
-CROSS   /arc:review, /arc:audit, /arc:progress, /arc:tasklist, /arc:document, /arc:suggest, /arc:tidy
-TOOLS   /arc:commit, /arc:rules
+1. ENTRY      /arc:arc        → Routes to right workflow based on context
+2. FOUNDATION /arc:vision     → Define project goals (one-time setup)
+3. DESIGN     /arc:ideate     → Turn idea into validated design doc
+4. PLAN       /arc:detail     → Create step-by-step implementation plan
+5. REVIEW     /arc:review     → Expert validation before execution
+6. EXECUTE    /arc:implement  → TDD implementation of plan
+              /arc:build      → Quick builds without formal planning
+              /arc:design     → Create distinctive UI
+              /arc:figma      → Implement from Figma designs
+7. TEST       /arc:test       → Test strategy and execution
+8. SHIP       /arc:letsgo     → Production readiness checklist
+              /arc:legal      → Privacy policy, Terms of Service
+
+CROSS-CUTTING (available anytime):
+              /arc:audit      → Comprehensive codebase audit
+              /arc:commit     → Smart commits with auto-splitting
+              /arc:progress   → Session journal
+              /arc:tasklist   → Persistent task backlog
+              /arc:suggest    → What to work on next
+              /arc:document   → Capture solved problems
+              /arc:tidy       → Clean up completed plans
+              /arc:rules      → Apply coding standards
 ```
 
 ## Development

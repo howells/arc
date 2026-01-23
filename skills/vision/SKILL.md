@@ -8,16 +8,17 @@ license: MIT
 metadata:
   author: howells
 website:
+  order: 2
   desc: Project north star
-  summary: Create or review a high-level vision document capturing project goals and purpose.
+  summary: Define what you're building and why. This document guides every future decision—yours and the AI's.
   what: |
-    Vision creates a 500-700 word document that captures why the project exists, who it's for, what success looks like, and what you're explicitly NOT building. It becomes the north star for all future decisions.
+    Vision creates a concise document (500-700 words) capturing why the project exists, who it's for, and what you're explicitly NOT building. Arc reads this document in future sessions, so the AI always understands the bigger picture when making implementation decisions.
   why: |
-    Projects drift. Features creep. Scope bloats. A clear vision document is the antidote — a written record of what you set out to build, so you can recognize when you're straying.
+    Projects drift. Features creep. Without a reference point, both you and the AI lose sight of the goal. The vision document is that reference—something you return to when decisions get hard, and something Arc consults to stay aligned with your intent.
   decisions:
-    - Short by design (500-700 words). If you can't explain it briefly, you don't understand it.
-    - Non-goals section mandatory. What you won't build is as important as what you will.
-    - Lives in docs/vision.md. Visible, versionable, quotable.
+    - Written for two audiences: you and the AI. Clear enough for both to act on.
+    - Non-goals section mandatory. What you won't build prevents scope creep.
+    - Lives in docs/vision.md. Arc reads it automatically in future sessions.
 ---
 
 # Vision Workflow
