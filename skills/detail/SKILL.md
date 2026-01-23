@@ -7,6 +7,17 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  desc: Implementation plans
+  summary: Create detailed implementation plans with exact file paths and TDD cycles.
+  what: |
+    Detail takes a design (from /arc:ideate or a spec you provide) and produces a step-by-step implementation plan with exact file paths, test code, and TDD cycles. The output is a markdown file ready for /arc:implement.
+  why: |
+    The gap between 'what to build' and 'how to build it' is where projects stall. Detail bridges that gap with actionable, sequenced tasks.
+  decisions:
+    - Exact file paths, not 'create a service for X'. Specificity eliminates ambiguity.
+    - Test code included in the plan. You know what success looks like before you start.
+    - Task dependencies explicit. You can see the critical path.
 ---
 
 <required_reading>

@@ -7,6 +7,21 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  desc: Idea → validated design
+  summary: Turn rough ideas into validated designs through collaborative dialogue with built-in expert review.
+  what: |
+    Ideate explores your codebase first to understand existing patterns, then asks clarifying questions to shape your idea into a concrete design. It runs parallel reviewer agents to catch issues early—before you write any code.
+  why: |
+    Most features fail not in implementation but in conception. Ideate forces you to think through the design with an informed collaborator, catching architectural mistakes when they're cheap to fix.
+  decisions:
+    - Codebase exploration happens automatically before any questions—context first, design second.
+    - Reviewers present findings as Socratic questions rather than mandates. You stay in control.
+    - One question at a time to avoid overwhelming. Depth over breadth.
+  agents:
+    - security-engineer
+    - performance-engineer
+    - architecture-engineer
 ---
 
 <required_reading>

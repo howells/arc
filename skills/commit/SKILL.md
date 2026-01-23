@@ -8,6 +8,17 @@ license: MIT
 metadata:
   author: howells
   argument-hint: <optional-message>
+website:
+  desc: Smart commits
+  summary: Smart commit and push with auto-splitting across domains.
+  what: |
+    Commit analyzes your staged changes and automatically splits them into atomic commits by domain (feature, refactor, test, docs, config). Each commit gets a clear message following conventional commit format.
+  why: |
+    Good commit hygiene makes history readable and bisecting possible. Most developers batch unrelated changes because splitting is tedious. Commit removes that friction.
+  decisions:
+    - Domain detection via file paths and change patterns. No manual tagging required.
+    - Atomic commits over monolithic. Each commit should be independently revertable.
+    - Conventional commit messages for automated changelog generation.
 ---
 
 <progress_context>

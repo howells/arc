@@ -20,6 +20,16 @@ description: |
   The user is specifically concerned about generic aesthetics, which is exactly what this reviewer specializes in.
   </commentary>
   </example>
+website:
+  desc: AI slop detector
+  summary: Reviews visual design quality and aesthetic distinctiveness. Catches generic, forgettable designs.
+  what: |
+    The designer reviews UI for aesthetic quality, not code quality. It catches "AI slop" — purple gradients, Inter font, white cards on white backgrounds, cookie-cutter layouts. It asks: "What's memorable about this?" and "Would this be mistaken for a template?"
+  why: |
+    AI-generated design defaults to the same forgettable patterns. This reviewer pushes past generic toward distinctive — because the best products are the ones you remember.
+  usedBy:
+    - audit
+    - review
 ---
 
 # Design Quality Reviewer Agent

@@ -20,6 +20,16 @@ description: |
   Forms and UI flows are daniel-product-engineer's specialty — checking for complete states, proper validation patterns, and type safety.
   </commentary>
   </example>
+website:
+  desc: TypeScript/React code quality
+  summary: Strict on type safety, UI completeness, and React patterns. Confidence-scored findings.
+  what: |
+    Daniel reviews frontend code with strong opinions on type safety (no `any`, no casts), UI completeness (loading/error/empty states), and React patterns (React Query, not useEffect for data). Findings are confidence-scored — only ≥80% confidence issues are reported.
+  why: |
+    Type escapes and incomplete UI states are the most common frontend bugs. This reviewer catches the `as any` casts, the missing loading spinners, and the useEffect data fetching that should be React Query.
+  usedBy:
+    - audit
+    - review
 ---
 
 # Daniel Product Engineer Reviewer Agent

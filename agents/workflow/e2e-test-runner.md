@@ -11,6 +11,13 @@ description: |
   E2e tests produce verbose output. Running in a separate agent keeps main context clean.
   </commentary>
   </example>
+website:
+  desc: E2E test fixer
+  summary: Runs Playwright/Cypress tests and iteratively fixes failures until all pass.
+  what: |
+    The e2e test runner runs your test suite, analyzes failures, fixes them, and re-runs until green. It handles selector changes, timing issues, implementation bugs, and flaky tests. Max 5 iterations per test file before escalating to you.
+  why: |
+    E2E tests produce verbose output that fills context windows. Running in a separate agent keeps the main conversation clean while still getting tests to green.
 ---
 
 # E2E Test Runner Agent

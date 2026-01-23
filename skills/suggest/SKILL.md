@@ -7,6 +7,17 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  desc: Opinionated next steps
+  summary: Opinionated recommendations for what to work on next based on tasklist and codebase.
+  what: |
+    Suggest reads your tasklist, scans your codebase for TODOs and technical debt, and compares against your vision. It synthesizes this into 3-5 ranked recommendations with clear rationale and the command to start each one.
+  why: |
+    Starting is the hardest part. When you sit down with an hour to code, decision fatigue can burn half of it. Suggest removes the "what should I work on?" loop.
+  decisions:
+    - Priority cascade: Tasklist first, codebase issues second, vision gaps third.
+    - Opinionated, not neutral. It picks winners and says why.
+    - One click to act. Each suggestion includes the exact command to run.
 ---
 
 <progress_context>

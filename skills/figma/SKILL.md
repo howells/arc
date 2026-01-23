@@ -8,6 +8,19 @@ license: MIT
 metadata:
   author: howells
   argument-hint: <figma-url-or-description>
+website:
+  desc: Design → code
+  summary: Implement UI directly from Figma designs using the Figma MCP with pixel-perfect fidelity.
+  what: |
+    Figma connects to your Figma file via the Figma MCP server, extracts design tokens and component structure, and generates React components that match the design exactly. It handles spacing, typography, colors, and responsive breakpoints.
+  why: |
+    Design-to-code handoff is where fidelity dies. Figma eliminates the telephone game by reading the source of truth directly.
+  decisions:
+    - Requires Figma MCP server connection. No screenshot-based guessing.
+    - Extracts design tokens first, then components. Systematic over ad-hoc.
+    - Pixel-perfect means pixel-perfect. Visual diff verification against the source design.
+  agents:
+    - figma-implement
 ---
 
 # Figma Implementation Workflow

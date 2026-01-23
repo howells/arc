@@ -15,6 +15,13 @@ description: |
     assistant: "Let me implement that pricing section from the Figma design."
     </example>
 model: opus
+website:
+  desc: Figma → production code
+  summary: Implements UI components from Figma designs with pixel-perfect fidelity via Figma MCP.
+  what: |
+    The figma implementer turns Figma designs into production code. It extracts specs via Figma MCP (colors, typography, spacing, shadows), understands your existing design system, generates code using your conventions, and compares screenshots to verify fidelity. Padding and spacing — the most commonly missed details — get special attention.
+  why: |
+    Design-to-code handoff is where fidelity dies. Screenshot-based guessing produces approximations. Figma MCP provides the source of truth — exact values, not estimates.
 ---
 
 You implement UI from Figma designs. Your job is to turn design specifications into production-ready code that fits naturally into the existing codebase.

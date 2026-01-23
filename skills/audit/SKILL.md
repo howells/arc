@@ -11,6 +11,26 @@ license: MIT
 metadata:
   author: howells
   argument-hint: <path-or-focus> [--parallel] [--security|--performance|--architecture|--design]
+website:
+  desc: Multi-reviewer audit
+  summary: Comprehensive codebase audit with specialized reviewers in parallel.
+  what: |
+    Audit spawns 4-8 specialized reviewer agents (security, performance, architecture, UI, data, etc.) to analyze your codebase. It consolidates findings into a severity-ranked report with actionable next steps.
+  why: |
+    No single reviewer catches everything. Security experts miss performance issues. Performance experts miss architectural violations. Audit brings multiple perspectives in a single command.
+  decisions:
+    - Batched execution by default (2 at a time). Avoids resource exhaustion.
+    - Scale-aware reviewer selection. Small projects get 2-3 reviewers, large get 6+.
+    - Focus flags (--security, --performance, --design). Targeted audits when you know what to look for.
+  agents:
+    - security-engineer
+    - performance-engineer
+    - architecture-engineer
+    - daniel-product-engineer
+    - lee-nextjs-engineer
+    - senior-engineer
+    - designer
+    - data-engineer
 ---
 
 <required_reading>

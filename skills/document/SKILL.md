@@ -7,6 +7,17 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  desc: Capture solutions
+  summary: Capture solved problems as searchable documentation for future reference.
+  what: |
+    Document captures non-trivial problems you've solved — the symptom, what didn't work, the root cause, and the fix. It creates searchable markdown in docs/solutions/ so future sessions can find it.
+  why: |
+    You solve the same problems twice because you forget you solved them. Document builds institutional knowledge that compounds across sessions. Next time you hit the same error, Arc finds the fix.
+  decisions:
+    - Triggered by success phrases ("that worked", "it's fixed"). Capture while context is fresh.
+    - Includes failed attempts. Knowing what doesn't work saves time.
+    - Categorized by type (build-error, test-failure, runtime-error, etc.). Searchable structure.
 ---
 
 <required_reading>

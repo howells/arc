@@ -7,6 +7,17 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  desc: Project north star
+  summary: Create or review a high-level vision document capturing project goals and purpose.
+  what: |
+    Vision creates a 500-700 word document that captures why the project exists, who it's for, what success looks like, and what you're explicitly NOT building. It becomes the north star for all future decisions.
+  why: |
+    Projects drift. Features creep. Scope bloats. A clear vision document is the antidote — a written record of what you set out to build, so you can recognize when you're straying.
+  decisions:
+    - Short by design (500-700 words). If you can't explain it briefly, you don't understand it.
+    - Non-goals section mandatory. What you won't build is as important as what you will.
+    - Lives in docs/vision.md. Visible, versionable, quotable.
 ---
 
 # Vision Workflow

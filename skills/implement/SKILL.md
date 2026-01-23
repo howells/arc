@@ -7,6 +7,17 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  desc: Plan-driven TDD
+  summary: Execute an implementation plan task-by-task with test-driven development.
+  what: |
+    Implement reads from a detailed plan file (created by /arc:detail), then works through each task systematically: write test, implement, verify. It runs TypeScript and lint checks after each task to catch issues immediately.
+  why: |
+    Complex features need structure. A plan creates shared understanding and an audit trail. TDD ensures each piece works before moving on. The combination produces reliable, reviewable code.
+  decisions:
+    - Plan files live in docs/plans/ and are git-committed—they're documentation, not throwaway notes.
+    - Strict task ordering. No skipping ahead, no parallel work within a plan.
+    - Continuous quality checks mean you never accumulate technical debt during implementation.
 ---
 
 <required_reading>

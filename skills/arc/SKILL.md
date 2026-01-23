@@ -7,6 +7,17 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  desc: Main entry point
+  summary: The front door to Arc. Understands your codebase and routes to the right workflow.
+  what: |
+    Arc gathers context about your project (structure, patterns, existing plans, recent progress), then asks what you want to do. Based on your answer, it routes to the appropriate workflow—ideate for new features, build for quick work, implement for planned tasks.
+  why: |
+    Starting is the hardest part. Arc removes the friction of choosing where to begin by understanding context first and making an informed recommendation.
+  decisions:
+    - Context gathering happens automatically. You don't need to explain your codebase.
+    - Routes to workflows, doesn't try to do everything. Each workflow has clear purpose.
+    - Checks for existing artifacts (vision, tasklist, plans) to avoid redundant work.
 ---
 
 # /arc

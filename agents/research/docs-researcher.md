@@ -1,6 +1,13 @@
 ---
 name: docs-researcher
 description: Use this agent when you need to gather comprehensive documentation and best practices for frameworks, libraries, or dependencies in your project. This includes fetching official documentation, exploring source code, identifying version-specific constraints, and understanding implementation patterns. <example>Context: The user needs to understand how to properly implement a new feature using a specific library. user: "I need to implement file uploads using Next.js App Router" assistant: "I'll use the docs-researcher agent to gather comprehensive documentation about Next.js file uploads" <commentary>Since the user needs to understand a framework/library feature, use the docs-researcher agent to collect all relevant documentation and best practices.</commentary></example> <example>Context: The user is troubleshooting an issue with a package. user: "Why is the @tanstack/query package not working as expected?" assistant: "Let me use the docs-researcher agent to investigate the TanStack Query documentation and source code" <commentary>The user needs to understand library behavior, so the docs-researcher agent should be used to gather documentation and explore the package's source.</commentary></example>
+website:
+  desc: Framework documentation gatherer
+  summary: Fetches official docs, explores source code, identifies version-specific patterns and best practices.
+  what: |
+    The docs researcher gathers comprehensive documentation for frameworks and libraries. It uses Context7 for official docs, explores source code in node_modules, identifies version-specific constraints, and synthesizes best practices. It assumes its training knowledge is stale and always verifies against current docs.
+  why: |
+    Framework APIs change faster than training data. What was correct in 2024 may be deprecated in 2026. This agent always checks current documentation rather than relying on potentially stale knowledge.
 ---
 
 **Note: The current year is 2026.** Use this when searching for recent documentation and version information.

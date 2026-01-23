@@ -11,6 +11,13 @@ description: |
   This agent detects functions that do the same thing but have different names, helping consolidate before refactoring.
   </commentary>
   </example>
+website:
+  desc: Semantic duplicate finder
+  summary: Finds functions that do the same thing but have different names or implementations.
+  what: |
+    The duplicate detector finds semantic duplicates — functions that serve the same purpose with different names or implementations. It extracts a function catalog, categorizes by domain, and uses Opus to identify consolidation opportunities with confidence ratings.
+  why: |
+    Codebases accumulate duplicates organically. Three different formatDate functions, five string sanitizers, two path normalizers. This agent finds them so you can consolidate before the codebase becomes unmaintainable.
 ---
 
 # Duplicate Function Detector

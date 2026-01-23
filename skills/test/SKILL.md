@@ -7,6 +7,19 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  desc: Test strategy
+  summary: Create test plans, run test suites, or fix failing tests across frameworks.
+  what: |
+    Test can analyze your codebase for coverage gaps, suggest missing test cases, run your test suite (vitest, playwright, jest, cypress), and help fix failing tests. It understands the difference between unit, integration, and e2e tests.
+  why: |
+    Testing is often an afterthought. Having a dedicated command that understands test strategy—not just test execution—elevates testing to a first-class concern.
+  decisions:
+    - Framework-agnostic. Detects what you're using rather than forcing a choice.
+    - Suggests tests that catch bugs, not tests that inflate coverage numbers.
+    - Fixing tests means understanding why they fail, not just making them pass.
+  agents:
+    - e2e-test-runner
 ---
 
 <rules_context>

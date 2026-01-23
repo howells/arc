@@ -7,6 +7,17 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  desc: Distinctive UI
+  summary: Create distinctive, non-generic UI designs with aesthetic direction and wireframes.
+  what: |
+    Design produces an aesthetic direction document with color palette, typography, spacing system, and ASCII wireframes. It actively avoids AI slop patterns—Inter font, purple gradients, cookie-cutter hero sections. Uses Chrome MCP to screenshot and verify as you build.
+  why: |
+    AI-generated UI tends toward a recognizable sameness. Design fights this by establishing strong aesthetic opinions upfront and verifying implementation against them visually.
+  decisions:
+    - ASCII wireframes over mockup tools—they're version-controllable and force focus on structure over polish.
+    - Explicit anti-patterns list. Naming what to avoid is as important as naming what to do.
+    - Visual verification via screenshots catches drift between design intent and implementation.
 ---
 
 # Design Workflow

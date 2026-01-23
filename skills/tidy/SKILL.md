@@ -7,6 +7,17 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  desc: Plan cleanup
+  summary: Clean up completed plans in docs/plans/. Archives or deletes finished plans.
+  what: |
+    Tidy analyzes your docs/plans/ folder, checks which plans have been implemented (by looking for the files they describe), and offers to archive or delete completed ones. One plan at a time, always with confirmation.
+  why: |
+    Planning documents accumulate. After implementation, they become clutter that obscures current work. Tidy keeps your plans folder relevant by archiving what's done.
+  decisions:
+    - One at a time presentation. Never bulk-deletes without review.
+    - Evidence-based status detection. Checks if planned files exist and have commits.
+    - Archive over delete. Completed plans move to docs/plans/archive/ by default.
 ---
 
 # Tidy Workflow

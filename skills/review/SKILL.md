@@ -9,6 +9,24 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  desc: Expert feedback
+  summary: Run expert review on a plan with parallel specialized reviewer agents.
+  what: |
+    Review spawns multiple reviewer agents in parallel—each reviews your plan through their specialized lens and presents findings as questions, not mandates.
+  why: |
+    No single reviewer catches everything. Parallel specialized reviewers simulate the breadth of a real code review without the coordination overhead.
+  decisions:
+    - Findings as questions, not mandates. 'Have you considered X?' rather than 'You must do X.'
+    - Parallel execution for speed. Reviews complete in the time of the slowest reviewer, not the sum.
+    - Specialization over generalization. Each reviewer has deep domain knowledge in one area.
+  agents:
+    - security-engineer
+    - performance-engineer
+    - architecture-engineer
+    - data-engineer
+    - senior-engineer
+    - simplicity-engineer
 ---
 
 <required_reading>

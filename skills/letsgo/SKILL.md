@@ -7,6 +7,17 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  desc: Ship checklist
+  summary: Production readiness checklist covering domains, SEO, security, and deployment.
+  what: |
+    Letsgo walks through a comprehensive pre-launch checklist: domain configuration, SEO basics (meta tags, sitemap, robots.txt), security headers, error handling, monitoring, and deployment configuration.
+  why: |
+    Shipping is more than pushing code. Letsgo ensures you don't forget the unglamorous-but-critical pieces that make production work.
+  decisions:
+    - Checklist, not automation. You verify and fix; the tool tracks progress.
+    - Security and SEO are non-negotiable sections. They're easy to skip and expensive to fix later.
+    - Integrates with Vercel deployment when available, but works standalone.
 ---
 
 <progress_context>

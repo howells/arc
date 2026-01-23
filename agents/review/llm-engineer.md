@@ -1,6 +1,15 @@
 ---
 name: llm-engineer
 description: Use this agent to detect AI-generated artifacts ("slop") in code. Reviews for unnecessary comments, defensive checks in trusted codepaths, type escapes, and style inconsistencies that indicate LLM-generated code not properly reviewed. Use when running /arc:audit --deslop, after AI-assisted coding sessions, or before merging branches with substantial AI-generated code.
+website:
+  desc: AI artifact detector
+  summary: Finds AI-generated slop — unnecessary comments, redundant defensive checks, type escapes, style drift.
+  what: |
+    The LLM engineer detects AI-generated artifacts that don't match codebase style. It flags unnecessary comments ("This function processes data"), defensive checks in trusted codepaths, type escapes (`as any`), and style inconsistencies that indicate un-reviewed LLM output.
+  why: |
+    AI-assisted coding produces consistent patterns of slop — the same verbose comments, the same unnecessary try/catches, the same type escapes. This reviewer catches AI artifacts before they pollute the codebase.
+  usedBy:
+    - audit
 ---
 
 # LLM Artifact Reviewer (Deslop)

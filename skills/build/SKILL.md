@@ -7,6 +7,17 @@ description: |
 license: MIT
 metadata:
   author: howells
+website:
+  desc: Quick implementation
+  summary: Fast implementation for small-to-medium scope work without formal planning.
+  what: |
+    Build is for when the path is clear and you want to move fast. It still uses test-driven development and runs TypeScript checks after every change, but skips the formal planning phase that /arc:detail and /arc:implement require.
+  why: |
+    Not everything needs a plan document. Small features, bug fixes, and refactors benefit from momentum. Build gives you TDD discipline without bureaucratic overhead.
+  decisions:
+    - Tests first, always—even in 'quick' mode. No exceptions.
+    - Type checks after every file change catch drift early.
+    - No plan file means no audit trail. Use /arc:implement for anything you might need to explain later.
 ---
 
 <rules_context>
