@@ -33,15 +33,16 @@ Frontend work requires intentional aesthetic direction. Generic "AI slop" (purpl
 
 ## Typography
 
-**Never use:** Roboto, Arial, system-ui defaults
+**Never use:** Roboto, Arial, system-ui defaults, Instrument Sans (becoming AI slop)
 
 **Recommended fonts:**
 
 | Category | Options |
 |----------|---------|
-| Sans | Inter, DM Sans, Sohne, Scto Grotesk, Instrument Sans, Space Grotesk, Bricolage Grotesque, Outfit |
+| Sans | Inter, DM Sans, Sohne, Scto Grotesk, Space Grotesk, Bricolage Grotesque, Outfit |
 | Serif | Instrument Serif, Newsreader, Fraunces, Cormorant, Crimson Pro, Libre Baskerville |
 | Display | Novarese, Editorial New |
+| Condensed | Items (when you need a condensed font) |
 | Mono | Geist Mono, IBM Plex Mono, JetBrains Mono, Fira Code |
 
 **Commercial foundries (require license):**
