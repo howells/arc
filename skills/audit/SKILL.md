@@ -48,9 +48,9 @@ Pass relevant rules to each reviewer agent.
 
 | Reviewer | Rules to Pass |
 |----------|---------------|
-| design-quality-reviewer | design.md, colors.md, typography.md, marketing.md |
-| daniel-product-engineer-reviewer | forms.md, interactions.md, animation.md, performance.md |
-| lee-nextjs-reviewer | layout.md, performance.md |
+| designer | design.md, colors.md, typography.md, marketing.md |
+| daniel-product-engineer | forms.md, interactions.md, animation.md, performance.md |
+| lee-nextjs-engineer | layout.md, performance.md |
 
 Rules location: `${CLAUDE_PLUGIN_ROOT}/rules/interface/`
 
@@ -118,10 +118,10 @@ find . -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx"
 | > 100 files | Large | Full reviewer suite, batched execution |
 
 **Scale-appropriate signals:**
-- Small projects: Skip `architecture-strategist` (no complex boundaries to review)
-- Small projects: Skip `code-simplicity-reviewer` (not enough code to over-engineer)
+- Small projects: Skip `architecture-engineer` (no complex boundaries to review)
+- Small projects: Skip `simplicity-engineer` (not enough code to over-engineer)
 - No tests present + small project: Don't flag missing tests as critical
-- Single developer: Skip `senior-reviewer` (no code review discipline needed)
+- Single developer: Skip `senior-engineer` (no code review discipline needed)
 
 **Summarize detection:**
 ```
@@ -141,30 +141,30 @@ Execution mode: [batched (default) / parallel]
 
 | Scale | Core Reviewers |
 |-------|----------------|
-| Small | security-sentinel, performance-oracle |
-| Medium | security-sentinel, performance-oracle, architecture-strategist |
-| Large | security-sentinel, performance-oracle, architecture-strategist, senior-reviewer |
+| Small | security-engineer, performance-engineer |
+| Medium | security-engineer, performance-engineer, architecture-engineer |
+| Large | security-engineer, performance-engineer, architecture-engineer, senior-engineer |
 
 **Add framework-specific reviewers (medium/large only):**
 
 | Project Type | Additional Reviewers |
 |--------------|---------------------|
-| Next.js | lee-nextjs-reviewer, daniel-product-engineer-reviewer |
-| React/TypeScript | daniel-product-engineer-reviewer |
+| Next.js | lee-nextjs-engineer, daniel-product-engineer |
+| React/TypeScript | daniel-product-engineer |
 | Python/Rust/Go | (none additional) |
 
 **Conditional additions:**
-- If scope includes DB/migrations → add `data-integrity-guardian`
-- If monorepo with shared packages (large only) → add `code-simplicity-reviewer`
-- If UI-heavy (React/Next.js, medium/large) → add `design-quality-reviewer`
-- If recent AI-assisted work or branch audit → add `llm-artifact-reviewer` (deslop)
+- If scope includes DB/migrations → add `data-engineer`
+- If monorepo with shared packages (large only) → add `simplicity-engineer`
+- If UI-heavy (React/Next.js, medium/large) → add `designer`
+- If recent AI-assisted work or branch audit → add `llm-engineer` (deslop)
 
 **Focus flag overrides:**
-- `--security` → only `security-sentinel`
-- `--performance` → only `performance-oracle`
-- `--architecture` → only `architecture-strategist`
-- `--design` → only `design-quality-reviewer`
-- `--deslop` → only `llm-artifact-reviewer`
+- `--security` → only `security-engineer`
+- `--performance` → only `performance-engineer`
+- `--architecture` → only `architecture-engineer`
+- `--design` → only `designer`
+- `--deslop` → only `llm-engineer`
 
 **Final reviewer list:**
 - Small projects: 2-3 reviewers
@@ -189,11 +189,11 @@ Split reviewers into batches of 2. Run each batch, wait for completion, then run
 
 **Example with 6 reviewers:**
 ```
-Batch 1: security-sentinel, performance-oracle
+Batch 1: security-engineer, performance-engineer
   → Wait for both to complete
-Batch 2: architecture-strategist, daniel-product-engineer-reviewer
+Batch 2: architecture-engineer, daniel-product-engineer
   → Wait for both to complete
-Batch 3: lee-nextjs-reviewer, senior-reviewer
+Batch 3: lee-nextjs-engineer, senior-engineer
   → Wait for both to complete
 ```
 
@@ -201,20 +201,20 @@ Batch 3: lee-nextjs-reviewer, senior-reviewer
 
 | Reviewer | Model | Why |
 |----------|-------|-----|
-| security-sentinel | sonnet | Pattern recognition + context |
-| performance-oracle | sonnet | Algorithmic reasoning |
-| architecture-strategist | sonnet | Structural analysis |
-| daniel-product-engineer-reviewer | sonnet | Code quality judgment |
-| lee-nextjs-reviewer | sonnet | Framework pattern recognition |
-| senior-reviewer | sonnet | Code review reasoning |
-| code-simplicity-reviewer | sonnet | Complexity analysis |
-| data-integrity-guardian | sonnet | Data safety reasoning |
-| **design-quality-reviewer** | **opus** | **Aesthetic judgment requires premium model** |
-| llm-artifact-reviewer | sonnet | Pattern recognition for AI artifacts |
+| security-engineer | sonnet | Pattern recognition + context |
+| performance-engineer | sonnet | Algorithmic reasoning |
+| architecture-engineer | sonnet | Structural analysis |
+| daniel-product-engineer | sonnet | Code quality judgment |
+| lee-nextjs-engineer | sonnet | Framework pattern recognition |
+| senior-engineer | sonnet | Code review reasoning |
+| simplicity-engineer | sonnet | Complexity analysis |
+| data-engineer | sonnet | Data safety reasoning |
+| **designer** | **opus** | **Aesthetic judgment requires premium model** |
+| llm-engineer | sonnet | Pattern recognition for AI artifacts |
 
 **For each batch, spawn 2 agents in parallel:**
 ```
-Task [security-sentinel] model: sonnet: "
+Task [security-engineer] model: sonnet: "
 Audit the following codebase for security issues.
 
 Scope: [path]
@@ -241,13 +241,13 @@ Return findings in this format:
 [1-2 sentences]
 "
 
-Task [performance-oracle] model: sonnet: "
+Task [performance-engineer] model: sonnet: "
 Audit the following codebase for performance issues.
 [similar structure]
 Focus on: N+1 queries, missing indexes, memory leaks, bundle size, render performance.
 "
 
-Task [design-quality-reviewer] model: opus: "
+Task [designer] model: opus: "
 Review UI implementation for visual design quality.
 [similar structure]
 Focus on: aesthetic direction, memorable elements, typography, color cohesion, AI slop patterns.
@@ -257,7 +257,7 @@ Focus on: aesthetic direction, memorable elements, typography, color cohesion, A
 **Wait for batch to complete before starting next batch.**
 
 Repeat for remaining batches:
-- Batch 2: architecture-strategist + UI reviewer (if applicable)
+- Batch 2: architecture-engineer + UI reviewer (if applicable)
 - Batch 3: remaining reviewers
 
 ### Parallel Execution (--parallel flag)
@@ -265,9 +265,9 @@ Repeat for remaining batches:
 Only if `--parallel` flag is explicitly set, spawn all reviewers simultaneously:
 
 ```
-Task [security-sentinel] model: sonnet: "..."
-Task [performance-oracle] model: sonnet: "..."
-Task [architecture-strategist] model: sonnet: "..."
+Task [security-engineer] model: sonnet: "..."
+Task [performance-engineer] model: sonnet: "..."
+Task [architecture-engineer] model: sonnet: "..."
 [All additional reviewers in same message...]
 ```
 
@@ -290,14 +290,14 @@ Task [architecture-strategist] model: sonnet: "..."
 4. **Low** — Suggestions, minor improvements
 
 **Group by domain:**
-- Security (from security-sentinel + dependency scan)
-- Performance (from performance-oracle)
-- Architecture (from architecture-strategist)
-- Code Quality (from senior-reviewer, code-simplicity-reviewer)
-- LLM Artifacts (from llm-artifact-reviewer) — AI-generated slop
-- UI/UX Code (from daniel-product-engineer-reviewer, lee-nextjs-reviewer)
-- Design Quality (from design-quality-reviewer) — visual/aesthetic concerns
-- Data Integrity (from data-integrity-guardian)
+- Security (from security-engineer + dependency scan)
+- Performance (from performance-engineer)
+- Architecture (from architecture-engineer)
+- Code Quality (from senior-engineer, simplicity-engineer)
+- LLM Artifacts (from llm-engineer) — AI-generated slop
+- UI/UX Code (from daniel-product-engineer, lee-nextjs-engineer)
+- Design Quality (from designer) — visual/aesthetic concerns
+- Data Integrity (from data-engineer)
 
 ## Phase 5: Generate Report
 
@@ -332,7 +332,7 @@ File: `docs/audits/YYYY-MM-DD-[scope-slug]-audit.md`
 
 ### [Issue Title]
 **File:** `path/to/file.ts:123`
-**Flagged by:** security-sentinel, architecture-strategist
+**Flagged by:** security-engineer, architecture-engineer
 **Description:** [What's wrong and why it matters]
 **Recommendation:** [How to fix]
 

@@ -122,7 +122,7 @@ After 3-5 questions, ask:
 Before diving into detailed design, run a sanity check:
 "Let me quickly validate this approach makes sense..."
 
-Use Task tool to spawn a single reviewer agent (architecture-strategist or relevant domain expert) to catch fundamental issues early. Present any concerns to user before proceeding.
+Use Task tool to spawn a single reviewer agent (architecture-engineer or relevant domain expert) to catch fundamental issues early. Present any concerns to user before proceeding.
 
 ## Phase 3: Incremental Design with Micro-Reviews
 
@@ -136,9 +136,9 @@ For each major section:
 
 **Micro-reviews (optional, for complex sections):**
 After completing a major section that warrants it:
-- Data model → spawn data-integrity-guardian for quick review
-- API design → spawn architecture-strategist for quick review
-- Security-sensitive → spawn security-sentinel for quick review
+- Data model → spawn data-engineer for quick review
+- API design → spawn architecture-engineer for quick review
+- Security-sensitive → spawn security-engineer for quick review
 
 Present micro-review findings immediately. Incorporate feedback before next section.
 

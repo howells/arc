@@ -34,13 +34,13 @@ Check for context on what led to the plan being reviewed.
 
 **Available reviewers:**
 - `daniel-product-engineer` — Type safety, UI completeness, React patterns
-- `lee-nextjs-reviewer` — Next.js App Router, server-first architecture
-- `senior-reviewer` — Asymmetric strictness, review discipline
-- `architecture-strategist` — System design, component boundaries
-- `code-simplicity-reviewer` — YAGNI, minimalism
-- `performance-oracle` — Bottlenecks, scalability
-- `security-sentinel` — Vulnerabilities, OWASP
-- `data-integrity-guardian` — Migrations, transactions
+- `lee-nextjs-engineer` — Next.js App Router, server-first architecture
+- `senior-engineer` — Asymmetric strictness, review discipline
+- `architecture-engineer` — System design, component boundaries
+- `simplicity-engineer` — YAGNI, minimalism
+- `performance-engineer` — Bottlenecks, scalability
+- `security-engineer` — Vulnerabilities, OWASP
+- `data-engineer` — Migrations, transactions
 
 ## Phase 1: Find the Plan
 
@@ -100,28 +100,28 @@ Check for context on what led to the plan being reviewed.
 **Select reviewers based on project type:**
 
 **Daniel's projects:**
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/daniel-product-engineer-reviewer.md
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/code-simplicity-reviewer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/daniel-product-engineer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/simplicity-engineer.md
 
 **TypeScript/React:**
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/daniel-product-engineer-reviewer.md
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/senior-reviewer.md
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/architecture-strategist.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/daniel-product-engineer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/senior-engineer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/architecture-engineer.md
 
 **Next.js:**
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/lee-nextjs-reviewer.md
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/daniel-product-engineer-reviewer.md
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/senior-reviewer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/lee-nextjs-engineer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/daniel-product-engineer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/senior-engineer.md
 
 **Python:**
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/senior-reviewer.md
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/performance-oracle.md
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/architecture-strategist.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/senior-engineer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/performance-engineer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/architecture-engineer.md
 
 **General/Unknown:**
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/senior-reviewer.md
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/architecture-strategist.md
-- ${CLAUDE_PLUGIN_ROOT}/agents/review/code-simplicity-reviewer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/senior-engineer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/architecture-engineer.md
+- ${CLAUDE_PLUGIN_ROOT}/agents/review/simplicity-engineer.md
 
 ## Phase 3: Run Expert Review
 

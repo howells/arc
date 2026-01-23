@@ -48,7 +48,7 @@ Task general-purpose model: haiku: "Run tsc --noEmit and fix errors"
 
 ```
 Task debugging-toolkit:debugger model: sonnet: "Debug failing test..."
-Task code-simplicity-reviewer model: sonnet: "Review this code..."
+Task simplicity-engineer model: sonnet: "Review this code..."
 ```
 
 ### Opus (full power)

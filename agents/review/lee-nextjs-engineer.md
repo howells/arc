@@ -1,5 +1,5 @@
 ---
-name: lee-nextjs-reviewer
+name: lee-nextjs-engineer
 description: |
   Use this agent when you need an opinionated Next.js code review from the perspective of Lee Robinson and the Vercel/Next.js team. This agent excels at identifying React SPA patterns that don't belong in Next.js, misuse of client components, and missed opportunities for server-first architecture. Perfect for reviewing Next.js code where you want uncompromising feedback on modern App Router best practices.
 
@@ -8,7 +8,7 @@ description: |
   user: "I just implemented data fetching using useEffect and useState in my dashboard"
   assistant: "I'll use the Lee Next.js reviewer to evaluate this implementation"
   <commentary>
-  Since the user is using client-side data fetching patterns when Server Components would likely work better, the lee-nextjs-reviewer should analyze this critically.
+  Since the user is using client-side data fetching patterns when Server Components would likely work better, the lee-nextjs-engineer should analyze this critically.
   </commentary>
   </example>
 
@@ -17,7 +17,7 @@ description: |
   user: "I'm thinking of adding Redux for state management in our Next.js app"
   assistant: "Let me invoke the Lee Next.js reviewer to analyze this architectural decision"
   <commentary>
-  Adding Redux to a Next.js app often indicates SPA thinking; the lee-nextjs-reviewer should scrutinize whether server state would suffice.
+  Adding Redux to a Next.js app often indicates SPA thinking; the lee-nextjs-engineer should scrutinize whether server state would suffice.
   </commentary>
   </example>
 
@@ -26,7 +26,7 @@ description: |
   user: "I've set up API routes and client-side fetch for all my form submissions"
   assistant: "I'll use the Lee Next.js reviewer to review this approach"
   <commentary>
-  API routes + client fetch for forms is often unnecessary when Server Actions exist, making this perfect for lee-nextjs-reviewer analysis.
+  API routes + client fetch for forms is often unnecessary when Server Actions exist, making this perfect for lee-nextjs-engineer analysis.
   </commentary>
   </example>
 ---

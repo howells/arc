@@ -197,8 +197,8 @@ Arc includes 16 specialized agents:
 
 | Category | Agents |
 |----------|--------|
-| **Research** | framework-docs-researcher, git-history-analyzer, duplicate-detector |
-| **Review** | architecture-strategist, code-simplicity-reviewer, daniel-product-engineer-reviewer, data-integrity-guardian, design-quality-reviewer, lee-nextjs-reviewer, llm-artifact-reviewer, performance-oracle, security-sentinel, senior-reviewer |
+| **Research** | docs-researcher, git-history-analyzer, duplicate-detector |
+| **Review** | architecture-engineer, simplicity-engineer, daniel-product-engineer, data-engineer, designer, lee-nextjs-engineer, llm-engineer, performance-engineer, security-engineer, senior-engineer |
 | **Design** | figma-implement |
 | **Workflow** | spec-flow-analyzer, e2e-test-runner |
 

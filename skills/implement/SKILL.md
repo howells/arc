@@ -195,7 +195,7 @@ Wait for user confirmation or adjustments.
 ## Phase 4: Quality Checkpoints
 
 **After completing data/types tasks:**
-- Spawn data-integrity-guardian for quick review
+- Spawn data-engineer for quick review
 - Present findings as questions
 
 **Before starting UI tasks — INVOKE ARC:DESIGN FOR BUILD:**
@@ -318,9 +318,9 @@ For significant features, offer parallel review:
 "Feature complete. Run expert review before PR?"
 
 If yes, spawn in parallel (all use sonnet for balanced cost/quality):
-- code-simplicity-reviewer (model: sonnet)
-- architecture-strategist or domain-specific reviewer (model: sonnet)
-- security-sentinel if auth/data involved (model: sonnet)
+- simplicity-engineer (model: sonnet)
+- architecture-engineer or domain-specific reviewer (model: sonnet)
+- security-engineer if auth/data involved (model: sonnet)
 
 Present findings as Socratic questions (see `${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md`).
 

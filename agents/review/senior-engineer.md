@@ -1,5 +1,5 @@
 ---
-name: senior-reviewer
+name: senior-engineer
 description: |
   Use this agent when you need a thorough code review with asymmetric strictness — strict on changes to existing code, pragmatic on new isolated code. This agent focuses on review process discipline: verifying deletions are intentional, checking testability as a quality signal, and preferring simple duplication over clever abstractions.
 
@@ -8,7 +8,7 @@ description: |
   user: "I've updated the UserProfile component to add settings"
   assistant: "Let me have the senior reviewer check these changes to existing code"
   <commentary>
-  Changes to existing code get stricter review — the senior-reviewer will question whether this adds complexity and whether extraction would be better.
+  Changes to existing code get stricter review — the senior-engineer will question whether this adds complexity and whether extraction would be better.
   </commentary>
   </example>
 
