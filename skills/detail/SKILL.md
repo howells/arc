@@ -40,6 +40,8 @@ website:
 </required_reading>
 
 <process>
+**Announce at start:** "I'm using the detail skill to create an implementation plan with exact file paths and TDD tasks."
+
 ## Step 1: Detect Project Stack
 
 **Use Glob tool to detect in parallel:**
@@ -277,25 +279,35 @@ git branch --show-current
 "Implementation plan ready, but you're still on main.
 
 I recommend setting up a worktree before implementing — this keeps main clean
-and lets you easily abandon the work if needed.
-
-Note: The implementation plan will need to be moved to the worktree."
+and lets you easily abandon the work if needed."
 ```
 
+**Use AskUserQuestion tool:**
+```
+Question: "How would you like to proceed?"
+Header: "Next step"
 Options:
-1. **Set up worktree first** → Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`, move plan, then continue
-2. **Continue on main anyway** → Not recommended for multi-file changes
-3. **Done for now** → End session
+  1. "Set up worktree first" (Recommended) — Isolated workspace, plan moves with branch
+  2. "Continue on main" — Not recommended for multi-file changes
+  3. "Done for now" — End session
+```
+
+**If option 1:** Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`, move plan, then continue
 
 **If already on feature branch (recommended path):**
+
+**Use AskUserQuestion tool:**
 ```
-"Implementation plan ready. How would you like to proceed?"
+Question: "Implementation plan ready. How would you like to proceed?"
+Header: "Next step"
+Options:
+  1. "Review the plan" (Recommended) — Expert reviewers validate before execution
+  2. "Execute now" — Skip review, start implementing
+  3. "Done for now" — End session
 ```
 
-Options:
-1. **Review plan** (`/arc:review`) — Expert reviewers validate before execution
-2. **Execute now** (`/arc:implement`) — Skip review, start implementing
-3. **Done for now** — End session
+**If option 1:** Route to `/arc:review`
+**If option 2:** Route to `/arc:implement`
 </process>
 
 <progress_context>

@@ -11,7 +11,7 @@ The full arc from idea to shipped code. A [Claude Code](https://docs.anthropic.c
 
 ## What It Does
 
-Arc provides 20 commands covering the complete development lifecycle:
+Arc provides 21 commands covering the complete development lifecycle:
 
 ```
 ENTRY   /arc:arc      - Main entry point, routes to right workflow
@@ -38,7 +38,8 @@ CROSS-CUTTING
         /arc:suggest    - Opinionated next-step recommendations
         /arc:tidy       - Clean up completed plans
 
-TOOLS   /arc:commit     - Smart commit + push with auto-splitting
+TOOLS   /arc:worktree   - Create isolated git worktree for feature work
+        /arc:commit     - Smart commit + push with auto-splitting
         /arc:rules      - Apply coding standards to project
 ```
 
@@ -187,6 +188,7 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:tasklist` | Manage backlog | `docs/tasklist.md` |
 | `/arc:document` | Document features | `docs/features/<feature>.md` |
 | `/arc:suggest` | What to work on next | Recommendations |
+| `/arc:worktree` | Create isolated worktree | Feature branch + workspace |
 | `/arc:commit` | Commit and push changes | Git commits |
 | `/arc:rules` | Apply coding standards | `.ruler/` directory |
 | `/arc:tidy` | Clean up completed plans | Archived/deleted plans |

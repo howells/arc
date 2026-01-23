@@ -20,6 +20,8 @@
     "frontend",
     "workflow",
     "development",
-    "lifecycle"
+    "lifecycle",
+    "worktree",
+    "git"
   ]
 }

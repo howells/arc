@@ -74,6 +74,8 @@ Reference: `${CLAUDE_PLUGIN_ROOT}/references/tailwind-v4.md` for Tailwind v4 syn
 
 <process>
 
+**Announce at start:** "I'm using the implement skill to execute the plan task-by-task with TDD."
+
 **You are here in the arc:**
 ```
 /arc:ideate     → Design doc (on main) ✓
@@ -336,15 +338,45 @@ If yes, spawn in parallel (all use sonnet for balanced cost/quality):
 
 Present findings as Socratic questions (see `${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md`).
 
-## Phase 7: Ship
+## Phase 7: Finish the Branch
 
-**Ensure all tests pass:**
+Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/finishing-a-development-branch.md`
+
+**First, verify tests pass:**
 ```bash
 pnpm test
 pnpm lint
 ```
 
-**Create PR:**
+**If tests fail:** Stop. Cannot proceed until tests pass.
+
+**If tests pass, present the 4 options:**
+
+**Use AskUserQuestion tool:**
+```
+Question: "Implementation complete. What would you like to do?"
+Header: "Finish"
+Options:
+  1. "Merge to main locally" — Merge, delete branch, cleanup worktree
+  2. "Push and create PR" (Recommended) — Push branch, open PR for review
+  3. "Keep branch as-is" — I'll handle it later
+  4. "Discard this work" — Delete branch and worktree (requires confirmation)
+```
+
+### Option 1: Merge Locally
+
+```bash
+git checkout main
+git pull
+git merge feature/<feature-name>
+pnpm test  # Verify tests pass on merged result
+git branch -d feature/<feature-name>
+```
+
+Then cleanup worktree (see below).
+
+### Option 2: Push and Create PR
+
 ```bash
 git push -u origin feature/<feature-name>
 
@@ -370,16 +402,46 @@ EOF
 )"
 ```
 
-**Report to user:**
-- PR URL
-- Summary of what was built
-- Any follow-up items
+Report PR URL to user. Keep worktree until PR is merged.
 
-**Cleanup worktree (optional):**
+### Option 3: Keep As-Is
+
+Report: "Keeping branch [name]. Worktree preserved at [path]."
+
+Don't cleanup worktree.
+
+### Option 4: Discard
+
+**Require typed confirmation:**
+```
+This will permanently delete:
+- Branch [name]
+- All commits since [base]
+- Worktree at [path]
+
+Type 'discard' to confirm.
+```
+
+Wait for exact confirmation. If confirmed:
 ```bash
+git checkout main
+git branch -D feature/<feature-name>
+```
+
+Then cleanup worktree.
+
+### Worktree Cleanup (Options 1, 2, 4)
+
+```bash
+# Only for options 1, 2, and 4
 cd ..
 git worktree remove .worktrees/<feature-name>
 ```
+
+**Report to user:**
+- What happened (merged/PR created/discarded)
+- Summary of what was built
+- Any follow-up items
 </process>
 
 <when_to_stop>

@@ -25,6 +25,8 @@ website:
 
 Create distinctive, non-generic UI. Avoids AI slop (purple gradients, cookie-cutter layouts).
 
+**Announce at start:** "I'm using the design skill to create distinctive, non-generic UI."
+
 <rules_context>
 **Load interface rules for UI work:**
 
@@ -111,10 +113,19 @@ Ask: "Does this layout feel right?"
 
 ### Step 5: Build or Hand Off
 
+**Use AskUserQuestion tool:**
+```
+Question: "Design ready. What would you like to do with it?"
+Header: "Next step"
 Options:
-1. **Build now** → Use /arc:build or /arc:implement
-2. **Create plan** → Invoke /arc:detail
-3. **Just the design** → Save to docs/plans/ and stop
+  1. "Build now" (Recommended) — Jump to /arc:build or /arc:implement
+  2. "Create implementation plan" — Run /arc:detail for detailed task breakdown
+  3. "Save design only" — Save to docs/plans/ and stop here
+```
+
+**If option 1:** Route to `/arc:build` (quick) or `/arc:implement` (from plan)
+**If option 2:** Route to `/arc:detail`
+**If option 3:** Save design doc and end
 
 ### Step 5b: Visual Verification (During Build)
 

@@ -61,6 +61,8 @@ Reference: `${CLAUDE_PLUGIN_ROOT}/references/tailwind-v4.md` for Tailwind v4 syn
 
 Quick build for small-to-medium scope work. No formal plan, but still uses TDD and verification disciplines.
 
+**Announce at start:** "I'm using the build skill for quick implementation with TDD."
+
 ## Process
 
 ### Step 1: Assess Scope
@@ -89,13 +91,18 @@ git branch --show-current
 ```
 
 **If on main/master:**
+
+**Use AskUserQuestion tool:**
 ```
-"I recommend creating a feature branch and worktree for this work. Keeps main clean and allows easy rollback."
+Question: "You're on main. Want to create a worktree for this work?"
+Header: "Worktree"
+Options:
+  1. "Yes, set up worktree" (Recommended) — Keeps main clean, easy rollback
+  2. "No, work on main" — Fine for trivial single-file fixes
 ```
 
-Options:
-1. **Yes, set up worktree** (Recommended for multi-file changes) → Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`
-2. **No, work on main** → Proceed (fine for trivial single-file fixes)
+**If option 1:** Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`
+**If option 2:** Proceed on main
 
 ### Step 2: Quick Mental Model
 
@@ -156,11 +163,17 @@ Skill vercel-react-best-practices: "Quick review of [component/feature] for perf
 
 ### Step 6: Offer Next Steps
 
-"Build complete. Would you like to:"
-1. Run /arc:test to verify coverage
-2. Run /arc:document to capture what we built
-3. Add follow-up items to /arc:tasklist
-4. Done for now
+**Use AskUserQuestion tool:**
+```
+Question: "Build complete. What's next?"
+Header: "Next step"
+multiSelect: false
+Options:
+  1. "Verify test coverage" — Run /arc:test
+  2. "Document what we built" — Run /arc:document
+  3. "Add follow-up tasks" — Update /arc:tasklist
+  4. "Done for now" — End session
+```
 
 <progress_context>
 **Use Read tool:** `docs/progress.md` (first 50 lines)

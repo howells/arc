@@ -1,6 +1,6 @@
 # Arc Plugin
 
-The full arc from idea to shipped code. This plugin provides 20 commands for the complete development lifecycle.
+The full arc from idea to shipped code. This plugin provides 21 commands for the complete development lifecycle.
 
 ## Structure
 
@@ -21,6 +21,7 @@ arc/
 │   ├── test/SKILL.md       # 7. Test: strategy & execution
 │   ├── letsgo/SKILL.md     # 8. Ship: production readiness
 │   ├── legal/SKILL.md      # 8. Ship: privacy policy, ToS
+│   ├── worktree/SKILL.md   # Cross-cutting: isolated workspaces
 │   ├── audit/SKILL.md      # Cross-cutting: codebase audit
 │   ├── commit/SKILL.md     # Cross-cutting: smart commits
 │   ├── progress/SKILL.md   # Cross-cutting: session journal
@@ -61,6 +62,7 @@ All commands use the `/arc:` namespace prefix. The typical workflow:
               /arc:legal      → Privacy policy, Terms of Service
 
 CROSS-CUTTING (available anytime):
+              /arc:worktree   → Create isolated git worktree
               /arc:audit      → Comprehensive codebase audit
               /arc:commit     → Smart commits with auto-splitting
               /arc:progress   → Session journal

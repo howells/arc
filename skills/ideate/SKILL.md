@@ -44,6 +44,8 @@ website:
 </required_reading>
 
 <process>
+**Announce at start:** "I'm using the ideate skill to turn your idea into a validated design."
+
 ## Phase 1: Context Gathering
 
 **Read progress journal and solutions for past decisions:**
@@ -345,10 +347,15 @@ The next step is creating a detailed implementation plan with exact file paths a
 I recommend setting up a worktree first so the implementation plan lives with your feature branch."
 ```
 
-**Options:**
-1. **Set up worktree → create implementation plan** (Recommended)
-2. **Create implementation plan on current branch** (skip worktree)
-3. **Done for now** — just the design
+**Use AskUserQuestion tool:**
+```
+Question: "How would you like to proceed?"
+Header: "Next step"
+Options:
+  1. "Set up worktree, then create plan" (Recommended) — Isolated workspace for clean development
+  2. "Create plan on current branch" — Skip worktree, plan lives on main
+  3. "Done for now" — Keep just the design, continue later
+```
 
 **If setting up worktree (option 1):**
 1. Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`
