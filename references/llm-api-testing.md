@@ -72,7 +72,7 @@ const response = await fetch(apiUrl, {
 
 ## Model Discovery
 
-**Reference:** https://routerbase.danielhowells.com/llms.txt
+**Reference:** https://routerbase.dev/llms.txt
 
 When choosing a model for testing:
 1. Prefer `-flash`, `-mini`, or `-lite` variants for speed
