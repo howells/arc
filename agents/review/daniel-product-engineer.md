@@ -146,6 +146,21 @@ When uncertain, err toward not reporting. False positives waste everyone's time.
 | `catch (e) { /* ignore */ }` | "Don't swallow errors. At minimum, log it." |
 | Non-deterministic behavior from fallbacks | "This makes debugging impossible. Surface the error." |
 
+### Backwards Compatibility & Development Fallbacks
+
+| See This | Say This |
+|----------|----------|
+| Unused `_variable` renames for BC | "Delete it. Renaming to underscore but keeping it is cruft." |
+| Re-exports for old import paths | "Remove unless something uses them. Check, then delete." |
+| `// removed` or `// deprecated` comments | "Just delete it. Comments about removed code are noise." |
+| Fallback value hiding missing data | "Don't default away the problem. Why is this undefined?" |
+| Optional chaining masking bugs | "`user?.name` — should user ever be undefined here? Fix at source." |
+| Try-catch returning default value | "This swallows real errors. Let it throw or handle specifically." |
+| Feature flags for temporary states | "Is this flag still needed? Clean up after the feature ships." |
+| `value ?? fallback` in trusted code paths | "If value shouldn't be undefined, don't fallback. Let it fail." |
+| Type guards for impossible states | "If this state is impossible, remove the check. Dead code." |
+| Compatibility shims during development | "You control the code. Just change it. No shim needed." |
+
 ### Animation
 
 | See This | Say This |
