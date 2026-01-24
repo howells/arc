@@ -12,7 +12,7 @@ website:
   desc: Idea → spec
   summary: Talk through your idea with a thinking partner who already knows your codebase. End up with a clear spec of what to build.
   what: |
-    Ideate is a conversation with a thinking partner who's already read your code. You describe what you want, it asks clarifying questions, and together you arrive at a concrete spec—user flows, data models, edge cases. Expert reviewers then check for issues before you write any code.
+    Ideate is a conversation with a thinking partner who's already read your code. You describe what you want, it asks clarifying questions, and together you arrive at a concrete spec—user flows, data models, edge cases. Review happens throughout—scope checks early, approach validation mid-flow, simplification at every step.
   why: |
     Vague ideas lead to wasted code. Ideate forces you to get specific—what exactly happens when a user clicks that button?—so you're not making it up as you implement. The conversation surfaces gaps you didn't know you had.
   decisions:
@@ -34,6 +34,7 @@ These govern every interaction. Return to them constantly.
 - **Multiple choice preferred** — Easier to answer than open-ended when possible. Offer 2-4 options.
 - **YAGNI ruthlessly** — Remove unnecessary features from all designs. "Do we need this in v1?"
 - **Explore alternatives** — Always propose 2-3 approaches before settling. Lead with your recommendation.
+- **Review at every stage** — Don't batch feedback at the end. Each phase includes validation before moving forward.
 - **Incremental validation** — Present design in 200-300 word sections. Check each before continuing.
 - **Be flexible** — Go back and clarify when something doesn't make sense. This is a conversation, not a checklist.
 </key_principles>
@@ -118,6 +119,19 @@ D) Something else?"
 **Never assume.** If you're not sure, ask. One more question is better than building the wrong thing.
 </conversation_flow>
 
+<scope_check>
+**Before proposing solutions, check scope:**
+
+"Before we dive into solutions—is there anything here that's nice-to-have vs must-have?"
+
+If user is unsure, help them clarify:
+- "What's the smallest version that would be useful?"
+- "If we had to ship in a day, what would we cut?"
+- "Which part solves the core problem?"
+
+**Why do this now:** Scope creep is easier to catch before any design work begins. Once you've invested in detailed approaches, it's harder to cut scope without feeling like wasted effort.
+</scope_check>
+
 <reference_capture>
 **As you talk, capture reference materials:**
 
@@ -155,14 +169,36 @@ For each option:
 
 **Ask which direction appeals to them.** Listen to their reasoning — they have context you don't.
 
+<early_review>
+**Once they've chosen an approach, offer a quick sanity check:**
+
+"Before we detail this out—want me to have a couple reviewers sanity-check the approach? Quick check, not a full audit."
+
+**Why now, not later:** Catching architectural issues before investing in detailed design saves significant rework. A 2-minute review now can prevent a 20-minute redesign later.
+
+**If yes:**
+- Spawn 2-3 reviewers based on project type:
+  - TypeScript/React: architecture-engineer, simplicity-engineer
+  - Python: architecture-engineer, simplicity-engineer
+  - General: architecture-engineer, security-engineer
+- Focus review on: "Is this approach sound for the problem stated?"
+- Transform findings into questions (see `${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md`)
+- Walk through **one at a time**: "Looking at the approach, one reviewer asked: [question]. What do you think?"
+
+**If no:** Move straight to detailed design. User can always request review later.
+</early_review>
+
 ## Presenting the Design
 
 Once you've agreed on an approach, present the design **in 200-300 word sections**.
 
-After each section, ask: "Does this look right so far?"
+After each section, ask: "Does this look right? Anything here we could simplify or defer to v2?"
 
 If they have concerns → address them before continuing.
+If they want to simplify → discuss what to cut and update the section.
 If they approve → move to the next section.
+
+**Why ask about simplification per-section:** Complexity is easier to cut before you've built a whole design around it. Each section is a chance to question whether every piece earns its place.
 
 **Sections to cover (as relevant):**
 - Problem statement / user story
@@ -202,47 +238,6 @@ Include: key screens, component hierarchy, interactive elements, loading/error/e
 
 Ask: "Does this layout feel right?"
 </ui_design>
-
-## Simplification Pass
-
-Before finalizing, challenge every piece of complexity together.
-
-"Let's make sure we're not overbuilding. I'm going to push back on a few things — not because they're wrong, but to make sure they're necessary."
-
-**Scope questions:**
-- "If we had to ship in a day, what would we cut?"
-- "What's the smallest version that's useful?"
-- "Which of these is must-have vs nice-to-have for the first user?"
-
-**Complexity questions:**
-- "Do we need [abstraction], or could we hardcode it for now?"
-- "What breaks if we remove [feature]?"
-- "We have three layers here. What if we started with one?"
-
-**Timing questions:**
-- "Does [feature] need to be in v1, or could it be a fast-follow?"
-- "What would we learn from shipping without this?"
-
-**These aren't rhetorical.** Listen to the answers. If they can articulate why the complexity is needed, keep it. If they're unsure, suggest trying without it.
-
-**The goal:** A design where every piece earns its place.
-
-## Expert Review (Optional)
-
-If the design is complex or high-stakes, offer:
-"Want me to have some expert reviewers sanity-check this before we finalize?"
-
-If yes, spawn reviewers based on project type:
-- TypeScript/React: architecture-engineer, performance-engineer, simplicity-engineer
-- Python: architecture-engineer, performance-engineer, simplicity-engineer
-- General: architecture-engineer, security-engineer, simplicity-engineer
-
-**Transform findings into collaborative questions** (see `${CLAUDE_PLUGIN_ROOT}/references/review-patterns.md`):
-
-Instead of: "Reviewer says remove the caching layer"
-Say: "Looking at this again — do we need caching in v1, or could we add it when we see performance issues?"
-
-Walk through findings **one at a time**. If they want to keep something, they probably have context the reviewer doesn't. Note decisions and move on.
 
 ## Finalization
 
@@ -348,9 +343,10 @@ After completing the design, append to `docs/progress.md`:
 <success_criteria>
 Design is complete when:
 - [ ] User's idea is fully understood (you can explain it in one sentence)
+- [ ] Scope clarified before proposing solutions
 - [ ] 2-3 approaches were considered, trade-offs explained
-- [ ] Design presented in sections, each validated by user
-- [ ] Simplification pass completed — every piece of complexity justified
+- [ ] Approach sanity-checked (if user opted for early review)
+- [ ] Design presented in sections, each validated with simplification check
 - [ ] Design document written and committed to main
 - [ ] User chose next step (plan in worktree, build directly, or done)
 - [ ] If continuing: worktree created and routed to appropriate skill
