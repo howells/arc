@@ -1,5 +1,6 @@
 ---
 name: letsgo
+disable-model-invocation: true
 description: |
   Production readiness checklist covering domains, SEO, security, and deployment.
   Use when asked to "ship it", "deploy to production", "go live", "launch",

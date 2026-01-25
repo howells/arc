@@ -1,5 +1,6 @@
 ---
 name: tidy
+disable-model-invocation: true
 description: |
   Clean up completed plans in docs/plans/. Archives or deletes finished plans.
   Use when asked to "clean up plans", "tidy the docs", "archive old plans",

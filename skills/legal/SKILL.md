@@ -1,5 +1,6 @@
 ---
 name: legal
+disable-model-invocation: true
 description: |
   Generate Privacy Policy, Terms of Service, and Cookie Policy pages.
   Use when setting up legal pages for a new project, when asked to

@@ -1,5 +1,6 @@
 ---
 name: rules
+disable-model-invocation: true
 description: |
   Apply Arc's coding rules to the current project. Copies rules to .ruler/ directory.
   Use when asked to "set up coding rules", "apply standards", "configure rules",

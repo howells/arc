@@ -1,5 +1,6 @@
 ---
 name: worktree
+disable-model-invocation: true
 description: |
   Create an isolated git worktree for feature development. Use proactively when starting
   any non-trivial work on main branch, when asked to "create a branch", "set up a worktree",

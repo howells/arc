@@ -5,9 +5,9 @@ description: |
   Use when asked to "show progress", "what have we done", "add a note",
   or when you need context from previous sessions.
 license: MIT
+argument-hint: <note-to-add>
 metadata:
   author: howells
-  argument-hint: <note-to-add>
 website:
   order: 15
   desc: Session journal

@@ -1,13 +1,14 @@
 ---
 name: commit
+disable-model-invocation: true
 description: |
   Smart commit and push with auto-splitting across domains. Creates atomic commits.
   Use when asked to "commit", "push changes", "save my work", or after completing
   implementation work. Automatically groups changes into logical commits.
 license: MIT
+argument-hint: <optional-message>
 metadata:
   author: howells
-  argument-hint: <optional-message>
 website:
   order: 14
   desc: Smart commits
@@ -38,16 +39,28 @@ Usage:
 
 $ARGUMENTS will contain the optional commit message.
 
+## Current Git State
+
+**Status:**
+```
+!`git status --porcelain 2>/dev/null || echo "(no changes)"`
+```
+
+**Changes summary:**
+```
+!`git diff --stat 2>/dev/null | head -20 || echo "(no diff)"`
+```
+
+**Recent commits (for style reference):**
+```
+!`git log --oneline -5 2>/dev/null || echo "(no commits)"`
+```
+
 ## Instructions
 
 ### 1. Analyze Changes
 
-Run these commands to understand the changes:
-```bash
-git status --porcelain
-git diff --stat
-git log --oneline -5
-```
+Review the git state above. If you need more detail:
 
 ### 2. Determine Commit Strategy
 

@@ -5,9 +5,9 @@ description: |
   Use when asked to "add a task", "show my tasks", "update the backlog", "prioritize",
   or when managing what needs to be done across sessions.
 license: MIT
+argument-hint: <add|review|done> <task>
 metadata:
   author: howells
-  argument-hint: <add|review|done> <task>
 website:
   order: 16
   desc: Task backlog

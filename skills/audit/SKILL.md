@@ -1,5 +1,6 @@
 ---
 name: audit
+context: fork
 description: |
   Comprehensive codebase audit with specialized reviewers. Generates actionable reports.
   Use when asked to "audit the codebase", "review code quality", "check for issues",
@@ -8,9 +9,9 @@ description: |
   Reviewers run in batches of 2 by default to avoid resource exhaustion.
   Use --parallel to run all reviewers simultaneously (resource-intensive).
 license: MIT
+argument-hint: <path-or-focus> [--parallel] [--security|--performance|--architecture|--design]
 metadata:
   author: howells
-  argument-hint: <path-or-focus> [--parallel] [--security|--performance|--architecture|--design]
 website:
   order: 13
   desc: Codebase audit

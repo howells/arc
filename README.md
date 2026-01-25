@@ -11,7 +11,7 @@ The full arc from idea to shipped code. A [Claude Code](https://docs.anthropic.c
 
 ## What It Does
 
-Arc provides 21 commands covering the complete development lifecycle:
+Arc provides 21 skills covering the complete development lifecycle:
 
 ```
 ENTRY   /arc:arc      - Main entry point, routes to right workflow

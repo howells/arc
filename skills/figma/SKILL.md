@@ -5,9 +5,9 @@ description: |
   Use when given a Figma URL, asked to "implement from Figma", "match the design",
   or when building UI that needs to precisely match design specs.
 license: MIT
+argument-hint: <figma-url-or-description>
 metadata:
   author: howells
-  argument-hint: <figma-url-or-description>
 website:
   order: 9
   desc: Figma → code
