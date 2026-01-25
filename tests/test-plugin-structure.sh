@@ -1,9 +1,9 @@
 #!/bin/bash
-# Test that the plugin structure is correct after the skills/commands merge
+# Test that the plugin structure is correct
 #
 # Verifies:
-# - commands/ directory no longer exists
-# - plugin.json doesn't reference commands
+# - commands/ directory exists (explicit command registration)
+# - plugin.json references both skills and commands
 # - skills/ directory exists and is referenced
 
 section "Plugin Structure Tests"
@@ -11,8 +11,8 @@ section "Plugin Structure Tests"
 echo "Verifying plugin structure after skills/commands merge..."
 echo ""
 
-# The commands/ directory should NOT exist anymore
-assert_dir_not_exists "$PLUGIN_ROOT/commands" "commands/ directory"
+# The commands/ directory should exist (explicit command registration)
+assert_dir_exists "$PLUGIN_ROOT/commands" "commands/ directory"
 
 # The skills/ directory SHOULD exist
 assert_dir_exists "$PLUGIN_ROOT/skills" "skills/ directory"
@@ -21,9 +21,9 @@ assert_dir_exists "$PLUGIN_ROOT/skills" "skills/ directory"
 PLUGIN_JSON="$PLUGIN_ROOT/.claude-plugin/plugin.json"
 assert_file_exists "$PLUGIN_JSON" "plugin.json"
 
-# plugin.json should NOT contain "commands" key
-assert_file_not_contains "$PLUGIN_JSON" '"commands"' \
-    "plugin.json does not reference commands"
+# plugin.json should contain "commands" key
+assert_file_contains "$PLUGIN_JSON" '"commands"' \
+    "plugin.json references commands"
 
 # plugin.json should contain "skills" key
 assert_file_contains "$PLUGIN_JSON" '"skills"' \
