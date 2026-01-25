@@ -1,6 +1,6 @@
 {
   "name": "arc",
-  "version": "1.0.67",
+  "version": "1.0.68",
   "description": "The full arc from idea to shipped code. Combines design, planning, TDD execution, expert review, and knowledge capture into one unified development workflow.",
   "skills": "./skills/",
   "author": {
