@@ -146,7 +146,9 @@ When uncertain, err toward not reporting. False positives waste everyone's time.
 | `catch (e) { /* ignore */ }` | "Don't swallow errors. At minimum, log it." |
 | Non-deterministic behavior from fallbacks | "This makes debugging impossible. Surface the error." |
 
-### Backwards Compatibility & Development Fallbacks
+### Legacy Code & Unnecessary Fallbacks
+
+**Philosophy:** Fail fast, deterministic behavior, clean codebases. No silent fallbacks hiding errors. No legacy cruft muddying behavior.
 
 | See This | Say This |
 |----------|----------|
@@ -160,6 +162,52 @@ When uncertain, err toward not reporting. False positives waste everyone's time.
 | `value ?? fallback` in trusted code paths | "If value shouldn't be undefined, don't fallback. Let it fail." |
 | Type guards for impossible states | "If this state is impossible, remove the check. Dead code." |
 | Compatibility shims during development | "You control the code. Just change it. No shim needed." |
+
+**Polyfills & Browser Support**
+
+| See This | Say This |
+|----------|----------|
+| Polyfill for standard feature (Promise, Object.assign, Array.from) | "This is native now. Remove the polyfill." |
+| IE11-specific code paths | "IE11 is dead. Remove this branch." |
+| Vendor-prefixed CSS in JS | "Check if the prefix is still needed. Usually it's not." |
+| Feature detection for universal features | "`typeof Promise !== 'undefined'` — Promise exists everywhere. Remove check." |
+| User agent sniffing | "Feature detect instead. Or better: just use the modern API." |
+
+**Legacy Dependencies**
+
+| See This | Say This |
+|----------|----------|
+| Lodash for native methods (`_.map`, `_.filter`, `_.find`) | "Use native Array methods. Lodash isn't needed for this." |
+| moment.js | "Use date-fns or native Intl. Moment is deprecated and huge." |
+| Polyfill packages in dependencies (core-js, whatwg-fetch) | "Check if these are still needed for your target browsers." |
+| jQuery for DOM manipulation | "Use native DOM APIs. jQuery isn't needed in modern browsers." |
+
+**Version & Migration Cruft**
+
+| See This | Say This |
+|----------|----------|
+| Version suffixes in module paths (`lib/v1`, `api/v2`) | "Is v1 still used? Migrate and delete the old version." |
+| Migration scripts in codebase | "If migration ran, delete the script. Don't ship migration code." |
+| Deprecated function aliases alongside new names | "Remove the old name. Update callers." |
+| TODO comments about removing legacy code | "The TODO says remove it. Remove it." |
+| `@deprecated` JSDoc on exported functions | "If deprecated, remove it or set a removal date." |
+
+**Environment & Config Fallbacks**
+
+| See This | Say This |
+|----------|----------|
+| `process.env.X \|\| 'default'` in runtime code | "Validate env vars at startup. Fail if missing, don't default." |
+| Multiple env var fallbacks (`X \|\| Y \|\| Z`) | "Pick one source of truth. Fallback chains hide misconfiguration." |
+| NODE_ENV checks for feature behavior | "Feature flags, not NODE_ENV. Make behavior explicit." |
+
+**Dead Code Indicators**
+
+| See This | Say This |
+|----------|----------|
+| Feature flag always true/false in all environments | "This flag is constant. Inline the value and delete the flag." |
+| Conditional that's always true/false | "This condition is constant. Remove the dead branch." |
+| Code after unconditional return/throw | "Unreachable code. Delete it." |
+| Exports with zero imports | "Nothing imports this. Delete it." |
 
 ### Animation
 
