@@ -9,7 +9,7 @@ description: |
   Reviewers run in batches of 2 by default to avoid resource exhaustion.
   Use --parallel to run all reviewers simultaneously (resource-intensive).
 license: MIT
-argument-hint: <path-or-focus> [--parallel] [--security|--performance|--architecture|--design]
+argument-hint: <path-or-focus> [--parallel] [--security|--performance|--architecture|--organization|--design]
 metadata:
   author: howells
 website:
@@ -28,6 +28,7 @@ website:
     - security-engineer
     - performance-engineer
     - architecture-engineer
+    - organization-engineer
     - daniel-product-engineer
     - lee-nextjs-engineer
     - senior-engineer
@@ -165,7 +166,7 @@ Execution mode: [batched (default) / parallel]
 |-------|----------------|
 | Small | security-engineer, performance-engineer |
 | Medium | security-engineer, performance-engineer, architecture-engineer |
-| Large | security-engineer, performance-engineer, architecture-engineer, senior-engineer |
+| Large | security-engineer, performance-engineer, architecture-engineer, organization-engineer, senior-engineer |
 
 **Add framework-specific reviewers (medium/large only):**
 
@@ -178,6 +179,7 @@ Execution mode: [batched (default) / parallel]
 **Conditional additions:**
 - If scope includes DB/migrations → add `data-engineer`
 - If monorepo with shared packages (large only) → add `simplicity-engineer`
+- If project has >50 files or inconsistent structure detected → add `organization-engineer`
 - If UI-heavy (React/Next.js, medium/large) → add `designer`
 - If recent AI-assisted work or branch audit → add `llm-engineer` (deslop)
 
@@ -185,6 +187,7 @@ Execution mode: [batched (default) / parallel]
 - `--security` → only `security-engineer`
 - `--performance` → only `performance-engineer`
 - `--architecture` → only `architecture-engineer`
+- `--organization` → only `organization-engineer`
 - `--design` → only `designer`
 - `--deslop` → only `llm-engineer`
 
@@ -226,6 +229,7 @@ Batch 3: lee-nextjs-engineer, senior-engineer
 | security-engineer | sonnet | Pattern recognition + context |
 | performance-engineer | sonnet | Algorithmic reasoning |
 | architecture-engineer | sonnet | Structural analysis |
+| organization-engineer | sonnet | File structure pattern analysis |
 | daniel-product-engineer | sonnet | Code quality judgment |
 | lee-nextjs-engineer | sonnet | Framework pattern recognition |
 | senior-engineer | sonnet | Code review reasoning |
@@ -279,8 +283,9 @@ Focus on: aesthetic direction, memorable elements, typography, color cohesion, A
 **Wait for batch to complete before starting next batch.**
 
 Repeat for remaining batches:
-- Batch 2: architecture-engineer + UI reviewer (if applicable)
-- Batch 3: remaining reviewers
+- Batch 2: architecture-engineer + organization-engineer (if applicable)
+- Batch 3: UI reviewers (daniel-product-engineer, lee-nextjs-engineer)
+- Batch 4: remaining reviewers (senior-engineer, designer, data-engineer)
 
 ### Parallel Execution (--parallel flag)
 
@@ -315,6 +320,7 @@ Task [architecture-engineer] model: sonnet: "..."
 - Security (from security-engineer + dependency scan)
 - Performance (from performance-engineer)
 - Architecture (from architecture-engineer)
+- Codebase Organization (from organization-engineer) — file structure, naming, colocation
 - Code Quality (from senior-engineer, simplicity-engineer)
 - LLM Artifacts (from llm-engineer) — AI-generated slop
 - UI/UX Code (from daniel-product-engineer, lee-nextjs-engineer)
@@ -390,6 +396,9 @@ File: `docs/audits/YYYY-MM-DD-[scope-slug]-audit.md`
 
 ### Architecture
 [Summary of architecture findings]
+
+### Codebase Organization
+[Summary of file structure, naming conventions, colocation findings]
 
 ### Code Quality
 [Summary of code quality findings]
