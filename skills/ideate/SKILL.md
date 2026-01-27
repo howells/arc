@@ -25,6 +25,12 @@ website:
     - architecture-engineer
 ---
 
+<tool_restrictions>
+# Tool Restrictions
+
+**Do NOT use the `EnterPlanMode` tool.** This skill has its own conversational design process that writes plans to disk (`docs/plans/`). Claude's built-in plan mode would bypass this process. Follow the conversation flow defined below instead.
+</tool_restrictions>
+
 <key_principles>
 # Key Principles
 
