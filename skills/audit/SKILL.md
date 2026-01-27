@@ -9,7 +9,7 @@ description: |
   Reviewers run in batches of 2 by default to avoid resource exhaustion.
   Use --parallel to run all reviewers simultaneously (resource-intensive).
 license: MIT
-argument-hint: <path-or-focus> [--parallel] [--security|--performance|--architecture|--organization|--design]
+argument-hint: <path-or-focus> [--parallel] [--stage=prototype|development|pre-launch|production] [--security|--performance|--architecture|--organization|--design]
 metadata:
   author: howells
 website:
@@ -88,6 +88,7 @@ Pass relevant rules to each UI reviewer in their prompt. These inform what to lo
   - A path (e.g., `apps/web`, `packages/ui`, `src/`)
   - A focus flag (e.g., `--security`, `--performance`, `--architecture`, `--design`)
   - `--parallel` flag to run all reviewers simultaneously (resource-intensive)
+  - A stage override (e.g., `--stage=production`, `--stage=prototype`)
   - Combinations (e.g., `apps/web --security`, `src/ --parallel`, `--design`)
 
 **If no scope provided:**
@@ -146,11 +147,47 @@ find . -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx"
 - No tests present + small project: Don't flag missing tests as critical
 - Single developer: Skip `senior-engineer` (no code review discipline needed)
 
+**Detect project lifecycle stage:**
+
+If `--stage=<stage>` was provided in arguments, use that directly. Otherwise, infer the stage from heuristic signals:
+
+| Signal | Tool | Indicates |
+|--------|------|-----------|
+| CI/CD config (`.github/workflows/*`, `Jenkinsfile`, `.gitlab-ci.yml`) | Glob | pre-launch+ |
+| Deployment config (`vercel.json`, `Dockerfile`, `fly.toml`, `render.yaml`, `k8s/`) | Glob | pre-launch+ |
+| Monitoring/observability (`sentry`, `datadog`, `newrelic` in deps) | Grep in package.json | production |
+| Production env references (`.env.production`, `NODE_ENV` guards) | Glob + Grep | pre-launch+ |
+| Test coverage > 0 (test files exist) | Glob (`**/*.test.*`, `**/*.spec.*`) | development+ |
+| Git history depth | `git rev-list --count HEAD` | maturity signal |
+| Custom domain / production URL in config | Grep | production |
+| Rate limiting, caching, or queue deps in package.json | Grep (`rate-limit`, `redis`, `bull`) | production |
+
+**Stage classification:**
+
+| Stage | Description | Typical Signals |
+|-------|-------------|-----------------|
+| `prototype` | Exploring ideas, validating concepts | < 30 commits, no CI, no deploy config, no tests |
+| `development` | Actively building features, not yet shipped | Has some tests, may have CI, no production deploy |
+| `pre-launch` | Feature-complete, preparing to ship | Has CI, has deploy config, has tests, no monitoring |
+| `production` | Live and serving real users | Has monitoring, production env, rate limiting, mature git history (200+ commits) |
+
+Default to `development` if signals are ambiguous. When in doubt, err toward the earlier stage — it's better to under-flag than to overwhelm with premature requirements.
+
+**Confirm stage with user:**
+
+After detection, briefly confirm:
+```
+Detected project stage: [stage] (based on [key signals])
+```
+
+If the user corrects it, use their override.
+
 **Summarize detection:**
 ```
 Scope: [path or "full codebase"]
 Project type: [Next.js / React / Python / etc.]
 Project scale: [small / medium / large]
+Project stage: [prototype / development / pre-launch / production]
 Has database: [yes/no]
 Has tests: [yes/no]
 Coding rules: [yes/no]
@@ -238,6 +275,69 @@ Batch 3: lee-nextjs-engineer, senior-engineer
 | **designer** | **opus** | **Aesthetic judgment requires premium model** |
 | llm-engineer | sonnet | Pattern recognition for AI artifacts |
 
+**Include project stage in every reviewer prompt.**
+
+Each reviewer must receive the stage context so they can calibrate their severity ratings appropriately. Include the following stage calibration block in every reviewer prompt:
+
+```
+Project stage: [prototype / development / pre-launch / production]
+
+SEVERITY CALIBRATION FOR THIS STAGE:
+
+[Include the matching block below]
+```
+
+**Stage calibration blocks (include the one matching the detected stage):**
+
+**Prototype stage:**
+```
+This project is in PROTOTYPE stage — exploring ideas and validating concepts.
+
+Severity calibration:
+- Only flag issues that could cause data loss, credential leaks, or make the prototype non-functional
+- Do NOT flag: missing rate limiting, incomplete error handling, lack of input validation on non-auth flows, missing tests, architectural purity, performance optimization, accessibility, code organization
+- Compress what would normally be High/Medium findings down to Low/Suggestion
+- Focus: "Does this work?" and "Could this leak secrets?" — nothing else matters yet
+- Respect the experiment. The project may be exploring an unconventional idea. Don't penalize it for being impractical — just flag genuine dangers.
+```
+
+**Development stage:**
+```
+This project is in DEVELOPMENT stage — actively building features, not yet shipped.
+
+Severity calibration:
+- Critical: Only actual security vulnerabilities (SQL injection, XSS, credential exposure, auth bypass)
+- High: Data integrity issues, bugs that would corrupt state
+- Medium: Performance issues that would block usability, missing error boundaries
+- Low: Everything else (architecture suggestions, missing tests, rate limiting, caching, monitoring)
+- Do NOT flag as High/Critical: missing rate limiting, incomplete logging, lack of monitoring, missing CI checks, production hardening concerns — these are premature for this stage
+- If the project is conceptual or experimental, use advisory language ("worth considering") rather than prescriptive ("must fix") for anything that isn't a security or data integrity issue
+```
+
+**Pre-launch stage:**
+```
+This project is in PRE-LAUNCH stage — feature-complete, preparing to ship.
+
+Severity calibration:
+- Apply standard severity ratings for most issues
+- Production hardening concerns (rate limiting, error handling, input validation) are now relevant but should be Medium, not Critical
+- Missing monitoring/observability is Medium (should be set up, but not blocking)
+- Architecture and performance issues at full severity
+- Flag any missing error states in user-facing flows as High
+```
+
+**Production stage:**
+```
+This project is in PRODUCTION stage — live and serving real users.
+
+Severity calibration:
+- Apply full severity ratings — all concerns are relevant
+- Missing rate limiting, monitoring, error handling are legitimate High/Critical concerns
+- Security issues at maximum severity
+- Performance regressions are High
+- No downgrading — if it affects real users, it matters
+```
+
 **For each batch, spawn 2 agents in parallel:**
 ```
 Task [security-engineer] model: sonnet: "
@@ -245,7 +345,10 @@ Audit the following codebase for security issues.
 
 Scope: [path]
 Project type: [type]
+Project stage: [stage]
 Coding rules: [rules content if any]
+
+[Stage calibration block from above]
 
 Focus on: OWASP top 10, authentication/authorization, input validation, secrets handling, injection vulnerabilities.
 
@@ -269,13 +372,13 @@ Return findings in this format:
 
 Task [performance-engineer] model: sonnet: "
 Audit the following codebase for performance issues.
-[similar structure]
+[similar structure, including stage calibration block]
 Focus on: N+1 queries, missing indexes, memory leaks, bundle size, render performance.
 "
 
 Task [designer] model: opus: "
 Review UI implementation for visual design quality.
-[similar structure]
+[similar structure, including stage calibration block]
 Focus on: aesthetic direction, memorable elements, typography, color cohesion, AI slop patterns.
 "
 ```
@@ -310,22 +413,75 @@ Task [architecture-engineer] model: sonnet: "..."
 - Same file:line mentioned by multiple reviewers → merge into single finding
 - Note which reviewers flagged each issue
 
-**Categorize by severity:**
+**Validate severity against project stage:**
+
+Reviewers should already have calibrated their findings based on the stage context they received. During consolidation, apply a final sanity check:
+
+| Finding Type | Prototype | Development | Pre-launch | Production |
+|-------------|-----------|-------------|------------|------------|
+| Missing rate limiting | Drop | Low | Medium | High |
+| Missing monitoring | Drop | Drop | Medium | High |
+| Missing input validation (non-auth) | Drop | Low | High | Critical |
+| Missing error boundaries | Low | Medium | High | High |
+| Missing tests | Drop | Low | Medium | High |
+| Credential exposure | Critical | Critical | Critical | Critical |
+| SQL injection / XSS | Critical | Critical | Critical | Critical |
+| Architecture concerns | Drop | Low | Medium | High |
+| Performance optimization | Drop | Low | Medium | High |
+| Accessibility gaps | Drop | Low | Medium | High |
+
+If a reviewer rated something higher than the stage warrants, **downgrade it** during consolidation. Add a note: `[Severity adjusted for [stage] stage — would be [original] in production]`
+
+**Categorize by severity (after stage adjustment):**
 1. **Critical** — Security vulnerabilities, data loss risks, breaking issues
 2. **High** — Performance blockers, architectural violations
 3. **Medium** — Technical debt, code quality issues
 4. **Low** — Suggestions, minor improvements
 
-**Group by domain:**
-- Security (from security-engineer + dependency scan)
-- Performance (from performance-engineer)
-- Architecture (from architecture-engineer)
-- Codebase Organization (from organization-engineer) — file structure, naming, colocation
-- Code Quality (from senior-engineer, simplicity-engineer)
-- LLM Artifacts (from llm-engineer) — AI-generated slop
-- UI/UX Code (from daniel-product-engineer, lee-nextjs-engineer)
-- Design Quality (from designer) — visual/aesthetic concerns
-- Data Integrity (from data-engineer)
+**Advisory tone — reviewers advise, user decides:**
+
+Not every project is trying to be production software. Some projects are conceptual, experimental, or exist to prove an idea that may not even be practical. The audit must respect that.
+
+Tone calibration:
+- **Most findings should be advisory.** Frame as "you may want to consider X" or "this could cause Y if Z", not "you must do X". The user knows their project's goals better than the reviewers do.
+- **Don't fight the user's intent.** If the project is clearly exploring an unconventional approach, don't penalize it for being unconventional. Flag genuine risks, but don't try to steer the project toward a "normal" architecture.
+- **Push hard only when it's genuinely dangerous.** Reserve forceful language ("this will cause data loss", "this is a security vulnerability that must be fixed") for things that are objectively harmful — credential exposure, data corruption, injection attacks. If you wouldn't lose sleep over it shipping as-is, it's advisory.
+- **YAGNI still applies.** Don't recommend adding infrastructure, abstractions, or patterns the project doesn't need yet. But also don't tell the user to remove something experimental just because it's not strictly necessary — they may be exploring whether it's useful.
+
+In the report, use this language hierarchy:
+- **"Must fix"** — Only for genuinely dangerous issues (security holes, data loss). Used sparingly.
+- **"Should consider"** — For issues that will cause real problems if the project progresses (performance cliffs, missing error handling on critical paths).
+- **"Worth noting"** — For suggestions and improvements. No pressure.
+
+**Resolve conflicts between reviewers:**
+
+Different reviewers may give contradictory advice. This is expected — they each optimize for their own domain. Resolve conflicts during consolidation, don't pass them through to the user as separate findings:
+
+| Conflict Pattern | Resolution |
+|-----------------|------------|
+| security-engineer says "add validation layer" vs simplicity-engineer says "remove unnecessary abstraction" | Security wins at pre-launch/production. At prototype/development, note as Low and let user decide. |
+| performance-engineer says "cache aggressively" vs architecture-engineer says "keep stateless" | Context-dependent. If the code is a hot path, performance wins. If it's rarely called, architecture wins. |
+| lee-nextjs-engineer says "move to Server Component" vs daniel-product-engineer says "needs client interactivity" | Check if the component actually uses client APIs (useState, onClick, etc.). If yes, daniel wins. If no, lee wins. |
+| Two reviewers flag same area with different fixes | Pick the simpler fix. Note the alternative in the finding description. |
+| Reviewer flags something the project's own coding rules (`.ruler/`) explicitly allow | Dismiss the finding entirely. Project rules override reviewer opinion. |
+
+When dismissing a conflicting or irrelevant finding, don't silently drop it. Include it in a collapsed "Dismissed" section of the report with a one-line reason, so the user can see what was considered and why it was excluded.
+
+**Cluster findings into task groups:**
+
+Do NOT group by reviewer domain (security, performance, etc.). Instead, group by **what you'd work on together** — files and concerns that would be addressed as a unit.
+
+Clustering strategy:
+1. **By area of code** — Findings touching the same files/modules cluster together regardless of which reviewer flagged them. E.g., three findings in `src/auth/` from security-engineer, performance-engineer, and architecture-engineer become one cluster: "Auth flow hardening."
+2. **By type of work** — If multiple findings across different files require the same kind of change (e.g., "add error boundaries to 5 components"), cluster those together.
+3. **By dependency** — If fixing finding A is a prerequisite for fixing finding B, they belong in the same cluster with A first.
+
+Each cluster becomes a task group with:
+- A descriptive name (e.g., "Auth flow hardening", "API input validation", "Dashboard performance")
+- The findings it contains (with severity and file references)
+- A suggested order of implementation within the cluster
+
+Aim for 3-8 clusters. If you have more than 8, merge the smallest ones. If you have fewer than 3, that's fine — don't force artificial grouping.
 
 ## Phase 5: Generate Report
 
@@ -344,19 +500,22 @@ File: `docs/audits/YYYY-MM-DD-[scope-slug]-audit.md`
 **Reviewers:** [list of agents used]
 **Scope:** [path or "full codebase"]
 **Project Type:** [detected type]
+**Project Stage:** [prototype / development / pre-launch / production]
+
+> Severity ratings have been calibrated for the **[stage]** stage. Issues marked with ↓ were downgraded from their production-level severity.
 
 ## Executive Summary
 
-[1-2 paragraph overview of findings]
+[1-2 paragraph overview of findings, noting the stage context]
 
 - **Critical:** X issues
 - **High:** X issues
 - **Medium:** X issues
 - **Low:** X issues
 
-## Critical Issues
+## Must Fix
 
-> Immediate action required
+> Genuinely dangerous — security holes, data loss, credential exposure
 
 ### [Issue Title]
 **File:** `path/to/file.ts:123`
@@ -364,17 +523,17 @@ File: `docs/audits/YYYY-MM-DD-[scope-slug]-audit.md`
 **Description:** [What's wrong and why it matters]
 **Recommendation:** [How to fix]
 
-[Repeat for each critical issue]
+[Repeat for each critical/high issue that warrants "must fix"]
 
-## High Priority
+## Should Consider
 
-> Should fix soon
+> Will cause real problems if the project progresses — performance cliffs, missing error handling on critical paths, architectural dead ends
 
-[Same format as Critical]
+[Same format]
 
-## Medium Priority
+## Worth Noting
 
-> Technical debt
+> Suggestions and improvements — no pressure
 
 [Same format]
 
@@ -386,34 +545,40 @@ File: `docs/audits/YYYY-MM-DD-[scope-slug]-audit.md`
 
 ---
 
-## Domain Breakdown
+## Task Clusters
 
-### Security
-[Summary of security findings]
+> Findings grouped by what you'd tackle together, ordered by priority.
 
-### Performance
-[Summary of performance findings]
+### 1. [Cluster Name]
 
-### Architecture
-[Summary of architecture findings]
+**Why:** [1 sentence — what's wrong in this area and why it matters]
 
-### Codebase Organization
-[Summary of file structure, naming conventions, colocation findings]
+| # | Severity | File | Issue | Flagged by |
+|---|----------|------|-------|------------|
+| 1 | Critical | `path/to/file.ts:123` | Issue description | security-engineer |
+| 2 | High | `path/to/file.ts:456` | Issue description | performance-engineer |
+| 3 | Medium | `path/to/other.ts:78` | Issue description | architecture-engineer |
 
-### Code Quality
-[Summary of code quality findings]
+**Suggested approach:** [1-2 sentences on how to tackle this cluster]
 
-### LLM Artifacts
-[Summary of AI-generated slop: unnecessary comments, defensive checks in trusted codepaths, type escapes]
+### 2. [Cluster Name]
 
-### UI/UX Code
-[Summary of UI/UX code findings, if applicable]
+[Same format]
 
-### Design Quality
-[Summary of visual/aesthetic findings, if applicable]
+[Repeat for each cluster]
 
-### Data Integrity
-[Summary of data integrity findings, if applicable]
+---
+
+<details>
+<summary>Dismissed findings ([N] items)</summary>
+
+| Finding | Reviewer | Reason Dismissed |
+|---------|----------|-----------------|
+| [description] | [reviewer] | Conflicts with [other reviewer]'s recommendation — [resolution reasoning] |
+| [description] | [reviewer] | Contradicts project coding rules in `.ruler/` |
+| [description] | [reviewer] | Not relevant at [stage] stage |
+
+</details>
 
 ---
 
@@ -438,36 +603,91 @@ git commit -m "docs: add audit report for [scope]"
 
 Reviewed: [scope]
 Reviewers: [count] agents
+Project stage: [stage]
 Report: docs/audits/YYYY-MM-DD-[scope]-audit.md
 
 ### Summary
-- Critical: X
-- High: X
-- Medium: X
-- Low: X
+- Critical: X | High: X | Medium: X | Low: X
+- Dismissed: X (conflicts/irrelevant)
+- Task clusters: X
 
-### Top Issues
-1. [Critical issue 1]
-2. [Critical issue 2]
-3. [High issue 1]
+### Task Clusters (by priority)
+1. [Cluster name] — X issues (X critical, X high)
+2. [Cluster name] — X issues
+3. [Cluster name] — X issues
+[...]
 ```
 
-**Offer next steps:**
+**Offer next steps using AskUserQuestion:**
 
+Present these options (include all that apply):
+
+1. **Tackle critical cluster now** → Jump straight into fixing the highest-priority cluster. Invoke `/arc:detail` scoped to the files and issues in that cluster.
+
+2. **Write full task plan** → Write all clusters as a structured plan to `docs/plans/YYYY-MM-DD-audit-tasks.md` for systematic implementation. Each cluster becomes a section with its findings, suggested approach, and a checkbox list. Commit the plan file.
+
+3. **Add to tasklist** → Write critical/high clusters as entries in `docs/tasklist.md` (for `/arc:tasklist` tracking). Lower severity clusters are omitted — they're in the audit report if needed later.
+
+4. **Deep dive on a cluster** → User picks a cluster to explore in detail. Show full findings, relevant code snippets, and discuss approach before committing to action.
+
+5. **Done for now** → End session. Report is committed, user can return to it later.
+
+**If user selects "Tackle critical cluster now":**
+- Identify the cluster with the most critical/high findings
+- Invoke `/arc:detail` with the cluster's files and issues as scope
+- The detail plan will be scoped to just that cluster, not the entire audit
+
+**If user selects "Write full task plan":**
+
+Create `docs/plans/YYYY-MM-DD-audit-tasks.md`:
+
+```markdown
+# Audit Task Plan
+
+**Source:** docs/audits/YYYY-MM-DD-[scope]-audit.md
+**Date:** YYYY-MM-DD
+**Project Stage:** [stage]
+**Total clusters:** X | **Total findings:** X
+
+---
+
+## Cluster 1: [Name] `[priority: critical/high/medium]`
+
+**Why this matters:** [1 sentence]
+
+- [ ] [Finding 1 — file:line — description]
+- [ ] [Finding 2 — file:line — description]
+- [ ] [Finding 3 — file:line — description]
+
+**Approach:** [1-2 sentences]
+
+---
+
+## Cluster 2: [Name] `[priority]`
+
+[Same format]
+
+---
+
+[Repeat for all clusters]
 ```
-What would you like to do?
 
-1. **Create tasks from findings** → Add critical/high issues to /arc:tasklist
-2. **Focus on critical issues** → Create implementation plan for critical fixes
-3. **Deep dive on [domain]** → Explore specific domain findings
-4. **Done for now** → End session
+Commit the plan:
+```bash
+git add docs/plans/
+git commit -m "docs: add audit task plan"
 ```
 
-If user selects:
-- **Create tasks** → Write critical/high issues to `docs/tasklist.md`
-- **Focus on critical** → Invoke `/arc:detail` with critical issues as scope
-- **Deep dive** → Show full findings for selected domain
-- **Done** → End session
+**If user selects "Add to tasklist":**
+- Write only critical/high clusters to `docs/tasklist.md`
+- Each cluster becomes one task entry with its findings as sub-items
+- Lower severity clusters stay in the audit report only
+
+**If user selects "Deep dive on a cluster":**
+- Ask which cluster (by number or name)
+- Show the full findings with code context (read relevant files)
+- Discuss the approach before taking action
+- After discussion, offer to start implementing or return to the action menu
 
 ## Phase 7: Cleanup
 
@@ -492,6 +712,7 @@ After completing the audit, append to progress journal:
 **Outcome:** Complete
 **Files:** docs/audits/YYYY-MM-DD-[scope]-audit.md
 **Decisions:**
+- Project stage: [stage]
 - Critical: [N] issues
 - High: [N] issues
 - Reviewers: [list]
