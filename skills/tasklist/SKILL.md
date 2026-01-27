@@ -19,7 +19,7 @@ website:
   decisions:
     - Markdown file over database. Readable, diffable, portable.
     - Git-committed. Backlog travels with your code.
-    - Simple sections: Up Next, Backlog, Ideas. No Jira complexity.
+    - "Simple sections: Up Next, Backlog, Ideas. No Jira complexity."
 ---
 
 # Tasklist Workflow

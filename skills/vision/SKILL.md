@@ -16,7 +16,7 @@ website:
   why: |
     Projects drift. Features creep. Without a reference point, both you and the AI lose sight of the goal. The vision document is that reference—something you return to when decisions get hard, and something Arc consults to stay aligned with your intent.
   decisions:
-    - Written for two audiences: you and the AI. Clear enough for both to act on.
+    - "Written for two audiences: you and the AI. Clear enough for both to act on."
     - Non-goals section mandatory. What you won't build prevents scope creep.
     - Lives in docs/vision.md. Arc reads it automatically in future sessions.
 ---

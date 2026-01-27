@@ -16,7 +16,7 @@ website:
   why: |
     Starting is the hardest part. When you sit down with an hour to code, decision fatigue can burn half of it. Suggest removes the "what should I work on?" loop.
   decisions:
-    - Priority cascade: Tasklist first, codebase issues second, vision gaps third.
+    - "Priority cascade: Tasklist first, codebase issues second, vision gaps third."
     - Opinionated, not neutral. It picks winners and says why.
     - One click to act. Each suggestion includes the exact command to run.
 ---

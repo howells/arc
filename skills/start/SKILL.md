@@ -1,5 +1,5 @@
 ---
-name: arc
+name: start
 description: |
   The main entry point. Understands your codebase and routes to the right workflow.
   Use when starting a session, saying "let's work on something", or unsure which
@@ -21,7 +21,7 @@ website:
     - Context-aware routing. Existing plans, tasklists, and code inform the recommendation.
 ---
 
-# /arc
+# /arc:start
 
 The front door to Arc. Understands context, asks what you want to do, routes to the right workflow.
 
@@ -96,7 +96,7 @@ Based on their answer:
 Skill arc:[chosen]: "[user's description]"
 ```
 
-## What /arc is NOT
+## What /arc:start is NOT
 
 - Not a replacement for specific commands — it routes TO them
 - Not for when you already know what command to use

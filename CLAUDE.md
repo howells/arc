@@ -9,7 +9,7 @@ arc/
 ├── .claude-plugin/
 │   └── plugin.json         # Plugin metadata
 ├── skills/                  # Each skill = one /arc:* command
-│   ├── arc/SKILL.md        # 1. Entry point
+│   ├── start/SKILL.md      # 1. Entry point
 │   ├── vision/SKILL.md     # 2. Foundation: project goals
 │   ├── ideate/SKILL.md     # 3. Design: idea → validated design
 │   ├── detail/SKILL.md     # 4. Plan: design → implementation plan
@@ -48,7 +48,7 @@ arc/
 All commands use the `/arc:` namespace prefix. The typical workflow:
 
 ```
-1. ENTRY      /arc:arc        → Routes to right workflow based on context
+1. ENTRY      /arc:start      → Routes to right workflow based on context
 2. FOUNDATION /arc:vision     → Define project goals (one-time setup)
 3. DESIGN     /arc:ideate     → Turn idea into validated design doc
 4. PLAN       /arc:detail     → Create step-by-step implementation plan

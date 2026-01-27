@@ -103,7 +103,26 @@ if [ -d commands ]; then
 fi
 ok "Commands checked"
 
-# 6. Check for hardcoded paths
+# 6. Check for unquoted YAML colons in frontmatter list items
+# YAML parses `- key: value` as an object, not a string. This breaks React rendering.
+echo "Checking YAML frontmatter safety..."
+while IFS= read -r -d '' f; do
+  # Extract frontmatter between --- delimiters
+  frontmatter_end=$(head -50 "$f" | grep -n "^---$" | sed -n '2p' | cut -d: -f1)
+  [ -z "$frontmatter_end" ] && continue
+
+  # Find list items (lines starting with `    - `) that contain unquoted `: `
+  # Skip lines that are already quoted with " or start with http
+  bad_lines=$(head -"$frontmatter_end" "$f" | grep -n '^ *- [^"]*[a-zA-Z]: ' | grep -v '^ *- "' | grep -v 'http' || true)
+  if [ -n "$bad_lines" ]; then
+    while IFS= read -r line; do
+      error "$f line ${line%%:*}: Unquoted colon in YAML list item will be parsed as object. Wrap in quotes."
+    done <<< "$bad_lines"
+  fi
+done < <(find skills -name "SKILL.md" -print0 2>/dev/null)
+ok "YAML frontmatter safe"
+
+# 7. Check for hardcoded paths
 echo "Checking for hardcoded paths..."
 hardcoded=$(grep -r "/Users/\|/home/" skills/ commands/ agents/ .claude-plugin/ 2>/dev/null | grep -v ".git" | head -5 || true)
 if [ -n "$hardcoded" ]; then
@@ -112,7 +131,7 @@ if [ -n "$hardcoded" ]; then
 fi
 ok "No hardcoded paths"
 
-# 7. Check scripts are executable
+# 8. Check scripts are executable
 echo "Checking script permissions..."
 while IFS= read -r -d '' f; do
   if [ ! -x "$f" ]; then
@@ -121,7 +140,7 @@ while IFS= read -r -d '' f; do
 done < <(find skills -name "*.sh" -print0 2>/dev/null)
 ok "Script permissions checked"
 
-# 8. Check for kebab-case naming
+# 9. Check for kebab-case naming
 echo "Checking naming conventions..."
 while IFS= read -r -d '' f; do
   name=$(head -20 "$f" | grep "^name:" | head -1 | sed 's/name: *//')
@@ -140,7 +159,7 @@ while IFS= read -r -d '' f; do
 done < <(find agents -name "*.md" -print0 2>/dev/null)
 ok "Naming conventions checked"
 
-# 9. Check for orphaned references
+# 10. Check for orphaned references
 echo "Checking internal references..."
 while IFS= read -r -d '' f; do
   # Extract references like agents/review/foo.md or disciplines/bar.md
