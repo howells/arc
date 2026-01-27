@@ -11,7 +11,7 @@ The full arc from idea to shipped code. A [Claude Code](https://docs.anthropic.c
 
 ## What It Does
 
-Arc provides 21 skills covering the complete development lifecycle:
+Arc provides 20 skills covering the complete development lifecycle:
 
 ```
 ENTRY   /arc:start    - Main entry point, routes to right workflow
@@ -33,7 +33,6 @@ CROSS-CUTTING
         /arc:review     - Review a plan for feasibility
         /arc:audit      - Comprehensive codebase audit (includes deslop)
         /arc:progress   - Session journal for knowledge persistence
-        /arc:tasklist   - Persistent task backlog
         /arc:document   - Feature documentation
         /arc:suggest    - Opinionated next-step recommendations
         /arc:tidy       - Clean up completed plans
@@ -185,7 +184,6 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:review` | Review a plan for feasibility | Updated plan file |
 | `/arc:audit` | Comprehensive codebase audit | `docs/audits/YYYY-MM-DD-*.md` |
 | `/arc:progress` | View/manage session journal | `docs/progress.md` |
-| `/arc:tasklist` | Manage backlog | `docs/tasklist.md` |
 | `/arc:document` | Document features | `docs/features/<feature>.md` |
 | `/arc:suggest` | What to work on next | Recommendations |
 | `/arc:worktree` | Create isolated worktree | Feature branch + workspace |
@@ -221,11 +219,11 @@ Implementation methodologies in `disciplines/`:
 
 Commands work together:
 
-- `/arc:suggest` reads `/arc:tasklist`, codebase, and `/arc:vision` (priority cascade)
+- `/arc:suggest` reads TaskList, codebase, and `/arc:vision` (priority cascade)
 - `/arc:ideate` can flow to `/arc:detail` → `/arc:implement`
 - `/arc:build` suggests `/arc:ideate` if scope is too large
 - `/arc:letsgo` runs `/arc:test` and `/arc:audit --deslop` as part of quality checks
-- Any command can add to `/arc:tasklist`
+- Any command can create tasks with TaskCreate
 
 ## Acknowledgments
 

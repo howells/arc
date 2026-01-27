@@ -322,12 +322,9 @@ Look for related ideate sessions or prior work on this feature.
 </progress_context>
 
 <tasklist_context>
-**Use Read tool:** `docs/tasklist.md`
+**Use TaskList tool** to check for existing tasks related to this work.
 
-Check if this feature relates to existing tasklist items:
-- If found → Note which items this plan will address
-- If multiple related items → Consider combining or sequencing them
-- Helps ensure implementation plan covers all related work
+If a related task exists, note its ID and mark it `in_progress` with TaskUpdate when starting.
 </tasklist_context>
 
 <progress_append>

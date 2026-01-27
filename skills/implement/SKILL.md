@@ -124,8 +124,8 @@ If tests fail before you start → stop and ask user.
 **Read implementation plan:**
 `docs/plans/YYYY-MM-DD-<topic>-implementation.md`
 
-**Create TodoWrite tasks:**
-One todo per task in the plan. Mark first as `in_progress`.
+**Create tasks with TaskCreate:**
+One task per task in the plan. Mark first as `in_progress` with TaskUpdate.
 
 ## Phase 3: Execute in Batches
 
@@ -134,7 +134,7 @@ One todo per task in the plan. Mark first as `in_progress`.
 For each task:
 
 ### Step 1: Mark in_progress
-Update TodoWrite.
+Update task with TaskUpdate.
 
 ### Step 2: Follow TDD cycle exactly
 
@@ -219,7 +219,7 @@ Debug and fix."
 If debugger can't resolve after one attempt → stop and ask user
 
 ### Step 3: Mark completed
-Update TodoWrite.
+Update task with TaskUpdate.
 
 ### Step 4: Checkpoint after batch
 
@@ -495,28 +495,20 @@ Look for related ideate/detail sessions and any prior implementation attempts.
 </progress_context>
 
 <tasklist_context>
-**Use Read tool:** `docs/tasklist.md`
+**Use TaskList tool** to check for existing tasks related to this work.
 
-Check if this work relates to an existing tasklist item:
-- If found → Note which item is being worked on
-- Track for marking complete when implementation finishes
+If a related task exists, note its ID and mark it `in_progress` with TaskUpdate when starting.
 </tasklist_context>
 
 <tasklist_update>
 **After implementation completes (or pauses):**
 
-1. **If feature complete** → Mark related tasklist item as done:
-   - Change `- [ ]` to `- [x]` with date
-   - Or move to "## Completed" section
-
-2. **If discovered new tasks during implementation** → Add to tasklist:
-   - Bugs found → Add to "Up Next" or "Backlog"
-   - Future improvements → Add to "Ideas"
-   - Technical debt → Add to "Backlog"
-
-3. **If blocked** → Add blocker to tasklist as high-priority item
-
-Use Edit tool on `docs/tasklist.md` to make updates.
+1. **If feature complete** → Use **TaskUpdate** to mark related task as `completed`
+2. **If discovered new tasks** → Use **TaskCreate** for each:
+   - **subject:** Brief imperative title
+   - **description:** What needs to be done and why
+   - **activeForm:** Present continuous form
+3. **If blocked** → Use **TaskCreate** for the blocker
 </tasklist_update>
 
 <progress_append>
@@ -537,7 +529,7 @@ After completing implementation (or pausing), append to progress journal:
 
 <success_criteria>
 Execution is complete when:
-- [ ] All tasks marked completed in TodoWrite
+- [ ] All tasks marked completed with TaskUpdate
 - [ ] All tests passing
 - [ ] Linting passes
 - [ ] PR created

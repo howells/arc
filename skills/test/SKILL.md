@@ -24,9 +24,9 @@ website:
 ---
 
 <tasklist_context>
-**Use Read tool:** `docs/tasklist.md` (first 50 lines)
+**Use TaskList tool** to check for existing tasks related to this work.
 
-Check if the tests relate to a tasklist item. If so, note which item for progress tracking.
+If a related task exists, note its ID and mark it `in_progress` with TaskUpdate when starting.
 </tasklist_context>
 
 <rules_context>

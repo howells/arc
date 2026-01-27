@@ -180,7 +180,6 @@ Look for:
 
 - `/arc:progress` itself (meta-circular)
 - `/arc:suggest` (read-only)
-- `/arc:tasklist` (has its own persistence)
 - Failed/abandoned attempts (unless valuable context)
 
 ## Success Criteria

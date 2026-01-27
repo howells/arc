@@ -69,7 +69,7 @@ This is collaborative dialogue, not a form to fill out. The conversation IS the 
 
 **Get oriented so you can ask informed questions (not generic ones):**
 - Glance at project structure — what patterns exist? What's the architecture?
-- Check `docs/tasklist.md` briefly — if this idea exists there, acknowledge it
+- Check **TaskList tool** briefly — if this idea exists as a task, acknowledge it
 - Note similar features that already exist — you'll reference these in questions
 - Identify project type (TypeScript/Python/Go) for later reviewer selection
 

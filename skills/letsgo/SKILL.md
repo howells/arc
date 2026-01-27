@@ -555,24 +555,12 @@ Invoke skill: vercel:deploy
 ```
 This handles the deployment workflow with proper verification.
 
-<tasklist_append>
-**After completing checklist, offer to add incomplete items:**
-
-If checklist has unchecked items that need future work:
-```
-"Some checklist items weren't completed. Add them to your tasklist for later?"
-```
-
-If yes, add to `docs/tasklist.md`:
-- Critical/blocking items → "Up Next"
-- Nice-to-have items → "Backlog"
-- Future improvements → "Ideas"
-
-Example items to add:
-- "Set up Google Search Console verification"
-- "Add custom 404 page"
-- "Configure email deliverability (SPF/DKIM)"
-</tasklist_append>
+<tasklist_update>
+If follow-up work is identified, use **TaskCreate**:
+- **subject:** Brief imperative title
+- **description:** What needs to be done and why
+- **activeForm:** Present continuous form
+</tasklist_update>
 
 <progress_append>
 After completing deployment or checklist, append to progress journal:

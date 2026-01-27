@@ -26,7 +26,6 @@ EXPECTED_SKILLS=(
     "review"
     "rules"
     "suggest"
-    "tasklist"
     "test"
     "tidy"
     "vision"

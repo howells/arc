@@ -1,7 +1,7 @@
 ---
 name: suggest
 description: |
-  Opinionated recommendations for what to work on next based on tasklist and codebase.
+  Opinionated recommendations for what to work on next based on existing tasks and codebase.
   Use when asked "what should I work on", "what's next", "suggest priorities",
   or when starting a session and unsure where to begin.
 license: MIT
@@ -10,9 +10,9 @@ metadata:
 website:
   order: 17
   desc: Opinionated next steps
-  summary: Opinionated recommendations for what to work on next based on tasklist and codebase.
+  summary: Opinionated recommendations for what to work on next based on existing tasks and codebase.
   what: |
-    Suggest reads your tasklist, scans your codebase for TODOs and technical debt, and compares against your vision. It synthesizes this into 3-5 ranked recommendations with clear rationale and the command to start each one.
+    Suggest checks your existing tasks, scans your codebase for TODOs and technical debt, and compares against your vision. It synthesizes this into 3-5 ranked recommendations with clear rationale and the command to start each one.
   why: |
     Starting is the hardest part. When you sit down with an hour to code, decision fatigue can burn half of it. Suggest removes the "what should I work on?" loop.
   decisions:
@@ -29,21 +29,21 @@ Check what was recently worked on to avoid re-suggesting completed work.
 
 # Suggest Workflow
 
-Analyze tasklist, codebase, and vision to give opinionated recommendations for what to work on next.
+Analyze tasks, codebase, and vision to give opinionated recommendations for what to work on next.
 
 ## Priority Cascade
 
-1. **Tasklist** (highest priority) — Already noted, most immediate
+1. **Existing tasks** (highest priority) — Already noted, most immediate
 2. **Codebase issues** — Technical debt, gaps, patterns
 3. **Vision gaps** (lowest priority) — Only if 1 & 2 are empty
 
 ## Process
 
-### Step 1: Read Tasklist
+### Step 1: Check Tasks
 
-**Use Read tool:** `docs/tasklist.md`
+**Use TaskList tool** to check for existing tasks.
 
-If tasklist has items in "Up Next":
+If tasks exist with status `pending`:
 → Recommend those first with brief rationale
 
 ### Step 2: Analyze Codebase
@@ -62,7 +62,7 @@ Prioritize by impact."
 
 ### Step 3: Read Vision (if needed)
 
-Only if tasklist is empty AND codebase analysis found nothing urgent:
+Only if no tasks exist AND codebase analysis found nothing urgent:
 
 **Use Read tool:** `docs/vision.md`
 
@@ -96,7 +96,7 @@ If user picks one, invoke the relevant command.
 
 ## Suggestion Categories
 
-**From Tasklist:**
+**From Tasks:**
 - "You noted [X] — ready to tackle it?"
 
 **From Codebase:**

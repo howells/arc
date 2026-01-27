@@ -22,9 +22,9 @@ website:
 ---
 
 <tasklist_context>
-**Use Read tool:** `docs/tasklist.md` (first 50 lines)
+**Use TaskList tool** to check for existing tasks related to this work.
 
-Check if this work relates to an existing tasklist item. If it does, note which item and mark it in-progress when starting.
+If a related task exists, note its ID and mark it `in_progress` with TaskUpdate when starting.
 </tasklist_context>
 
 <rules_context>
@@ -217,7 +217,7 @@ multiSelect: false
 Options:
   1. "Verify test coverage" — Run /arc:test
   2. "Document what we built" — Run /arc:document
-  3. "Add follow-up tasks" — Update /arc:tasklist
+  3. "Add follow-up tasks" — Create tasks with TaskCreate
   4. "Done for now" — End session
 ```
 

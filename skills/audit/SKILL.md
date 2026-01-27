@@ -37,9 +37,9 @@ website:
 ---
 
 <tasklist_context>
-**Use Read tool:** `docs/tasklist.md` (first 50 lines)
+**Use TaskList tool** to check for existing tasks related to this work.
 
-Check existing tasklist before generating new tasks post-audit. Avoid creating duplicate entries for issues already tracked.
+If a related task exists, note its ID and mark it `in_progress` with TaskUpdate when starting.
 </tasklist_context>
 
 <required_reading>
@@ -635,7 +635,7 @@ Present these options (include all that apply):
 
 2. **Write full task plan** → Write all clusters as a structured plan to `docs/plans/YYYY-MM-DD-audit-tasks.md` for systematic implementation. Each cluster becomes a section with its findings, suggested approach, and a checkbox list. Commit the plan file.
 
-3. **Add to tasklist** → Write critical/high clusters as entries in `docs/tasklist.md` (for `/arc:tasklist` tracking). Lower severity clusters are omitted — they're in the audit report if needed later.
+3. **Add to tasks** → Use **TaskCreate** to create tasks for critical/high clusters. Each cluster becomes a task with findings in the description. Lower severity clusters are omitted — they're in the audit report if needed later.
 
 4. **Deep dive on a cluster** → User picks a cluster to explore in detail. Show full findings, relevant code snippets, and discuss approach before committing to action.
 
@@ -687,9 +687,9 @@ git add docs/plans/
 git commit -m "docs: add audit task plan"
 ```
 
-**If user selects "Add to tasklist":**
-- Write only critical/high clusters to `docs/tasklist.md`
-- Each cluster becomes one task entry with its findings as sub-items
+**If user selects "Add to tasks":**
+- Use **TaskCreate** for each critical/high cluster
+- Each task gets the cluster name as subject, findings as description, and present continuous activeForm
 - Lower severity clusters stay in the audit report only
 
 **If user selects "Deep dive on a cluster":**
