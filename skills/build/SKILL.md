@@ -104,35 +104,75 @@ Options:
 **If option 1:** Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`
 **If option 2:** Proceed on main
 
-### Step 2: Quick Mental Model
+### Step 2: Verify Test Infrastructure
+
+Before writing any code, confirm the project can run tests:
+
+```bash
+# Check for test runner in package.json
+grep -E '"vitest"|"jest"|"playwright"' package.json
+```
+
+**If no test runner found:**
+```
+"This project has no test runner configured. I need to set one up before I can build with TDD.
+Want me to add vitest (recommended for most projects)?"
+```
+Wait for user response. Set up the runner before proceeding.
+
+**If test runner found:** Note the runner and its test command for use in Step 4.
+
+### Step 3: Quick Mental Model
 
 Briefly outline (don't write a doc):
 - What needs to change
+- What to test (be specific: which behaviors, which edge cases)
 - What order to do it
-- What to test
 
 Share with user: "Here's my approach: [2-3 bullets]. Sound right?"
 
-### Step 3: Build with TDD
+### Step 4: Build with TDD
 
-Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/test-driven-development.md`:
+Read `${CLAUDE_PLUGIN_ROOT}/disciplines/test-driven-development.md` for full methodology.
 
-For each piece:
-1. Write failing test
-2. Verify it fails
-3. Write minimal code to pass
-4. Verify it passes
-5. Refactor if needed
+<tdd_enforcement>
+**THE IRON LAW: No production code without a failing test first.**
 
-### Step 4: Continuous Quality
+Writing code before its test? Delete it. Start over. No exceptions:
+- Don't keep it as "reference"
+- Don't "adapt" it while writing tests
+- Delete means delete
 
-After each implementation:
-```bash
-pnpm tsc --noEmit    # TypeScript check
-pnpm biome check .   # Lint
-```
+**For each piece of work, the FIRST file you touch MUST be the test file.** Not the implementation file. The test file.
 
-Fix issues immediately.
+**Cycle — follow exactly, every time:**
+
+1. **Create/open the test file first.** Write one failing test.
+2. **Run the test. Watch it fail.** If it passes, your test is wrong — fix the test.
+   ```bash
+   pnpm vitest run path/to/file.test.ts  # or jest/playwright equivalent
+   ```
+3. **Now open the implementation file.** Write the minimum code to make the test pass.
+4. **Run the test. Watch it pass.** If it fails, fix the implementation, not the test.
+   ```bash
+   pnpm vitest run path/to/file.test.ts
+   ```
+5. **Run TypeScript + lint before moving on:**
+   ```bash
+   pnpm tsc --noEmit
+   pnpm biome check --write .
+   ```
+   Fix any issues immediately.
+6. Repeat for the next behavior.
+
+**Self-check after each cycle:**
+- [ ] Did I write the test BEFORE the implementation?
+- [ ] Did I watch the test fail?
+- [ ] Did the test fail because the feature is missing (not a typo or import error)?
+- [ ] Did I write only enough code to pass?
+
+If any answer is "no" — STOP. Delete the implementation. Write the test first.
+</tdd_enforcement>
 
 ### Step 5: Verify Before Done
 

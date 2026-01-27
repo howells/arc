@@ -104,6 +104,14 @@ cd .worktrees/<feature-name>
 pnpm install  # or yarn/npm based on lockfile
 ```
 
+**Verify test infrastructure exists:**
+```bash
+# Check for test runner in package.json
+grep -E '"vitest"|"jest"|"playwright"' package.json
+```
+
+If no test runner → stop and ask user. Cannot proceed with TDD without a runner.
+
 **Verify clean baseline:**
 ```bash
 pnpm test     # or relevant test command
@@ -130,14 +138,38 @@ Update TodoWrite.
 
 ### Step 2: Follow TDD cycle exactly
 
-```
-1. Write the test (copy from plan)
-2. Run test → verify FAIL
-3. Write implementation (copy from plan, adapt as needed)
-4. Run test → verify PASS
-5. Fix TypeScript + lint (see below)
-6. Commit with message from plan
-```
+Read `${CLAUDE_PLUGIN_ROOT}/disciplines/test-driven-development.md` for full methodology.
+
+<tdd_enforcement>
+**THE IRON LAW: No production code without a failing test first.**
+
+The FIRST file you touch for each task MUST be the test file. Not the implementation file.
+
+If the plan includes test code, use it. If the plan doesn't include test code, write it yourself — but write it BEFORE the implementation.
+
+**Cycle — follow exactly, every time:**
+
+1. **Write the test file first.** Create/open the `.test.ts` file. Write one failing test (copy from plan if available, otherwise write it yourself).
+2. **Run test → verify FAIL.** If it passes immediately, the test is wrong — fix it or the behavior already exists.
+   ```bash
+   pnpm vitest run path/to/file.test.ts  # or jest/playwright equivalent
+   ```
+3. **Now write implementation** (copy from plan, adapt as needed). Only the minimum code to pass the test.
+4. **Run test → verify PASS.**
+   ```bash
+   pnpm vitest run path/to/file.test.ts
+   ```
+5. **Fix TypeScript + lint** (see below)
+6. **Commit with message from plan**
+
+**Self-check gate — before moving to next task:**
+- [ ] Test file was created/modified BEFORE implementation file
+- [ ] Test was run and observed to FAIL before implementation
+- [ ] Test failure was because feature was missing (not typo/import error)
+- [ ] Only enough code was written to pass the test
+
+If any answer is "no" — delete the implementation, write the test first.
+</tdd_enforcement>
 
 <continuous_quality>
 **After every implementation, before commit:**
