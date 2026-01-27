@@ -6,7 +6,7 @@ description: |
   Use when asked to "commit", "push changes", "save my work", or after completing
   implementation work. Automatically groups changes into logical commits.
 license: MIT
-argument-hint: <optional-message>
+argument-hint: [push]
 metadata:
   author: howells
 website:
@@ -35,9 +35,9 @@ Commit and push changes, intelligently splitting into separate commits when chan
 
 Usage:
 - `/arc:commit` - Auto-analyze and commit (may create multiple commits)
-- `/arc:commit [message]` - Single commit with provided message
+- `/arc:commit push` - Commit and push
 
-$ARGUMENTS will contain the optional commit message.
+$ARGUMENTS will be either empty or "push".
 
 ## Current Git State
 
@@ -65,11 +65,10 @@ Review the git state above. If you need more detail:
 ### 2. Determine Commit Strategy
 
 **Single commit** if:
-- $ARGUMENTS contains a commit message, OR
 - All changes are in the same domain/area, OR
 - Changes are tightly coupled (e.g., feature + its tests)
 
-**Multiple commits** if $ARGUMENTS is empty AND changes span multiple unrelated domains:
+**Multiple commits** if changes span multiple unrelated domains:
 - Different packages (e.g., `packages/ui`, `packages/api`)
 - Different apps (e.g., `apps/web`, `apps/admin`)
 - Config vs source changes
@@ -146,9 +145,11 @@ If TypeScript or lint errors block the commit:
 6. Retry the commit
 7. Repeat until all errors are resolved
 
-### 6. Push Changes
+### 6. Push Changes (only if `push` argument provided)
 
-After all commits are created:
+**Skip this step** unless $ARGUMENTS starts with "push".
+
+If pushing:
 ```bash
 git push
 ```
@@ -165,7 +166,7 @@ If push fails (e.g., diverged history), report the issue - do NOT force push unl
 Tell the user:
 - How many commits were created
 - Summary of each commit (hash, message)
-- Push status
+- Push status (if pushed), or remind them to push when ready
 
 <progress_append>
 After committing changes, append to progress journal:
