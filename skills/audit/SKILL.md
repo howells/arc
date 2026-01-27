@@ -9,7 +9,7 @@ description: |
   Reviewers run in batches of 2 by default to avoid resource exhaustion.
   Use --parallel to run all reviewers simultaneously (resource-intensive).
 license: MIT
-argument-hint: <path-or-focus> [--parallel] [--stage=prototype|development|pre-launch|production] [--security|--performance|--architecture|--organization|--design]
+argument-hint: <path-or-focus> [--parallel] [--stage=prototype|development|pre-launch|production] [--security|--performance|--architecture|--organization|--design|--accessibility]
 metadata:
   author: howells
 website:
@@ -35,6 +35,12 @@ website:
     - designer
     - data-engineer
 ---
+
+<tasklist_context>
+**Use Read tool:** `docs/tasklist.md` (first 50 lines)
+
+Check existing tasklist before generating new tasks post-audit. Avoid creating duplicate entries for issues already tracked.
+</tasklist_context>
 
 <required_reading>
 **Read these reference files NOW:**
@@ -218,6 +224,8 @@ Execution mode: [batched (default) / parallel]
 - If monorepo with shared packages (large only) → add `simplicity-engineer`
 - If project has >50 files or inconsistent structure detected → add `organization-engineer`
 - If UI-heavy (React/Next.js, medium/large) → add `designer`
+- If UI-heavy (React/Next.js, medium/large) → add `accessibility-engineer`
+- If test files detected (medium/large) → add `test-quality-engineer`
 - If recent AI-assisted work or branch audit → add `llm-engineer` (deslop)
 
 **Focus flag overrides:**
@@ -226,6 +234,7 @@ Execution mode: [batched (default) / parallel]
 - `--architecture` → only `architecture-engineer`
 - `--organization` → only `organization-engineer`
 - `--design` → only `designer`
+- `--accessibility` → only `accessibility-engineer`
 - `--deslop` → only `llm-engineer`
 
 **Final reviewer list:**

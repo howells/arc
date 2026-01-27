@@ -590,6 +590,17 @@ After completing deployment or checklist, append to progress journal:
 ```
 </progress_append>
 
+<success_criteria>
+Letsgo is complete when:
+- [ ] Project detected and checklist tailored
+- [ ] All relevant checklist items addressed or deferred with reason
+- [ ] Critical items resolved (no blockers remaining)
+- [ ] Production build succeeds
+- [ ] Deployed to production (or ready to deploy)
+- [ ] Incomplete items added to tasklist (if any)
+- [ ] Progress journal updated
+</success_criteria>
+
 ## Interop
 
 - Runs **/arc:test** as part of quality check

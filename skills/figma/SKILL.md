@@ -133,6 +133,16 @@ After completing the Figma implementation, append to progress journal:
 ```
 </progress_append>
 
+<success_criteria>
+Figma implementation is complete when:
+- [ ] Design specs extracted via Figma MCP (colors, typography, spacing, shadows)
+- [ ] Component implemented using existing design system tokens
+- [ ] Screenshots compared against Figma design
+- [ ] Responsive states handled (mobile, tablet, desktop)
+- [ ] Discrepancies identified and fixed
+- [ ] Progress journal updated
+</success_criteria>
+
 ## Interop
 
 - Use **/arc:design** if you need to create a design from scratch (no Figma reference)

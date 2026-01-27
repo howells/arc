@@ -21,6 +21,12 @@ website:
     - No plan file means no audit trail. Use /arc:implement for anything you might need to explain later.
 ---
 
+<tasklist_context>
+**Use Read tool:** `docs/tasklist.md` (first 50 lines)
+
+Check if this work relates to an existing tasklist item. If it does, note which item and mark it in-progress when starting.
+</tasklist_context>
+
 <rules_context>
 **Check for project coding rules:**
 
@@ -236,6 +242,15 @@ After completing the build, append to progress journal:
 ---
 ```
 </progress_append>
+
+<success_criteria>
+Build is complete when:
+- [ ] Code works as requested
+- [ ] All tests pass (including new tests written via TDD)
+- [ ] TypeScript check clean (`pnpm tsc --noEmit`)
+- [ ] Lint clean (`pnpm biome check .` or equivalent)
+- [ ] Changes committed
+</success_criteria>
 
 ## What Build is NOT
 

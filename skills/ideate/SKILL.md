@@ -39,6 +39,12 @@ These govern every interaction. Return to them constantly.
 - **Be flexible** — Go back and clarify when something doesn't make sense. This is a conversation, not a checklist.
 </key_principles>
 
+<vision_context>
+**Use Glob tool:** `docs/vision.md`
+
+If `docs/vision.md` exists, read it. Anchor the design conversation to the project's stated goals and constraints. This isn't mandatory — just useful context to ask better questions and keep the design aligned.
+</vision_context>
+
 <required_reading>
 **Read these reference files NOW:**
 1. ${CLAUDE_PLUGIN_ROOT}/references/design-phases.md
@@ -341,6 +347,21 @@ After completing the design, append to `docs/progress.md`:
 ---
 ```
 </progress_append>
+
+<spec_flow_analysis>
+After the design document is written and committed, offer optional user flow analysis:
+
+"Would you like me to analyze this design for missing user flows?"
+
+If the user accepts:
+1. Spawn the spec-flow-analyzer agent with the design doc content
+2. Present the gaps found
+3. Offer to update the design doc with any missing flows
+
+Agent: `${CLAUDE_PLUGIN_ROOT}/agents/workflow/spec-flow-analyzer.md`
+
+This step is optional — skip if the user declines or wants to move straight to implementation.
+</spec_flow_analysis>
 
 <success_criteria>
 Design is complete when:

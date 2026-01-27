@@ -142,6 +142,9 @@ Check for context on what led to the plan being reviewed.
 - ${CLAUDE_PLUGIN_ROOT}/agents/review/architecture-engineer.md
 - ${CLAUDE_PLUGIN_ROOT}/agents/review/simplicity-engineer.md
 
+**Conditional addition (all UI project types):**
+- If plan involves UI components, forms, or user-facing features → add `${CLAUDE_PLUGIN_ROOT}/agents/review/accessibility-engineer.md`
+
 ## Phase 3: Run Expert Review
 
 **If specific reviewer from Phase 0:** Spawn single reviewer agent.

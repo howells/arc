@@ -198,6 +198,15 @@ After completing the design work, append to progress journal:
 ```
 </progress_append>
 
+<success_criteria>
+Design is complete when:
+- [ ] Aesthetic direction established (tone, memorable element, typography, color)
+- [ ] ASCII wireframes created and approved
+- [ ] Design direction document saved
+- [ ] Implementation started or handed off to /arc:build or /arc:implement
+- [ ] Progress journal updated
+</success_criteria>
+
 ## Interop
 
 - Can invoke **/arc:build** for quick implementation

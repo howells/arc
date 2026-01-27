@@ -23,6 +23,12 @@ website:
     - e2e-test-runner
 ---
 
+<tasklist_context>
+**Use Read tool:** `docs/tasklist.md` (first 50 lines)
+
+Check if the tests relate to a tasklist item. If so, note which item for progress tracking.
+</tasklist_context>
+
 <rules_context>
 **Check for project testing rules:**
 
@@ -212,6 +218,28 @@ Key points:
 - Use fast models (-flash, -mini) for tests
 - Set aggressive timeouts (5-10s)
 - Never conclude "network issues" without evidence
+
+<success_criteria>
+Test workflow is complete when:
+- [ ] Test framework detected and configured
+- [ ] Strategy documented (if creating strategy)
+- [ ] Tests written and passing (if creating tests)
+- [ ] Failing tests diagnosed and fixed (if fixing)
+- [ ] All tests pass (`pnpm vitest run` or equivalent)
+- [ ] Optional: test quality review offered (if tests written)
+- [ ] Progress journal updated
+</success_criteria>
+
+<test_quality_check>
+After tests pass, optionally offer a quality check:
+
+"Tests are passing. Would you like me to review the test quality (assertion meaningfulness, isolation, flaky patterns)?"
+
+If accepted, spawn the test-quality-engineer agent:
+`${CLAUDE_PLUGIN_ROOT}/agents/review/test-quality-engineer.md`
+
+Present findings and offer to fix any issues found.
+</test_quality_check>
 
 <progress_append>
 After running tests or creating strategy, append to progress journal:
