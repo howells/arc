@@ -123,9 +123,13 @@ Options:
   3. "Save design only" — Save to docs/plans/ and stop here
 ```
 
-**If option 1:** Route to `/arc:build` (quick) or `/arc:implement` (from plan)
-**If option 2:** Route to `/arc:detail`
-**If option 3:** Save design doc and end
+**IMPORTANT: Do NOT automatically invoke skills. Save the design, then STOP.**
+
+**If option 1:** Save design doc, then tell the user: "Run `/arc:build` to start building."
+**If option 2:** Save design doc, then tell the user: "Run `/arc:detail` to create a detailed implementation plan."
+**If option 3:** Save design doc and tell the user they can return later.
+
+**Do NOT invoke `/arc:build`, `/arc:implement`, or `/arc:detail` yourself — wait for the user to do so.**
 
 ### Step 5b: Visual Verification (During Build)
 

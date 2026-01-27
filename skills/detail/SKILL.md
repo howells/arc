@@ -292,7 +292,7 @@ Options:
   3. "Done for now" — End session
 ```
 
-**If option 1:** Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`, move plan, then continue
+**If option 1:** Follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`, move plan, then continue with the next question below.
 
 **If already on feature branch (recommended path):**
 
@@ -306,8 +306,13 @@ Options:
   3. "Done for now" — End session
 ```
 
-**If option 1:** Route to `/arc:review`
-**If option 2:** Route to `/arc:implement`
+**IMPORTANT: Do NOT automatically invoke skills. Set up environment only, then STOP.**
+
+**If option 1:** Tell the user: "Run `/arc:review` to have expert reviewers validate the plan."
+**If option 2:** Tell the user: "Run `/arc:implement` to start executing the plan task-by-task."
+**If option 3:** Tell the user the plan is ready and they can return later.
+
+**Do NOT invoke `/arc:review` or `/arc:implement` yourself — wait for the user to do so.**
 </process>
 
 <progress_context>

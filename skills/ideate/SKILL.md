@@ -305,22 +305,24 @@ Options:
 ```
 
 <next_step_routing>
+**IMPORTANT: Do NOT automatically invoke skills. Wait for the user to choose, then perform the setup steps only.**
+
 **If Option 1 (implementation plan):**
 1. Create worktree: follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`
 2. Branch name: `feature/<topic-slug>`
 3. Copy design doc to worktree: `docs/plans/`
-4. Route to `/arc:detail` to create implementation plan
-5. Implementation plan lives in the worktree (it's large and specific to this work)
+4. **STOP.** Tell the user: "Worktree ready. Run `/arc:detail` to create the implementation plan."
+5. Do NOT invoke `/arc:detail` yourself — wait for the user to do so.
 
 **If Option 2 (start building):**
 1. Create worktree: follow `${CLAUDE_PLUGIN_ROOT}/disciplines/using-git-worktrees.md`
 2. Branch name: `feature/<topic-slug>`
-3. Route to `/arc:build` to start implementation
-4. Design doc is the guide — no formal plan needed
+3. **STOP.** Tell the user: "Worktree ready. Run `/arc:build` to start implementing."
+4. Do NOT invoke `/arc:build` yourself — wait for the user to do so.
 
 **If Option 3 (done for now):**
 - Design is complete and committed
-- User can return later with `/arc:detail` or `/arc:build`
+- **STOP.** Tell the user they can return later with `/arc:detail` or `/arc:build`
 </next_step_routing>
 </process>
 
