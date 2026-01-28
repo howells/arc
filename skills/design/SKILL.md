@@ -171,6 +171,8 @@ The goal: **never commit UI code without visually verifying it looks correct.**
 
 See `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` for the full list of anti-patterns and the design review checklist.
 
+**🚫 Never use sparkles/stars to denote AI or ML features.** This visual cliché has become the "clip art" of AI interfaces—overused, meaningless, and instantly dated. Find distinctive ways to communicate intelligence: motion, progressive disclosure, conversational patterns, or simply letting the capability speak for itself without decorative badges.
+
 ### Step 6: Optional UI Compliance Review
 
 If the `web-design-guidelines` skill is available:
