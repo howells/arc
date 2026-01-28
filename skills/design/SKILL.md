@@ -27,12 +27,23 @@ Create distinctive, non-generic UI. Avoids AI slop (purple gradients, cookie-cut
 
 **Announce at start:** "I'm using the design skill to create distinctive, non-generic UI."
 
-<rules_context>
-**Load interface rules for UI work:**
+---
 
-**Use Read tool:** `${CLAUDE_PLUGIN_ROOT}/rules/interface/index.md`
+## Phase 0: Load References (MANDATORY)
 
-Then load relevant rules based on the task:
+**You MUST read these files before proceeding. Do not skip this step.**
+
+<mandatory_references>
+**Read ALL of these using the Read tool:**
+
+1. `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` — Fonts, anti-patterns, design review checklist. **Critical.**
+2. `${CLAUDE_PLUGIN_ROOT}/references/design-philosophy.md` — Timeless principles from Refactoring UI
+3. `${CLAUDE_PLUGIN_ROOT}/references/ascii-ui-patterns.md` — Wireframe syntax and patterns
+
+**Then load interface rules:**
+4. `${CLAUDE_PLUGIN_ROOT}/rules/interface/index.md` — Interface rules index
+
+**And relevant domain rules based on what you're designing:**
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/design.md` — Visual principles
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/colors.md` — Color palettes
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/spacing.md` — Spacing system
@@ -42,12 +53,7 @@ Then load relevant rules based on the task:
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/forms.md` — If designing forms
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/interactions.md` — Touch, keyboard, hover patterns
 - `${CLAUDE_PLUGIN_ROOT}/rules/interface/marketing.md` — If designing marketing pages
-
-Also load references:
-- `${CLAUDE_PLUGIN_ROOT}/references/design-philosophy.md` — Timeless principles
-- `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` — Fonts, checklist, anti-patterns
-- `${CLAUDE_PLUGIN_ROOT}/references/component-design.md` — React component patterns
-</rules_context>
+</mandatory_references>
 
 <progress_context>
 **Use Read tool:** `docs/progress.md` (first 50 lines)
@@ -55,153 +61,273 @@ Also load references:
 Check for related prior design work and aesthetic decisions.
 </progress_context>
 
-## Prerequisites
+---
 
-- **Dev server running** — Ensure the app is running locally so you can visually verify changes
-- **Chrome MCP available** — Use browser automation to screenshot and check layouts frequently
+## Phase 1: Visual Reconnaissance
 
-## Process
+**Before designing anything, see what exists.**
 
-### Step 1: Understand Scope
+### If Redesigning Existing UI:
 
-"What are we designing?"
-1. New component/page from scratch
-2. Redesign existing UI
-3. Review and refine current implementation
+**Use Chrome MCP to capture current state:**
 
-### Step 2: Gather Aesthetic Direction
+```
+1. mcp__claude-in-chrome__tabs_context_mcp (get available tabs)
+2. mcp__claude-in-chrome__tabs_create_mcp (create new tab if needed)
+3. mcp__claude-in-chrome__navigate to the local dev URL
+4. mcp__claude-in-chrome__computer action=screenshot
+```
 
-Ask one at a time:
+**Analyze the screenshot against the Design Review Checklist from frontend-design.md:**
+- Does it have any Red Flags (AI slop indicators)?
+- What's the current aesthetic direction (if any)?
+- What's working? What's not?
 
-1. "What tone fits this UI?"
-   - Minimal, bold, playful, editorial, luxury, brutalist, retro, organic
+**Report findings to user:** "Here's what I see in the current UI: [observations]. The main issues are: [problems]."
 
-2. "What should be memorable about this?"
-   - The animation? Typography? Layout? A specific interaction?
+### If Designing From Scratch:
 
-3. "Any existing brand/style to match, or fresh start?"
+- Confirm dev server is running (or will be)
+- Ask if there's any existing brand/style guide to reference
+- Check if there are reference designs or inspiration URLs to screenshot
 
-4. "Any reference designs or inspiration?"
-   - Capture Figma links, screenshots, URLs immediately
+---
 
-### Step 3: Capture Direction
+## Phase 2: Gather Direction
 
-Capture **concrete visual decisions**, not conceptual themes. No metaphors, no "vibes."
+Ask these questions **one at a time**:
+
+### Question 1: Tone
+"What tone fits this UI?"
+- Minimal, bold, playful, editorial, luxury, brutalist, retro, organic, industrial, art deco, soft/pastel
+
+### Question 2: Memorable Element
+"What should be memorable about this?"
+- The animation? Typography? Layout? A specific interaction? Color? Photography style?
+
+### Question 3: Existing Constraints
+"Any existing brand/style to match, or fresh start?"
+
+### Question 4: Inspiration
+"Any reference designs or inspiration?"
+- If provided, **screenshot them immediately using Chrome MCP** for visual reference
+
+---
+
+## Phase 3: Make Concrete Visual Decisions
+
+**Capture SPECIFIC visual decisions, not conceptual themes.**
+
+Apply knowledge from the loaded references to make these decisions:
+
+### Typography Selection
+Using the font recommendations from `frontend-design.md`:
+- **Display font:** [specific font name]
+- **Body font:** [specific font name]
+- **Mono font (if needed):** [specific font name]
+
+**Never use:** Roboto, Arial, system-ui defaults, Instrument Serif (AI slop)
+
+### Color Palette
+- **Background:** [specific hex, e.g., #0a0a0a]
+- **Surface/card:** [specific hex]
+- **Text primary:** [specific hex]
+- **Text secondary:** [specific hex]
+- **Accent:** [specific hex]
+- **Accent hover:** [specific hex]
+
+**Never use:** Purple-to-blue gradients (AI cliché)
+
+### Spacing System
+Define the scale being used:
+- **Base unit:** 4px or 8px
+- **Common values:** 4, 8, 12, 16, 24, 32, 48, 64
+- **Component padding:** [e.g., 16px default, 24px for cards]
+- **Section spacing:** [e.g., 64px between major sections]
+
+### Motion Philosophy
+- **Where animation is used:** [specific locations]
+- **Animation style:** [e.g., ease-out for enters, springs for interactive]
+- **Duration range:** [e.g., 150-300ms]
+
+---
+
+## Phase 4: ASCII Wireframe
+
+**Create ASCII wireframes before any code.** Use patterns from `ascii-ui-patterns.md`.
+
+```
+┌─────────────────────────────────────┐
+│  Logo        [Search...]    [Menu]  │
+├─────────────────────────────────────┤
+│                                     │
+│  [Main Content Area]                │
+│                                     │
+└─────────────────────────────────────┘
+```
+
+**Include:**
+1. Primary layout structure
+2. Key interactive elements
+3. Mobile version if responsive
+4. States: empty, loading, error (where relevant)
+
+**Ask:** "Does this layout feel right before I continue?"
+
+---
+
+## Phase 5: Produce Design Document
+
+**Create the design direction document at `docs/plans/design-[component-name].md`:**
 
 ```markdown
+# Design Direction: [Component/Page Name]
+
 ## Aesthetic Direction
-- **Tone**: [chosen - e.g., "minimal", "bold", "editorial"]
-- **Memorable element**: [specific - e.g., "oversized typography", "micro-interactions on hover"]
-- **Typography**: [actual fonts - e.g., "Inter for body, Tiempos for headings"]
-- **Colors**: [specific palette - e.g., "Near-black (#0a0a0a) background, amber (#f59e0b) accents"]
-- **Spacing**: [system - e.g., "8px base unit, generous padding (24-48px)"]
-- **Motion**: [where and how - e.g., "subtle fade-ins on scroll, no bounce effects"]
+- **Tone:** [chosen - e.g., "minimal", "bold", "editorial"]
+- **Memorable element:** [specific - e.g., "oversized typography", "micro-interactions on hover"]
+
+## Typography
+- **Display:** [font name] — [where used]
+- **Body:** [font name] — [where used]
+- **Mono:** [font name] — [where used, if applicable]
+
+## Color Palette
+| Role | Value | Usage |
+|------|-------|-------|
+| Background | #0a0a0a | Page background |
+| Surface | #1a1a1a | Cards, panels |
+| Text primary | #fafafa | Headings, body |
+| Text secondary | #a1a1a1 | Labels, hints |
+| Accent | #f59e0b | CTAs, links |
+| Accent hover | #fbbf24 | Hover states |
+
+## Spacing
+- Base unit: 8px
+- Component padding: 16px (small), 24px (medium), 32px (large)
+- Section gaps: 48px (tight), 64px (normal), 96px (generous)
+
+## Motion
+- Page transitions: fade, 200ms ease-out
+- Interactive elements: spring (stiffness: 400, damping: 25)
+- Hover states: 150ms ease-out
+
+## Layout
+
+### Desktop
+[ASCII wireframe]
+
+### Mobile
+[ASCII wireframe]
+
+## Implementation Notes
+- [Any specific technical considerations]
+- [Component library preferences]
+- [Animation library: CSS-only vs motion/react]
+
+## Anti-Patterns to Avoid
+- [Specific things NOT to do for this design]
 ```
 
-**❌ Bad:** "Direction: Darkroom / Metaphor: Photo emerging from developer bath / Vibe: Analog, craft"
-**✅ Good:** "Dark UI with warm red accents (#dc2626), high contrast text, Söhne font family"
+---
 
-### Step 4: ASCII Wireframe First
+## Phase 6: Verify Against Checklist
 
-Before any code, create ASCII wireframe. See `${CLAUDE_PLUGIN_ROOT}/references/ascii-ui-patterns.md`.
+**Run the Design Review Checklist from frontend-design.md:**
 
-```
-┌─────────────────────────────────┐
-│  Header                         │
-├─────────────────────────────────┤
-│  ┌─────────┐  ┌─────────┐      │
-│  │  Card   │  │  Card   │      │
-│  └─────────┘  └─────────┘      │
-└─────────────────────────────────┘
-```
+### Red Flags (must be zero)
+- [ ] Uses default system fonts
+- [ ] Purple-to-blue gradient present
+- [ ] White background + gray cards throughout
+- [ ] Could be mistaken for generic AI output
 
-Ask: "Does this layout feel right?"
+### Green Flags (should have most)
+- [ ] Clear aesthetic direction documented
+- [ ] Typography is deliberate
+- [ ] At least one memorable element
+- [ ] Layout has unexpected decisions
 
-### Step 5: Build or Hand Off
+**If any Red Flags are present, revise before proceeding.**
+
+---
+
+## Phase 7: Hand Off
 
 **Use AskUserQuestion tool:**
 ```
-Question: "Design ready. What would you like to do with it?"
+Question: "Design documented. What's next?"
 Header: "Next step"
 Options:
-  1. "Build now" (Recommended) — Jump to /arc:build or /arc:implement
-  2. "Create implementation plan" — Run /arc:detail for detailed task breakdown
-  3. "Save design only" — Save to docs/plans/ and stop here
+  1. "Build now" (Recommended) — Continue to implementation
+  2. "Create detailed plan" — Run /arc:detail for task breakdown
+  3. "Save and stop" — Return to this later
 ```
 
-**IMPORTANT: Do NOT automatically invoke skills. Save the design, then STOP.**
+**IMPORTANT: Do NOT automatically invoke other skills.**
 
-**If option 1:** Save design doc, then tell the user: "Run `/arc:build` to start building."
-**If option 2:** Save design doc, then tell the user: "Run `/arc:detail` to create a detailed implementation plan."
-**If option 3:** Save design doc and tell the user they can return later.
+- **If option 1:** Tell user: "Design saved. Run `/arc:build` to start building."
+- **If option 2:** Tell user: "Design saved. Run `/arc:detail` to create implementation tasks."
+- **If option 3:** Tell user: "Design saved to `docs/plans/design-[name].md`. Return anytime."
 
-**Do NOT invoke `/arc:build`, `/arc:implement`, or `/arc:detail` yourself — wait for the user to do so.**
+---
 
-### Step 5b: Visual Verification (During Build)
+## During Implementation (Reference for /arc:build)
 
-**Use Chrome MCP tools liberally** to check how the layout actually looks as you build:
+When implementing this design (in /arc:build or /arc:implement), use Chrome MCP continuously:
 
-1. **After each significant change** — Take a screenshot to verify:
-   ```
-   mcp__claude-in-chrome__computer action=screenshot
-   ```
-
-2. **Check responsive behavior** — Resize and screenshot:
-   ```
-   mcp__claude-in-chrome__resize_window width=375 height=812  # Mobile
-   mcp__claude-in-chrome__computer action=screenshot
-   mcp__claude-in-chrome__resize_window width=1440 height=900 # Desktop
-   ```
-
-3. **Verify spacing, alignment, typography** — Don't assume it looks right. See it.
-
-4. **Check for visual conflicts** — Look for:
-   - Components overlapping or clipping each other
-   - Elements clashing with existing UI (headers, footers, sidebars)
-   - Z-index issues causing unexpected layering
-   - Scroll containers behaving unexpectedly
-   - Fixed/sticky elements interfering with content
-
-5. **Iterate visually** — If something looks off, fix it immediately before moving on.
-
-**When to screenshot:**
-- After implementing a new component
-- After adding responsive styles
-- After adjusting spacing/layout
-- Before declaring a section "done"
-- When something feels uncertain
-
-The goal: **never commit UI code without visually verifying it looks correct.**
-
-### Anti-Patterns to Avoid
-
-See `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` for the full list of anti-patterns and the design review checklist.
-
-**🚫 Never use sparkles/stars to denote AI or ML features.** This visual cliché has become the "clip art" of AI interfaces—overused, meaningless, and instantly dated. Find distinctive ways to communicate intelligence: motion, progressive disclosure, conversational patterns, or simply letting the capability speak for itself without decorative badges.
-
-**🚫 Never propose conceptual "themes" with metaphors unless explicitly requested.** Avoid outputs like "Direction: Darkroom / Metaphor: Photo emerging from developer bath" or "Direction: Geode / Metaphor: Crystal beauty inside rough stone." This is overwrought and impractical. Instead, make direct visual decisions: "Dark background with warm accent colors" or "High contrast with generous whitespace." Themes and metaphors are creative exercises that rarely translate to good UI—stick to concrete visual choices (colors, typography, spacing, layout) that can actually be implemented.
-
-### Step 6: Optional UI Compliance Review
-
-If the `web-design-guidelines` skill is available:
+### After Every Significant Change
 ```
-Skill web-design-guidelines: "Review the design against Web Interface Guidelines.
-Focus on: [specific areas of concern]"
+mcp__claude-in-chrome__computer action=screenshot
 ```
 
-This provides external validation against established UI best practices.
+### Check Responsive Behavior
+```
+mcp__claude-in-chrome__resize_window width=375 height=812  # Mobile
+mcp__claude-in-chrome__computer action=screenshot
+mcp__claude-in-chrome__resize_window width=1440 height=900 # Desktop
+mcp__claude-in-chrome__computer action=screenshot
+```
+
+### Verify Against Design Doc
+- Does the typography match what was specified?
+- Are the colors exactly as documented?
+- Does spacing feel consistent with the system?
+- Is the memorable element actually memorable?
+
+**Never commit UI code without visually verifying it looks correct.**
+
+---
+
+## Anti-Patterns (Quick Reference)
+
+From `frontend-design.md`:
+
+**🚫 Never use sparkles/stars to denote AI features.** Overused, meaningless, dated.
+
+**🚫 Never propose conceptual themes with metaphors.** No "Direction: Darkroom / Metaphor: Photo emerging from developer bath". Instead: "Dark background (#0a0a0a) with warm red accents (#dc2626)."
+
+**🚫 Never use these:**
+- Roboto/Arial/system-ui defaults
+- Purple-to-blue gradients
+- White backgrounds with gray cards
+- Rounded corners on everything
+- Mixed icon styles
+
+---
 
 <progress_append>
-After completing the design work, append to progress journal:
+After completing design work, append to progress journal:
 
 ```markdown
 ## YYYY-MM-DD HH:MM — /arc:design
 **Task:** [UI/component designed]
 **Outcome:** Complete
-**Files:** [Design doc or component files]
+**Files:** docs/plans/design-[name].md
 **Decisions:**
 - Tone: [aesthetic direction]
 - Memorable: [key element]
+- Typography: [fonts chosen]
+- Colors: [palette summary]
 **Next:** /arc:build or /arc:implement
 
 ---
@@ -210,17 +336,21 @@ After completing the design work, append to progress journal:
 
 <success_criteria>
 Design is complete when:
-- [ ] Aesthetic direction established (tone, memorable element, typography, color)
+- [ ] All mandatory references were loaded and applied
+- [ ] Current UI was screenshotted (if redesigning)
+- [ ] Aesthetic direction established with SPECIFIC values
+- [ ] Typography selected from recommended fonts
+- [ ] Color palette defined with hex values
+- [ ] Spacing system documented
 - [ ] ASCII wireframes created and approved
-- [ ] Design direction document saved
-- [ ] Implementation started or handed off to /arc:build or /arc:implement
+- [ ] Design document saved to docs/plans/
+- [ ] Red flag checklist passed (zero red flags)
 - [ ] Progress journal updated
 </success_criteria>
 
 ## Interop
 
-- Can invoke **/arc:build** for quick implementation
-- Can invoke **/arc:implement** for planned implementation
-- Aesthetic direction feeds into implementation tasks
+- Produces design doc consumed by **/arc:build** and **/arc:implement**
 - Can invoke **web-design-guidelines** skill for compliance review (if available)
-- Uses **Chrome MCP** (`mcp__claude-in-chrome__*`) for visual verification throughout
+- Uses **Chrome MCP** (`mcp__claude-in-chrome__*`) for visual capture throughout
+- References feed into implementation to maintain design fidelity
