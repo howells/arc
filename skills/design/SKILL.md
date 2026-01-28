@@ -86,14 +86,20 @@ Ask one at a time:
 
 ### Step 3: Capture Direction
 
+Capture **concrete visual decisions**, not conceptual themes. No metaphors, no "vibes."
+
 ```markdown
 ## Aesthetic Direction
-- **Tone**: [chosen]
-- **Memorable element**: [what stands out]
-- **Typography**: [display] + [body] (NOT Roboto/Arial/system-ui)
-- **Color strategy**: [approach - NOT purple gradients]
-- **Motion**: [where animation matters]
+- **Tone**: [chosen - e.g., "minimal", "bold", "editorial"]
+- **Memorable element**: [specific - e.g., "oversized typography", "micro-interactions on hover"]
+- **Typography**: [actual fonts - e.g., "Inter for body, Tiempos for headings"]
+- **Colors**: [specific palette - e.g., "Near-black (#0a0a0a) background, amber (#f59e0b) accents"]
+- **Spacing**: [system - e.g., "8px base unit, generous padding (24-48px)"]
+- **Motion**: [where and how - e.g., "subtle fade-ins on scroll, no bounce effects"]
 ```
+
+**❌ Bad:** "Direction: Darkroom / Metaphor: Photo emerging from developer bath / Vibe: Analog, craft"
+**✅ Good:** "Dark UI with warm red accents (#dc2626), high contrast text, Söhne font family"
 
 ### Step 4: ASCII Wireframe First
 
@@ -172,6 +178,8 @@ The goal: **never commit UI code without visually verifying it looks correct.**
 See `${CLAUDE_PLUGIN_ROOT}/references/frontend-design.md` for the full list of anti-patterns and the design review checklist.
 
 **🚫 Never use sparkles/stars to denote AI or ML features.** This visual cliché has become the "clip art" of AI interfaces—overused, meaningless, and instantly dated. Find distinctive ways to communicate intelligence: motion, progressive disclosure, conversational patterns, or simply letting the capability speak for itself without decorative badges.
+
+**🚫 Never propose conceptual "themes" with metaphors unless explicitly requested.** Avoid outputs like "Direction: Darkroom / Metaphor: Photo emerging from developer bath" or "Direction: Geode / Metaphor: Crystal beauty inside rough stone." This is overwrought and impractical. Instead, make direct visual decisions: "Dark background with warm accent colors" or "High contrast with generous whitespace." Themes and metaphors are creative exercises that rarely translate to good UI—stick to concrete visual choices (colors, typography, spacing, layout) that can actually be implemented.
 
 ### Step 6: Optional UI Compliance Review
 
