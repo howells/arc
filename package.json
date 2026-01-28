@@ -1,6 +1,6 @@
 {
   "name": "arc-plugin",
-  "version": "1.0.75",
+  "version": "1.0.76",
   "private": true,
   "description": "Arc plugin for Claude Code",
   "scripts": {
