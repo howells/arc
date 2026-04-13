@@ -24,7 +24,7 @@ WHY     /arc:vision     - High-level goals (500-700 words)
 WHAT    /arc:ideate     - From idea to design doc
           ↓
 DO      /arc:implement  - Plan + execute with TDD
-        /arc:design     - UI/UX design with wireframes
+        /arc:design     - UI/UX design with wireframes, reusable UI patterns, and critique
         /arc:build      - Quick build (no formal plan)
         /arc:testing    - Test strategy and execution
         /arc:letsgo     - Production readiness checklist

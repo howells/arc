@@ -10,9 +10,9 @@ metadata:
 website:
   order: 8
   desc: Visual design direction
-  summary: Establish the visual identity for your UI—colors, typography, spacing, tone. Comes with opinionated references to avoid generic AI aesthetics.
+  summary: Establish the visual identity for your UI—colors, typography, spacing, tone, reusable Tailwind patterns, and critique loops. Comes with opinionated references to avoid generic AI aesthetics.
   what: |
-    Design walks you through visual decisions: What's the tone? What makes this memorable? It checks for persistent design context (docs/design-context.md) so brand decisions carry across sessions. It can research real-world examples from Siteinspire and Mobbin to inform your direction. From there it produces a design direction document—color palette in OKLCH, typography scale, spacing system, and wireframes for key screens. It draws from built-in references on font pairing, component patterns, and animation. As you build, it can verify the rendered UI against intent with browser screenshots.
+    Design walks you through visual decisions: What's the tone? What makes this memorable? It checks for persistent design context (docs/design-context.md) so brand decisions carry across sessions. It can research real-world examples from Siteinspire and Mobbin to inform your direction. From there it produces a design direction document—Tailwind v4 `@theme` color tokens in OKLCH, typography scale, spacing system, reusable UI patterns, and wireframes for key screens. It draws from built-in references on font pairing, component patterns, Tailwind usage, and animation, then runs a critique pass so the draft gets sharpened before implementation. As you build, it can verify the rendered UI against intent with browser screenshots.
   why: |
     AI-generated UI tends toward the same safe choices—the same gradients, the same card layouts, the same hero sections. Design fights this by forcing you to make distinctive choices upfront and documenting them. The references help you avoid common pitfalls and give the AI better taste.
   decisions:
@@ -44,6 +44,17 @@ Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
 Create distinctive, non-generic UI. Avoids AI slop (purple gradients, cookie-cutter layouts).
 
 **Announce at start:** "I'm using the design skill to create distinctive, non-generic UI."
+
+## Tailwind-First Constraint
+
+Arc UI design assumes **Tailwind is the implementation target**.
+
+- Design decisions MUST be expressible as **Tailwind v4 `@theme` tokens** plus utility classes
+- Spacing, sizing, radius, typography, and interaction states MUST map cleanly to Tailwind utilities
+- Component patterns MUST be described in a way `ui-builder` can implement with Tailwind classes
+- Do NOT produce framework-agnostic styling plans as the primary output
+- Do NOT default to bespoke CSS, CSS Modules, styled-components, or emotion when Tailwind utilities and tokens are sufficient
+- Raw CSS is only for unavoidable global primitives or capabilities Tailwind does not express directly
 
 <important>
 **This skill is user-interactive. Do NOT spawn agents to do design work.**
@@ -90,9 +101,10 @@ designer (reviews for AI slop)
 5. `${ARC_ROOT}/references/typography-opentype.md` — OpenType features, tracking, text-wrap, fluid sizing
 6. `${ARC_ROOT}/references/ascii-ui-patterns.md` — Wireframe syntax and patterns
 7. `${ARC_ROOT}/references/wiretext.md` — When to use WireText vs ASCII vs browser review
+8. `${ARC_ROOT}/references/tailwind-v4.md` — Tailwind v4 syntax and token patterns
 
 **Then load interface rules:**
-5. `rules/interface/index.md` — Interface rules index
+9. `rules/interface/index.md` — Interface rules index
 
 **And relevant domain rules based on what you're designing:**
 - `rules/interface/design.md` — Visual principles
@@ -158,6 +170,19 @@ Persistent aesthetic decisions for this project. All design work inherits these 
 - **Base unit**: 4px
 - **Scale**: Tailwind default (p-1=4px through p-16=64px)
 
+## UI System Snapshot
+### Tokens
+- **Depth model**: [borders-only / subtle shadows / layered surfaces]
+- **Surface ladder**: [canvas, surface, raised, overlay]
+- **Radius scale**: [e.g., 4px, 8px, 12px]
+- **Control heights**: [e.g., 32px, 40px, 48px]
+
+### Canonical Patterns
+- **Primary button**: [height, padding, radius, emphasis]
+- **Default card/panel**: [padding, border/shadow treatment, radius]
+- **Input/select**: [height, padding, border/fill treatment]
+- **Dense data treatment**: [table row height, stat card rhythm, list spacing]
+
 ## Motion Philosophy
 - **Style**: [e.g., snappy and confident, smooth and refined]
 - **Library**: [CSS transitions / motion/react]
@@ -176,6 +201,8 @@ After creating, proceed to Phase 1.
 
 Check for related prior design work and aesthetic decisions.
 </progress_context>
+
+**Internal consistency rule:** if any later design choice conflicts with the stored design context, brand system, or interface rules, resolve that conflict before moving on. Do not let the spec say one thing and the implementation guidance imply another.
 
 ---
 
@@ -380,7 +407,7 @@ If a specific example catches interest, use Chrome MCP for detailed inspection:
 1. mcp__claude-in-chrome__navigate to the specific site URL
 2. mcp__claude-in-chrome__computer action=screenshot
 3. Analyze: typography, colors, spacing, layout patterns
-4. Report specific values observed (font names, hex colors, spacing)
+4. Report specific values observed (font names, color relationships, spacing) and translate them into Tailwind-friendly tokens/utilities
 ```
 
 **Note:** WebFetch provides quick overview; Chrome MCP provides detailed visual inspection. Use both strategically.
@@ -406,14 +433,16 @@ Using the font recommendations from `frontend-design.md`:
 **Never use:** Roboto, Arial, system-ui defaults, Instrument Serif (AI slop)
 
 ### Color Palette
-- **Background:** [specific hex, e.g., #0a0a0a]
-- **Surface/card:** [specific hex]
-- **Text primary:** [specific hex]
-- **Text secondary:** [specific hex]
-- **Accent:** [specific hex]
-- **Accent hover:** [specific hex]
+- **Define in Tailwind v4 `@theme` with OKLCH, not hex-only values**
+- **Background token:** [e.g., `--color-gray-950: oklch(...)`]
+- **Surface token:** [e.g., `--color-gray-900: oklch(...)`]
+- **Text primary token:** [e.g., `--color-gray-50: oklch(...)`]
+- **Text secondary token:** [e.g., `--color-gray-400: oklch(...)`]
+- **Accent token:** [e.g., `--color-brand-500: oklch(...)`]
+- **Accent hover token:** [e.g., `--color-brand-600: oklch(...)`]
 
 **Never use:** Purple-to-blue gradients (AI cliché)
+**Never use:** Hex-only palettes with no OKLCH/Tailwind token mapping
 
 ### Spacing System
 Define the scale being used:
@@ -435,6 +464,16 @@ Beyond basic layout, make deliberate choices about:
 - **Where animation is used:** [specific locations]
 - **Animation style:** [e.g., ease-out for enters, springs for interactive]
 - **Duration range:** [e.g., 150-300ms]
+
+### UI System Snapshot
+Capture the reusable system that implementation should preserve:
+- **Depth model:** [borders-only / subtle shadows / layered surfaces]
+- **Surface ladder:** [canvas → surface → raised → overlay]
+- **Radius scale:** [e.g., 4px / 8px / 12px]
+- **Control heights:** [e.g., 32px compact, 40px default, 48px prominent]
+- **Primary button pattern:** [height, padding, radius, fill/border treatment, core Tailwind utility shape]
+- **Card/panel pattern:** [padding, border/shadow, radius, core Tailwind utility shape]
+- **Input/select pattern:** [height, padding, border/background treatment, core Tailwind utility shape]
 
 ---
 
@@ -481,14 +520,14 @@ If WireText is used:
 ### Typography
 | Element | Before | After | Rule Reference |
 |---------|--------|-------|----------------|
-| h1 | 24px Inter regular | 48px Instrument Serif bold | typography.md: display hierarchy |
-| body | 14px system-ui | 16px/1.6 DM Sans | typography.md: body readability |
+| h1 | `text-2xl font-normal` | `text-5xl font-semibold tracking-tight` | typography.md: display hierarchy |
+| body | `text-sm font-normal` | `text-base/7 font-normal` | typography.md: body readability |
 
 ### Colors
 | Element | Before | After | Rule Reference |
 |---------|--------|-------|----------------|
-| background | white #fff | warm off-white #faf9f7 | colors.md: warmth |
-| accent | none | coral #ff6b4a | colors.md: accent strategy |
+| background | `bg-white` | `bg-gray-50` backed by `--color-gray-50: oklch(...)` | colors.md: warmth |
+| accent | none | `bg-brand-500 hover:bg-brand-600` backed by `--color-brand-500/600` | colors.md: accent strategy |
 
 ### Spacing
 | Element | Before | After | Rule Reference |
@@ -509,7 +548,7 @@ If WireText is used:
 **Rules for change specs:**
 - Every change references a rule from the interface rules
 - Changes must be **substantial**, not tweaks
-- Specific values, not vague descriptions
+- Specific values, tokens, and Tailwind utility shapes, not vague descriptions
 
 **Self-check:**
 - [ ] At least 3 typography changes?
@@ -540,17 +579,17 @@ If WireText is used:
 ## Color Palette
 | Role | Value | Usage |
 |------|-------|-------|
-| Background | #0a0a0a | Page background |
-| Surface | #1a1a1a | Cards, panels |
-| Text primary | #fafafa | Headings, body |
-| Text secondary | #a1a1a1 | Labels, hints |
-| Accent | #f59e0b | CTAs, links |
-| Accent hover | #fbbf24 | Hover states |
+| Background | `--color-gray-950: oklch(...)` | Page background |
+| Surface | `--color-gray-900: oklch(...)` | Cards, panels |
+| Text primary | `--color-gray-50: oklch(...)` | Headings, body |
+| Text secondary | `--color-gray-400: oklch(...)` | Labels, hints |
+| Accent | `--color-brand-500: oklch(...)` | CTAs, links |
+| Accent hover | `--color-brand-600: oklch(...)` | Hover states |
 
 ## Spacing
-- Base unit: 8px
-- Component padding: 16px (small), 24px (medium), 32px (large)
-- Section gaps: 48px (tight), 64px (normal), 96px (generous)
+- Base unit: 4px
+- Tailwind spacing scale: `p-4` / `p-6` / `p-8`, `gap-4` / `gap-6` / `gap-8`
+- Section gaps: `gap-12` (tight), `gap-16` (normal), `gap-24` (generous)
 
 ## Motion
 - Page transitions: fade, 200ms ease-out
@@ -567,8 +606,28 @@ If WireText is used:
 
 ## Implementation Notes
 - [Any specific technical considerations]
+- Tailwind-first implementation: express decisions as `@theme` tokens plus utilities
 - [Component library preferences]
 - [Animation library: CSS-only vs motion/react]
+- Avoid bespoke CSS when utilities/tokens are sufficient; extract components before reaching for custom styling
+
+## UI System Snapshot
+
+### Tokens
+| Token | Value | Usage |
+|------|-------|-------|
+| Depth model | borders-only | Global surface strategy |
+| Surface ladder | canvas / panel / raised / overlay | Layering hierarchy |
+| Radius scale | 4px / 8px / 12px | Controls, cards, dialogs |
+| Control heights | 32px / 40px / 48px | Dense, default, prominent controls |
+
+### Canonical Patterns
+| Pattern | Spec | Usage |
+|---------|------|-------|
+| Primary button | `h-10 px-4 rounded-lg bg-brand-500 hover:bg-brand-600` | Main CTA |
+| Default card | `rounded-xl border border-gray-200 p-5` | Content container |
+| Input/select | `h-10 px-3 rounded-lg border border-gray-300` | Form controls |
+| Dense data row | `h-11 px-3 tabular-nums border-b border-gray-200` | Tables/lists |
 
 ## Anti-Patterns to Avoid
 - [Specific things NOT to do for this design]
@@ -606,6 +665,33 @@ Every interactive element must address all 8 states:
 
 ---
 
+## Phase 6.5: Critique the Draft
+
+Before handoff, critique the draft like a design lead reviewing a first pass. Do this even if the wireframe and change spec already look coherent.
+
+### Composition
+- Does the layout have rhythm, or is every block the same weight and spacing?
+- Are proportions saying something intentional about priority?
+- Is there a clear focal point for the primary task?
+
+### Craft
+- Is hierarchy carried by weight, spacing, and contrast, not size alone?
+- Do surfaces whisper structure without relying on harsh lines?
+- Are interactive elements visibly alive across hover, focus, and press?
+
+### Content
+- Do labels, examples, and sample data tell one coherent product story?
+- Would a real user in this product domain recognize this as plausible?
+
+### Structure
+- Are there any “looks right but held together with tape” decisions in the planned implementation?
+- Does the UI system snapshot actually match the wireframe and change spec, or is it generic filler?
+- Could `ui-builder` implement this cleanly with Tailwind tokens/utilities, or did the spec drift into generic CSS language?
+
+If any answer is weak, revise the design doc before proceeding. Do not hand off a “correct enough” draft when the weakness is already visible in the spec.
+
+---
+
 ## Phase 7: Verify Against Checklist
 
 **Run the Design Review Checklist from frontend-design.md:**
@@ -621,6 +707,7 @@ Every interactive element must address all 8 states:
 - [ ] Typography is deliberate
 - [ ] At least one memorable element
 - [ ] Layout has unexpected decisions
+- [ ] UI system snapshot is specific enough to keep buttons/cards/inputs consistent
 - [ ] Complexity guardrails defined (max nesting, class budget)
 - [ ] All 8 interactive states specified
 - [ ] Contrast requirements met (4.5:1 body, 3:1 large/UI)
@@ -693,7 +780,7 @@ From `frontend-design.md`:
 
 **🚫 Never use sparkles/stars to denote AI features.** Overused, meaningless, dated.
 
-**🚫 Never propose conceptual themes with metaphors.** No "Direction: Darkroom / Metaphor: Photo emerging from developer bath". Instead: "Dark background (#0a0a0a) with warm red accents (#dc2626)."
+**🚫 Never propose conceptual themes with metaphors.** No "Direction: Darkroom / Metaphor: Photo emerging from developer bath". Instead: "Use `bg-gray-950` with `text-gray-50` and restrained `brand-600` accents backed by `@theme` tokens."
 
 **🚫 Never use these:**
 - Roboto/Arial/system-ui defaults
@@ -718,10 +805,12 @@ Design is complete when:
 - [ ] Current UI was screenshotted (if redesigning)
 - [ ] Aesthetic direction established with SPECIFIC values
 - [ ] Typography selected from recommended fonts
-- [ ] Color palette defined with hex values
+- [ ] Color palette defined as Tailwind v4 `@theme` tokens in OKLCH
 - [ ] Spacing system documented
+- [ ] UI system snapshot documented with reusable patterns
 - [ ] Wireframes created and approved
 - [ ] Design document saved to docs/arc/specs/
+- [ ] Critique pass completed and revisions applied
 - [ ] Red flag checklist passed (zero red flags)
 - [ ] Progress journal updated
 </success_criteria>
@@ -729,7 +818,7 @@ Design is complete when:
 ## Interop
 
 - Produces design doc consumed by **/arc:implement**
-- Reads/creates **docs/design-context.md** for persistent project-wide aesthetic decisions
+- Reads/creates **docs/design-context.md** for persistent project-wide aesthetic decisions and reusable UI patterns
 - Can invoke **web-design-guidelines** skill for compliance review (if available)
 - Can invoke **vercel-composition-patterns** skill for component architecture review (if available)
 - Uses **WireText MCP** for low-fidelity wireframes when available

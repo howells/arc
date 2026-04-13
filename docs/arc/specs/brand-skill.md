@@ -27,7 +27,7 @@ A new `/arc:brand` skill that guides users through brand discovery and produces 
 /arc:brand (visual identity system) ←→ /arc:design (feature UI)
     ↓                                      ↓
 docs/brand-system.md                  docs/design-context.md
-+ tokens + assets                     + wireframes + specs
++ tokens + assets                     + wireframes + specs + reusable UI patterns
 ```
 
 - `/arc:brand` establishes identity: who you are visually
