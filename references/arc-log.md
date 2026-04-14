@@ -87,3 +87,5 @@ Look for:
 - `/arc:tidy` (utility)
 - `/arc:rules` (one-time setup)
 - `/arc:naming` (standalone)
+
+/arc:commit — 2 commits (`feat(web): clarify backend completion dashboard`, `feat(scrape): harden winners graph ingestion`)
