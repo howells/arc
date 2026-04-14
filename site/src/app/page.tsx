@@ -338,9 +338,7 @@ export default function ArcPage() {
                   <td className="py-2 pr-4 font-mono text-neutral-800">
                     Claude in Chrome
                   </td>
-                  <td className="py-2">
-                    /arc:design, /arc:responsive
-                  </td>
+                  <td className="py-2">/arc:design, /arc:responsive</td>
                 </tr>
                 <tr className="border-neutral-100 border-b">
                   <td className="py-2 pr-4 font-mono text-neutral-800">
