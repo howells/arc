@@ -114,6 +114,19 @@ Elegance = executing the vision fully, not hedging.
 
 **If you catch yourself making any of these choices, stop and reconsider.**
 
+### Concrete AI Slop Checks
+
+When reviewing or building, scan for these specific code-level tells. See `rules/interface/design.md` → "AI Slop Detection" for the full table.
+
+- `transition-all` → specify exact properties
+- `bg-gradient-to-*` used decoratively → justify or remove
+- `shadow-[0_0_*]` glow effects → real UIs use shadows for depth, not glow
+- Same `rounded-*` / padding / shadow on every card → vary visual weight
+- Placeholder text still present (`"Lorem ipsum"`, `"Your text here"`)
+- Emoji used as section icons → use actual iconography
+- `blur-*` > `blur-xl` on decorative elements → performance cost, no purpose
+- Hero → Features → Testimonials → CTA landing page formula → break the mold
+
 ## Design Review Checklist
 
 Use this checklist when reviewing UI implementations.

@@ -1,5 +1,39 @@
 # Interface: Content & Accessibility
 
+## HTML Antipatterns (WCAG Quick Reference)
+
+Common patterns that fail accessibility, mapped to WCAG success criteria. Use as a grep-friendly checklist.
+
+### Critical (Must Fix)
+
+| Pattern | WCAG | What to grep for |
+|---------|------|------------------|
+| Images without alt | 1.1.1 | `<img>` missing `alt` attribute |
+| Icon-only buttons | 4.1.2 | `<button>` containing only SVG/icon, no `aria-label` |
+| Unlabeled form inputs | 1.3.1 | `<input>`, `<select>`, `<textarea>` without `<label>` or `aria-label` |
+| Non-semantic click handlers | 2.1.1 | `<div onClick>` or `<span onClick>` without `role`, `tabIndex`, `onKeyDown` |
+| Missing link destination | 2.1.1 | `<a>` with only `onClick`, no `href` |
+| `aria-hidden` on focusable | 4.1.2 | `aria-hidden="true"` on element with `tabIndex` or native focusability |
+
+### Serious (Should Fix)
+
+| Pattern | WCAG | What to grep for |
+|---------|------|------------------|
+| Focus outline removed | 2.4.7 | `outline-none` or `outline: none` without `focus-visible:ring` replacement |
+| Missing keyboard handlers | 2.1.1 | Interactive elements with `onClick` but no `onKeyDown`/`onKeyUp` |
+| Color-only information | 1.4.1 | Status/error indicated by color alone (no icon or text) |
+| Touch target too small | 2.5.5 | Clickable elements smaller than 44×44px |
+| Heading hierarchy skipped | 1.3.1 | `h1` followed by `h3` (skipping `h2`) |
+
+### Moderate (Consider Fixing)
+
+| Pattern | WCAG | What to grep for |
+|---------|------|------------------|
+| Positive tabIndex | 2.4.3 | `tabIndex` > 0 (disrupts natural tab order) |
+| Role without required attrs | 4.1.2 | `role="button"` without `tabIndex="0"` |
+| Placeholder-only labels | 1.3.1 | `<input placeholder="...">` without visible `<label>` |
+| Auto-playing media | 1.4.2 | `<video autoPlay>` or `<audio autoPlay>` without pause control |
+
 ## ARIA
 
 - NEVER: Use `aria-hidden="true"` on focusable elements
