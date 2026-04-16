@@ -11,6 +11,10 @@ UI/UX guidelines for building polished, accessible interfaces.
 | [spacing.md](spacing.md) | Spacing system, layout methodology |
 | [typography.md](typography.md) | Type hierarchy and readability |
 | [layout.md](layout.md) | Layout patterns |
+| [tailwind-authoring.md](tailwind-authoring.md) | Tailwind class-level authoring discipline |
+| [buttons.md](buttons.md) | Button sizing, hierarchy, focus, touch targets |
+| [surfaces.md](surfaces.md) | Surface hierarchy, cards, dividers |
+| [sections.md](sections.md) | Section composition and cross-section consistency |
 | [forms.md](forms.md) | Form design and validation |
 | [interactions.md](interactions.md) | User interaction patterns |
 | [animation.md](animation.md) | Motion and transitions |
@@ -39,7 +43,9 @@ UI/UX guidelines for building polished, accessible interfaces.
 2. Check `colors.md` for palette rules
 3. Check `spacing.md` for spacing methodology
 4. Check `typography.md` for text styling
-5. Check `animation.md` before adding motion
+5. Check `tailwind-authoring.md` before composing class strings
+6. Check `buttons.md` / `surfaces.md` / `sections.md` when those patterns appear
+7. Check `animation.md` before adding motion
 
 ### Accessibility Minimums
 
@@ -47,4 +53,3 @@ UI/UX guidelines for building polished, accessible interfaces.
 - 3:1 contrast for large text
 - Never rely on color alone
 - Honor `prefers-reduced-motion`
-

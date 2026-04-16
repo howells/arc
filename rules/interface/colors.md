@@ -53,6 +53,7 @@ Lightness 95% + saturation 80% → maintains vibrancy
 - Cool greys (blue): Professional, tech-forward
 - Warm greys (yellow/orange): Friendly, inviting
 - NEVER: Mix warm and cool greys in same interface
+- MUST NOT: Default to `gray-*` or `slate-*` for product neutrals. Prefer `zinc-*` or `neutral-*` unless an existing system already committed elsewhere.
 
 ## Semantic Colors
 
@@ -218,5 +219,6 @@ Note chroma curve: peaks at 500 (0.15), reduces toward both extremes. This keeps
 - NEVER: Define colors in hex without OKLCH equivalent
 - NEVER: Create shades by adjusting only lightness (also adjust chroma and hue)
 - NEVER: Multiple primary colors (dilutes hierarchy)
+- NEVER: Default to indigo as the brand or accent color unless the project already uses it or the user asked for it
 - NEVER: Invent colors on the fly — use defined palette
 - NEVER: Heavy alpha/transparency as a substitute for proper palette shades

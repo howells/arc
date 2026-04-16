@@ -87,6 +87,10 @@ Load rules relevant to the implementation:
 | `rules/interface/spacing.md` | When reviewing layout/spacing |
 | `rules/interface/typography.md` | When reviewing text styling |
 | `rules/interface/layout.md` | When reviewing layout structure |
+| `rules/interface/tailwind-authoring.md` | When reviewing Tailwind-heavy implementations |
+| `rules/interface/buttons.md` | When reviewing CTAs or action clusters |
+| `rules/interface/surfaces.md` | When reviewing cards, panels, and dividers |
+| `rules/interface/sections.md` | When reviewing page rhythm across sections |
 | `rules/interface/animation.md` | When reviewing motion/transitions |
 | `rules/interface/forms.md` | When reviewing forms |
 | `rules/interface/interactions.md` | When reviewing interactive elements |
@@ -114,7 +118,7 @@ Load rules relevant to the implementation:
 - Are empty states designed, or just blank?
 - Are borders overused where spacing/shadows could work?
 
-**UX Laws (from `${ARC_ROOT}/references/ux-laws.md`):**
+**UX Laws (from the required reading):**
 - **Fitts's Law** — Are primary actions large and prominent? Are destructive actions small and distant?
 - **Hick's Law** — Are there too many options presented at once? Should progressive disclosure be used?
 - **Gestalt Proximity** — Is spacing between related items obviously tighter than between unrelated items?
@@ -137,8 +141,7 @@ Read the core references and relevant interface rules listed above. This is non-
 
 ### 2. Check for Design Doc
 
-Search for an existing design direction document:
-- `docs/arc/specs/design-*.md`
+Search for an existing design direction document under `docs/arc/specs/`.
 
 If one exists, **review against the documented decisions** — the implementation should match the design intent. Flag drift between the doc and the implementation.
 
@@ -161,11 +164,11 @@ If no browser automation is available, ask for screenshots and review the code p
 
 ### 4. Apply the Design Review Checklist
 
-Run through the **Red / Yellow / Green Flags** checklist from `frontend-design.md`. Do not reproduce the checklist inline — read it from the file.
+Run through the **Red / Yellow / Green Flags** checklist from the required reading. Do not reproduce the checklist inline.
 
 ### 5. Evaluate UX Fundamentals
 
-Apply principles from `design-philosophy.md` and the interface rules:
+Apply the principles from the required reading and the interface rules:
 
 **Hierarchy** — Is it clear what's primary, secondary, tertiary? Is size the only tool being used, or are weight, color, and spacing also contributing?
 

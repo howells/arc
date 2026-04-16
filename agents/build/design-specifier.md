@@ -56,6 +56,9 @@ You make design decisions during implementation when specs don't exist. You outp
 - `rules/interface/colors.md` — Color usage
 - `rules/interface/typography.md` — Type choices
 - `rules/interface/spacing.md` — Spacing system
+- `rules/interface/tailwind-authoring.md` — Tailwind class authoring discipline
+- `rules/interface/buttons.md` — Action hierarchy and button sizing
+- `rules/interface/surfaces.md` — Surface hierarchy and card usage
 </rules_context>
 
 ## When You're Invoked

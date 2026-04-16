@@ -1,21 +1,24 @@
 ---
 name: design
 description: |
-  Create distinctive, non-generic UI designs with aesthetic direction and wireframes.
+  Create distinctive, non-generic UI designs with aesthetic direction and wireframes,
+  or polish existing UI code after implementation.
   Use when asked to "design the UI", "create a layout", "wireframe this", or when building
-  UI that should be memorable rather than generic. Avoids AI slop patterns.
+  UI that should be memorable rather than generic. Also handles "clean this up",
+  "componentize this", and other post-implementation polish work. Avoids AI slop patterns.
 license: MIT
 metadata:
   author: howells
 website:
   order: 8
   desc: Visual design direction
-  summary: Establish the visual identity for your UI—colors, typography, spacing, tone, reusable Tailwind patterns, and critique loops. Comes with opinionated references to avoid generic AI aesthetics.
+  summary: Visual direction plus code polish. Establish UI identity, reusable Tailwind patterns, critique loops, and post-implementation cleanup guidance.
   what: |
-    Design walks you through visual decisions: What's the tone? What makes this memorable? It checks for persistent design context (docs/design-context.md) so brand decisions carry across sessions. It can research real-world examples from Siteinspire and Mobbin to inform your direction. From there it produces a design direction document—Tailwind v4 `@theme` color tokens in OKLCH, typography scale, spacing system, reusable UI patterns, and wireframes for key screens. It draws from built-in references on font pairing, component patterns, Tailwind usage, and animation, then runs a critique pass so the draft gets sharpened before implementation. As you build, it can verify the rendered UI against intent with browser screenshots.
+    Design now has explicit mode detection. In design mode it walks through visual decisions, references persistent design context, researches examples, and produces a design direction document for implementation. In polish mode it tightens UI code after implementation: extracting reusable pieces, deduplicating patterns, and cleaning up Tailwind class authoring without changing the product direction.
   why: |
     AI-generated UI tends toward the same safe choices—the same gradients, the same card layouts, the same hero sections. Design fights this by forcing you to make distinctive choices upfront and documenting them. The references help you avoid common pitfalls and give the AI better taste.
   decisions:
+    - Mode-aware. Full design flow for new UI, focused polish flow for cleanup.
     - Opinionated references built in. Font choices, spacing scales, animation patterns—not starting from scratch.
     - WireText when available, ASCII when not. Focus on structure before fidelity.
     - Visual verification via screenshots. Catches when implementation drifts from intent.
@@ -87,9 +90,27 @@ ui-builder or figma-builder (builds it)
 designer (reviews for AI slop)
 ```
 
-## Phase 0: Load References & Design Context (MANDATORY)
+## Mode Detection
 
-**You MUST read these files before proceeding. Do not skip this step.**
+Decide which path applies before loading the heavy reference set.
+
+**Design mode (default):**
+- The user wants visual direction, layout exploration, wireframes, or a design doc.
+
+**Polish mode:**
+- The user asks to clean up, componentize, deduplicate, organize, or polish existing UI code.
+
+**Component fast-path:**
+- The user is designing a single component or small UI fragment rather than a page or product surface.
+- Use targeted rules and skip the heavier reconnaissance / research flow.
+
+Announce the chosen mode before continuing.
+
+## Phase 0: Load References & Design Context
+
+In full design mode, read the full reference set below. The component fast-path overrides this and loads only the relevant targeted rules.
+
+**In full design mode, you MUST read these files before proceeding.**
 
 <required_reading>
 **Read ALL of these using the Read tool:**
@@ -105,6 +126,10 @@ designer (reviews for AI slop)
 
 **Then load interface rules:**
 9. `rules/interface/index.md` — Interface rules index
+10. `rules/interface/tailwind-authoring.md` — Tailwind class-level discipline
+11. `rules/interface/buttons.md` — Button sizing and hierarchy
+12. `rules/interface/surfaces.md` — Surface hierarchy and card usage
+13. `rules/interface/sections.md` — Page section composition
 
 **And relevant domain rules based on what you're designing:**
 - `rules/interface/design.md` — Visual principles
@@ -206,6 +231,15 @@ Check for related prior design work and aesthetic decisions.
 
 ---
 
+## Phase 0.5: Component Fast-Path
+
+If the request is for a single component rather than a page or product flow:
+- Load only the 2-3 relevant rules files for that component type
+- Skip visual reconnaissance unless the component already exists and is being redesigned
+- Skip external inspiration research
+- Compress direction gathering to 1-2 questions
+- Continue with wireframe -> spec -> critique -> handoff as normal
+
 ## Phase 1: Visual Reconnaissance
 
 **Before designing anything, see what exists.**
@@ -286,6 +320,14 @@ Options:
 - Each route (/design-1, /design-2, etc.) gets a completely different aesthetic
 - Vary: color palette, typography, layout structure, tone, spatial composition
 - Don't just tweak—make them *unrecognizable* from each other
+- Write a style definition brief for each direction before building it:
+  - Layout structure
+  - Typography character
+  - Color direction
+  - Spacing strategy
+  - Surface treatment
+  - Shape language
+  - Personality
 - After building all 5, ask user which direction resonates
 - Then proceed with full design doc for the chosen direction
 
@@ -828,5 +870,31 @@ Design is complete when:
 - References feed into implementation to maintain design fidelity
 
 ### Related Skills
-After implementation:
-- **/arc:harden** — Production resilience (errors, overflow, i18n)
+## Polish Workflow
+
+Use this when the request is to clean up UI code after implementation rather than create new visual direction.
+
+### P.1: Scan Current State
+- Identify large components that should be split
+- Identify repeated shells, heading groups, buttons, and form controls
+- Identify components that bake in margins instead of accepting layout from the caller
+- Search for existing shared components before proposing new ones
+
+### P.2: Extract Components
+- Break large page components into smaller reusable pieces
+- Consolidate duplicated form controls and repeated section wrappers
+- Ensure every reusable component accepts `className`
+
+### P.3: Clean Tailwind Classes
+- Verify `npx @tailwindcss/cli canonicalize --help`
+- If available, canonicalize repeated or messy class strings
+- If unavailable, clean manually using `tailwind-authoring.md`
+
+### P.4: Verify
+- No broken imports
+- No duplicate component names
+- Tests and lint still pass
+
+## Progress Updates
+
+During longer design sessions, post a one-line status update before each major phase so the user can follow the flow.

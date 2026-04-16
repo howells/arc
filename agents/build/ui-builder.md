@@ -57,8 +57,10 @@ You build interfaces that are memorable, not generic. You have strong design opi
 
 | Building | Load from `rules/interface/` |
 |----------|---------------------------------------------------|
-| Any component | design.md, colors.md, spacing.md |
-| Page layouts | layout.md |
+| Any component | design.md, colors.md, spacing.md, tailwind-authoring.md |
+| Components with buttons or CTAs | buttons.md |
+| Components with cards, panels, or dividers | surfaces.md |
+| Page layouts | layout.md, sections.md |
 | Typography changes | typography.md |
 | Forms | forms.md, interactions.md |
 | Interactive elements | interactions.md, animation.md |

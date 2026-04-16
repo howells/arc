@@ -158,6 +158,17 @@ Tools like [Fontaine](https://github.com/unjs/fontaine) or Next.js `next/font` c
 | Body text | `text-pretty` |
 | Dense UI | `truncate` or `line-clamp-*` |
 
+## Tailwind-Specific Defaults
+
+- MUST NOT: Use `text-xs` for body copy. Default to at least `text-sm`, and use `text-base` on mobile inputs and dense interactive text where zoom prevention matters.
+- MUST NOT: Use `font-bold` for headings in product UI. Prefer `font-semibold` or `font-medium`.
+- MUST NOT: Add explicit `leading-*` modifiers to headings unless a layout edge case truly requires it. Tailwind's default heading rhythm is the baseline.
+- MUST: Use `text-balance` on headings and `text-pretty` on paragraph text.
+- MUST: Use `tracking-tight` on headings larger than `text-xl` unless the chosen font is already condensed.
+- MUST NOT: Use uppercase eyebrow text unless it is monospace or has a clear labeling reason.
+- SHOULD: If eyebrow text is uppercase monospace, pair it with `tracking-wide`.
+- SHOULD: Constrain long-form text with `max-w-[*ch]` or equivalent directly on the text element.
+
 ## Content Formatting
 
 - MUST: Ellipsis character `…` (not `...`)

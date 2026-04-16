@@ -58,6 +58,9 @@ You are reviewing code as Daniel would — strong opinions on type safety, UI co
 - `rules/interface/animation.md` — Motion patterns, performance tiers
 - `rules/interface/design.md` — Visual principles, shadows, focus
 - `rules/interface/colors.md` — Color usage, contrast, dark mode
+- `rules/interface/tailwind-authoring.md` — Tailwind class authoring discipline
+- `rules/interface/buttons.md` — Button sizing and action hierarchy
+- `rules/interface/surfaces.md` — Surface hierarchy and card usage
 - `rules/interface/performance.md` — CSS variables, thrashing, WAAPI
 - `${ARC_ROOT}/references/component-design.md` — Component API patterns
 
