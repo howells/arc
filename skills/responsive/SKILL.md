@@ -74,19 +74,60 @@ If Chrome MCP is unavailable:
 - fall back to Playwright if browser automation must be scripted directly
 - only stop if no browser-capable path is available
 
-### Step 2: Confirm Dev Server
+### Step 2: Detect Dev Server URL
+
+**Do not prompt with hardcoded port options — detect first.**
+
+Read `package.json` and resolve the dev URL:
+
+1. Read root `package.json`. Inspect `scripts.dev`.
+2. If `dev` delegates to a workspace (e.g. `pnpm --dir site dev`, `pnpm -C apps/web dev`, `turbo run dev --filter=web`, `npm run dev --workspace=...`), follow the reference and read that workspace's `package.json`.
+3. Glob for `.env`, `.env.local`, `.env.development`. Look for `PORT=`.
+4. If still unresolved, check `next.config.*`, `vite.config.*`, `astro.config.*` for an explicit port.
+
+Scan the leaf `scripts.dev` for one of these patterns (first match wins):
+
+| Pattern | Example | Port |
+|---------|---------|------|
+| `--port N` / `-p N` | `next dev --port 4000` | `4000` |
+| `${PORT:-N}` shell fallback | `next dev --port ${PORT:-26000}` | `26000` (unless `$PORT` is set in `.env*`) |
+| `PORT=N` inline | `PORT=8080 next dev` | `8080` |
+| `PORT=N` in `.env*` | `PORT=3005` in `.env.local` | `3005` |
+| Vite default | `vite` with no port flag | `5173` |
+| Astro default | `astro dev` with no port flag | `4321` |
+| SvelteKit default | `vite dev` (kit) | `5173` |
+| Next default | `next dev` with no port flag | `3000` |
+| Remix default | `remix dev` | `3000` |
+
+`.env*` `PORT` values override `${PORT:-N}` fallbacks.
+
+**If exactly one dev URL was detected:**
+Announce it and navigate directly:
+
+> "Using http://localhost:26000 (from `site/package.json` → `next dev --port ${PORT:-26000}`)."
+
+**If multiple candidates** (monorepo with several dev servers):
 
 ```
 AskUserQuestion:
-  question: "What's your dev server URL?"
+  question: "Which dev server should I audit?"
   header: "Dev server"
   options:
-    - label: "localhost:3000"
-      description: "Default Next.js dev server"
-    - label: "localhost:5173"
-      description: "Default Vite dev server"
-    - label: "localhost:4321"
-      description: "Default Astro dev server"
+    - label: "[detected URL 1]"
+      description: "[source]"
+    - label: "[detected URL 2]"
+      description: "[source]"
+```
+
+**If nothing could be detected:**
+
+```
+AskUserQuestion:
+  question: "I couldn't detect a dev URL. What should I audit?"
+  header: "Dev server"
+  options:
+    - label: "Enter a URL"
+      description: "I'll type it in"
 ```
 
 Then verify the server is running with the selected browser tool:
@@ -96,7 +137,7 @@ mcp__claude-in-chrome__navigate to the dev server URL
 mcp__claude-in-chrome__computer action=screenshot
 ```
 
-If the page doesn't load, tell the user to start their dev server and try again.
+If the page doesn't load, tell the user to start their dev server and try again. Do not silently fall back to `localhost:3000` — surface the failure.
 
 ### Step 3: Load Design Context
 

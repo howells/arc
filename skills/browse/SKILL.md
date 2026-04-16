@@ -60,7 +60,25 @@ Read a fixed set of files to understand the app's intent. Do NOT read the entire
 2. **Recent changes** — `git log --oneline -10`
 3. **Design tokens** — Glob for `tailwind.config.*`, `theme.ts`, CSS custom properties files
 4. **Design docs** — Glob for `docs/arc/specs/*.md`
-5. **Stack** — Read `package.json` (dependencies section only)
+5. **Stack + dev URL** — Read `package.json` (dependencies **and** `scripts.dev`). If the `dev` script delegates to a workspace (e.g. `pnpm --dir site dev`, `pnpm -C apps/web dev`, `turbo run dev --filter=web`, `npm run dev --workspace=...`), follow the reference and also read that workspace's `package.json`. Glob for `.env`, `.env.local`, `.env.development` and look for `PORT=`. Also check `next.config.*`, `vite.config.*`, `astro.config.*` for an explicit port.
+
+**Extract the dev URL:**
+
+Scan the leaf `scripts.dev` for one of these patterns (first match wins):
+
+| Pattern | Example | Port |
+|---------|---------|------|
+| `--port N` / `-p N` | `next dev --port 4000` | `4000` |
+| `${PORT:-N}` shell fallback | `next dev --port ${PORT:-26000}` | `26000` (unless `$PORT` is set in `.env*`) |
+| `PORT=N` inline | `PORT=8080 next dev` | `8080` |
+| `PORT=N` in `.env*` | `PORT=3005` in `.env.local` | `3005` |
+| Vite default | `vite` with no port flag | `5173` |
+| Astro default | `astro dev` with no port flag | `4321` |
+| SvelteKit default | `vite dev` (kit) | `5173` |
+| Next default | `next dev` with no port flag | `3000` |
+| Remix default | `remix dev` | `3000` |
+
+If `.env*` sets `PORT`, that overrides `${PORT:-N}` fallbacks. Resolve accordingly.
 
 **Synthesize into a pinned summary (write this out explicitly):**
 
@@ -71,6 +89,7 @@ Read a fixed set of files to understand the app's intent. Do NOT read the entire
 - **Recent changes:** [What was built/changed in the last 10 commits]
 - **Design system:** [Spacing unit, color approach, typography stack]
 - **Stack:** [Framework, styling, key libraries]
+- **Dev URL:** [Resolved from package.json / .env / config — e.g. http://localhost:26000]
 ```
 
 This summary stays in scope for the entire session. Discard the raw file content — the summary is what you reference.
@@ -139,18 +158,38 @@ If agent-browser:
 
 ### Step 2: Confirm Target URL
 
+Use the **Dev URL** resolved in Phase 1. Do not present hardcoded port options — this is a skill violation.
+
+**If exactly one dev URL was detected:**
+Announce it and navigate directly:
+
+> "Browsing http://localhost:26000 (from `site/package.json` → `next dev --port ${PORT:-26000}`)."
+
+**If multiple candidates were detected** (monorepo with several dev servers, or `.env` overrides an inline port differently):
+
 ```
 AskUserQuestion:
-  question: "What URL should I browse?"
+  question: "Which dev server should I browse?"
   header: "URL"
   options:
-    - label: "localhost:3000"
-      description: "Default Next.js dev server"
-    - label: "localhost:5173"
-      description: "Default Vite dev server"
+    - label: "[detected URL 1]"
+      description: "[source — e.g. apps/web/package.json]"
+    - label: "[detected URL 2]"
+      description: "[source — e.g. apps/admin/package.json]"
 ```
 
-Navigate to the URL. If the page doesn't load, tell the user to start their dev server and try again.
+**If no dev URL could be detected** (no `dev` script, unusual command, static site):
+
+```
+AskUserQuestion:
+  question: "I couldn't detect a dev URL. What should I browse?"
+  header: "URL"
+  options:
+    - label: "Enter a URL"
+      description: "I'll type it in"
+```
+
+Navigate to the URL. If the page doesn't load, tell the user to start their dev server and try again. Do not silently fall back to `localhost:3000` — surface the failure.
 
 ## Phase 4: The Session
 
