@@ -26,6 +26,7 @@ arc/
 │   ├── letsgo/SKILL.md     # 8. Ship: production readiness
 │   ├── harden/SKILL.md     # Refine: production resilience
 │   ├── naming/SKILL.md     # Cross-cutting: project naming
+│   ├── browse/SKILL.md     # Cross-cutting: expert browser experience evaluation
 │   ├── responsive/SKILL.md # Cross-cutting: mobile responsive audit
 │   ├── seo/SKILL.md        # Cross-cutting: SEO audit
 │   ├── audit/SKILL.md      # Cross-cutting: codebase audit
@@ -71,6 +72,7 @@ All commands use the `/arc:` namespace prefix. The typical workflow:
 7. SHIP       /arc:letsgo     → Production readiness checklist
 
 CROSS-CUTTING (available anytime):
+              /arc:browse     → Expert browser experience evaluation
               /arc:naming     → Generate and validate project names
               /arc:responsive → Mobile responsive audit & fix
               /arc:seo        → Deep SEO audit
