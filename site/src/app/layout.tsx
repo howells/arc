@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { mono } from "@/lib/fonts";
+import { mono, sans } from "@/lib/fonts";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://usearc.dev"),
@@ -28,11 +28,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html className={`${mono.variable} min-h-svh touch-manipulation`} lang="en">
-      <head>
-        <link href="https://rsms.me/" rel="preconnect" />
-        <link href="https://rsms.me/inter/inter.css" rel="stylesheet" />
-      </head>
+    <html
+      className={`${sans.variable} ${mono.variable} min-h-svh touch-manipulation`}
+      lang="en"
+    >
       <body className="isolate break-words bg-neutral-100 text-neutral-950 antialiased">
         {children}
       </body>

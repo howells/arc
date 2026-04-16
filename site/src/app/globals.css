@@ -6,7 +6,7 @@
 
 @layer base {
 	:root {
-		--font-sans: "InterVariable", "Inter", system-ui, sans-serif;
+		--font-sans: var(--font-inter), system-ui, sans-serif;
 		--font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
 		--color-accent: #5A7B7B;
 		/* Baseline grid: text-sm (14px) × leading-relaxed (1.625) = 22.75px */

@@ -1,4 +1,5 @@
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import type { NextConfig } from "next";
 
 const securityHeaders = [
@@ -31,8 +32,8 @@ const securityHeaders = [
     value: [
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-      "style-src 'self' 'unsafe-inline' https://rsms.me",
-      "font-src 'self' https://rsms.me",
+      "style-src 'self' 'unsafe-inline'",
+      "font-src 'self'",
       "img-src 'self' data: https:",
       "connect-src 'self'",
       "frame-ancestors 'none'",
@@ -40,9 +41,11 @@ const securityHeaders = [
   },
 ];
 
+const SITE_ROOT = dirname(fileURLToPath(import.meta.url));
+
 const nextConfig: NextConfig = {
   turbopack: {
-    root: resolve(import.meta.dirname, ".."),
+    root: resolve(SITE_ROOT, ".."),
   },
   experimental: {
     optimizeCss: true,

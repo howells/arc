@@ -1,5 +1,6 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import matter from "gray-matter";
 import { load as yamlLoad } from "js-yaml";
 import type {
@@ -13,9 +14,10 @@ import type {
 } from "./types";
 import { AGENT_CATEGORIES } from "./types";
 
-// Resolve repo root: site/ → arc/
-// process.cwd() is the Next.js project root (site/), go up one level to arc/
-const ROOT = resolve(process.cwd(), "..");
+const MODULE_DIR = dirname(fileURLToPath(import.meta.url));
+
+// Resolve repo root once from this module location instead of process.cwd().
+const ROOT = resolve(MODULE_DIR, "../../..");
 
 // Regex patterns for custom YAML extraction (avoids issues with complex description fields)
 const FRONTMATTER_REGEX = /^---\n([\s\S]*?)\n---/;
