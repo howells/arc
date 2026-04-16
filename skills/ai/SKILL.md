@@ -159,7 +159,7 @@ Run /arc:rules to update, or I can copy them now.
 ```
 AI SDK context loaded. Ready to build.
 
-1. Start building → /arc:build or /arc:implement
+1. Start building → /arc:implement
 2. Review existing AI code → I'll check for deprecated API usage
 3. Set up from scratch → I'll scaffold the provider, route, and component
 ```
@@ -172,7 +172,7 @@ If user selects "Review existing AI code":
 
 <notes>
 - This skill is cross-cutting — invoke anytime, not just during implementation
-- The reference file (${ARC_ROOT}/references/ai-sdk.md) is also loaded by /arc:implement and /arc:build when they detect `ai` in package.json
+- The reference file (${ARC_ROOT}/references/ai-sdk.md) is also loaded by /arc:implement when it detects `ai` in package.json
 - The rules file (rules/ai-sdk.md) is copied to .ruler/ by /arc:rules and loaded by all build agents
 - OpenRouter is the default provider per stack.md. The patterns use it throughout.
 </notes>

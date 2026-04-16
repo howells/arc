@@ -132,8 +132,7 @@ Output ALL of these in order:
 
 | Command | What it does | When to use |
 |---------|-------------|-------------|
-| `/arc:implement` | Plan and execute feature implementation with TDD | After ideate, or for substantial features |
-| `/arc:build` | Quick builds for smaller scope — lightweight planning, full agent orchestration | Small-to-medium features, components, utilities |
+| `/arc:implement` | Scope-aware planning and execution with TDD | Small fixes through substantial features |
 | `/arc:ai` | AI SDK guidance — correct patterns, deprecated API warnings | Before implementing any AI feature |
 
 **REVIEW**
@@ -141,21 +140,13 @@ Output ALL of these in order:
 | Command | What it does | When to use |
 |---------|-------------|-------------|
 | `/arc:review` | Expert review with parallel specialized agents (security, design, performance, etc.) | Before merging, after implementation |
-| `/arc:audit` | Comprehensive codebase audit across all dimensions | Periodic quality check, before shipping |
+| `/arc:audit` | Mechanical verification plus comprehensive audit | Quick checks, focused audits, before shipping |
 
 **TEST**
 
 | Command | What it does | When to use |
 |---------|-------------|-------------|
 | `/arc:testing` | Test strategy and execution — unit, integration, E2E with specialist agents | Creating test plans, running suites, fixing failures |
-| `/arc:verify` | Run build + typecheck + lint + tests in one command | Quick pre-commit or pre-PR check |
-
-**REFINE**
-
-| Command | What it does | When to use |
-|---------|-------------|-------------|
-| `/arc:harden` | Production resilience — error states, text overflow, edge cases, loading patterns | Before shipping to real users |
-
 **SHIP**
 
 | Command | What it does | When to use |
@@ -201,7 +192,7 @@ Based on what I found in your project:
 Pick 2-4 commands that make the most sense given:
 - What's **missing** (no vision doc → suggest `/arc:vision`)
 - What's **stale** (old plans → suggest `/arc:tidy`)
-- What **just changed** (recent UI edits → suggest `/arc:design` or `/arc:harden`)
+- What **just changed** (recent UI edits → suggest `/arc:design` or `/arc:audit --harden`)
 - What **could be improved** (no tests → suggest `/arc:testing`)
 
 ---

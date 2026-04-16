@@ -513,7 +513,8 @@ Invoke skill: vercel-react-native-skills
 - [ ] All tests passing
 - [ ] No TypeScript errors (`pnpm tsc --noEmit`)
 - [ ] No lint errors (`pnpm biome check .` or eslint)
-- [ ] `/arc:audit --hygiene` run (no code artifacts)
+- [ ] `/arc:audit pre-pr` run
+- [ ] `/arc:audit --harden` run for UI-heavy launches
 - [ ] Placeholder content replaced
 - [ ] Lorem ipsum removed
 
@@ -710,7 +711,8 @@ Letsgo is complete when:
 ## Interop
 
 - Runs **/arc:testing** as part of quality check
-- Runs **/arc:audit --hygiene** as part of quality check (code artifact detection)
+- Runs **/arc:audit pre-pr** as part of quality check
+- Uses **/arc:audit --harden** when the launch includes meaningful UI surface area
 - References **/arc:vision** to verify alignment
 - Flags missing legal documents for user to address externally
 - Can invoke **vercel-react-best-practices** skill for performance review (if available)

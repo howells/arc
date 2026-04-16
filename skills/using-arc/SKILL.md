@@ -87,7 +87,7 @@ Use these defaults:
 
 - New feature or product thinking -> `ideate`
 - Plan execution -> `implement`
-- Small scoped change -> `build`
+- Small scoped change -> `implement`
 - Architecture or quality review -> `review` or `audit`
 - Testing work -> `testing`
 - Production readiness -> `letsgo`

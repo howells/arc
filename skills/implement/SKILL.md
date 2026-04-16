@@ -1,26 +1,27 @@
 ---
 name: implement
 description: |
-  Plan and execute feature implementation with TDD and continuous quality checks.
+  Scope-aware implementation workflow with TDD and continuous quality checks.
   Use when asked to "implement this", "build this feature", "execute the plan",
-  or after /arc:ideate has created a design doc. Creates implementation plan if needed,
-  then executes task-by-task with build agents.
+  or after /arc:ideate has created a design doc. For small work it creates a
+  lightweight inline plan; for larger work it creates or loads a full implementation
+  plan and executes task-by-task with build agents.
 license: MIT
 metadata:
   author: howells
 website:
   order: 5
   desc: Plan + execute
-  summary: Creates an implementation plan from your design, then executes it task by task with TDD. Tests first, then code—LLMs make this easy.
+  summary: Scope-aware planning plus execution with TDD. Small changes get a lightweight inline plan; larger changes get the full implementation workflow.
   what: |
-    Implement reads your design doc from /arc:ideate, breaks it into ordered tasks, then executes each one. For each task: write the test, make it pass, run type checks and lint. The AI writes the tests for you—TDD used to be tedious, but LLMs make it trivial. Strongly recommends /arc:review before execution.
+    Implement decides how much ceremony the work needs before it starts building. Small, well-bounded changes get an inline plan and the same TDD + quality gates without forcing a separate plan document or worktree. Larger features still use the full detail-driven implementation flow: plan creation, task execution, review checkpoints, and whole-plan verification. In both paths the loop is the same: tests first, then implementation, then typecheck, lint, review, and commit.
   why: |
-    TDD produces better code, but developers skip it because writing tests is boring. LLMs remove that excuse. Implement enforces the discipline—test first, then code—while handling both planning and execution in one flow.
+    The quality bar should stay constant even when the scope changes. TDD produces better code, but developers skip it because writing tests is boring and heavyweight workflows feel like overkill for small tasks. Implement keeps the discipline while scaling the planning ceremony to the work.
   decisions:
-    - Planning is built in. Reads design doc and creates task breakdown automatically.
+    - Planning is built in. Uses inline planning for small scope, full plans for large scope.
     - Test-first is mandatory. The AI writes them, so there's no reason to skip.
     - Quality gates after every task. TypeScript and lint errors don't accumulate.
-    - Strongly recommends review before building.
+    - Strongly recommends review before building larger work.
   workflow:
     position: spine
     after: review
@@ -129,11 +130,11 @@ Rules are optional — proceed without them if the user prefers.
 
 | Check | Read from `rules/interface/` |
 |-------|---------------------------------------------------|
-| Building components/pages | design.md, colors.md, spacing.md, layout.md |
+| Building components/pages | design.md, colors.md, spacing.md, layout.md, tailwind-authoring.md, surfaces.md, sections.md |
 | Typography changes | typography.md |
 | Adding animations | animation.md, performance.md |
-| Form work | forms.md, interactions.md |
-| Interactive elements | interactions.md |
+| Form work | forms.md, interactions.md, buttons.md |
+| Interactive elements | interactions.md, buttons.md |
 | Marketing pages | marketing.md |
 
 **Additional references (load as needed):**
@@ -156,7 +157,32 @@ Rules are optional — proceed without them if the user prefers.
 /arc:review     → Review (optional, can run anytime)
 ```
 
-## Phase 0: Planning (if no plan exists)
+## Phase 0: Scope Detection
+
+Assess what is being asked before choosing the heavier workflow.
+
+| Signal | Small Scope | Large Scope |
+|--------|-------------|-------------|
+| Files affected | 1-5 | 6+ |
+| New patterns | No | Yes |
+| Design decisions | Minimal | Significant |
+| Spec or design doc exists | Maybe | Should |
+
+**Use the small-scope path when the change is bounded and the implementation shape is already obvious:**
+- Stay in the current shared workspace. Create a simple feature branch if needed.
+- Create an inline plan instead of requiring a saved implementation plan.
+- Keep the same per-task loop: test -> build -> TDD -> fix -> spec -> quality -> commit.
+- Skip plan-completion-reviewer for fewer than 4 tasks unless the user explicitly wants it.
+- Offer review, but don't push it as hard as the large-scope flow.
+
+**Use the large-scope path when the work introduces new patterns, significant product decisions, or multiple moving parts:**
+- Load an existing implementation plan or create one via `detail`.
+- Strongly recommend `/arc:review` before building.
+- Use the full task execution flow, checkpoints, and plan-completion verification.
+
+**When in doubt:** make a recommendation, show the chosen posture in the plan, and let the user correct it before coding.
+
+## Phase 0.5: Planning
 
 **Check for existing implementation plan:**
 ```bash
@@ -178,7 +204,7 @@ The detail skill will:
 4. Break down into TDD tasks
 5. Save implementation plan
 
-After plan is created, strongly recommend review:
+After a large-scope plan is created, strongly recommend review:
 
 ```
 AskUserQuestion:
@@ -195,17 +221,48 @@ If "Review first" → invoke `/arc:review`, then return here.
 
 ---
 
+**If the work is small scope and no plan exists, create an inline plan instead of stopping:**
+
+```markdown
+## Inline Build Plan: [Feature Name]
+
+### Scope posture
+- Small scope because: [1-2 concrete reasons]
+
+### Files to create/modify
+| File | Action | Purpose |
+|------|--------|---------|
+
+### Implementation approach
+1. [Step]
+2. [Step]
+3. [Step]
+
+### Test coverage
+- Unit:
+- Integration:
+- E2E:
+
+### Quality gates
+- Failing test before implementation
+- `pnpm tsc --noEmit`
+- `pnpm biome check --write .`
+```
+
+Share the inline plan, confirm it looks right, then proceed directly to execution.
+
 ## Phase 1: Setup
 
-**If not already in worktree:**
+**Branch setup:**
 ```bash
 # Check current location
 git branch --show-current
 
-# If on main/dev, create worktree
-git worktree add .worktrees/<feature-name> -b feature/<feature-name>
-cd .worktrees/<feature-name>
+# If on main/dev, create a feature branch
+git checkout -b feature/<feature-name>
 ```
+
+**Codex note:** In shared-workspace environments, prefer the current worktree plus a feature branch so the user sees edits immediately. A separate git worktree is optional, not mandatory.
 
 **Install dependencies:**
 ```bash
@@ -649,7 +706,7 @@ Aesthetic Direction (from design doc):
 Figma: [URL if available]
 Files to create: [list from implementation plan]
 
-Interface rules: rules/interface/
+Interface rules: rules/interface/ (include tailwind-authoring.md, buttons.md, surfaces.md, sections.md when relevant)
 Project rules: .ruler/react.md, .ruler/tailwind.md
 
 Apply the aesthetic direction to every decision. Make it memorable, not generic."
@@ -716,6 +773,8 @@ pnpm test
 If tests fail, spawn debugger to investigate.
 
 ## Phase 5.5: Plan Completion Verification
+
+Skip this phase for small-scope executions with fewer than 4 tasks unless the user explicitly asks for the whole-plan gate.
 
 **This is the whole-plan gate. Per-task spec reviews catch issues within tasks — this catches tasks that were skipped, partially implemented, or scope that crept in.**
 
@@ -850,8 +909,11 @@ EOF
 - Summary of what was built
 - Any follow-up items
 
-**Cleanup worktree (optional):**
+**Cleanup branch/worktree (optional):**
 ```bash
+git checkout main
+git branch -d feature/<feature-name>
+# or, if you used an external worktree:
 cd ..
 git worktree remove .worktrees/<feature-name>
 ```
@@ -917,7 +979,7 @@ Execution is complete when:
 - [ ] All tasks marked completed in TodoWrite
 - [ ] All tests passing
 - [ ] Linting passes
-- [ ] Plan completion verification passed (plan-completion-reviewer)
+- [ ] Plan completion verification passed when the full-plan path was used
 - [ ] PR created
 - [ ] User informed of completion
 - [ ] Progress journal updated

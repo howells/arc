@@ -2,31 +2,30 @@
 name: audit
 context: fork
 description: |
-  Comprehensive codebase audit with specialized reviewers. Generates actionable reports.
+  Comprehensive codebase audit with verification and specialized reviewers.
+  Generates actionable reports.
   Use when asked to "audit the codebase", "review code quality", "check for issues",
   "security review", or "performance audit". Accepts path scope like "apps/web".
 
-  Reviewers run in batches of 2 by default to avoid resource exhaustion.
-  Use --parallel to run all reviewers simultaneously (resource-intensive).
-  Use --diff to scope audit to files changed vs main branch (or specify base: --diff develop).
-  Use --docs for a focused JSDoc/documentation coverage audit.
-  Use --copy for a focused UX writing/copy quality audit.
+  Verification-only modes (`quick`, `pre-commit`, `pre-pr`) skip reviewer agents and run
+  the mechanical checks directly. Full and focused modes run those checks first, then the
+  reviewer agents. `--harden` preserves the interactive UI resilience flow.
 license: MIT
-argument-hint: <path-or-focus> [--parallel] [--diff [base]] [--stage=prototype|development|pre-launch|production] [--security|--performance|--architecture|--organization|--design|--accessibility|--hygiene|--seo|--docs|--copy]
+argument-hint: [quick|pre-commit|pre-pr|<path-or-focus>] [--parallel] [--diff [base]] [--stage=prototype|development|pre-launch|production] [--security|--performance|--architecture|--organization|--design|--accessibility|--hygiene|--seo|--docs|--copy|--harden]
 metadata:
   author: howells
 website:
   order: 13
   desc: Codebase audit
-  summary: Run a comprehensive audit of your entire codebase—or target a specific area. Spawns specialist reviewers for security, performance, architecture, and more.
+  summary: Verification plus specialist review. Run fast mechanical checks, focused audits, or the full multi-reviewer pass from one command.
   what: |
-    Audit spins up multiple specialist agents—security, performance, architecture, data, UI, simplicity—each analyzing your code through their lens. Run it on your whole project before launch, or target a specific path (`/arc:audit apps/api`) for focused feedback. Each agent works independently, then findings are consolidated into a single report: critical issues first, then warnings, then suggestions. The output is a markdown file you can work through or convert into tasks.
+    Audit now handles both the old "verify" path and the reviewer-driven audit path. In quick modes it runs build, typecheck, lint, tests, debug-log scanning, git status, and secrets scanning without spawning agents. In full or focused modes it runs those mechanical checks first, then dispatches the relevant reviewers and consolidates their findings into a report.
   why: |
-    A security expert misses performance issues. A performance expert misses architectural violations. A frontend expert misses data integrity problems. Audit gives you a panel of specialists in one command—the kind of thorough review you'd want before shipping, without coordinating six different people.
+    Mechanical checks catch obvious breakage. Reviewers catch the judgment calls that linters miss. Putting both in one workflow removes the "verify or audit?" decision and keeps the fast path fast.
   decisions:
-    - Whole project or targeted. Run on everything, or scope to a path like `src/lib/auth`.
-    - Agents run in batches (2 at a time by default). Use `--parallel` for speed if you have resources.
-    - Focus flags available. `--security`, `--performance`, `--design`, `--docs`, `--copy` for targeted audits.
+    - `quick`, `pre-commit`, and `pre-pr` are verification-only modes. No agents.
+    - Full and focused audits run mechanical checks before reviewers.
+    - `--harden` stays interactive and does not fork into reviewer mode.
   agents:
     - security-engineer
     - performance-engineer
@@ -126,8 +125,8 @@ Pass relevant rules to each reviewer agent.
 
 | Reviewer | Interface Rules to Pass |
 |----------|------------------------|
-| designer | design.md, colors.md, typography.md, marketing.md |
-| daniel-product-engineer | forms.md, interactions.md, animation.md, performance.md |
+| designer | design.md, colors.md, typography.md, marketing.md, tailwind-authoring.md, buttons.md, surfaces.md, sections.md |
+| daniel-product-engineer | forms.md, interactions.md, animation.md, performance.md, tailwind-authoring.md, buttons.md, surfaces.md |
 | lee-nextjs-engineer | layout.md, performance.md |
 Interface rules location: `rules/interface/`
 
@@ -151,9 +150,25 @@ In addition to their domain-specific rules, both UI reviewers should verify:
 </rules_context>
 
 <process>
+## Phase 0: Mode Detection
+
+Parse `$ARGUMENTS` first and choose the correct path.
+
+| Argument | Mode | What Runs |
+|----------|------|-----------|
+| `quick` | Quick | Build + typecheck + lint |
+| `pre-commit` | Pre-commit | Build + typecheck + lint + debug logs |
+| `pre-pr` | Pre-PR | Build + typecheck + lint + tests + debug logs + secrets scan |
+| `--harden` | Harden | Interactive UI resilience pass, no reviewer agents |
+| anything else / none | Full or focused audit | Mechanical checks, then reviewers |
+
+**Critical behavior:**
+- `quick`, `pre-commit`, and `pre-pr` skip scope detection, hotspots, knip, and reviewer dispatch.
+- `--harden` is a separate interactive code path. Do not spawn review agents. Preserve the user-interactive hardening flow.
+
 ## Phase 1: Detect Scope & Project Type
 
-**Parse arguments:**
+**Parse arguments (full / focused audit path only):**
 - `$ARGUMENTS` may contain:
   - A path (e.g., `apps/web`, `packages/ui`, `src/`)
   - A focus flag (e.g., `--security`, `--performance`, `--architecture`, `--design`)
@@ -354,6 +369,30 @@ Coding rules: [yes/no]
 Focus: [all / security / performance / architecture / design]
 Execution mode: [batched (default) / parallel / team]
 ```
+
+## Phase 1.5: Mechanical Checks
+
+Run these before any reviewer agents so obvious breakage gets caught cheaply.
+
+### Tooling Detection
+- Detect package manager from lockfiles
+- Detect build command from `package.json`
+- Detect typechecker from `tsconfig.json`
+- Detect linter from Biome / ESLint config
+- Detect tests from Vitest / Jest config
+
+### Check Order
+1. Build — stop immediately if it fails
+2. Typecheck — report errors and continue
+3. Lint — auto-fix first, then report remaining issues
+4. Tests — skip in `quick` and `pre-commit`
+5. Debug log audit — skip in `quick`
+6. Git status
+7. Secrets scan — `pre-pr` only
+
+### Mode Behavior
+- `quick`, `pre-commit`, `pre-pr`: report the summary table and stop. No reviewers.
+- Full or focused audit: include the mechanical summary in reviewer context, then continue.
 
 ## Phase 2: Select Reviewers
 

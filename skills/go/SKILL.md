@@ -154,7 +154,7 @@ AskUserQuestion:
 
 ### Step 3.5: Scope Posture (feature work only)
 
-**Skip this step** if the user's intent is a quick fix, continuing an existing plan, running tests, shipping, or reviewing code. Only ask when routing to `/arc:ideate` or `/arc:build` for a new feature.
+**Skip this step** if the user's intent is a quick fix, continuing an existing plan, running tests, shipping, or reviewing code. Only ask when routing to `/arc:ideate` or `/arc:implement` for a new feature.
 
 Ask one question:
 
@@ -187,9 +187,9 @@ Based on their answer:
 | Intent | Route to |
 |--------|----------|
 | "Run a health check" | Health check flow (see below) |
-| "Set up a new project" | /arc:build with scaffolding context |
+| "Set up a new project" | /arc:implement with scaffolding context |
 | "I want to build [feature]" | /arc:ideate (with posture from Step 3.5) |
-| "Quick fix/small change" | /arc:build |
+| "Quick fix/small change" | /arc:implement |
 | "Continue [existing plan]" | /arc:implement |
 | "Not sure what to work on" | /arc:suggest |
 | "Review/improve existing code" | /arc:audit or /arc:review |
@@ -206,7 +206,7 @@ Skill arc:[chosen]: "[user's description]"
 
 When the user picks "Run a health check", run these sequentially — stop and report if anything critical fails:
 
-1. **Verify the build** — `Skill arc:verify: "quick"`
+1. **Run mechanical checks** — `Skill arc:audit: "quick"`
    - Does it build? Typecheck? Lint? Tests pass?
    - If critical failures, report them and ask if the user wants to fix before continuing.
 
@@ -253,4 +253,4 @@ AskUserQuestion:
 - Routes to all other /arc:* commands
 - Reads Linear issues (if MCP available), /arc:vision, progress for context
 - Uses /arc:suggest when user is unsure
-- Chains /arc:verify → /arc:deps → /arc:suggest for stale repo health checks
+- Chains /arc:audit quick → /arc:deps → /arc:suggest for stale repo health checks

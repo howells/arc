@@ -76,7 +76,6 @@ Look for:
 |-------|-------------|
 | `/arc:ideate` | Feature designed, key decisions, approach chosen |
 | `/arc:implement` | Tasks completed, tasks remaining, blockers |
-| `/arc:build` | What was built, files changed |
 | `/arc:testing` | Test results, coverage changes |
 | `/arc:review` | Plan reviewed, changes made |
 | `/arc:audit` | Audit completed, issue counts by severity |

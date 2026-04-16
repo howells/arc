@@ -66,12 +66,9 @@ All commands use the `/arc:` namespace prefix. The typical workflow:
 4. REVIEW     /arc:review     → Expert validation before execution
 5. EXECUTE    /arc:implement  → Plan + TDD implementation
               /arc:design     → Create distinctive UI
-              /arc:build      → Quick builds for smaller scope
               /arc:ai         → AI SDK patterns and guidance
 6. TEST       /arc:testing    → Test strategy and execution
-              /arc:verify     → Run build, typecheck, lint, and tests
-7. REFINE     /arc:harden     → Production resilience
-8. SHIP       /arc:letsgo     → Production readiness checklist
+7. SHIP       /arc:letsgo     → Production readiness checklist
 
 CROSS-CUTTING (available anytime):
               /arc:naming     → Generate and validate project names

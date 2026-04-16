@@ -25,7 +25,6 @@ WHAT    /arc:ideate     - From idea to design doc
           ↓
 DO      /arc:implement  - Plan + execute with TDD
         /arc:design     - UI/UX design with wireframes, reusable UI patterns, and critique
-        /arc:build      - Quick build (no formal plan)
         /arc:testing    - Test strategy and execution
         /arc:letsgo     - Production readiness checklist
 
@@ -264,9 +263,8 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:go` | Main entry point, routes to workflow | Context-aware guidance |
 | `/arc:vision` | Starting a new project | `docs/vision.md` |
 | `/arc:ideate` | From idea to design doc | `docs/arc/specs/YYYY-MM-DD-<feature>-design.md` |
-| `/arc:implement` | Plan + execute with TDD | Code changes |
+| `/arc:implement` | Scope-aware plan + execute with TDD | Code changes |
 | `/arc:design` | UI/UX work | Wireframes + code |
-| `/arc:build` | Quick implementation | Code changes |
 | `/arc:testing` | Test strategy | Test files |
 | `/arc:letsgo` | Ship to production | Deployment |
 | `/arc:review` | Review a plan for feasibility | Updated plan file |
@@ -312,8 +310,8 @@ Commands work together:
 
 - `/arc:suggest` reads Linear issues (if configured), in-session tasks (TaskList), codebase, and `/arc:vision` (priority cascade with opt-in discovery mode)
 - `/arc:ideate` flows to `/arc:implement` (which creates plans internally)
-- `/arc:build` suggests `/arc:ideate` if scope is too large
-- `/arc:letsgo` runs `/arc:testing` and `/arc:audit --hygiene` as part of quality checks
+- `/arc:implement` scales from quick fixes to full plan-driven execution
+- `/arc:letsgo` runs `/arc:testing`, `/arc:audit pre-pr`, and `/arc:audit --harden` as part of quality checks
 - Claude Code uses TaskList for in-session task tracking; Linear MCP for persistent issue tracking
 
 ### Linear Integration (Optional)

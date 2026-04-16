@@ -21,3 +21,11 @@ This file stores Arc's cross-session progress notes.
 - Files changed: `skills/`, `agents/`, `disciplines/`, `references/`, `hooks/`, `docs/arc/`, docs, and tests.
 - Key decisions: Keep Arc broader than Superpowers but adopt a smaller always-on control plane; make repo-relative paths canonical in portable instructions; keep `CLAUDE_PLUGIN_ROOT` only for Claude runtime integration.
 - Suggested next step: Dogfood the new SessionStart bootstrap in real Claude/Codex sessions and trim any remaining oversized skills based on actual routing behavior.
+
+### 2026-04-15 12:53 BST
+- Skill or workflow used: `implement`
+- Task summary: Consolidate `build` into `implement`, move `verify` and `harden` behavior into `audit`, add Tailwind-specific interface rules, and keep the docs/tests aligned for both Claude and Codex.
+- Outcome: Added four new interface rule files, updated `implement` to describe scope-aware execution, updated `audit` to document verification modes and `--harden`, added design polish guidance, removed the `build`, `verify`, and `harden` skill/command entry points, and updated docs/tests/site copy to the 23-command surface.
+- Files changed: `skills/`, `agents/`, `rules/interface/`, `commands/`, `README.md`, `AGENTS.md`, `CLAUDE.md`, `site/src/app/page.tsx`, `.claude-plugin/plugin.json`, and `tests/`.
+- Key decisions: Keep Codex in the current shared worktree on a feature branch instead of forcing an external worktree; treat Claude-specific tool references as platform-adapted guidance rather than literal requirements; preserve hardening as an interactive `audit --harden` path instead of folding it into reviewer-only behavior.
+- Suggested next step: Dogfood the consolidated `implement`, `audit quick`, and `audit --harden` flows in real sessions and tighten any remaining phrasing gaps the first time they are exercised.

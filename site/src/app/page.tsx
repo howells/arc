@@ -270,10 +270,10 @@ export default function ArcPage() {
             <li className="flex gap-3 text-neutral-600 text-sm leading-relaxed">
               <span className="select-none text-[var(--color-accent)]">→</span>
               <span>
-                <span className="font-mono text-neutral-800">/arc:build</span>{" "}
-                suggests{" "}
-                <span className="font-mono text-neutral-800">/arc:ideate</span>{" "}
-                if scope is too large.
+                <span className="font-mono text-neutral-800">
+                  /arc:implement
+                </span>{" "}
+                scales between quick fixes and full plan-driven execution.
               </span>
             </li>
             <li className="flex gap-3 text-neutral-600 text-sm leading-relaxed">

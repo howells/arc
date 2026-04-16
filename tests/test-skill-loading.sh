@@ -13,14 +13,12 @@ EXPECTED_SKILLS=(
     "ai"
     "audit"
     "brand"
-    "build"
     "commit"
     "deps"
     "design"
     "detail"
     "document"
     "go"
-    "harden"
     "help"
     "hooks"
     "ideate"
@@ -37,7 +35,6 @@ EXPECTED_SKILLS=(
     "testing"
     "tidy"
     "using-arc"
-    "verify"
     "vision"
 )
 

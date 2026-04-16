@@ -30,7 +30,7 @@ echo "Verifying interactive skills don't fork..."
 NON_FORKED_SKILLS=(
     "ideate"
     "commit"
-    "build"
+    "implement"
 )
 
 for skill in "${NON_FORKED_SKILLS[@]}"; do
