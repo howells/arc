@@ -4,7 +4,8 @@ set -euo pipefail
 REPO_URL="https://github.com/howells/arc.git"
 BRANCH="main"
 ARC_HOME="${ARC_HOME:-$HOME/.codex/arc}"
-SKILLS_ROOT="${SKILLS_ROOT:-$HOME/.agents/skills}"
+CODEX_SKILLS_ROOT="${CODEX_SKILLS_ROOT:-$HOME/.codex/skills}"
+AGENTS_SKILLS_ROOT="${AGENTS_SKILLS_ROOT:-$HOME/.agents/skills}"
 AUTO_UPDATE="false"
 INTERVAL_HOURS="6"
 
@@ -21,7 +22,9 @@ Options:
   --repo-url <url>              Override Arc repository URL.
   --branch <name>               Branch to track (default: main).
   --arc-home <path>             Install/update clone location.
-  --skills-root <path>          Codex skills root (default: ~/.agents/skills).
+  --codex-skills-root <path>    Codex Desktop skills root (default: ~/.codex/skills).
+  --agents-skills-root <path>   Compatibility skills root (default: ~/.agents/skills).
+  --skills-root <path>          Back-compat alias for --agents-skills-root.
   -h, --help                    Show this help.
 EOF
 }
@@ -55,8 +58,16 @@ while [[ $# -gt 0 ]]; do
       ARC_HOME="${2:-}"
       shift 2
       ;;
+    --codex-skills-root)
+      CODEX_SKILLS_ROOT="${2:-}"
+      shift 2
+      ;;
+    --agents-skills-root)
+      AGENTS_SKILLS_ROOT="${2:-}"
+      shift 2
+      ;;
     --skills-root)
-      SKILLS_ROOT="${2:-}"
+      AGENTS_SKILLS_ROOT="${2:-}"
       shift 2
       ;;
     -h|--help)
@@ -100,54 +111,64 @@ else
   git clone --branch "$BRANCH" "$REPO_URL" "$ARC_HOME"
 fi
 
-mkdir -p "$SKILLS_ROOT"
 SKILLS_SOURCE="$ARC_HOME/.agents/skills"
-LEGACY_LINK="$SKILLS_ROOT/arc"
 
 if [[ ! -d "$SKILLS_SOURCE" ]]; then
   echo "Arc Codex skill links not found at $SKILLS_SOURCE" >&2
   exit 1
 fi
 
-if [[ -L "$LEGACY_LINK" ]]; then
-  echo "Removing legacy bundle symlink: $LEGACY_LINK"
-  rm "$LEGACY_LINK"
-elif [[ -e "$LEGACY_LINK" ]]; then
-  BACKUP_PATH="${LEGACY_LINK}.backup.$(date +%Y%m%d%H%M%S)"
-  echo "Legacy path at $LEGACY_LINK is not a symlink. Backing up to $BACKUP_PATH"
-  mv "$LEGACY_LINK" "$BACKUP_PATH"
-fi
+link_skills_into_root() {
+  local root="$1"
+  local root_label="$2"
+  local legacy_link="$root/arc"
 
-for skill_path in "$SKILLS_SOURCE"/*; do
-  skill_name="$(basename "$skill_path")"
-  skill_link="$SKILLS_ROOT/$skill_name"
+  mkdir -p "$root"
 
-  if [[ -L "$skill_link" ]]; then
-    current_target="$(readlink "$skill_link")"
-    if [[ "$current_target" != "$skill_path" ]]; then
-      echo "Repointing skill symlink: $skill_link -> $skill_path"
-      ln -sfn "$skill_path" "$skill_link"
+  if [[ -L "$legacy_link" ]]; then
+    echo "Removing legacy bundle symlink from $root_label: $legacy_link"
+    rm "$legacy_link"
+  elif [[ -e "$legacy_link" ]]; then
+    local backup_path="${legacy_link}.backup.$(date +%Y%m%d%H%M%S)"
+    echo "Legacy path at $legacy_link is not a symlink. Backing up to $backup_path"
+    mv "$legacy_link" "$backup_path"
+  fi
+
+  for skill_path in "$SKILLS_SOURCE"/*; do
+    local skill_name skill_link current_target backup_path
+    skill_name="$(basename "$skill_path")"
+    skill_link="$root/$skill_name"
+
+    if [[ -L "$skill_link" ]]; then
+      current_target="$(readlink "$skill_link")"
+      if [[ "$current_target" != "$skill_path" ]]; then
+        echo "Repointing $root_label symlink: $skill_link -> $skill_path"
+        ln -sfn "$skill_path" "$skill_link"
+      fi
+    elif [[ -e "$skill_link" ]]; then
+      backup_path="${skill_link}.backup.$(date +%Y%m%d%H%M%S)"
+      echo "Existing path at $skill_link is not a symlink. Backing up to $backup_path"
+      mv "$skill_link" "$backup_path"
+      ln -s "$skill_path" "$skill_link"
+    else
+      ln -s "$skill_path" "$skill_link"
     fi
-  elif [[ -e "$skill_link" ]]; then
-    backup_path="${skill_link}.backup.$(date +%Y%m%d%H%M%S)"
-    echo "Existing path at $skill_link is not a symlink. Backing up to $backup_path"
-    mv "$skill_link" "$backup_path"
-    ln -s "$skill_path" "$skill_link"
-  else
-    ln -s "$skill_path" "$skill_link"
-  fi
-done
+  done
 
-for existing_link in "$SKILLS_ROOT"/*; do
-  [[ -L "$existing_link" ]] || continue
-  current_target="$(readlink "$existing_link")"
-  if [[ "$current_target" == "$ARC_HOME/.agents/skills/"* ]] && [[ ! -e "$current_target" ]]; then
-    echo "Removing stale Arc skill symlink: $existing_link"
-    rm "$existing_link"
-  fi
-done
+  for existing_link in "$root"/*; do
+    [[ -L "$existing_link" ]] || continue
+    current_target="$(readlink "$existing_link")"
+    if [[ "$current_target" == "$ARC_HOME/.agents/skills/"* ]] && [[ ! -e "$current_target" ]]; then
+      echo "Removing stale Arc skill symlink from $root_label: $existing_link"
+      rm "$existing_link"
+    fi
+  done
 
-echo "Arc skills linked into: $SKILLS_ROOT"
+  echo "Arc skills linked into $root_label: $root"
+}
+
+link_skills_into_root "$CODEX_SKILLS_ROOT" "Codex Desktop root"
+link_skills_into_root "$AGENTS_SKILLS_ROOT" "compatibility root"
 
 if [[ "$AUTO_UPDATE" == "true" ]]; then
   if [[ ! -x "$ARC_HOME/.codex/enable-auto-update.sh" ]]; then

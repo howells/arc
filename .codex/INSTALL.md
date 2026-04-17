@@ -2,7 +2,9 @@
 
 Enable Arc skills in Codex with the supported full-runtime install.
 
-Codex best-practice path is `~/.agents/skills` (legacy `~/.codex/skills` still works).
+Codex Desktop indexes installed skills from `~/.codex/skills`. Arc also mirrors them into
+`~/.agents/skills` as a compatibility layer for environments that still surface home-local
+skills from there.
 
 ## Prerequisites
 
@@ -27,8 +29,9 @@ curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh 
 What this does:
 
 1. Clones Arc to `~/.codex/arc` (or fast-forwards if already installed).
-2. Symlinks each Arc skill from `~/.codex/arc/.agents/skills/` into `~/.agents/skills/`.
-3. Configures scheduled updates using launchd (macOS) or cron (Linux) when `--auto-update` is used.
+2. Symlinks each Arc skill from `~/.codex/arc/.agents/skills/` into `~/.codex/skills/`.
+3. Mirrors the same skill links into `~/.agents/skills/` for compatibility.
+4. Configures scheduled updates using launchd (macOS) or cron (Linux) when `--auto-update` is used.
 
 This is the supported **full-runtime** install for Codex. Because the skills are discovered from the cloned Arc checkout, workflows that load bundled `agents/`, `references/`, `disciplines/`, `templates/`, and `scripts/` work without needing special-case copies.
 
@@ -40,8 +43,10 @@ Restart Codex if skills do not appear immediately.
 
 ```bash
 git clone https://github.com/howells/arc.git ~/.codex/arc
+mkdir -p ~/.codex/skills
 mkdir -p ~/.agents/skills
 for skill in ~/.codex/arc/.agents/skills/*; do
+  ln -s "$skill" ~/.codex/skills/$(basename "$skill")
   ln -s "$skill" ~/.agents/skills/$(basename "$skill")
 done
 ```
@@ -49,11 +54,17 @@ done
 ## Verify
 
 ```bash
-ls -la ~/.agents/skills/{go,audit,design}
-readlink ~/.agents/skills/audit
+ls -la ~/.codex/skills/{go,audit,design}
+readlink ~/.codex/skills/audit
 ```
 
 You should see direct skill symlinks pointing into `~/.codex/arc/.agents/skills/`.
+If you want to confirm the compatibility mirror too:
+
+```bash
+ls -la ~/.agents/skills/{go,audit,design}
+readlink ~/.agents/skills/audit
+```
 
 ## Usage
 
@@ -84,6 +95,7 @@ Enable or change auto-update later:
 ## Uninstalling
 
 ```bash
+find ~/.codex/skills -maxdepth 1 -type l -lname "$HOME/.codex/arc/.agents/skills/*" -delete
 find ~/.agents/skills -maxdepth 1 -type l -lname "$HOME/.codex/arc/.agents/skills/*" -delete
 rm -rf ~/.codex/arc
 ```

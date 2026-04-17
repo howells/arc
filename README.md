@@ -111,7 +111,7 @@ curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh 
 
 Follow `.codex/INSTALL.md` (or run the one-line installer above) for the supported Codex install, then invoke Arc skills in any project.
 
-This is the **full-runtime** Codex install. It clones the Arc repo to `~/.codex/arc` and installs direct skill entries under `~/.agents/skills`, so workflows that need bundled agents, references, disciplines, templates, and scripts work the same way they do in Claude Code.
+This is the **full-runtime** Codex install. It clones the Arc repo to `~/.codex/arc`, installs direct skill entries under `~/.codex/skills` for Codex Desktop discovery, and mirrors them into `~/.agents/skills` for compatibility. Workflows that need bundled agents, references, disciplines, templates, and scripts work the same way they do in Claude Code.
 
 ### Repo-Local (Project Skills)
 
@@ -149,7 +149,8 @@ Common Codex entry points:
 ### Codex Notes
 
 - These skills are stored in `skills/<name>/SKILL.md` for Claude Code; `.agents/skills/<name>` is a symlink to the same folder so Codex can discover them.
-- The supported install exposes Arc as direct skill entries like `~/.agents/skills/audit`, `~/.agents/skills/ideate`, and `~/.agents/skills/design`.
+- The supported install exposes Arc as direct skill entries like `~/.codex/skills/audit`, `~/.codex/skills/ideate`, and `~/.codex/skills/design`.
+- Arc also mirrors those links into `~/.agents/skills/*` because some Codex environments still surface home-local skills from that compatibility root.
 - Some skills reference Claude-specific tooling (e.g. `TaskList`, `mcp__claude-in-chrome__*`). In Codex, use the closest equivalent:
   - terminal exploration instead of `Task` blocks
   - `agent-browser` first, then Playwright, instead of Claude-in-Chrome MCP
