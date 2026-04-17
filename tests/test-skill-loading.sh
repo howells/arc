@@ -13,6 +13,7 @@ EXPECTED_SKILLS=(
     "ai"
     "audit"
     "brand"
+    "browse"
     "commit"
     "deps"
     "design"
@@ -70,6 +71,33 @@ for skill in "${EXPECTED_SKILLS[@]}"; do
         fail "skill/$skill directory not found"
     fi
 done
+
+echo ""
+echo "Checking skill frontmatter parses as YAML..."
+if command -v ruby >/dev/null 2>&1; then
+    yaml_errors=$(ruby -e '
+        require "yaml"
+        ARGV.each do |file|
+          text = File.read(file)
+          next unless text.start_with?("---\n")
+          frontmatter = text.split(/^---\s*$/, 3)[1]
+          begin
+            YAML.safe_load(frontmatter, permitted_classes: [], aliases: false)
+          rescue => e
+            warn "#{file}: #{e.class}: #{e.message}"
+            exit 1
+          end
+        end
+    ' "$PLUGIN_ROOT"/skills/*/SKILL.md 2>&1)
+
+    if [ $? -eq 0 ]; then
+        pass "all skill frontmatter parses as YAML"
+    else
+        fail "skill frontmatter must parse as YAML" "$yaml_errors"
+    fi
+else
+    skip "Ruby unavailable; skipping YAML parser validation"
+fi
 
 # Verify no unexpected skills (optional but useful)
 echo ""

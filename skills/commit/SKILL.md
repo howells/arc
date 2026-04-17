@@ -6,7 +6,7 @@ description: |
   Use when asked to "commit", "push changes", "save my work", or after completing
   implementation work. Automatically groups changes into logical commits.
 license: MIT
-argument-hint: [push]
+argument-hint: "[push]"
 metadata:
   author: howells
 website:

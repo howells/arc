@@ -6,7 +6,7 @@ description: |
   "find outdated packages", or "check for CVEs". Generates a prioritized report,
   then optionally walks through batch upgrades with rollback on failure.
 license: MIT
-argument-hint: [--apply] [--cve-only]
+argument-hint: "[--apply] [--cve-only]"
 metadata:
   author: howells
 website:

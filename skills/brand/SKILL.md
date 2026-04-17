@@ -7,7 +7,7 @@ description: |
   tech aesthetics. Use when asked to "create a brand", "define the visual identity",
   "design the brand", "set up colors and fonts", or before /arc:design for new projects.
 license: MIT
-argument-hint: <references-or-description>
+argument-hint: "<references-or-description>"
 metadata:
   author: howells
 website:

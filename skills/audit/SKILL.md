@@ -11,7 +11,7 @@ description: |
   the mechanical checks directly. Full and focused modes run those checks first, then the
   reviewer agents. `--harden` preserves the interactive UI resilience flow.
 license: MIT
-argument-hint: [quick|pre-commit|pre-pr|<path-or-focus>] [--parallel] [--diff [base]] [--stage=prototype|development|pre-launch|production] [--security|--performance|--architecture|--organization|--design|--accessibility|--hygiene|--seo|--docs|--copy|--harden]
+argument-hint: "[quick|pre-commit|pre-pr|<path-or-focus>] [--parallel] [--diff [base]] [--stage=prototype|development|pre-launch|production] [--security|--performance|--architecture|--organization|--design|--accessibility|--hygiene|--seo|--docs|--copy|--harden]"
 metadata:
   author: howells
 website:
@@ -23,9 +23,9 @@ website:
   why: |
     Mechanical checks catch obvious breakage. Reviewers catch the judgment calls that linters miss. Putting both in one workflow removes the "verify or audit?" decision and keeps the fast path fast.
   decisions:
-    - `quick`, `pre-commit`, and `pre-pr` are verification-only modes. No agents.
+    - "`quick`, `pre-commit`, and `pre-pr` are verification-only modes. No agents."
     - Full and focused audits run mechanical checks before reviewers.
-    - `--harden` stays interactive and does not fork into reviewer mode.
+    - "`--harden` stays interactive and does not fork into reviewer mode."
   agents:
     - security-engineer
     - performance-engineer

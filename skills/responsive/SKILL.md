@@ -20,7 +20,7 @@ website:
   decisions:
     - Two breakpoints only. 375px mobile and 1440px desktop catches 95% of issues. Tablet deferred to v2.
     - Design-aware. Reads your design doc first to preserve aesthetic intent, not just fix layout.
-    - Chrome MCP preferred in Claude Code. `agent-browser` is the main fallback outside Claude.
+    - "Chrome MCP preferred in Claude Code. `agent-browser` is the main fallback outside Claude."
     - Container queries for components. Reusable components adapt to their container, not the viewport.
   workflow:
     position: utility

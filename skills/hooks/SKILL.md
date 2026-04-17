@@ -6,7 +6,7 @@ description: |
   Use when setting up a project, after "install hooks", "set up hooks", "add auto-formatting",
   "add git hooks", "set up husky", or when starting a new project that uses Biome.
 license: MIT
-argument-hint: [--remove | --git-only | --claude-only]
+argument-hint: "[--remove | --git-only | --claude-only]"
 metadata:
   author: howells
 website:
