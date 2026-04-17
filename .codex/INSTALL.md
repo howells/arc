@@ -27,7 +27,7 @@ curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh 
 What this does:
 
 1. Clones Arc to `~/.codex/arc` (or fast-forwards if already installed).
-2. Symlinks `~/.agents/skills/arc` to `~/.codex/arc/skills`.
+2. Symlinks each Arc skill from `~/.codex/arc/.agents/skills/` into `~/.agents/skills/`.
 3. Configures scheduled updates using launchd (macOS) or cron (Linux) when `--auto-update` is used.
 
 This is the supported **full-runtime** install for Codex. Because the skills are discovered from the cloned Arc checkout, workflows that load bundled `agents/`, `references/`, `disciplines/`, `templates/`, and `scripts/` work without needing special-case copies.
@@ -41,17 +41,19 @@ Restart Codex if skills do not appear immediately.
 ```bash
 git clone https://github.com/howells/arc.git ~/.codex/arc
 mkdir -p ~/.agents/skills
-ln -s ~/.codex/arc/skills ~/.agents/skills/arc
+for skill in ~/.codex/arc/.agents/skills/*; do
+  ln -s "$skill" ~/.agents/skills/$(basename "$skill")
+done
 ```
 
 ## Verify
 
 ```bash
-ls -la ~/.agents/skills/arc
-readlink ~/.agents/skills/arc
+ls -la ~/.agents/skills/{go,audit,design}
+readlink ~/.agents/skills/audit
 ```
 
-You should see a symlink pointing to `~/.codex/arc/skills`.
+You should see direct skill symlinks pointing into `~/.codex/arc/.agents/skills/`.
 
 ## Usage
 
@@ -82,6 +84,6 @@ Enable or change auto-update later:
 ## Uninstalling
 
 ```bash
-rm ~/.agents/skills/arc
+find ~/.agents/skills -maxdepth 1 -type l -lname "$HOME/.codex/arc/.agents/skills/*" -delete
 rm -rf ~/.codex/arc
 ```

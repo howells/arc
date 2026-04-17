@@ -5,7 +5,6 @@ REPO_URL="https://github.com/howells/arc.git"
 BRANCH="main"
 ARC_HOME="${ARC_HOME:-$HOME/.codex/arc}"
 SKILLS_ROOT="${SKILLS_ROOT:-$HOME/.agents/skills}"
-SKILLS_LINK="$SKILLS_ROOT/arc"
 AUTO_UPDATE="false"
 INTERVAL_HOURS="6"
 
@@ -58,7 +57,6 @@ while [[ $# -gt 0 ]]; do
       ;;
     --skills-root)
       SKILLS_ROOT="${2:-}"
-      SKILLS_LINK="$SKILLS_ROOT/arc"
       shift 2
       ;;
     -h|--help)
@@ -103,24 +101,53 @@ else
 fi
 
 mkdir -p "$SKILLS_ROOT"
-TARGET="$ARC_HOME/skills"
+SKILLS_SOURCE="$ARC_HOME/.agents/skills"
+LEGACY_LINK="$SKILLS_ROOT/arc"
 
-if [[ -L "$SKILLS_LINK" ]]; then
-  CURRENT_TARGET="$(readlink "$SKILLS_LINK")"
-  if [[ "$CURRENT_TARGET" != "$TARGET" ]]; then
-    echo "Repointing existing symlink: $SKILLS_LINK -> $TARGET"
-    ln -sfn "$TARGET" "$SKILLS_LINK"
-  fi
-elif [[ -e "$SKILLS_LINK" ]]; then
-  BACKUP_PATH="${SKILLS_LINK}.backup.$(date +%Y%m%d%H%M%S)"
-  echo "Existing path at $SKILLS_LINK is not a symlink. Backing up to $BACKUP_PATH"
-  mv "$SKILLS_LINK" "$BACKUP_PATH"
-  ln -s "$TARGET" "$SKILLS_LINK"
-else
-  ln -s "$TARGET" "$SKILLS_LINK"
+if [[ ! -d "$SKILLS_SOURCE" ]]; then
+  echo "Arc Codex skill links not found at $SKILLS_SOURCE" >&2
+  exit 1
 fi
 
-echo "Arc skills linked at: $SKILLS_LINK"
+if [[ -L "$LEGACY_LINK" ]]; then
+  echo "Removing legacy bundle symlink: $LEGACY_LINK"
+  rm "$LEGACY_LINK"
+elif [[ -e "$LEGACY_LINK" ]]; then
+  BACKUP_PATH="${LEGACY_LINK}.backup.$(date +%Y%m%d%H%M%S)"
+  echo "Legacy path at $LEGACY_LINK is not a symlink. Backing up to $BACKUP_PATH"
+  mv "$LEGACY_LINK" "$BACKUP_PATH"
+fi
+
+for skill_path in "$SKILLS_SOURCE"/*; do
+  skill_name="$(basename "$skill_path")"
+  skill_link="$SKILLS_ROOT/$skill_name"
+
+  if [[ -L "$skill_link" ]]; then
+    current_target="$(readlink "$skill_link")"
+    if [[ "$current_target" != "$skill_path" ]]; then
+      echo "Repointing skill symlink: $skill_link -> $skill_path"
+      ln -sfn "$skill_path" "$skill_link"
+    fi
+  elif [[ -e "$skill_link" ]]; then
+    backup_path="${skill_link}.backup.$(date +%Y%m%d%H%M%S)"
+    echo "Existing path at $skill_link is not a symlink. Backing up to $backup_path"
+    mv "$skill_link" "$backup_path"
+    ln -s "$skill_path" "$skill_link"
+  else
+    ln -s "$skill_path" "$skill_link"
+  fi
+done
+
+for existing_link in "$SKILLS_ROOT"/*; do
+  [[ -L "$existing_link" ]] || continue
+  current_target="$(readlink "$existing_link")"
+  if [[ "$current_target" == "$ARC_HOME/.agents/skills/"* ]] && [[ ! -e "$current_target" ]]; then
+    echo "Removing stale Arc skill symlink: $existing_link"
+    rm "$existing_link"
+  fi
+done
+
+echo "Arc skills linked into: $SKILLS_ROOT"
 
 if [[ "$AUTO_UPDATE" == "true" ]]; then
   if [[ ! -x "$ARC_HOME/.codex/enable-auto-update.sh" ]]; then
