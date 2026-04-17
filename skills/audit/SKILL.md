@@ -17,9 +17,9 @@ metadata:
 website:
   order: 13
   desc: Codebase audit
-  summary: Verification plus specialist review. Run fast mechanical checks, focused audits, or the full multi-reviewer pass from one command.
+  summary: Verification plus specialist review with a scored scorecard. Run fast mechanical checks, focused audits, or the full multi-reviewer pass from one command.
   what: |
-    Audit now handles both the old "verify" path and the reviewer-driven audit path. In quick modes it runs build, typecheck, lint, tests, debug-log scanning, git status, and secrets scanning without spawning agents. In full or focused modes it runs those mechanical checks first, then dispatches the relevant reviewers and consolidates their findings into a report.
+    Audit now handles both the old "verify" path and the reviewer-driven audit path. In quick modes it runs build, typecheck, lint, tests, debug-log scanning, git status, and secrets scanning without spawning agents — and produces a partial scorecard. In full or focused modes it runs those mechanical checks first, then dispatches the relevant reviewers, consolidates findings, and produces a scored scorecard across 7 axes (0-21) with optional bonus axes for UI, accessibility, and SEO.
   why: |
     Mechanical checks catch obvious breakage. Reviewers catch the judgment calls that linters miss. Putting both in one workflow removes the "verify or audit?" decision and keeps the fast path fast.
   decisions:
@@ -75,6 +75,7 @@ If no native task/todo tool exists, skip task tracking and continue with the aud
 **Read these reference files NOW:**
 1. `${ARC_ROOT}/disciplines/dispatching-parallel-agents.md`
 2. `${ARC_ROOT}/references/audit-stage-calibration.md`
+3. `${ARC_ROOT}/references/audit-scorecard.md`
 </required_reading>
 
 <progress_context>
@@ -391,8 +392,29 @@ Run these before any reviewer agents so obvious breakage gets caught cheaply.
 7. Secrets scan — `pre-pr` only
 
 ### Mode Behavior
-- `quick`, `pre-commit`, `pre-pr`: report the summary table and stop. No reviewers.
+- `quick`, `pre-commit`, `pre-pr`: report the summary table with **partial scorecard** and stop. No reviewers.
 - Full or focused audit: include the mechanical summary in reviewer context, then continue.
+
+**Partial scorecard for quick modes:**
+
+Derive scores for mechanically-evaluable axes only:
+
+| Axis | Signal |
+|------|--------|
+| 4. Code Quality | Lint results (clean = 2, warnings = 1, errors = 0). Bump to 3 if lint clean + no dead code |
+| 5. Test Health | `pre-pr` only: tests exist + pass = 2, exist + fail = 1, no tests = 0 |
+| 7. Operations | Build pass + types clean + lint clean = 2, any failure = 0-1 |
+
+Report as: `X/9 (partial — 3 of 7 axes)`. Other axes show `--`.
+
+```
+## Quick Check — X/9 (partial)
+
+Quality: X | Tests: X | Ops: X
+Security: -- | Perf: -- | Arch: -- | Resilience: --
+
+Run full audit for complete scorecard.
+```
 
 ## Phase 2: Select Reviewers
 
@@ -535,6 +557,10 @@ Reviewer-specific emphasis:
 **For each batch, dispatch 2 reviewer subagents in parallel when the platform supports delegation.**
 If the platform does not support subagents, run the same reviewer prompts locally one reviewer at a time and continue with consolidation.
 
+**Scorecard scoring:** Every reviewer prompt must include the scorecard axis they are responsible for
+scoring. Include the criteria table for their axis from `audit-scorecard.md` and ask them to score it
+at the end of their response.
+
 Example reviewer prompts:
 ```
 Task [security-engineer] model: sonnet: "
@@ -565,20 +591,47 @@ Return findings in this format:
 
 ## Summary
 [1-2 sentences]
+
+## Scorecard
+Score the Security Posture axis (0-3) using these criteria:
+[Paste Security Posture criteria table from audit-scorecard.md]
+
+Axis: Security Posture
+Score: [0-3]
+Rationale: [1 sentence explaining the score based on the criteria]
 "
 
 Task [performance-engineer] model: sonnet: "
 Audit the following codebase for performance issues.
 [similar structure, including stage calibration block]
 Focus on: N+1 queries, missing indexes, memory leaks, bundle size, render performance.
+[Include Scorecard section with Performance criteria table]
 "
 
 Task [designer] model: opus: "
 Review UI implementation for visual design quality.
 [similar structure, including stage calibration block]
 Focus on: aesthetic direction, memorable elements, typography, color cohesion, AI slop patterns.
+[Include Scorecard section with UI/Design BONUS criteria table]
 "
 ```
+
+**Scorecard axis assignments per reviewer:**
+
+| Reviewer | Scores Axis |
+|----------|-------------|
+| security-engineer | 1. Security Posture |
+| performance-engineer | 2. Performance |
+| architecture-engineer | 3. Architecture |
+| lee-nextjs-engineer | 3. Architecture (second opinion) |
+| senior-engineer | 4. Code Quality |
+| daniel-product-engineer | 4. Code Quality (second opinion) + 6. Resilience |
+| test-quality-engineer | 5. Test Health |
+| designer | Bonus: UI/Design |
+| accessibility-engineer | Bonus: Accessibility |
+| seo-engineer | Bonus: SEO |
+
+When a reviewer scores two axes (daniel-product-engineer), include both criteria tables and ask for both scores.
 
 **Wait for batch to complete before starting next batch.**
 
@@ -722,6 +775,24 @@ Each cluster becomes a task group with:
 
 Aim for 3-8 clusters. If you have more than 8, merge the smallest ones. If you have fewer than 3, that's fine — don't force artificial grouping.
 
+**Derive scorecard:**
+
+Collect axis scores from reviewer outputs and apply derivation rules from `audit-scorecard.md`:
+
+1. **Reviewer-scored axes (1-4, 6):** Take the score each reviewer returned. For multi-reviewer axes (Architecture, Code Quality), use the **lower** score.
+2. **Test Health (axis 5):** Use reviewer score if test-quality-engineer ran. Apply mechanical overrides:
+   - No test files found → cap at 0
+   - Test failures in mechanical checks → cap at 1
+3. **Operations (axis 7):** Derive from mechanical check results:
+   - Build broken → 0
+   - Type errors or lint failures → 1
+   - Clean build + CI exists → 2
+   - Full pipeline with monitoring/logging → 3
+4. **Bonus axes:** Collect from designer, accessibility-engineer, seo-engineer if they ran.
+5. **Sum** the 7 core scores for the total. Report bonus axes as `+N/M` separately.
+
+If a core axis had no reviewer (e.g., small project skipped architecture-engineer), score it based on the mechanical signals available or mark as `--` (not evaluated). Adjust the denominator: `X/18` if one axis skipped, etc.
+
 ## Phase 5: Generate Report
 
 **Create audit report:**
@@ -752,9 +823,31 @@ File: `docs/audits/YYYY-MM-DD-[scope-slug]-audit.md`
 
 [Optional short table of the top hotspots with file path, LOC, and why they were flagged]
 
+## Scorecard: X/21 — [Rating]
+
+| # | Axis | Score | |
+|---|------|:-----:|-|
+| 1 | Security Posture | X/3 | [one-line rationale] |
+| 2 | Performance | X/3 | [one-line rationale] |
+| 3 | Architecture | X/3 | [one-line rationale] |
+| 4 | Code Quality | X/3 | [one-line rationale] |
+| 5 | Test Health | X/3 | [one-line rationale] |
+| 6 | Resilience | X/3 | [one-line rationale] |
+| 7 | Operations | X/3 | [one-line rationale] |
+| | **Total** | **X/21** | **[Fragile / Developing / Solid / Production-grade]** |
+
+[If bonus axes were scored:]
+
+| Bonus | Score | |
+|-------|:-----:|-|
+| UI/Design | X/3 | [rationale] |
+| Accessibility | X/3 | [rationale] |
+| SEO | X/3 | [rationale] |
+| **Bonus** | **+X/9** | |
+
 ## Executive Summary
 
-[1-2 paragraph overview of findings, noting the stage context]
+[1-2 paragraph overview of findings, noting the stage context and scorecard highlights]
 
 - **Critical:** X issues
 - **High:** X issues
@@ -844,14 +937,18 @@ You may stage it or leave it unstaged based on the user's preferences and the pl
 
 **Show summary to user:**
 ```
-## Audit Complete
+## Audit Complete — X/21 [Rating]
 
 Reviewed: [scope]
 Reviewers: [count] agents
 Project stage: [stage]
 Report: docs/audits/YYYY-MM-DD-[scope]-audit.md
 
-### Summary
+### Scorecard
+Security: X | Perf: X | Arch: X | Quality: X | Tests: X | Resilience: X | Ops: X
+[+X/9 bonus if applicable]
+
+### Findings
 - Critical: X | High: X | Medium: X | Low: X
 - Dismissed: X (conflicts/irrelevant)
 - Task clusters: X
@@ -963,7 +1060,8 @@ Audit is complete when:
 - [ ] Reviewers run in batches of 2 (or all at once if --parallel)
 - [ ] All reviewers completed
 - [ ] Findings consolidated and deduplicated
-- [ ] Report generated in `docs/audits/`
+- [ ] Scorecard derived (7 core axes + bonus if applicable)
+- [ ] Report generated in `docs/audits/` with scorecard
 - [ ] Report saved and optionally staged
 - [ ] Summary presented to user
 - [ ] Next steps offered
