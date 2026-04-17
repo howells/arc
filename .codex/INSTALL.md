@@ -1,6 +1,6 @@
 # Installing Arc for Codex
 
-Enable Arc skills in Codex with native skill discovery.
+Enable Arc skills in Codex with the supported full-runtime install.
 
 Codex best-practice path is `~/.agents/skills` (legacy `~/.codex/skills` still works).
 
@@ -48,15 +48,17 @@ ln -s ~/.codex/arc/skills ~/.agents/skills/arc
 
 ```bash
 ls -la ~/.agents/skills/arc
+readlink ~/.agents/skills/arc
 ```
 
-You should see a symlink pointing to Arc `skills/`.
+You should see a symlink pointing to `~/.codex/arc/skills`.
 
 ## Usage
 
 Skills are discovered automatically. You can:
 
-- Explicit invocation (recommended): `$start`, `$ideate`, `$implement`, etc.
+- In Codex, use `$<skill-name>`, not `/arc:<skill-name>`.
+- Explicit invocation (recommended): `$go`, `$audit`, `$ideate`, `$design`, `$implement`, `$review`, `$testing`, `$deps`
 - Implicit invocation: ask for a task that matches a skill description.
 
 Arc also includes a lightweight bootstrap skill, `using-arc`, which is intended to be the
