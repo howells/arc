@@ -4,7 +4,7 @@ description: |
   Browse a web app through an expert persona — evaluate the rendered experience, not just the code.
   Use when asked to "browse the app", "experience the app", "evaluate the app as a user",
   or when you want expert-level quality assessment of the rendered product.
-  Supports designer and first-time-user personas. Chrome MCP preferred, agent-browser as fallback.
+  Supports designer, first-time-user, strategist, and demo-presenter personas. Chrome MCP preferred, agent-browser as fallback.
 license: MIT
 metadata:
   author: howells
@@ -24,6 +24,8 @@ website:
   agents:
     - first-time-user
     - designer
+    - strategist
+    - demo-presenter
   workflow:
     position: utility
 ---
@@ -99,7 +101,9 @@ This summary stays in scope for the entire session. Discard the raw file content
 If the user specified a persona in the command args, use it. Otherwise, recommend based on recent changes:
 
 - UI/styling changes (CSS, components, design tokens) → suggest **designer**
-- New feature/page, content changes, navigation changes → suggest **first-time**
+- New feature/page, content changes, navigation changes → suggest **first-time-user**
+- Product direction questions, feature prioritization, positioning → suggest **strategist**
+- Preparing for a recording, investor call, or public walkthrough → suggest **demo-presenter**
 
 ```
 AskUserQuestion:
@@ -110,6 +114,10 @@ AskUserQuestion:
       description: "Visual hierarchy, spacing, typography, distinctiveness, AI slop detection"
     - label: "First-time User"
       description: "Discoverability, clarity, cognitive load, error recovery, terminology"
+    - label: "Strategist"
+      description: "Value proposition, feature prioritization, earned complexity, flow logic"
+    - label: "Demo Presenter"
+      description: "Demo-readiness, narrative arc, wow moments, hazard sweep, demo script"
 ```
 
 **After selection, load the persona's knowledge:**
@@ -121,6 +129,14 @@ For **Designer:**
 For **First-time User:**
 1. Read `${ARC_ROOT}/agents/review/first-time-user.md` — evaluation criteria
 2. Read `${ARC_ROOT}/skills/browse/references/first-time-session.md` — browsing strategy
+
+For **Strategist:**
+1. Read `${ARC_ROOT}/agents/review/strategist.md` — evaluation criteria
+2. Read `${ARC_ROOT}/skills/browse/references/strategist-session.md` — browsing strategy
+
+For **Demo Presenter:**
+1. Read `${ARC_ROOT}/agents/review/demo-presenter.md` — evaluation criteria
+2. Read `${ARC_ROOT}/skills/browse/references/demo-presenter-session.md` — browsing strategy
 
 ## Phase 3: Browser Setup
 
