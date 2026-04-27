@@ -474,6 +474,12 @@ Using the font recommendations from `frontend-design.md`:
 
 **Never use:** Roboto, Arial, system-ui defaults, Instrument Serif (AI slop)
 
+**Eyebrow / label discipline (anti-overuse rule):**
+- Do **not** default to `uppercase tracking-wide`/`tracking-widest` eyebrows above headings. This is the typographic equivalent of a purple-to-blue gradient — overused on every AI-built section.
+- Only use `uppercase` on eyebrow/label text when the font is **monospace**, and only then pair it with `tracking-wide`.
+- For sans/serif eyebrows, prefer alternatives: a numeric label (`01 / Pricing`), a kicker in the display font at smaller weight, a colored dot + label in sentence case, or just remove the eyebrow entirely.
+- One uppercase-tracked eyebrow style across an entire page is a code smell — the choice is doing nothing, so cut it.
+
 ### Color Palette
 - **Define in Tailwind v4 `@theme` with OKLCH, not hex-only values**
 - **Background token:** [e.g., `--color-gray-950: oklch(...)`]
@@ -742,6 +748,7 @@ If any answer is weak, revise the design doc before proceeding. Do not hand off 
 - [ ] Uses default system fonts
 - [ ] Purple-to-blue gradient present
 - [ ] White background + gray cards throughout
+- [ ] `uppercase` + wide tracking eyebrow above section headings (only allowed on monospace eyebrows, sparingly)
 - [ ] Could be mistaken for generic AI output
 
 ### Green Flags (should have most)
@@ -830,6 +837,7 @@ From `frontend-design.md`:
 - White backgrounds with gray cards
 - Rounded corners on everything
 - Mixed icon styles
+- `uppercase` + `tracking-wide`/`tracking-widest` eyebrows on sans/serif fonts. Reserve uppercase eyebrows for **monospace only**, and even then use them sparingly — one per page, not above every heading. See `rules/interface/typography.md`.
 
 ---
 

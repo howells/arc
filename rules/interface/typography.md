@@ -165,8 +165,10 @@ Tools like [Fontaine](https://github.com/unjs/fontaine) or Next.js `next/font` c
 - MUST NOT: Add explicit `leading-*` modifiers to headings unless a layout edge case truly requires it. Tailwind's default heading rhythm is the baseline.
 - MUST: Use `text-balance` on headings and `text-pretty` on paragraph text.
 - MUST: Use `tracking-tight` on headings larger than `text-xl` unless the chosen font is already condensed.
-- MUST NOT: Use uppercase eyebrow text unless it is monospace or has a clear labeling reason.
-- SHOULD: If eyebrow text is uppercase monospace, pair it with `tracking-wide`.
+- MUST NOT: Default to `uppercase` + `tracking-wide`/`tracking-widest` eyebrows above section headings. This pattern is overused to the point of being a tell — the typographic equivalent of a purple-to-blue gradient. Most pages need zero eyebrows; many need one; almost none need them on every section.
+- MUST NOT: Use `uppercase` eyebrow text on sans or serif fonts. Reserve uppercase eyebrows for **monospace** fonts only.
+- SHOULD: When uppercase monospace eyebrows are used, pair with `tracking-wide` and use them sparingly (typically one per page, not as a section-divider habit).
+- SHOULD: Prefer alternatives to the uppercase eyebrow — numeric labels (`01 / Pricing`), sentence-case kickers in the display font at smaller weight, a colored dot + label, or no eyebrow at all.
 - SHOULD: Constrain long-form text with `max-w-[*ch]` or equivalent directly on the text element.
 
 ## Content Formatting
