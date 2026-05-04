@@ -37,9 +37,11 @@ website:
 
 <arc_runtime>
 This workflow requires the full Arc bundle, not a prompts-only install.
-Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
-Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`, `agents/`, `templates/`, and `scripts/`.
-Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+
+Paths in this skill use these conventions:
+- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
+- `./...` is local to this skill's directory.
+- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
 # Design Workflow
@@ -76,10 +78,10 @@ Arc UI design assumes **Tailwind is the implementation target**.
 
 | Agent | Location | When to Use |
 |-------|----------|-------------|
-| `ui-builder` | ${ARC_ROOT}/agents/build/ | Build UI from the change spec you create |
-| `figma-builder` | ${ARC_ROOT}/agents/build/ | Build UI when Figma URL is provided |
-| `design-specifier` | ${ARC_ROOT}/agents/build/ | Quick design decisions during implement (empty states, dropdowns) |
-| `designer` | ${ARC_ROOT}/agents/review/ | Review implemented UI for AI slop |
+| `ui-builder` | agents/build/ | Build UI from the change spec you create |
+| `figma-builder` | agents/build/ | Build UI when Figma URL is provided |
+| `design-specifier` | agents/build/ | Quick design decisions during implement (empty states, dropdowns) |
+| `designer` | agents/review/ | Review implemented UI for AI slop |
 
 **Workflow:**
 ```
@@ -115,14 +117,14 @@ In full design mode, read the full reference set below. The component fast-path 
 <required_reading>
 **Read ALL of these using the Read tool:**
 
-1. `${ARC_ROOT}/references/frontend-design.md` — UI fonts, anti-patterns, design review checklist. **Critical.**
-2. `${ARC_ROOT}/references/brand-identity.md` — Brand typography, color psychology, visual character (if no brand-system.md exists)
-3. `${ARC_ROOT}/references/design-philosophy.md` — Timeless principles from Refactoring UI
-4. `${ARC_ROOT}/references/ux-laws.md` — Psychology-based design principles: Fitts's, Hick's, Gestalt, Jakob's Law, Doherty Threshold
-5. `${ARC_ROOT}/references/typography-opentype.md` — OpenType features, tracking, text-wrap, fluid sizing
-6. `${ARC_ROOT}/references/ascii-ui-patterns.md` — Wireframe syntax and patterns
-7. `${ARC_ROOT}/references/wiretext.md` — When to use WireText vs ASCII vs browser review
-8. `${ARC_ROOT}/references/tailwind-v4.md` — Tailwind v4 syntax and token patterns
+1. `references/frontend-design.md` — UI fonts, anti-patterns, design review checklist. **Critical.**
+2. `references/brand-identity.md` — Brand typography, color psychology, visual character (if no brand-system.md exists)
+3. `references/design-philosophy.md` — Timeless principles from Refactoring UI
+4. `references/ux-laws.md` — Psychology-based design principles: Fitts's, Hick's, Gestalt, Jakob's Law, Doherty Threshold
+5. `references/typography-opentype.md` — OpenType features, tracking, text-wrap, fluid sizing
+6. `references/ascii-ui-patterns.md` — Wireframe syntax and patterns
+7. `references/wiretext.md` — When to use WireText vs ASCII vs browser review
+8. `references/tailwind-v4.md` — Tailwind v4 syntax and token patterns
 
 **Then load interface rules:**
 9. `rules/interface/index.md` — Interface rules index
@@ -843,7 +845,7 @@ From `frontend-design.md`:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${ARC_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:design — [Component/page] design ([aesthetic direction])`
 </arc_log>

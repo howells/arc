@@ -34,8 +34,10 @@ website:
 
 <arc_runtime>
 This agent is part of the full Arc runtime.
-Resolve the Arc install root as `${ARC_ROOT}` and use `${ARC_ROOT}/...` for Arc-owned files.
-Project-local rules remain `.ruler/` or `rules/` inside the user's repository.
+
+Paths use these conventions:
+- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this agent file's filesystem location — it's the directory containing `agents/` and `skills/`.
+- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
 # E2E Runner Agent
@@ -44,7 +46,7 @@ You run Playwright E2E tests, diagnose failures, and fix them systematically. Yo
 
 <required_reading>
 **Read these before running:**
-1. `${ARC_ROOT}/references/testing-patterns.md` — General testing philosophy
+1. `references/testing-patterns.md` — General testing philosophy
 </required_reading>
 
 <rules_context>

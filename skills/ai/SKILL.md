@@ -32,12 +32,12 @@ website:
 </tool_restrictions>
 
 <arc_runtime>
-Arc-owned files live under the Arc install root for full-runtime installs.
+This workflow requires the full Arc bundle, not a prompts-only install.
 
-Set `${ARC_ROOT}` to that root and use `${ARC_ROOT}/...` for Arc bundle files such as
-`references/`, `disciplines/`, `agents/`, `templates/`, `scripts/`, and `rules/`.
-
-Project-local files stay relative to the user's repository.
+Paths in this skill use these conventions:
+- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
+- `./...` is local to this skill's directory.
+- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
 ```
@@ -49,7 +49,7 @@ AI SDK 6 guidance for building AI-powered features.
 
 <required_reading>
 **Read after detecting AI SDK (Step 1):**
-1. ${ARC_ROOT}/references/ai-sdk.md — Patterns and code examples
+1. references/ai-sdk.md — Patterns and code examples
 2. rules/ai-sdk.md — MUST/NEVER constraints
 </required_reading>
 
@@ -93,7 +93,7 @@ Continue with v6 patterns? (recommended even for planning a migration)
 
 **Read the patterns reference:**
 ```
-Read: ${ARC_ROOT}/references/ai-sdk.md
+Read: references/ai-sdk.md
 ```
 
 **Read the rules (MUST/NEVER constraints):**
@@ -172,7 +172,7 @@ If user selects "Review existing AI code":
 
 <notes>
 - This skill is cross-cutting — invoke anytime, not just during implementation
-- The reference file (${ARC_ROOT}/references/ai-sdk.md) is also loaded by /arc:implement when it detects `ai` in package.json
+- The reference file (references/ai-sdk.md) is also loaded by /arc:implement when it detects `ai` in package.json
 - The rules file (rules/ai-sdk.md) is copied to .ruler/ by /arc:rules and loaded by all build agents
 - OpenRouter is the default provider per stack.md. The patterns use it throughout.
 </notes>

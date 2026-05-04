@@ -41,16 +41,18 @@ If you feel the urge to "plan before acting" — that urge is satisfied by follo
 
 <arc_runtime>
 This workflow requires the full Arc bundle, not a prompts-only install.
-Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
-Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`, `agents/`, `templates/`, and `scripts/`.
-Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+
+Paths in this skill use these conventions:
+- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
+- `./...` is local to this skill's directory.
+- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
 <required_reading>
 **Read these using the Read tool when relevant:**
 
-1. `${ARC_ROOT}/references/touch-targets.md` — Minimum target sizes, pseudo-element expansion, mobile-specific patterns
-2. `${ARC_ROOT}/references/ux-laws.md` — Fitts's Law (target sizing), Gestalt proximity (spacing decisions)
+1. `references/touch-targets.md` — Minimum target sizes, pseudo-element expansion, mobile-specific patterns
+2. `references/ux-laws.md` — Fitts's Law (target sizing), Gestalt proximity (spacing decisions)
 </required_reading>
 
 # Responsive Audit & Fix
@@ -456,7 +458,7 @@ Responsive audit is complete when:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${ARC_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:responsive — [N] pages audited, [N] issues fixed`
 </arc_log>

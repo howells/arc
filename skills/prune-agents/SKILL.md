@@ -21,12 +21,12 @@ website:
 ---
 
 <arc_runtime>
-Arc-owned files live under the Arc install root for full-runtime installs.
+This workflow requires the full Arc bundle, not a prompts-only install.
 
-Set `${ARC_ROOT}` to that root and use `${ARC_ROOT}/...` for Arc bundle files such as
-`references/`, `disciplines/`, `agents/`, `templates/`, `scripts/`, and `rules/`.
-
-Project-local files stay relative to the user's repository.
+Paths in this skill use these conventions:
+- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
+- `./...` is local to this skill's directory.
+- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
 # Prune Orphaned Agents
@@ -34,7 +34,7 @@ Project-local files stay relative to the user's repository.
 Run the cleanup script to kill orphaned Claude agent processes.
 
 ```bash
-${ARC_ROOT}/scripts/cleanup-orphaned-agents.sh
+scripts/cleanup-orphaned-agents.sh
 ```
 
 This kills Claude Code processes that have become detached from their terminal (TTY shows "??"). These accumulate when the Task tool spawns subagents that don't cleanly exit after completion.

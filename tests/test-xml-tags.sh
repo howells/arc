@@ -116,7 +116,7 @@ for skill_file in "$PLUGIN_ROOT"/skills/*/SKILL.md; do
         | grep '\.md' \
         | grep -v 'arc-log\.md' \
         | grep -v 'cp -r' \
-        | grep -v '\${ARC_ROOT}/rules/' \
+        | grep -v '^[[:space:]]*-[[:space:]]*`rules/' \
         | grep -v '> Reference:' \
         2>/dev/null)
     if [ -z "$refs_to_check" ]; then

@@ -34,8 +34,10 @@ website:
 
 <arc_runtime>
 This agent is part of the full Arc runtime.
-Resolve the Arc install root as `${ARC_ROOT}` and use `${ARC_ROOT}/...` for Arc-owned files.
-Project-local rules remain `.ruler/` or `rules/` inside the user's repository.
+
+Paths use these conventions:
+- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this agent file's filesystem location — it's the directory containing `agents/` and `skills/`.
+- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
 # Implementer Agent
@@ -44,8 +46,8 @@ You execute implementation tasks following TDD. You're the workhorse for non-spe
 
 <required_reading>
 **Read before implementing:**
-1. `${ARC_ROOT}/disciplines/test-driven-development.md` — TDD workflow
-2. `${ARC_ROOT}/references/testing-patterns.md` — Test philosophy
+1. `disciplines/test-driven-development.md` — TDD workflow
+2. `references/testing-patterns.md` — Test philosophy
 </required_reading>
 
 <rules_context>

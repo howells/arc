@@ -49,14 +49,16 @@ website:
 
 <arc_runtime>
 This workflow requires the full Arc bundle, not a prompts-only install.
-Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
-Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`, `agents/`, `templates/`, and `scripts/`.
-Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+
+Paths in this skill use these conventions:
+- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
+- `./...` is local to this skill's directory.
+- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
 <platform_context>
 **Read this reference NOW:**
-1. `${ARC_ROOT}/references/platform-tools.md`
+1. `references/platform-tools.md`
 
 Adapt the workflow to the current harness instead of assuming Claude-specific tool names.
 - Use platform-native task tracking only when available; otherwise continue without it.
@@ -73,9 +75,9 @@ If no native task/todo tool exists, skip task tracking and continue with the aud
 
 <required_reading>
 **Read these reference files NOW:**
-1. `${ARC_ROOT}/disciplines/dispatching-parallel-agents.md`
-2. `${ARC_ROOT}/references/audit-stage-calibration.md`
-3. `${ARC_ROOT}/references/audit-scorecard.md`
+1. `disciplines/dispatching-parallel-agents.md`
+2. `references/audit-stage-calibration.md`
+3. `references/audit-scorecard.md`
 </required_reading>
 
 <progress_context>
@@ -475,7 +477,7 @@ Use the platform's structured question prompt if available. Otherwise ask a conc
 
 **If team mode selected**, read the team reference:
 ```
-${ARC_ROOT}/references/agent-teams.md
+references/agent-teams.md
 ```
 </team_mode_check>
 
@@ -484,7 +486,7 @@ ${ARC_ROOT}/references/agent-teams.md
 **Read agent prompts:**
 For each selected reviewer, read:
 ```
-${ARC_ROOT}/agents/review/[reviewer-name].md
+agents/review/[reviewer-name].md
 ```
 
 **Execution strategy:**
@@ -523,7 +525,7 @@ Batch 3: lee-nextjs-engineer, senior-engineer
 
 Each reviewer must receive the stage context so they can calibrate their severity ratings. Read the matching stage calibration block from:
 ```
-${ARC_ROOT}/references/audit-stage-calibration.md
+references/audit-stage-calibration.md
 ```
 
 Include in every reviewer prompt:
@@ -701,7 +703,7 @@ After all reviewer agents complete, run an additional structural pass using the 
 
 1. **Read the checklist:**
    ```
-   Read: ${ARC_ROOT}/references/diff-review-checklist.md
+   Read: references/diff-review-checklist.md
    ```
 
 2. **Get the full diff:**
@@ -744,7 +746,7 @@ Skip the deduplication and conflict resolution steps below and proceed directly 
 
 Use the severity validation table and conflict resolution rules from:
 ```
-${ARC_ROOT}/references/audit-stage-calibration.md
+references/audit-stage-calibration.md
 ```
 
 Downgrade findings that are rated higher than the stage warrants. Add note: `[Severity adjusted for [stage] stage — would be [original] in production]`
@@ -1038,7 +1040,7 @@ Do not auto-commit the plan unless the user explicitly asks for a commit.
 After spawning multiple reviewer agents, some may not exit cleanly. Run cleanup to prevent memory accumulation:
 
 ```bash
-${ARC_ROOT}/scripts/cleanup-orphaned-agents.sh
+scripts/cleanup-orphaned-agents.sh
 ```
 
 This is especially important after `--parallel` runs or when auditing large codebases.
@@ -1047,7 +1049,7 @@ This is especially important after `--parallel` runs or when auditing large code
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${ARC_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 Entry: `/arc:audit — [scope] ([N] critical, [N] high)`
 </arc_log>
 

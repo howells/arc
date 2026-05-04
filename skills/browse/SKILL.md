@@ -43,20 +43,22 @@ website:
 
 <arc_runtime>
 This workflow requires the full Arc bundle, not a prompts-only install.
-Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
-Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`, `agents/`, `templates/`, and `scripts/`.
-Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+
+Paths in this skill use these conventions:
+- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
+- `./...` is local to this skill's directory.
+- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
 <required_reading>
 **Persona-conditional — read only the pair matching the chosen persona in Phase 2:**
 
-- Designer: `${ARC_ROOT}/agents/review/designer.md` + `${ARC_ROOT}/skills/browse/references/designer-session.md`
-- First-time User: `${ARC_ROOT}/agents/review/first-time-user.md` + `${ARC_ROOT}/skills/browse/references/first-time-session.md`
-- Strategist: `${ARC_ROOT}/agents/review/strategist.md` + `${ARC_ROOT}/skills/browse/references/strategist-session.md`
-- Demo Presenter: `${ARC_ROOT}/agents/review/demo-presenter.md` + `${ARC_ROOT}/skills/browse/references/demo-presenter-session.md`
+- Designer: `agents/review/designer.md` + `skills/browse/references/designer-session.md`
+- First-time User: `agents/review/first-time-user.md` + `skills/browse/references/first-time-session.md`
+- Strategist: `agents/review/strategist.md` + `skills/browse/references/strategist-session.md`
+- Demo Presenter: `agents/review/demo-presenter.md` + `skills/browse/references/demo-presenter-session.md`
 
-**Always read at end of session:** `${ARC_ROOT}/skills/browse/templates/experience-report.md`
+**Always read at end of session:** `skills/browse/templates/experience-report.md`
 </required_reading>
 
 <process>
@@ -134,20 +136,20 @@ AskUserQuestion:
 **After selection, load the persona's knowledge:**
 
 For **Designer:**
-1. Read `${ARC_ROOT}/agents/review/designer.md` — judgment criteria
-2. Read `${ARC_ROOT}/skills/browse/references/designer-session.md` — browsing strategy
+1. Read `agents/review/designer.md` — judgment criteria
+2. Read `skills/browse/references/designer-session.md` — browsing strategy
 
 For **First-time User:**
-1. Read `${ARC_ROOT}/agents/review/first-time-user.md` — evaluation criteria
-2. Read `${ARC_ROOT}/skills/browse/references/first-time-session.md` — browsing strategy
+1. Read `agents/review/first-time-user.md` — evaluation criteria
+2. Read `skills/browse/references/first-time-session.md` — browsing strategy
 
 For **Strategist:**
-1. Read `${ARC_ROOT}/agents/review/strategist.md` — evaluation criteria
-2. Read `${ARC_ROOT}/skills/browse/references/strategist-session.md` — browsing strategy
+1. Read `agents/review/strategist.md` — evaluation criteria
+2. Read `skills/browse/references/strategist-session.md` — browsing strategy
 
 For **Demo Presenter:**
-1. Read `${ARC_ROOT}/agents/review/demo-presenter.md` — evaluation criteria
-2. Read `${ARC_ROOT}/skills/browse/references/demo-presenter-session.md` — browsing strategy
+1. Read `agents/review/demo-presenter.md` — evaluation criteria
+2. Read `skills/browse/references/demo-presenter-session.md` — browsing strategy
 
 ## Phase 3: Browser Setup
 
@@ -220,7 +222,7 @@ Navigate to the URL. If the page doesn't load, tell the user to start their dev 
 
 ## Phase 4: The Session
 
-Follow the browsing strategy loaded in Phase 2 (`${ARC_ROOT}/skills/browse/references/designer-session.md`, `first-time-session.md`, `strategist-session.md`, or `demo-presenter-session.md`). The session reference defines the step-by-step flow.
+Follow the browsing strategy loaded in Phase 2 (`skills/browse/references/designer-session.md`, `first-time-session.md`, `strategist-session.md`, or `demo-presenter-session.md`). The session reference defines the step-by-step flow.
 
 **General rules for all personas:**
 
@@ -247,7 +249,7 @@ Follow the browsing strategy loaded in Phase 2 (`${ARC_ROOT}/skills/browse/refer
 After completing the session (5-8 observations):
 
 1. **Copy the report template:**
-   Read `${ARC_ROOT}/skills/browse/templates/experience-report.md`
+   Read `skills/browse/templates/experience-report.md`
 
 2. **Create the report:**
    Write to `docs/arc/browse/YYYY-MM-DD-[persona]-[app-name].md`
@@ -292,7 +294,7 @@ After completing the session, append to progress journal:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${ARC_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:browse — [persona] session on [app] ([N] observations)`
 </arc_log>

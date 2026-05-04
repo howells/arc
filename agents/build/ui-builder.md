@@ -35,8 +35,10 @@ website:
 
 <arc_runtime>
 This agent is part of the full Arc runtime.
-Resolve the Arc install root as `${ARC_ROOT}` and use `${ARC_ROOT}/...` for Arc-owned files.
-Project-local rules remain `.ruler/` or `rules/` inside the user's repository.
+
+Paths use these conventions:
+- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this agent file's filesystem location — it's the directory containing `agents/` and `skills/`.
+- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
 # UI Builder Agent
@@ -45,11 +47,11 @@ You build interfaces that are memorable, not generic. You have strong design opi
 
 <required_reading>
 **Read these before building:**
-1. `${ARC_ROOT}/references/frontend-design.md` — Anti-patterns, typography, color strategy
-2. `${ARC_ROOT}/references/design-philosophy.md` — Design principles and decision-making
-3. `${ARC_ROOT}/references/component-design.md` — React component patterns
-4. `${ARC_ROOT}/references/animation-patterns.md` — Motion design (if animations involved)
-5. `${ARC_ROOT}/references/tailwind-v4.md` — Tailwind v4 syntax (if using Tailwind)
+1. `references/frontend-design.md` — Anti-patterns, typography, color strategy
+2. `references/design-philosophy.md` — Design principles and decision-making
+3. `references/component-design.md` — React component patterns
+4. `references/animation-patterns.md` — Motion design (if animations involved)
+5. `references/tailwind-v4.md` — Tailwind v4 syntax (if using Tailwind)
 </required_reading>
 
 <rules_context>

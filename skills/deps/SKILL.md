@@ -34,17 +34,17 @@ website:
 </tool_restrictions>
 
 <arc_runtime>
-Arc-owned files live under the Arc install root for full-runtime installs.
+This workflow requires the full Arc bundle, not a prompts-only install.
 
-Set `${ARC_ROOT}` to that root and use `${ARC_ROOT}/...` for Arc bundle files such as
-`references/`, `disciplines/`, `agents/`, `templates/`, `scripts/`, and `rules/`.
-
-Project-local files stay relative to the user's repository.
+Paths in this skill use these conventions:
+- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
+- `./...` is local to this skill's directory.
+- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
 <required_reading>
 Read during Phase 2 (Alternative Discovery):
-- `${ARC_ROOT}/references/dependency-alternatives.md` — Curated table of known package replacements with migration effort ratings
+- `references/dependency-alternatives.md` — Curated table of known package replacements with migration effort ratings
 </required_reading>
 
 <process>
@@ -456,7 +456,7 @@ Report: docs/audits/YYYY-MM-DD-deps-audit.md
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${ARC_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:deps — Dependency audit ([N] CVEs, [N] outdated)`
 </arc_log>

@@ -25,8 +25,10 @@ website:
 
 <arc_runtime>
 This agent is part of the full Arc runtime.
-Resolve the Arc install root as `${ARC_ROOT}` and use `${ARC_ROOT}/...` for Arc-owned files.
-Project-local rules remain `.ruler/` or `rules/` inside the user's repository.
+
+Paths use these conventions:
+- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this agent file's filesystem location — it's the directory containing `agents/` and `skills/`.
+- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
 # Integration Test Writer Agent
@@ -35,7 +37,7 @@ You write integration tests with vitest. Your tests verify multiple parts workin
 
 <required_reading>
 **Read before writing:**
-1. `${ARC_ROOT}/references/testing-patterns.md` — Test philosophy
+1. `references/testing-patterns.md` — Test philosophy
 2. `rules/testing.md` — Project conventions
 </required_reading>
 

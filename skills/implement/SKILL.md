@@ -42,30 +42,32 @@ If you feel the urge to "plan before acting" — that urge is satisfied by follo
 
 <arc_runtime>
 This workflow requires the full Arc bundle, not a prompts-only install.
-Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
-Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`, `agents/`, `templates/`, and `scripts/`.
-Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+
+Paths in this skill use these conventions:
+- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
+- `./...` is local to this skill's directory.
+- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
 <required_reading>
 **Read these reference files NOW:**
-1. ${ARC_ROOT}/references/testing-patterns.md
-2. ${ARC_ROOT}/references/task-granularity.md
-3. ${ARC_ROOT}/references/checkpoint-patterns.md
-4. ${ARC_ROOT}/references/subagent-statuses.md
-5. ${ARC_ROOT}/references/arc-paths.md
+1. references/testing-patterns.md
+2. references/task-granularity.md
+3. references/checkpoint-patterns.md
+4. references/subagent-statuses.md
+5. references/arc-paths.md
 
 **Load these only when relevant:**
-- ${ARC_ROOT}/references/frontend-design.md — if UI work is involved
-- ${ARC_ROOT}/references/model-strategy.md — when choosing build models
-- ${ARC_ROOT}/disciplines/dispatching-parallel-agents.md — when parallel reviewers/build agents are needed
-- ${ARC_ROOT}/disciplines/finishing-a-development-branch.md — before finalizing the branch
-- ${ARC_ROOT}/disciplines/subagent-driven-development.md — when executing through build agents
-- ${ARC_ROOT}/disciplines/verification-before-completion.md — before closing the work
+- references/frontend-design.md — if UI work is involved
+- references/model-strategy.md — when choosing build models
+- disciplines/dispatching-parallel-agents.md — when parallel reviewers/build agents are needed
+- disciplines/finishing-a-development-branch.md — before finalizing the branch
+- disciplines/subagent-driven-development.md — when executing through build agents
+- disciplines/verification-before-completion.md — before closing the work
 </required_reading>
 
 <build_agents>
-**Available build agents in `${ARC_ROOT}/agents/build/`:**
+**Available build agents in `agents/build/`:**
 
 | Agent | Model | Use For |
 |-------|-------|---------|
@@ -85,7 +87,7 @@ Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
 | `plan-completion-reviewer` | sonnet | Whole-plan gate — all tasks built, nothing skipped, no scope creep |
 
 **Before spawning a build agent:**
-1. Read the agent file: `${ARC_ROOT}/agents/build/[agent-name].md`
+1. Read the agent file: `agents/build/[agent-name].md`
 2. Use the model specified in the agent's frontmatter
 3. Include relevant context from the task
 
@@ -138,12 +140,12 @@ Rules are optional — proceed without them if the user prefers.
 | Marketing pages | marketing.md |
 
 **Additional references (load as needed):**
-- `${ARC_ROOT}/references/component-design.md` — React component patterns
-- `${ARC_ROOT}/references/animation-patterns.md` — Motion design
-- `${ARC_ROOT}/references/nextjs-app-router.md` — Next.js App Router patterns (if using Next.js)
-- `${ARC_ROOT}/references/tanstack-query-trpc.md` — TanStack Query + tRPC patterns (if data fetching)
-- `${ARC_ROOT}/references/tanstack-table.md` — TanStack Table v8 patterns (if data tables)
-- `${ARC_ROOT}/references/ai-sdk.md` — AI SDK 6 patterns (if `ai` in package.json)
+- `references/component-design.md` — React component patterns
+- `references/animation-patterns.md` — Motion design
+- `references/nextjs-app-router.md` — Next.js App Router patterns (if using Next.js)
+- `references/tanstack-query-trpc.md` — TanStack Query + tRPC patterns (if data fetching)
+- `references/tanstack-table.md` — TanStack Table v8 patterns (if data tables)
+- `references/ai-sdk.md` — AI SDK 6 patterns (if `ai` in package.json)
 </rules_context>
 
 <process>
@@ -539,7 +541,7 @@ Test name: [name]
 Error: [paste full error]
 Implementation file: [path]
 
-Investigate root cause and fix. See ${ARC_ROOT}/disciplines/systematic-debugging.md"
+Investigate root cause and fix. See disciplines/systematic-debugging.md"
 ```
 
 If debugger can't resolve after one attempt → stop and ask user.
@@ -655,7 +657,7 @@ AskUserQuestion:
 5. If "Need help" → provide additional guidance, then re-present checkpoint
 6. Retry the blocked operation and continue
 
-See `${ARC_ROOT}/references/checkpoint-patterns.md` for full protocol.
+See `references/checkpoint-patterns.md` for full protocol.
 
 ## Phase 4: Quality Checkpoints
 
@@ -670,7 +672,7 @@ Search the codebase (Glob + Grep) for existing functions that serve the same or 
 
 **If design spec exists** — spawn ui-builder:
 ```
-Read: ${ARC_ROOT}/agents/build/ui-builder.md
+Read: agents/build/ui-builder.md
 ```
 
 **If no design spec** (empty states, undefined visuals) — spawn design-specifier first:
@@ -688,7 +690,7 @@ Then spawn ui-builder with the design-specifier's output.
 
 **If Figma URL provided** — spawn figma-builder:
 ```
-Read: ${ARC_ROOT}/agents/build/figma-builder.md
+Read: agents/build/figma-builder.md
 Task [figma-builder] model: opus: "Implement from Figma: [URL]"
 ```
 
@@ -798,7 +800,7 @@ TEST RESULTS:
 
 Read each file referenced in the plan. Verify every task was implemented substantively.
 Check for skipped tasks, partial implementations, and scope creep.
-See ${ARC_ROOT}/agents/build/plan-completion-reviewer.md"
+See agents/build/plan-completion-reviewer.md"
 ```
 
 **If plan-completion-reviewer finds issues:**
@@ -821,7 +823,7 @@ Test files: [list e2e test files]
 Feature: [brief description]
 
 Run tests, fix any failures, and iterate until all pass or report blockers.
-See ${ARC_ROOT}/agents/build/e2e-runner.md for protocol."
+See agents/build/e2e-runner.md for protocol."
 ```
 
 **Why a separate agent?**
@@ -842,11 +844,11 @@ If yes, spawn review agents in parallel (all use sonnet):
 ```
 Task [senior-engineer] model: sonnet: "Review implementation for unnecessary complexity and code quality.
 Files: [list of new/modified files]
-See ${ARC_ROOT}/agents/review/senior-engineer.md"
+See agents/review/senior-engineer.md"
 
 Task [architecture-engineer] model: sonnet: "Review implementation for architectural concerns.
 Files: [list of new/modified files]
-See ${ARC_ROOT}/agents/review/architecture-engineer.md"
+See agents/review/architecture-engineer.md"
 ```
 
 **Add a conditional third reviewer based on what was built:**
@@ -857,7 +859,7 @@ See ${ARC_ROOT}/agents/review/architecture-engineer.md"
 | Significant UI (components, pages) | senior-engineer |
 | Database migrations, data models | data-engineer |
 
-Present findings as Socratic questions (see `${ARC_ROOT}/references/review-patterns.md`).
+Present findings as Socratic questions (see `references/review-patterns.md`).
 Blockers → fix → re-verify (max 2 cycles). Should-fix → fix if quick, otherwise note as follow-up.
 
 ## Post-Completion: Doc Staleness Check
@@ -922,7 +924,7 @@ git branch -d feature/<feature-name>
 After spawning multiple build agents, some may not exit cleanly. Run cleanup:
 
 ```bash
-${ARC_ROOT}/scripts/cleanup-orphaned-agents.sh
+scripts/cleanup-orphaned-agents.sh
 ```
 
 This is especially important after parallel agent runs.
@@ -966,7 +968,7 @@ After completing implementation (or pausing), append to progress journal:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${ARC_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:implement — [Feature name] ([X/Y] tasks complete)`
 </arc_log>

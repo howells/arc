@@ -54,15 +54,18 @@ WORKFLOW_AGENTS=(
 )
 # Note: flow-discoverer removed (flow skill deleted)
 
-find_bare_internal_refs() {
+find_arc_root_refs() {
+    # Flag any `${ARC_ROOT}/...` references — anti-pattern since no platform
+    # expands the variable in skill prose. Use bare paths instead.
     local file="$1"
-    sed '/<arc_runtime>/,/<\/arc_runtime>/d' "$file" \
-        | grep -nE '(^|[^$[:alnum:]_{/])(references|disciplines|agents|templates|scripts)/' || true
+    grep -nE '\$\{ARC_ROOT\}/' "$file" || true
 }
 
-uses_arc_root_refs() {
+uses_internal_refs() {
+    # Skills/agents that reference Arc-owned paths (bare or otherwise).
     local file="$1"
-    grep -q '\${ARC_ROOT}/' "$file"
+    sed '/<arc_runtime>/,/<\/arc_runtime>/d' "$file" \
+        | grep -qE '(^|[^$[:alnum:]_{/])(references|disciplines|agents|templates|scripts|rules|skills)/[a-z]'
 }
 
 declares_arc_runtime() {
@@ -224,25 +227,19 @@ echo ""
 
 for skill_file in "$PLUGIN_ROOT"/skills/*/SKILL.md; do
     skill="$(basename "$(dirname "$skill_file")")"
-    bare_refs="$(find_bare_internal_refs "$skill_file")"
+    arc_root_refs="$(find_arc_root_refs "$skill_file")"
 
-    if uses_arc_root_refs "$skill_file" || [ -n "$bare_refs" ] || declares_arc_runtime "$skill_file"; then
+    if uses_internal_refs "$skill_file" || declares_arc_runtime "$skill_file"; then
         if declares_arc_runtime "$skill_file"; then
             pass "skill/$skill declares full-runtime requirements"
         else
             fail "skill/$skill missing <arc_runtime> block"
         fi
 
-        if uses_arc_root_refs "$skill_file"; then
-            pass "skill/$skill uses \${ARC_ROOT} paths"
+        if [ -z "$arc_root_refs" ]; then
+            pass "skill/$skill uses bare path conventions (no \${ARC_ROOT})"
         else
-            fail "skill/$skill missing \${ARC_ROOT} path references"
-        fi
-
-        if [ -z "$bare_refs" ]; then
-            pass "skill/$skill has no bare Arc-internal paths"
-        else
-            fail "skill/$skill has bare Arc-internal paths" "$bare_refs"
+            fail "skill/$skill uses anti-pattern \${ARC_ROOT}/ paths" "$arc_root_refs"
         fi
     fi
 done
@@ -253,25 +250,19 @@ echo ""
 
 for agent_file in "$PLUGIN_ROOT"/agents/*/*.md; do
     agent="$(basename "$(dirname "$agent_file")")/$(basename "$agent_file" .md)"
-    bare_refs="$(find_bare_internal_refs "$agent_file")"
+    arc_root_refs="$(find_arc_root_refs "$agent_file")"
 
-    if uses_arc_root_refs "$agent_file" || [ -n "$bare_refs" ] || declares_arc_runtime "$agent_file"; then
+    if uses_internal_refs "$agent_file" || declares_arc_runtime "$agent_file"; then
         if declares_arc_runtime "$agent_file"; then
             pass "agent/$agent declares full-runtime requirements"
         else
             fail "agent/$agent missing <arc_runtime> block"
         fi
 
-        if uses_arc_root_refs "$agent_file"; then
-            pass "agent/$agent uses \${ARC_ROOT} paths"
+        if [ -z "$arc_root_refs" ]; then
+            pass "agent/$agent uses bare path conventions (no \${ARC_ROOT})"
         else
-            fail "agent/$agent missing \${ARC_ROOT} path references"
-        fi
-
-        if [ -z "$bare_refs" ]; then
-            pass "agent/$agent has no bare Arc-internal paths"
-        else
-            fail "agent/$agent has bare Arc-internal paths" "$bare_refs"
+            fail "agent/$agent uses anti-pattern \${ARC_ROOT}/ paths" "$arc_root_refs"
         fi
     fi
 done

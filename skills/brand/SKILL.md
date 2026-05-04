@@ -41,12 +41,12 @@ website:
 </tool_restrictions>
 
 <arc_runtime>
-Arc-owned files live under the Arc install root for full-runtime installs.
+This workflow requires the full Arc bundle, not a prompts-only install.
 
-Set `${ARC_ROOT}` to that root and use `${ARC_ROOT}/...` for Arc bundle files such as
-`references/`, `disciplines/`, `agents/`, `templates/`, `scripts/`, and `rules/`.
-
-Project-local files stay relative to the user's repository.
+Paths in this skill use these conventions:
+- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
+- `./...` is local to this skill's directory.
+- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
 # Brand Workflow
@@ -71,9 +71,9 @@ The skill's job is to present excellent options and push against mediocrity — 
 <required_reading>
 **Read ALL of these using the Read tool:**
 
-1. `${ARC_ROOT}/references/brand-identity.md` — Brand typography, color psychology, visual character, distinctiveness criteria
-2. `${ARC_ROOT}/references/design-philosophy.md` — Hierarchy, color theory, personality choices
-3. `${ARC_ROOT}/references/typography-opentype.md` — OpenType features, tracking, text-wrap, fluid sizing
+1. `references/brand-identity.md` — Brand typography, color psychology, visual character, distinctiveness criteria
+2. `references/design-philosophy.md` — Hierarchy, color theory, personality choices
+3. `references/typography-opentype.md` — OpenType features, tracking, text-wrap, fluid sizing
 4. `rules/interface/colors.md` — OKLCH palettes, tinted neutrals, 60-30-10 rule
 5. `rules/interface/typography.md` — Font loading, OpenType features, type scale
 </required_reading>
@@ -529,13 +529,13 @@ The taste engine is not a hardcoded list — it draws from the references loaded
 
 ### Typography Taste
 
-Consult `${ARC_ROOT}/references/brand-identity.md` for:
+Consult `references/brand-identity.md` for:
 - The "Never use for brand identity" list
 - Recommended brand fonts with character descriptions and use cases
 - Commercial foundries for premium projects
 - Font pairing principles
 
-Consult `${ARC_ROOT}/references/typography-opentype.md` for:
+Consult `references/typography-opentype.md` for:
 - Tracking adjustments per context (tighter for display, looser for all-caps)
 - Font loading strategy decisions
 - OpenType features that add typographic polish
@@ -544,7 +544,7 @@ Consult `${ARC_ROOT}/references/typography-opentype.md` for:
 
 ### Color Taste
 
-Consult `${ARC_ROOT}/references/brand-identity.md` for:
+Consult `references/brand-identity.md` for:
 - Color psychology beyond basics (hue ranges, when they work, when they don't)
 - Generic palette patterns to avoid
 - How to build a brand palette (meaning → dominant → accent → derive → scale)
@@ -588,7 +588,7 @@ Push users past safe defaults with questions, not mandates:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${ARC_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:brand — [Project] brand identity created ([chosen direction name], [key characteristics])`
 </arc_log>

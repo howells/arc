@@ -36,12 +36,12 @@ website:
 </tool_restrictions>
 
 <arc_runtime>
-Arc-owned files live under the Arc install root for full-runtime installs.
+This workflow requires the full Arc bundle, not a prompts-only install.
 
-Set `${ARC_ROOT}` to that root and use `${ARC_ROOT}/...` for Arc bundle files such as
-`references/`, `disciplines/`, `agents/`, `templates/`, `scripts/`, and `rules/`.
-
-Project-local files stay relative to the user's repository.
+Paths in this skill use these conventions:
+- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
+- `./...` is local to this skill's directory.
+- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
 ```
@@ -63,12 +63,12 @@ Apply Arc's coding standards to the current project.
 
 ## Step 2: Fresh Install
 
-Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}` for the rest of this workflow.
+Resolve the Arc plugin root from this skill's filesystem location (it's the directory containing `agents/` and `skills/`) — `rules/` is a sibling of that directory.
 
 Copy all rules from Arc to the project:
 
 ```bash
-cp -r "${ARC_ROOT}/rules/" .ruler/
+cp -r "rules/" .ruler/
 ```
 
 Tell the user:
@@ -106,7 +106,7 @@ cp -r .ruler/ ".ruler.backup-$(date +%Y%m%d-%H%M%S)/"
 
 # Copy fresh rules
 rm -rf .ruler/
-cp -r "${ARC_ROOT}/rules/" .ruler/
+cp -r "rules/" .ruler/
 ```
 
 Tell the user:
@@ -121,7 +121,7 @@ Go to Step 4 (Offer Ruler)
 **If user picks "Keep existing":**
 ```
 Keeping existing rules. You can manually compare with Arc's rules at:
-${ARC_ROOT}/rules/
+rules/
 ```
 
 Done.

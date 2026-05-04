@@ -25,8 +25,10 @@ website:
 
 <arc_runtime>
 This agent is part of the full Arc runtime.
-Resolve the Arc install root as `${ARC_ROOT}` and use `${ARC_ROOT}/...` for Arc-owned files.
-Project-local rules remain `.ruler/` or `rules/` inside the user's repository.
+
+Paths use these conventions:
+- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this agent file's filesystem location — it's the directory containing `agents/` and `skills/`.
+- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
 # Spec Reviewer Agent
@@ -63,7 +65,7 @@ Get the task specification from:
 <required_reading>
 ### 2.5. Check for Stubs
 
-Use patterns from `${ARC_ROOT}/references/verification-patterns.md` to verify implementations are substantive:
+Use patterns from `references/verification-patterns.md` to verify implementations are substantive:
 
 - No placeholder text or TODO comments in new code
 - Event handlers have real logic (not empty or log-only)

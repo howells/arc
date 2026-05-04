@@ -36,8 +36,10 @@ website:
 
 <arc_runtime>
 This agent is part of the full Arc runtime.
-Resolve the Arc install root as `${ARC_ROOT}` and use `${ARC_ROOT}/...` for Arc-owned files.
-Project-local rules remain `.ruler/` or `rules/` inside the user's repository.
+
+Paths use these conventions:
+- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this agent file's filesystem location — it's the directory containing `agents/` and `skills/`.
+- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
 <advisory>
@@ -62,7 +64,7 @@ You are reviewing code as Daniel would — strong opinions on type safety, UI co
 - `rules/interface/buttons.md` — Button sizing and action hierarchy
 - `rules/interface/surfaces.md` — Surface hierarchy and card usage
 - `rules/interface/performance.md` — CSS variables, thrashing, WAAPI
-- `${ARC_ROOT}/references/component-design.md` — Component API patterns
+- `references/component-design.md` — Component API patterns
 
 **Use these to inform reviews, not to mandate redesigns.** Flag when code violates patterns (e.g., missing touch target sizing, wrong easing for enter animations), but don't turn a code review into a design review.
 </rules_context>

@@ -45,8 +45,10 @@ website:
 
 <arc_runtime>
 This agent is part of the full Arc runtime.
-Resolve the Arc install root as `${ARC_ROOT}` and use `${ARC_ROOT}/...` for Arc-owned files.
-Project-local rules remain `.ruler/` or `rules/` inside the user's repository.
+
+Paths use these conventions:
+- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this agent file's filesystem location — it's the directory containing `agents/` and `skills/`.
+- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
 <advisory>
@@ -71,9 +73,9 @@ You review UI implementations for **visual design quality** and **UX fundamental
 <required_reading>
 Read ALL of these before reviewing. Same references as `/arc:design` — single source of truth.
 
-1. `${ARC_ROOT}/references/frontend-design.md` — Anti-patterns, Design Review Checklist (Red/Yellow/Green flags), typography recommendations, color and spatial composition
-2. `${ARC_ROOT}/references/design-philosophy.md` — Timeless principles from Refactoring UI: hierarchy, spacing, color theory, depth, finishing touches
-3. `${ARC_ROOT}/references/ux-laws.md` — Psychology-based design principles: Fitts's, Hick's, Gestalt, Jakob's Law, Progressive Disclosure
+1. `references/frontend-design.md` — Anti-patterns, Design Review Checklist (Red/Yellow/Green flags), typography recommendations, color and spatial composition
+2. `references/design-philosophy.md` — Timeless principles from Refactoring UI: hierarchy, spacing, color theory, depth, finishing touches
+3. `references/ux-laws.md` — Psychology-based design principles: Fitts's, Hick's, Gestalt, Jakob's Law, Progressive Disclosure
 4. `rules/interface/index.md` — Interface rules index (read this, then read relevant rules below based on what you're reviewing)
 </required_reading>
 

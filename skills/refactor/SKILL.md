@@ -39,15 +39,17 @@ website:
 
 <arc_runtime>
 This workflow requires the full Arc bundle, not a prompts-only install.
-Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
-Use `${ARC_ROOT}/...` for Arc-owned files.
-Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+
+Paths in this skill use these conventions:
+- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
+- `./...` is local to this skill's directory.
+- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
 <required_reading>
 Before starting, read these references:
-1. `${ARC_ROOT}/references/architecture-patterns.md` — import depth rules, boundary violations
-2. `${ARC_ROOT}/references/component-design.md` — compound vs simple component patterns
+1. `references/architecture-patterns.md` — import depth rules, boundary violations
+2. `references/component-design.md` — compound vs simple component patterns
 </required_reading>
 
 # Architectural Refactoring

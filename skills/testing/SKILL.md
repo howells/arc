@@ -43,9 +43,11 @@ website:
 
 <arc_runtime>
 This workflow requires the full Arc bundle, not a prompts-only install.
-Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
-Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`, `agents/`, `templates/`, and `scripts/`.
-Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+
+Paths in this skill use these conventions:
+- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
+- `./...` is local to this skill's directory.
+- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
 # Testing Strategy Workflow
@@ -54,10 +56,10 @@ Create comprehensive test strategies covering the full test pyramid. Execute wit
 
 <required_reading>
 **Read before planning:**
-1. `${ARC_ROOT}/references/testing-patterns.md` — Test philosophy, vitest/playwright patterns
+1. `references/testing-patterns.md` — Test philosophy, vitest/playwright patterns
 2. `rules/testing.md` — Project conventions
-3. `${ARC_ROOT}/references/llm-api-testing.md` — If testing LLM integrations
-4. `${ARC_ROOT}/disciplines/change-impact-testing.md` — Blast radius analysis for code changes
+3. `references/llm-api-testing.md` — If testing LLM integrations
+4. `disciplines/change-impact-testing.md` — Blast radius analysis for code changes
 </required_reading>
 
 ## Agents

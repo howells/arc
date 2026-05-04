@@ -42,9 +42,11 @@ If you feel the urge to "plan before acting" — that urge is satisfied by follo
 
 <arc_runtime>
 This workflow requires the full Arc bundle, not a prompts-only install.
-Resolve the Arc install root from this skill's location and refer to it as `${ARC_ROOT}`.
-Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`, `agents/`, `templates/`, and `scripts/`.
-Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
+
+Paths in this skill use these conventions:
+- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
+- `./...` is local to this skill's directory.
+- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
 <key_principles>
@@ -66,8 +68,8 @@ If a related task exists, note its ID and mark it `in_progress` with TaskUpdate 
 
 <required_reading>
 **Read these reference files NOW:**
-1. ${ARC_ROOT}/references/documentation-guide.md
-2. ${ARC_ROOT}/templates/doc-templates.md
+1. references/documentation-guide.md
+2. templates/doc-templates.md
 </required_reading>
 
 <progress_context>
@@ -301,7 +303,7 @@ For Fumadocs projects, check `source.config.ts` for the configured content direc
 
 Single-pass generation. No agents needed.
 
-1. Use the templates from `${ARC_ROOT}/templates/doc-templates.md`
+1. Use the templates from `templates/doc-templates.md`
 2. Read all source files identified in Phase 2
 3. Generate documentation matching the validated style sample
 4. Write files to the chosen location
@@ -309,7 +311,7 @@ Single-pass generation. No agents needed.
 
 ### Full-Site (large scope)
 
-**Spawn docs-writer agents in batches following `${ARC_ROOT}/disciplines/dispatching-parallel-agents.md`.**
+**Spawn docs-writer agents in batches following `disciplines/dispatching-parallel-agents.md`.**
 
 1. **Prepare agent assignments.** Each outline section = one agent. Each agent gets:
    - Section name and description
@@ -409,7 +411,7 @@ Options:
 
 <arc_log>
 **After completing this skill, append to the activity log.**
-See: `${ARC_ROOT}/references/arc-log.md`
+See: `references/arc-log.md`
 
 Entry: `/arc:document — [scope] ([audience]) [N files]`
 

@@ -8,12 +8,11 @@ If you were dispatched as a subagent to execute a specific task, skip this skill
 </SUBAGENT-STOP>
 
 <arc_runtime>
-Arc-owned files live under the Arc install root for full-runtime installs.
+Arc-owned files live at the Arc plugin root for full-runtime installs.
 
-Set `${ARC_ROOT}` to that root and use `${ARC_ROOT}/...` for Arc bundle files such as
-`references/`, `disciplines/`, `agents/`, `templates/`, `scripts/`, and `rules/`.
+Skills and agents reference Arc-owned files using bare relative paths from the plugin root: `agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, and `skills/<name>/`. Resolve the plugin root by walking up from a SKILL.md or agent file's location (it's the directory containing `agents/` and `skills/`).
 
-Project-local files stay relative to the user's repository.
+Project-local files stay relative to the user's repository (`.ruler/`, `docs/`, `src/`, etc.).
 </arc_runtime>
 
 # Using Arc
@@ -47,7 +46,7 @@ Arc should improve routing, not create ceremony for every trivial request.
 <required_reading>
 Arc skills may mention Claude Code tool names. For platform mappings and equivalents, read:
 
-`${ARC_ROOT}/references/platform-tools.md`
+`references/platform-tools.md`
 </required_reading>
 
 When a skill says `AskUserQuestion`, preserve the behavior rather than the literal tool name.
@@ -58,10 +57,10 @@ Do not narrate tool fallbacks or tell the user that a question tool is unavailab
 
 Arc supports two install classes:
 
-- **Full-runtime installs**: Claude plugin and Codex installer. These include Arc-owned `${ARC_ROOT}/agents/`, `${ARC_ROOT}/references/`, `${ARC_ROOT}/disciplines/`, `${ARC_ROOT}/templates/`, and `${ARC_ROOT}/scripts/`.
+- **Full-runtime installs**: Claude plugin and Codex installer. These include Arc-owned `agents/`, `references/`, `disciplines/`, `templates/`, and `scripts/`.
 - **Prompt-only installs**: `skills.sh` and similar prompt distributors. These copy `SKILL.md` files only.
 
-When a workflow needs Arc-owned files, resolve the Arc install root from the loaded skill's location and refer to it as `${ARC_ROOT}`. Use `${ARC_ROOT}/...` for Arc bundle files, and keep project-local paths such as `.ruler/` or `rules/` scoped to the user's repository.
+When a workflow needs Arc-owned files, resolve the Arc plugin root by walking up from the loaded skill's filesystem location (it's the directory containing `agents/` and `skills/`). Skills reference Arc-owned files using bare relative paths from that root: `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...`. Project-local paths such as `.ruler/`, `docs/`, `src/`, or the user's own `rules/` stay scoped to the user's repository.
 
 If the requested workflow depends on Arc-owned files and the environment only has prompt-only skills, stop early and tell the user to upgrade to the full Claude plugin or Codex installer.
 
