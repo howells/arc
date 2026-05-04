@@ -78,7 +78,7 @@ if command -v ruby >/dev/null 2>&1; then
     yaml_errors=$(ruby -e '
         require "yaml"
         ARGV.each do |file|
-          text = File.read(file)
+          text = File.read(file, encoding: "UTF-8")
           next unless text.start_with?("---\n")
           frontmatter = text.split(/^---\s*$/, 3)[1]
           begin

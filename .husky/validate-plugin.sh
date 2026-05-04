@@ -278,9 +278,10 @@ for search_dir in skills agents; do
   [ -d "$search_dir" ] || continue
   while IFS= read -r -d '' f; do
     # Extract references: agents/, disciplines/, references/, templates/, rules/, skills/ paths
-    refs=$(grep -oE "(\\\$\{CLAUDE_PLUGIN_ROOT\}/)?(agents|disciplines|workflows|references|templates|rules|skills)/[a-z0-9/_-]+\.md" "$f" 2>/dev/null || true)
+    # Supports ${CLAUDE_PLUGIN_ROOT}/ and ${ARC_ROOT}/ prefixes (both resolve to the plugin root).
+    refs=$(grep -oE "(\\\$\{(CLAUDE_PLUGIN_ROOT|ARC_ROOT)\}/)?(agents|disciplines|workflows|references|templates|rules|skills)/[a-z0-9/_-]+\.md" "$f" 2>/dev/null || true)
     for ref in $refs; do
-      clean_ref=$(echo "$ref" | sed 's/\${CLAUDE_PLUGIN_ROOT}\///')
+      clean_ref=$(echo "$ref" | sed -E 's/\$\{(CLAUDE_PLUGIN_ROOT|ARC_ROOT)\}\///')
       if [ ! -f "$clean_ref" ]; then
         warn "$f references '$clean_ref' which doesn't exist"
         ref_issues=$((ref_issues + 1))

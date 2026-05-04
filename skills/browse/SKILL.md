@@ -48,6 +48,17 @@ Use `${ARC_ROOT}/...` for Arc-owned files such as `references/`, `disciplines/`,
 Use project-local paths such as `.ruler/` or `rules/` for the user's repository.
 </arc_runtime>
 
+<required_reading>
+**Persona-conditional — read only the pair matching the chosen persona in Phase 2:**
+
+- Designer: `${ARC_ROOT}/agents/review/designer.md` + `${ARC_ROOT}/skills/browse/references/designer-session.md`
+- First-time User: `${ARC_ROOT}/agents/review/first-time-user.md` + `${ARC_ROOT}/skills/browse/references/first-time-session.md`
+- Strategist: `${ARC_ROOT}/agents/review/strategist.md` + `${ARC_ROOT}/skills/browse/references/strategist-session.md`
+- Demo Presenter: `${ARC_ROOT}/agents/review/demo-presenter.md` + `${ARC_ROOT}/skills/browse/references/demo-presenter-session.md`
+
+**Always read at end of session:** `${ARC_ROOT}/skills/browse/templates/experience-report.md`
+</required_reading>
+
 <process>
 
 **Announce at start:** "I'm using the browse skill to evaluate your app through an expert persona."
@@ -209,7 +220,7 @@ Navigate to the URL. If the page doesn't load, tell the user to start their dev 
 
 ## Phase 4: The Session
 
-Follow the browsing strategy loaded in Phase 2 (`references/designer-session.md` or `references/first-time-session.md`). The session reference defines the step-by-step flow.
+Follow the browsing strategy loaded in Phase 2 (`${ARC_ROOT}/skills/browse/references/designer-session.md`, `first-time-session.md`, `strategist-session.md`, or `demo-presenter-session.md`). The session reference defines the step-by-step flow.
 
 **General rules for all personas:**
 
