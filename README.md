@@ -65,7 +65,7 @@ when they clearly apply.
 claude plugins install arc@howells
 ```
 
-Installs the full plugin: skills, agents, hooks, commands, references, and disciplines. This is the complete Arc experience — skills can dispatch specialized subagents, use worktrees, track tasks, and chain workflows together.
+Installs the full plugin: skills, agents, hooks, commands, references, and disciplines. This is the complete Arc experience — skills can dispatch specialized subagents, track tasks, and chain workflows together.
 
 ### Any agent (via skills.sh)
 
@@ -314,7 +314,6 @@ Implementation methodologies in `disciplines/`:
 - **test-driven-development** — Red-green-refactor cycle
 - **systematic-debugging** — Methodical bug investigation
 - **verification-before-completion** — Prove it works before claiming done
-- **using-git-worktrees** — Isolated development branches
 - **finishing-a-development-branch** — Cleanup after work complete
 - **subagent-driven-development** — Parallel agent execution
 - **dispatching-parallel-agents** — Efficient multi-agent coordination

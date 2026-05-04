@@ -307,11 +307,11 @@ Present the full arc:
 ```
 /arc:ideate     → Design doc ✓ YOU ARE HERE
      ↓
-/arc:implement  → Plan + Execute (recommend worktree)
+/arc:implement  → Plan + Execute
 ```
 
 Options via AskUserQuestion:
-1. **Set up worktree → implement** (Recommended) — follow `${ARC_ROOT}/disciplines/using-git-worktrees.md`
+1. **Implement on a new feature branch** (Recommended)
 2. **Implement on current branch**
 3. **Done for now** — just the design
 </process>

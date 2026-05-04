@@ -189,7 +189,6 @@ Add site-specific ignores to the root `.gitignore`:
 *.log
 .arc/
 node_modules/
-.worktrees/
 
 # Site
 site/.next/

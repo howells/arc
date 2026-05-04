@@ -14,7 +14,7 @@ website:
   desc: Plan + execute
   summary: Scope-aware planning plus execution with TDD. Small changes get a lightweight inline plan; larger changes get the full implementation workflow.
   what: |
-    Implement decides how much ceremony the work needs before it starts building. Small, well-bounded changes get an inline plan and the same TDD + quality gates without forcing a separate plan document or worktree. Larger features still use the full detail-driven implementation flow: plan creation, task execution, review checkpoints, and whole-plan verification. In both paths the loop is the same: tests first, then implementation, then typecheck, lint, review, and commit.
+    Implement decides how much ceremony the work needs before it starts building. Small, well-bounded changes get an inline plan and the same TDD + quality gates without forcing a separate plan document. Larger features still use the full detail-driven implementation flow: plan creation, task execution, review checkpoints, and whole-plan verification. In both paths the loop is the same: tests first, then implementation, then typecheck, lint, review, and commit.
   why: |
     The quality bar should stay constant even when the scope changes. TDD produces better code, but developers skip it because writing tests is boring and heavyweight workflows feel like overkill for small tasks. Implement keeps the discipline while scaling the planning ceremony to the work.
   decisions:
@@ -253,7 +253,7 @@ Share the inline plan, confirm it looks right, then proceed directly to executio
 
 ## Phase 1: Setup
 
-**Branch setup:**
+**If not already on a feature branch:**
 ```bash
 # Check current location
 git branch --show-current
@@ -262,7 +262,7 @@ git branch --show-current
 git checkout -b feature/<feature-name>
 ```
 
-**Codex note:** In shared-workspace environments, prefer the current worktree plus a feature branch so the user sees edits immediately. A separate git worktree is optional, not mandatory.
+**Codex note:** In shared-workspace environments, work in the current working directory on a feature branch so the user sees edits immediately.
 
 **Install dependencies:**
 ```bash
@@ -909,13 +909,10 @@ EOF
 - Summary of what was built
 - Any follow-up items
 
-**Cleanup branch/worktree (optional):**
+**Cleanup branch (optional):**
 ```bash
 git checkout main
 git branch -d feature/<feature-name>
-# or, if you used an external worktree:
-cd ..
-git worktree remove .worktrees/<feature-name>
 ```
 
 ## Phase 8: Cleanup

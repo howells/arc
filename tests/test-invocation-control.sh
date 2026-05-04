@@ -4,6 +4,7 @@
 # These skills should NOT be auto-invoked by Claude:
 # - commit (user controls when to commit)
 # - letsgo (production deployment)
+# - legal (generates legal documents)
 # - tidy (deletes/archives files)
 # - rules (modifies project files)
 
