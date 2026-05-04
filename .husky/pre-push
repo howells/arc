@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Block pushes that contain version drift — undeclared files referencing the
+# current version, or declared files out of sync. Catches the kind of
+# drift that orphans published artifacts from source.
+
+if ! bash scripts/bump-version.sh --audit; then
+  echo ""
+  echo "version audit failed — fix drift before pushing."
+  echo "  - update .version-bump.json if a file should be tracked"
+  echo "  - add to .audit.exclude if it should be ignored"
+  exit 1
+fi

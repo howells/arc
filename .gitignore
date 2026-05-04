@@ -5,6 +5,9 @@
 .vercel/
 node_modules/
 
+# Build output (the repo at HEAD is the published artifact — no tarballs)
+dist/
+
 # Site
 site/.next/
 site/.vercel/
