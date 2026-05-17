@@ -163,6 +163,20 @@ export default function ArcPage() {
             </div>
             <div className="flex items-center gap-3 font-mono text-sm">
               <span className="shrink-0 text-neutral-400">#</span>
+              <span className="text-neutral-500">
+                Evaluate the rendered app
+              </span>
+            </div>
+            <div className="group">
+              <div className="flex items-center justify-between border-neutral-200 border-b py-2 font-mono text-sm">
+                <span className="text-neutral-800">
+                  /arc:browse as a designer
+                </span>
+                <CopyButton text="/arc:browse as a designer" />
+              </div>
+            </div>
+            <div className="flex items-center gap-3 font-mono text-sm">
+              <span className="shrink-0 text-neutral-400">#</span>
               <span className="text-neutral-500">Ship to production</span>
             </div>
             <div className="group">
@@ -295,6 +309,14 @@ export default function ArcPage() {
                 vision.
               </span>
             </li>
+            <li className="flex gap-3 text-neutral-600 text-sm leading-relaxed">
+              <span className="select-none text-[var(--color-accent)]">→</span>
+              <span>
+                <span className="font-mono text-neutral-800">/arc:browse</span>{" "}
+                evaluates the rendered app through designer, first-time-user,
+                strategist, or demo-presenter eyes.
+              </span>
+            </li>
           </ul>
         </section>
 
@@ -338,7 +360,9 @@ export default function ArcPage() {
                   <td className="py-2 pr-4 font-mono text-neutral-800">
                     Claude in Chrome
                   </td>
-                  <td className="py-2">/arc:design, /arc:responsive</td>
+                  <td className="py-2">
+                    /arc:design, /arc:responsive, /arc:browse
+                  </td>
                 </tr>
                 <tr className="border-neutral-100 border-b">
                   <td className="py-2 pr-4 font-mono text-neutral-800">

@@ -27,6 +27,7 @@ arc/
 │   ├── harden/SKILL.md     # Refine: production resilience
 │   ├── naming/SKILL.md     # Cross-cutting: project naming
 │   ├── responsive/SKILL.md # Cross-cutting: mobile responsive audit
+│   ├── browse/SKILL.md     # Cross-cutting: rendered app experience evaluation
 │   ├── seo/SKILL.md        # Cross-cutting: SEO audit
 │   ├── audit/SKILL.md      # Cross-cutting: codebase audit
 │   ├── commit/SKILL.md     # Cross-cutting: smart commits
@@ -73,6 +74,7 @@ All commands use the `/arc:` namespace prefix. The typical workflow:
 CROSS-CUTTING (available anytime):
               /arc:naming     → Generate and validate project names
               /arc:responsive → Mobile responsive audit & fix
+              /arc:browse     → Evaluate rendered app experience through a persona
               /arc:seo        → Deep SEO audit
               /arc:audit      → Comprehensive codebase audit
               /arc:commit     → Smart commits with auto-splitting
@@ -116,6 +118,7 @@ Arc focuses on the development lifecycle. For specialized domains, consider thes
 | `/arc:implement` | All agent-skills + `web-design-guidelines` | Quality checkpoints |
 | `/arc:letsgo` | `vercel-react-best-practices`, `vercel-react-native-skills`, `vercel-deploy` | Production readiness |
 | `/arc:responsive` | `web-design-guidelines`, `vercel-react-native-skills` | Mobile audit |
+| `/arc:browse` | `web-design-guidelines` | Rendered experience review |
 
 ## Browser And Wireframe Tools
 
