@@ -8,6 +8,16 @@ Quick reference for TanStack Query v5 with tRPC integration using queryOptions/m
 
 **MUST** use `queryOptions` and `mutationOptions` factories instead of inline configs. This is THE recommended v5 pattern.
 
+## Audit Red Flags
+
+- MUST NOT: Call queries from `useEffect` when a query hook, prefetch, loader, or Server Component should own the fetch.
+- MUST NOT: Use `useQuery` for mutations. Use `useMutation` and invalidate/update affected queries.
+- MUST: Query functions return useful data. A `void` query function usually means cache state is meaningless.
+- MUST: Mutations that affect cached list/detail data either invalidate, update cache, or document why no cached view can be stale.
+- MUST: `QueryClient` identity is stable across renders. In client providers, initialize it with lazy `useState` or an equivalent stable factory.
+- SHOULD: Avoid rest destructuring query results when it disables tracked-property optimizations.
+- SHOULD: Use generated tRPC query keys/options rather than hand-written string keys for invalidation.
+
 ```tsx
 // WRONG: Inline config (duplicated, error-prone)
 useQuery({

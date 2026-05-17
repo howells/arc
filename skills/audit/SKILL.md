@@ -78,6 +78,9 @@ If no native task/todo tool exists, skip task tracking and continue with the aud
 1. `disciplines/dispatching-parallel-agents.md`
 2. `references/audit-stage-calibration.md`
 3. `references/audit-scorecard.md`
+
+**Load when relevant:**
+- `references/react-audit-signals.md` — React, Next.js, TanStack Query, or React Native projects. Pass the relevant sections into reviewer prompts as audit signals.
 </required_reading>
 
 <progress_context>
@@ -230,6 +233,35 @@ grep -rn --include='*.ts' --include='*.tsx' -E 'generateObject|maxTokens[^A-Z]|t
 
 If deprecated APIs found, include count in the detection summary and flag for reviewers. These are mechanical fixes — load `rules/ai-sdk.md` and pass the migration table to the implementing agent.
 
+**Collect React audit signal manifest (React/Next.js/React Native projects only):**
+
+This pass gives reviewers concrete hotspots for React Doctor-style rule families without running React Doctor. These are **signals, not findings**. Reviewers must still inspect code and report only evidence-backed issues.
+
+```bash
+# High-signal React/Next/TanStack/security/UI patterns. Scope to source-like files.
+rg -n --glob '*.{ts,tsx,js,jsx}' \
+  "useEffect\\(|dangerouslySetInnerHTML|\\beval\\(|new Function\\(|setTimeout\\(|setInterval\\(|useSearchParams\\(|new QueryClient\\(|useQuery\\(|useMutation\\(|<Image\\b|<img\\b|transition-all|outline-none|will-change|z-\\[?9999|localStorage|sessionStorage" \
+  ${scope:-.} 2>/dev/null | head -120
+
+# Suspicious client/server boundary spread.
+rg -n --glob '*.{ts,tsx,js,jsx}' "^[\"']use client[\"'];?$" ${scope:-.} 2>/dev/null | head -80
+
+# Legacy/deprecated React surface.
+rg -n --glob '*.{ts,tsx,js,jsx}' \
+  'React\.Children\.|cloneElement\(|forwardRef\(|defaultProps\b|class\s+\w+\s+extends\s+(React\.)?(Component|PureComponent)|ReactDOM\.render|findDOMNode' \
+  ${scope:-.} 2>/dev/null | head -80
+```
+
+Store a **React audit signal manifest** with:
+- State/effect hotspots: `useEffect`, effect-driven data fetching, effect cleanup candidates
+- Boundary hotspots: `"use client"` files, async client components, suspicious client wrappers
+- Data-client hotspots: TanStack Query/tRPC hooks, unstable `QueryClient`, mutations/invalidation
+- Security hotspots: `dangerouslySetInnerHTML`, eval-like calls, client storage, secret-shaped identifiers in client-reachable files
+- UI/performance hotspots: `next/image`, raw `<img>`, transition/will-change/z-index/focus classes, heavy client imports
+- Legacy React hotspots: deprecated React/ReactDOM APIs and fragile child traversal
+
+If `--diff` is active, intersect the manifest with changed files before passing it to reviewers.
+
 **Run dependency vulnerability scan (critical/high only):**
 
 ```bash
@@ -368,6 +400,7 @@ Has AI SDK: [yes/no + deprecated API count if any]
 Has tests: [yes/no]
 Dead code: [X unused files, Y unused exports, Z unused deps] or "N/A (not JS/TS)"
 Structural hotspots: [X long files >250 LOC, Y severe >400 LOC, Z suspicious boundary files, W suspicious+long overlap]
+React audit signals: [X state/effect, Y boundary, Z data-client, W security/UI/perf hotspots] or "N/A (not React)"
 Coding rules: [yes/no]
 Focus: [all / security / performance / architecture / design]
 Execution mode: [batched (default) / parallel / team]
@@ -555,6 +588,29 @@ Reviewer-specific emphasis:
 - `daniel-product-engineer`: treat suspiciously named long files as probable god components and inspect for mixed responsibilities, mode props, and unreadable UI shape.
 - `architecture-engineer`: use long-file and suspicious-name hotspots to find poor module boundaries and misplaced orchestration.
 - Other reviewers: use the manifest opportunistically; only report if it matters to your domain.
+
+**Include React audit signals for React/Next.js/React Native projects.**
+
+Read `references/react-audit-signals.md` and pass the relevant sections plus the React audit signal manifest to reviewers. The goal is to make Arc's own audit pick up React Doctor-style issues through reviewer inspection.
+
+Reviewer-specific emphasis:
+- `daniel-product-engineer`: state/effects, rendering correctness, TanStack Query misuse, UI completeness, legacy React APIs.
+- `lee-nextjs-engineer`: server/client boundaries, async client components, Suspense around `useSearchParams`, Server Action auth, route handler side effects, RSC payload shape, Next.js primitives.
+- `performance-engineer`: rerender hotspots, memoization defeats, hydration flicker, bundle imports, async waterfalls, DOM/CSS performance.
+- `security-engineer`: client-reachable secrets, unsafe HTML, eval-like execution, storage-backed trust, Server Action and route-handler auth.
+- `designer` and `accessibility-engineer`: UI/a11y/design hygiene signals. Treat design-tag rules as quality signals, not CI-blocking defects.
+- `architecture-engineer`: god components, boundary escape hatches, data-client placement, mutable server module state, duplicate query/mutation patterns.
+
+Include in each React reviewer prompt:
+```
+React audit signals:
+[Paste relevant manifest entries]
+
+React signal guidance:
+[Paste only the relevant sections from references/react-audit-signals.md]
+
+Important: These are inspection prompts, not automatic findings. Report only concrete, reproducible issues with file/line evidence.
+```
 
 **For each batch, dispatch 2 reviewer subagents in parallel when the platform supports delegation.**
 If the platform does not support subagents, run the same reviewer prompts locally one reviewer at a time and continue with consolidation.

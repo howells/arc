@@ -147,6 +147,12 @@ The guiding question: **does this code run because the component was displayed, 
   );
   ```
 
+### Effect stability and cleanup
+
+- MUST: Clean up effects that subscribe, listen, observe, poll, or start timers.
+- MUST NOT: Put freshly-created mutable objects or arrays in an effect dependency list. Stabilize the value or move the logic so the effect represents a real external synchronization.
+- SHOULD: Use React 19 Effect Events or stable refs for effect-only callbacks that should see latest values without retriggering the subscription effect.
+
 ### App initialization
 
 - SHOULD: Run one-time startup logic at module scope, not in a component effect (Strict Mode runs effects twice):
@@ -163,6 +169,8 @@ The guiding question: **does this code run because the component was displayed, 
 - SHOULD: Consolidate 3+ related `useState` calls into `useReducer` or a single state object
 - SHOULD: Batch multiple `setState` calls in one handler into a single update (React 18+ batches automatically in most cases, but verify in async callbacks)
 - MUST NOT: Fetch data in `useEffect` — use React Query, SWR, or server components instead
+- MUST NOT: Mutate React state or props directly. Create a new object/array and set it.
+- SHOULD: Use functional `setState` when the next value depends on the previous value.
 
 ## Naming & Structure
 

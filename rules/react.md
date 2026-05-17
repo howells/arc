@@ -73,6 +73,8 @@ LLMs default to creating new components instead of finding existing ones. This r
 ## JSX
 - NEVER: Pass children as props. Nest children between opening and closing tags.
 - NEVER: Reassign props in components.
+- SHOULD: Avoid components whose correctness depends on inspecting or transforming arbitrary `children`. Prefer explicit props, context, or named slots.
+- MUST NOT: Flip an input between controlled and uncontrolled over its lifetime.
 
 ## React 19
 - MUST: Use ref-as-prop instead of legacy `forwardRef`.

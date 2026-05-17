@@ -28,6 +28,8 @@ For Clerk, WorkOS, and provider-specific rules, see [auth.md](auth.md).
 ## Secrets
 
 - MUST: All secrets live in environment variables, never in source code. See [env.md](env.md).
+- MUST: Distinguish server-only env access from client-reachable code. Server env reads are fine; non-public env vars in `"use client"` files, browser bundles, Vite client code, or React Native bundles are exposure risks.
+- MUST: Client-exposed env vars use the framework's public prefix (`NEXT_PUBLIC_`, `VITE_`, `REACT_APP_`, or project equivalent) and contain only values safe to publish.
 
 ## Rate Limiting
 

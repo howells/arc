@@ -37,6 +37,9 @@ Inline props on `React.memo`'d components silently defeat memoization. Every ren
 - SHOULD: Avoid deep object nesting (4+ levels) in frequently-accessed data — flatten for faster reads
 - SHOULD: Cache repeated `localStorage.getItem()` / `sessionStorage.getItem()` calls in a variable
 - SHOULD: Use `startTransition` to wrap non-urgent state updates that trigger expensive re-renders
+- SHOULD: Use refs for high-frequency DOM reads or interaction state that does not affect rendered output
+- SHOULD: Use lazy state initialization for expensive initial values (`useState(() => buildIndex(items))`)
+- MUST: Hydration-sensitive client state (theme, tabs, accordions, viewport-derived values, timestamps) must avoid a flash of wrong content on refresh
 
 ## Async Patterns
 
@@ -49,6 +52,7 @@ Inline props on `React.memo`'d components silently defeat memoization. Every ren
   // Right — parallel
   const [a, b] = await Promise.all([fetchA(), fetchB()]);
   ```
+- SHOULD: Defer non-critical awaits until after early exits so cheap invalid cases return before expensive work runs.
 
 ## Event Listeners
 
@@ -59,3 +63,6 @@ Inline props on `React.memo`'d components silently defeat memoization. Every ren
 
 - MUST NOT: Use `transition: all` — specify exact properties (`transition: opacity 200ms, transform 200ms`)
 - SHOULD: Prefer `transform` and `opacity` for animations — they run on the compositor thread
+- MUST NOT: Leave `will-change` permanently enabled. Toggle it only around the interaction that needs layer promotion.
+- MUST NOT: Animate layout properties (`width`, `height`, `top`, `left`, `margin`, `padding`) when transform/opacity can express the motion.
+- SHOULD: Avoid large animated blurs and scale-from-zero entrances on production UI.
