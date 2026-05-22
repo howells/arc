@@ -33,7 +33,7 @@ REVIEW  /arc:review     - Review a plan, spec, or implementation approach
         /arc:audit      - Verify and audit current codebase health
         /arc:refactor   - Find structural friction and propose refactors
 
-TOOLS   /arc:commit     - Create clean commits and optionally push
+TOOLS   /arc:commit     - Create clean commits, optionally push and publish
         /arc:help       - Show the command catalog with relevance notes
 ```
 
@@ -142,7 +142,7 @@ If you open this repo itself in Codex, `.agents/skills/*` symlinks let Codex dis
 | `/arc:launch` | A project needs to be ready for a public URL | Launch readiness checklist |
 | `/arc:audit` | You need a verified current-state codebase health report | `docs/audits/...` |
 | `/arc:refactor` | Code feels tangled, shallow, duplicated, oversized, or ready for package/module extraction | Refactor plan/RFC |
-| `/arc:commit` | You are ready to commit or push | Atomic git commits |
+| `/arc:commit` | You are ready to commit, push, or publish changed npm packages | Atomic git commits |
 
 ## Typical Flows
 
@@ -237,7 +237,8 @@ Arc is self-contained, but it can use connected tools when available:
 | Browser automation / Playwright | Rendered verification, E2E checks, launch evidence |
 | Context/documentation search | Research during implementation or review |
 | Project-local task planning | Turning audit findings into implementation plans |
-| GitHub tooling | Commit, push, branch, and PR workflows |
+| Git tooling | Commit and push workflows |
+| npm registry | Publishing changed packages after a successful push |
 
 External skills and plugins can add specialist depth, but Arc should still remain understandable and usable without them.
 

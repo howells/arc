@@ -54,7 +54,7 @@ All commands use the `/arc:` namespace prefix. The typical workflow:
 
 CROSS-CUTTING (available anytime):
               /arc:audit      → Comprehensive codebase audit
-              /arc:commit     → Smart commits with auto-splitting
+              /arc:commit     → Smart commits, push, and package publishing
               /arc:refactor   → Discover friction, propose structural refactors
               /arc:help        → Context-aware guide to all commands
 ```

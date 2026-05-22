@@ -2,7 +2,7 @@
 
 This is the canonical source for Arc's product definition, domain language, and operating boundary. README, agent instructions, website copy, and individual skills may summarize Arc, but they should not introduce competing definitions.
 
-Arc is a self-contained software development lifecycle for coding agents. It helps move work from idea to shipped code through explicit workflows for vision, ideation, implementation, review, testing, launch readiness, and commit hygiene.
+Arc is a self-contained software development lifecycle for coding agents. It helps move work from idea to shipped code through explicit workflows for vision, ideation, implementation, review, testing, launch readiness, commit hygiene, and package publishing when a change includes a publishable package.
 
 Arc should stay focused on the development cycle. It is not a general-purpose catalogue of every useful agent skill, and it should not require external personal skill collections to make its core workflows understandable or usable.
 
@@ -16,6 +16,7 @@ Arc should stay focused on the development cycle. It is not a general-purpose ca
 - **Review**: An advisory workflow for evaluating plans, specs, or implementation approaches before deciding what to change.
 - **Refactor**: A codebase-structure workflow for inspecting existing code with the explicit goal of producing a refactoring plan or RFC, including module/package extraction, god-file decomposition, duplication reduction, and testable interface design.
 - **Audit**: A verification and assessment workflow that combines mechanical checks with specialist review to report current codebase health.
+- **Publish**: Releasing a changed package to its registry after the corresponding commit has been pushed and the package version is confirmed unpublished.
 - **Specialist lens**: A focused way of inspecting lifecycle work, such as reuse, API documentation, architecture boundaries, test quality, security, or performance.
 - **Self-contained**: Arc workflows may absorb useful patterns from adjacent tools, but they should explain and execute those patterns in Arc's own language.
 - **Full-runtime**: An install that includes Arc-owned agents, references, disciplines, templates, scripts, rules, and skills.
@@ -46,7 +47,7 @@ Arc owns the software development cycle:
 4. Implement with tests and verification.
 5. Review the plan, code, and rendered experience.
 6. Prepare the project to ship.
-7. Commit cleanly and keep progress legible.
+7. Commit cleanly, push when requested, publish changed packages when requested, and keep progress legible.
 
 Launch readiness means the project is visitable, shareable, and ready for a first real audience. It covers go-live basics such as deployment, domain, HTTPS, environment variables, access gates, metadata, social previews, favicons, obvious placeholders, accidental robots/noindex blockers, and production settings for detected services. It should not expand into responsive, testing, security, code-health, or deep search-optimization work; those belong outside launch or Arc.
 

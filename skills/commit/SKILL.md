@@ -2,25 +2,28 @@
 name: commit
 disable-model-invocation: true
 description: |
-  Smart commit and push with auto-splitting across domains. Creates atomic commits.
-  Use when asked to "commit", "push changes", "save my work", or after completing
-  implementation work. Automatically groups changes into logical commits.
+  Smart commit, push, and npm publish with auto-splitting across domains.
+  Creates atomic commits. Use when asked to "commit", "push changes", "publish",
+  "save my work", or after completing implementation work. Automatically groups
+  changes into logical commits.
 license: MIT
-argument-hint: "[push]"
+argument-hint: "[push|publish]"
 metadata:
   author: howells
 website:
   order: 14
-  desc: Smart commits
-  summary: Commit your changes with auto-splitting. Groups related changes into atomic commits with clear messages—so your git history actually makes sense.
+  desc: Commit, push, publish
+  summary: Commit your changes with auto-splitting, push when asked, and publish changed npm packages after a successful push.
   what: |
-    Commit looks at your staged changes and groups them logically—feature code in one commit, tests in another, config changes in a third. Each gets a clear message following conventional commit format (feat:, fix:, refactor:, etc.). The result is a git history you can actually read, bisect, and cherry-pick from.
+    Commit looks at your staged changes and groups them logically—feature code in one commit, tests in another, config changes in a third. Each gets a clear message following conventional commit format (feat:, fix:, refactor:, etc.). When asked to push, it pushes the branch and then publishes any changed npm package whose package metadata says it is publishable and whose version is not already on the registry.
   why: |
     Messy commits make git history useless. You can't bisect to find a bug if every commit touches 15 unrelated files. You can't revert a broken feature if it's tangled with a refactor. Developers know this but batch changes anyway because splitting is tedious. Commit does the tedious part—you get clean history without the effort.
   decisions:
     - Auto-detects domains. Feature code, tests, docs, config—grouped by what changed.
     - Conventional commit format. Enables automated changelogs and clear history.
     - Each commit is atomic. Independently revertable, cherry-pickable, bisectable.
+    - Publishing happens only after a successful push.
+    - Private packages and already-published versions are skipped.
   workflow:
     position: utility
 ---
@@ -42,13 +45,14 @@ Check recent work context to inform commit message writing.
 
 # Commit Changes
 
-Commit and push changes, intelligently splitting into separate commits when changes span multiple domains.
+Commit, push, and publish changes, intelligently splitting into separate commits when changes span multiple domains.
 
 Usage:
 - `/arc:commit` - Auto-analyze and commit (may create multiple commits)
-- `/arc:commit push` - Commit and push
+- `/arc:commit push` - Commit, push, then publish changed npm packages if present
+- `/arc:commit publish` - Alias for the push-and-publish path
 
-$ARGUMENTS will be either empty or "push".
+$ARGUMENTS will be empty, "push", or "publish". Treat "push" and "publish" as the same push-and-publish path.
 
 ## Current Git State
 
@@ -156,9 +160,9 @@ If TypeScript or lint errors block the commit:
 6. Retry the commit
 7. Repeat until all errors are resolved
 
-### 6. Push Changes (only if `push` argument provided)
+### 6. Push Changes (only if `push` or `publish` argument provided)
 
-**Skip this step** unless $ARGUMENTS starts with "push".
+**Skip this step** unless $ARGUMENTS starts with "push" or "publish".
 
 If pushing:
 ```bash
@@ -172,12 +176,53 @@ git push -u origin $(git branch --show-current)
 
 If push fails (e.g., diverged history), report the issue - do NOT force push unless explicitly authorized.
 
-### 7. Report Results
+### 7. Publish npm Packages (only if `push` or `publish` argument provided)
+
+**Skip this step** unless $ARGUMENTS starts with "push" or "publish".
+
+Publish only after commits and push have succeeded.
+
+**Detect candidate packages:**
+- Look for changed `package.json` files and changed files under directories containing a `package.json`.
+- Ignore generated directories such as `node_modules`, `dist`, `build`, `.next`, `.turbo`, and coverage output.
+- A package is publishable only if `package.json` has a `name`, a `version`, and does not have `"private": true`.
+- Prefer packages with a `publishConfig`, `files`, `bin`, `exports`, or an explicit package-level `prepublishOnly` / `prepare` / `build` script. If package intent is unclear, ask before publishing.
+
+**Pre-publish checks for each candidate:**
+1. Read the package's `package.json`.
+2. Confirm the package has an npm package name and version.
+3. Check whether that exact version is already published:
+   ```bash
+   npm view <package-name>@<version> version
+   ```
+   - If the version exists, skip publishing and report it.
+   - If npm returns 404/not found, continue.
+   - If npm auth/network fails, stop and report the blocker.
+4. Run package-local verification when scripts exist, using the repo's detected package manager consistently:
+   - `test` if a `test` script exists
+   - `build` if a `build` script exists
+   - `typecheck` if a `typecheck` script exists
+5. Publish from the package directory:
+   ```bash
+   npm publish
+   ```
+   Use `npm publish --access public` for scoped public packages when `publishConfig.access` is `public` or the existing package is public.
+
+**Publishing rules:**
+- NEVER publish a private package.
+- NEVER publish before pushing the commit containing the package version.
+- NEVER bump a package version unless the user explicitly asked for a version bump.
+- NEVER publish if the working tree has uncommitted files that belong to that package.
+- NEVER use `--force` or delete registry versions.
+- If multiple changed packages exist, publish each confirmed publishable package once.
+
+### 8. Report Results
 
 Tell the user:
 - How many commits were created
 - Summary of each commit (hash, message)
 - Push status (if pushed), or remind them to push when ready
+- Publish status for each package (if publish was requested): published, skipped, or blocked
 
 <arc_log>
 **After completing this skill, append to the activity log.**

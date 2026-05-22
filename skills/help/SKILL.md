@@ -155,7 +155,7 @@ Output ALL of these in order:
 
 | Command | What it does | When to use |
 |---------|-------------|-------------|
-| `/arc:commit` | Smart commit with auto-splitting across domains | When ready to commit changes |
+| `/arc:commit` | Smart commit with auto-splitting, push, and package publishing | When ready to commit, push, or publish changed npm packages |
 
 ---
 
