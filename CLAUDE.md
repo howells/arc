@@ -11,7 +11,6 @@ arc/
 ├── .agents/                # Codex skill symlinks
 ├── commands/               # Slash command routers (invoke skills)
 ├── skills/                  # Each skill = one /arc:* command
-│   ├── go/SKILL.md         # 1. Entry point
 │   ├── using-arc/SKILL.md  # Bootstrap control plane
 │   ├── vision/SKILL.md     # 2. Foundation: project goals
 │   ├── ideate/SKILL.md     # 3. Spec: idea → validated feature spec
@@ -44,13 +43,12 @@ All commands use the `/arc:` namespace prefix. The typical workflow:
 
 ```
 0. HELP       /arc:help       → Context-aware guide to all commands
-1. ENTRY      /arc:go         → Routes to right workflow based on context
-2. FOUNDATION /arc:vision     → Define project goals (one-time setup)
-3. SPEC       /arc:ideate     → Turn idea into validated feature spec
-4. REVIEW     /arc:review     → Expert validation before execution
-5. EXECUTE    /arc:implement  → Plan + TDD implementation
-6. TEST       /arc:testing    → Backfill safety-net tests for existing code
-7. SHIP       /arc:launch     → Go-live checklist
+1. FOUNDATION /arc:vision     → Define project goals (one-time setup)
+2. SPEC       /arc:ideate     → Turn idea into validated feature spec
+3. REVIEW     /arc:review     → Expert validation before execution
+4. EXECUTE    /arc:implement  → Plan + TDD implementation
+5. TEST       /arc:testing    → Backfill safety-net tests for existing code
+6. SHIP       /arc:launch     → Go-live checklist
 
 CROSS-CUTTING (available anytime):
               /arc:audit      → Comprehensive codebase audit

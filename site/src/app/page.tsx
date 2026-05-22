@@ -109,13 +109,13 @@ export default function ArcPage() {
           </h2>
           <div className="group max-w-md">
             <div className="flex items-center justify-between border-neutral-300 border-b py-3 font-mono text-sm transition-colors">
-              <span>/arc:go</span>
-              <CopyButton text="/arc:go" />
+              <span>/arc:help</span>
+              <CopyButton text="/arc:help" />
             </div>
           </div>
           <p className="mt-[calc(var(--baseline)*1)] max-w-lg text-pretty text-neutral-600 text-sm leading-relaxed">
-            Understands your codebase. Asks what you want to build. Guides you
-            through design → plan → implementation with TDD.
+            Shows the Arc catalog with relevance notes. Pick the workflow you
+            want and invoke it directly.
           </p>
         </section>
 
@@ -152,12 +152,12 @@ export default function ArcPage() {
             </div>
             <div className="flex items-center gap-3 font-mono text-sm">
               <span className="shrink-0 text-neutral-400">#</span>
-              <span className="text-neutral-500">Orient a session</span>
+              <span className="text-neutral-500">Show the catalog</span>
             </div>
             <div className="group">
               <div className="flex items-center justify-between border-neutral-200 border-b py-2 font-mono text-sm">
-                <span className="text-neutral-800">/arc:go</span>
-                <CopyButton text="/arc:go" />
+                <span className="text-neutral-800">/arc:help</span>
+                <CopyButton text="/arc:help" />
               </div>
             </div>
             <div className="flex items-center gap-3 font-mono text-sm">
@@ -289,9 +289,8 @@ export default function ArcPage() {
             <li className="flex gap-3 text-neutral-600 text-sm leading-relaxed">
               <span className="select-none text-[var(--color-accent)]">→</span>
               <span>
-                <span className="font-mono text-neutral-800">/arc:go</span>{" "}
-                reads project-local context and routes to the smallest relevant
-                workflow.
+                <span className="font-mono text-neutral-800">/arc:help</span>{" "}
+                shows the available workflows without starting one for you.
               </span>
             </li>
           </ul>

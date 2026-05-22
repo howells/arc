@@ -19,8 +19,6 @@ Arc's canonical product definition and operating boundary live in [CONTEXT.md](.
 ## Workflow
 
 ```
-ENTRY   /arc:go         - Read project context and route to the right workflow
-          ↓
 WHY     /arc:vision     - Define the project's purpose, audience, and non-goals
           ↓
 WHAT    /arc:ideate     - Turn an idea into a validated feature spec
@@ -43,7 +41,6 @@ TOOLS   /arc:commit     - Create clean commits, optionally push and publish
 
 Arc owns the software development cycle:
 
-- Understand the project and route the work.
 - Clarify why the work matters.
 - Shape ideas into concrete specs and implementation plans.
 - Implement with tests, review checkpoints, and verification.
@@ -95,7 +92,6 @@ This copies `SKILL.md` prompts to supported agents. It is useful for lightweight
 Use slash commands:
 
 ```text
-/arc:go
 /arc:ideate add magic-link login
 /arc:implement
 /arc:audit
@@ -107,7 +103,6 @@ Use slash commands:
 Use skill names:
 
 ```text
-$go
 $ideate add magic-link login
 $implement
 $audit
@@ -116,7 +111,6 @@ $commit push
 
 Common Codex entry points:
 
-- `$go`
 - `$ideate`
 - `$implement`
 - `$review`
@@ -132,7 +126,6 @@ If you open this repo itself in Codex, `.agents/skills/*` symlinks let Codex dis
 
 | Command | Use when | Output |
 |---------|----------|--------|
-| `/arc:go` | You are starting a session or unsure which workflow applies | Context-aware routing |
 | `/arc:help` | You want the full catalog with relevance notes | Command guide |
 | `/arc:vision` | A project needs a concise north star | `docs/vision.md` |
 | `/arc:ideate` | An idea needs to become a concrete feature spec | `docs/arc/specs/...` |
@@ -149,7 +142,6 @@ If you open this repo itself in Codex, `.agents/skills/*` symlinks let Codex dis
 ### Start A New Feature
 
 ```text
-/arc:go
 /arc:ideate add team invitations
 /arc:review
 /arc:implement

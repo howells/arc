@@ -26,7 +26,6 @@ Arc should stay focused on the development cycle. It is not a general-purpose ca
 
 Arc's public workflow surface is organized around the lifecycle:
 
-- **Entry**: route the user to the right workflow with minimal startup context.
 - **Why**: clarify project purpose, goals, and constraints.
 - **What**: turn ideas into validated specs or plans.
 - **Do**: implement, test, and verify the change.
@@ -41,13 +40,12 @@ Cross-cutting workflows can run at any point, but they should still serve the li
 
 Arc owns the software development cycle:
 
-1. Understand the project and route the work.
-2. Clarify why the work matters.
-3. Shape the idea into a feature spec.
-4. Implement with tests and verification.
-5. Review the plan, code, and rendered experience.
-6. Prepare the project to ship.
-7. Commit cleanly, push when requested, publish changed packages when requested, and keep progress legible.
+1. Clarify why the work matters.
+2. Shape the idea into a feature spec.
+3. Implement with tests and verification.
+4. Review the plan, code, and rendered experience.
+5. Prepare the project to ship.
+6. Commit cleanly, push when requested, publish changed packages when requested, and keep progress legible.
 
 Launch readiness means the project is visitable, shareable, and ready for a first real audience. It covers go-live basics such as deployment, domain, HTTPS, environment variables, access gates, metadata, social previews, favicons, obvious placeholders, accidental robots/noindex blockers, and production settings for detected services. It should not expand into responsive, testing, security, code-health, or deep search-optimization work; those belong outside launch or Arc.
 
@@ -67,9 +65,7 @@ Machine process cleanup is outside Arc's core lifecycle. Arc workflows may finis
 
 Plan cleanup is outside Arc's public workflow surface. Arc may create and reference plans during implementation, but it should not expose a separate command for deleting, archiving, or housekeeping old planning files.
 
-Next-work suggestion is outside Arc's public workflow surface. `/arc:go` can help orient a session and route from the user's stated intent, but Arc should not expose a separate recommendation command or priority queue.
-
-The main entry workflow is also project-local. `/arc:go` should route from repository context, recent progress, plans, staleness, and the user's stated intent; it should not check Linear, present external issue queues, or make issue trackers the starting point.
+Next-work suggestion and generic session routing are outside Arc's public workflow surface. Users should invoke the workflow they want directly, or use `/arc:help` to see the catalog.
 
 Dependency and package maintenance are outside Arc's public workflow surface because Monogrove owns that space. Arc may notice dependency risk as part of broader audits, but it should not expose dependency update, CVE remediation, alternative discovery, or batch-upgrade workflows.
 

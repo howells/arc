@@ -192,7 +192,6 @@ Entry: `/arc:vision — [Created / Reviewed / Revised] vision document`
 
 ## Interop
 
-- `/arc:go` uses vision to route new work.
 - `/arc:ideate` reads vision for product and scope context.
 - `/arc:launch` checks whether launch posture still matches the project intent.
 

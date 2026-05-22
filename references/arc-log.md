@@ -75,10 +75,6 @@ Look for:
 | `/arc:vision` | Vision created/updated |
 | `/arc:figma` | Components implemented |
 
-## What Doesn't Get Logged
-
-- `/arc:go` (routing only)
-
 /arc:commit — 2 commits (`feat(web): clarify backend completion dashboard`, `feat(scrape): harden winners graph ingestion`)
 /arc:commit — 1 commit (`docs: structure Agent Surface documentation`)
 /arc:commit — 1 commit (`docs(strategy): refresh material docs inventory`)

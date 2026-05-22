@@ -19,7 +19,7 @@ website:
   decisions:
     - Lightweight context gathering. Quick checks, not deep analysis.
     - Shows ALL commands. Doesn't hide irrelevant ones — dims them with explanation.
-    - No routing. Unlike /arc:go, this doesn't launch other skills — it just informs.
+    - No routing. This doesn't launch other skills — it just informs.
   workflow:
     position: utility
 ---
@@ -106,11 +106,10 @@ Output ALL of these in order:
 
 ---
 
-**ENTRY POINTS**
+**CATALOG**
 
 | Command | What it does | When to use |
 |---------|-------------|-------------|
-| `/arc:go` | Understands your codebase, asks what you want to do, routes to the right workflow | Starting a session, unsure where to begin |
 | `/arc:help` | This command — shows all commands with context | When you want to see what's available |
 
 **FOUNDATION**

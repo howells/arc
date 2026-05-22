@@ -103,7 +103,7 @@ Use these defaults:
 - Architecture or quality review -> `review` or `audit`
 - Testing work -> `testing`
 - Go-live/shareability readiness -> `launch`
-- Unsure what to do -> `go`
+- Unsure what to do -> `help`
 
 When a task needs a specialist lens, keep the routing Arc-native:
 

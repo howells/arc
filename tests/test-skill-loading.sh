@@ -13,7 +13,6 @@ EXPECTED_SKILLS=(
     "audit"
     "commit"
     "detail"
-    "go"
     "help"
     "ideate"
     "implement"
