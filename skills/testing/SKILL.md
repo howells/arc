@@ -311,26 +311,6 @@ export default defineConfig({
 
 ---
 
-<progress_append>
-After backfilling tests or running a safety-net check:
-
-```markdown
-## YYYY-MM-DD HH:MM — /arc:testing
-**Task:** [Characterize behavior / Backfill tests / Run safety net / Fix failing test]
-**Target:** [What was tested]
-**Reason:** [Refactor / bug fix / launch risk / coverage gap]
-**Tests added/changed:**
-- [path]
-**Behavior protected:**
-- [behavior]
-**Result:** [All passing / X failing]
-**Remaining risk:** [Untested gaps or none]
-**Next:** [Proceed with refactor / Fix failures / Add another slice]
-
----
-```
-</progress_append>
-
 <success_criteria>
 The safety-net pass is complete when:
 - [ ] Target behavior and planned change are clear

@@ -37,12 +37,6 @@ Paths in this skill use these conventions:
 - `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
-<progress_context>
-**Use Read tool:** `docs/arc/progress.md` (first 50 lines)
-
-Check recent work context to inform commit message writing.
-</progress_context>
-
 # Commit Changes
 
 Commit, push, and publish changes, intelligently splitting into separate commits when changes span multiple domains.

@@ -1,8 +1,9 @@
 ---
 name: detail
 description: |
-  Internal skill for creating implementation plans. Invoked by /arc:implement, not directly.
-  Creates detailed plans with exact file paths, test code, and TDD cycles.
+  Internal bridge from /arc:ideate feature specs to /arc:implement execution plans.
+  Creates implementation plans with exact file paths, test code, and TDD cycles.
+  Invoked by /arc:implement, not directly.
 internal: true
 license: MIT
 metadata:
@@ -67,14 +68,17 @@ Paths in this skill use these conventions:
 
 **Find the feature spec:**
 ```
-Glob: docs/arc/specs/*.md
-Fallback: docs/plans/*-design.md
+Primary: docs/arc/specs/*-spec.md
+Fallbacks:
+- docs/arc/specs/*.md
+- docs/plans/*-spec.md
+- docs/plans/*-design.md
 ```
 
 Pick the most recent one (highest date prefix). Read it. This is the source of truth for what to build.
 
-**Derive implementation plan filename:** Replace `-design.md` or `-spec.md` with `-implementation.md`.
-- Feature spec: `docs/arc/specs/2025-06-15-user-dashboard-design.md`
+**Derive implementation plan filename:** Replace `-spec.md` or legacy `-design.md` with `-implementation.md`.
+- Feature spec: `docs/arc/specs/2025-06-15-user-dashboard-spec.md`
 - Implementation: `docs/arc/plans/2025-06-15-user-dashboard-implementation.md`
 
 ## Step 2.2: Lock File Structure Before Tasks
@@ -329,7 +333,7 @@ For each UI task, embed implementation-relevant UI requirements and external vis
 
 > **For Arc:** Use /arc:implement to execute this plan. Subagents should report DONE, DONE_WITH_CONCERNS, NEEDS_CONTEXT, or BLOCKED.
 
-**Feature spec:** `docs/arc/specs/YYYY-MM-DD-<topic>-design.md` (or legacy fallback path)
+**Feature spec:** `docs/arc/specs/YYYY-MM-DD-<topic>-spec.md` (or legacy fallback path)
 **Goal:** [One sentence from feature spec's problem statement]
 **Stack:** [Framework] + [Test runner] + [Package manager]
 

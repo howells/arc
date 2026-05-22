@@ -34,7 +34,7 @@ REVIEW  /arc:review     - Review a plan, spec, or implementation approach
 TOOLS   /arc:commit     - Create clean commits, optionally push and publish
 ```
 
-`using-arc`, `detail`, and `progress` are supporting skills. They keep startup context small, create implementation plans, and preserve useful session state, but they are not normally invoked directly.
+`using-arc` and `detail` are supporting skills. They keep startup context small and create implementation plans, but they are not normally invoked directly.
 
 ## What Arc Is For
 

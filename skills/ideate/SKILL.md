@@ -180,7 +180,6 @@ There are three acts: **Understand**, **Explore**, **Specify**. But they're a co
 
 **Background work (silent — do NOT share results with the user):**
 - Check `docs/vision.md` if it exists
-- Glance at `docs/arc/progress.md` (first 50 lines)
 - Note the project type and obvious constraints
 - Use what you learn to ask BETTER questions — not to produce summaries
 
@@ -268,7 +267,7 @@ After the spec is mostly shaped, run parallel expert review:
 
 ### Writing the Feature Spec
 
-Location: `docs/arc/specs/YYYY-MM-DD-<topic>-design.md`
+Location: `docs/arc/specs/YYYY-MM-DD-<topic>-spec.md`
 
 ```markdown
 # [Feature Name] Feature Spec
@@ -368,24 +367,6 @@ Read these when relevant (not all at once — load what the conversation needs):
 2. `references/model-strategy.md` — Which models for which agents
 3. `disciplines/dispatching-parallel-agents.md` — Agent orchestration
 </required_reading>
-
-<progress_append>
-After completing the spec, append to progress journal:
-
-```markdown
-## YYYY-MM-DD HH:MM — /arc:ideate
-**Task:** [Feature name/description]
-**Outcome:** Complete
-**Files:** docs/arc/specs/YYYY-MM-DD-[topic]-design.md
-**Decisions:**
-- Approach: [chosen approach]
-- [Key decision 1]
-- [Key decision 2]
-**Next:** /arc:implement
-
----
-```
-</progress_append>
 
 <spec_flow_analysis>
 After the feature spec is written and committed, offer optional user flow analysis:

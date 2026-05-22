@@ -79,12 +79,6 @@ Paths in this skill use these conventions:
 | accessibility-engineer | (interface rules only — already in agent prompt) |
 </rules_context>
 
-<progress_context>
-**Use Read tool:** `docs/arc/progress.md` (first 50 lines)
-
-Check for context on what led to the plan being reviewed.
-</progress_context>
-
 <scope_discipline>
 ## Scope Discipline
 
@@ -298,6 +292,5 @@ Entry: `/arc:review — [Plan name] reviewed`
 - [ ] Summary presented
 - [ ] Remaining arc shown (based on plan type)
 - [ ] User chose next step (`/arc:implement` or done)
-- [ ] Progress journal updated
 - [ ] Orphaned agents cleaned up
 </success_criteria>

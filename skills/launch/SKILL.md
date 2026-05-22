@@ -193,5 +193,4 @@ Launch is complete when:
 - [ ] Detected services have public-URL settings checked
 - [ ] Deeper checks are recorded as done, missing, or deferred
 - [ ] Final launch status is presented with one next action
-- [ ] Progress journal updated
 </success_criteria>

@@ -120,7 +120,5 @@ Arc-owned artifacts live under:
 - `docs/arc/specs/`
 - `docs/arc/plans/`
 - `docs/arc/archive/`
-- `docs/arc/progress.md`
 
-If a workflow references legacy `docs/plans/` or `docs/progress.md`, treat those as
-compatibility fallbacks while the repo migrates.
+If a workflow references legacy `docs/plans/`, treat it as a compatibility fallback while the repo migrates.

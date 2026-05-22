@@ -21,8 +21,7 @@ arc/
 │   ├── launch/SKILL.md     # 8. Launch: go-live checklist
 │   ├── refactor/SKILL.md   # Cross-cutting: structural refactor planning
 │   ├── audit/SKILL.md      # Cross-cutting: codebase audit
-│   ├── commit/SKILL.md     # Cross-cutting: smart commits
-│   └── progress/SKILL.md   # internal (progress journal)
+│   └── commit/SKILL.md     # Cross-cutting: smart commits
 ├── agents/                  # Specialized subagents
 │   ├── build/
 │   ├── review/

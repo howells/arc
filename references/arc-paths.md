@@ -8,7 +8,6 @@ docs or user-authored project documents.
 - Specs: `docs/arc/specs/`
 - Plans: `docs/arc/plans/`
 - Archive: `docs/arc/archive/`
-- Progress journal: `docs/arc/progress.md`
 
 ## Compatibility
 
@@ -16,6 +15,5 @@ During migration, workflows may read from legacy locations if the canonical file
 exist yet:
 
 - `docs/plans/`
-- `docs/progress.md`
 
 Always prefer `docs/arc/` for new writes.

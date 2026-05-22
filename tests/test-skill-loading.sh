@@ -16,7 +16,6 @@ EXPECTED_SKILLS=(
     "ideate"
     "implement"
     "launch"
-    "progress"
     "refactor"
     "review"
     "testing"

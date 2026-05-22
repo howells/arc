@@ -9,12 +9,10 @@ export function sanitizeContent(content: string): string {
 
   // 1. Strip operational blocks entirely (tag + content) — these are Claude instructions
   const stripBlocks = [
-    "progress_context",
     "tasklist_context",
     "rules_context",
     "required_reading",
     "tool_restrictions",
-    "progress_append",
     "arc_log",
     "success_criteria",
   ];

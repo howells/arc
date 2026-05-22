@@ -79,13 +79,6 @@ If no native task/todo tool exists, skip task tracking and continue with the aud
 - `references/react-audit-signals.md` — React, Next.js, TanStack Query, or React Native projects. Pass the relevant sections into reviewer prompts as audit signals.
 </required_reading>
 
-<progress_context>
-**If `docs/arc/progress.md` exists, read the first 50 lines.**
-
-Check for recent changes that should be included in audit scope.
-If the file does not exist, continue without it.
-</progress_context>
-
 <rules_context>
 **Check for project coding rules:**
 
@@ -888,6 +881,5 @@ Audit is complete when:
 - [ ] Report saved and optionally staged
 - [ ] Summary presented to user
 - [ ] Next steps offered
-- [ ] Progress journal checked if present
 - [ ] Any delegated reviewer work has completed or blockers are reported
 </success_criteria>

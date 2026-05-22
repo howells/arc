@@ -30,11 +30,11 @@ Arc's public workflow surface is organized around the lifecycle:
 - **What**: turn ideas into validated specs or plans.
 - **Do**: implement, test, and verify the change.
 - **Review**: inspect plans, code, architecture, implementation approach, and launch readiness.
-- **Ship**: prepare the project for release, commit work cleanly, and preserve progress.
+- **Ship**: prepare the project for release and commit work cleanly.
 
 Cross-cutting workflows can run at any point, but they should still serve the lifecycle rather than becoming unrelated utilities.
 
-`detail`, `progress`, and `using-arc` are supporting skills, not workflows. They should be documented as internal routing, planning, or persistence mechanisms rather than as public lifecycle stages.
+`detail` and `using-arc` are supporting skills, not workflows. They should be documented as internal planning or bootstrap mechanisms rather than as public lifecycle stages.
 
 ## Product Boundary
 
@@ -45,7 +45,7 @@ Arc owns the software development cycle:
 3. Implement with tests and verification.
 4. Review the plan, code, and rendered experience.
 5. Prepare the project to ship.
-6. Commit cleanly, push when requested, publish changed packages when requested, and keep progress legible.
+6. Commit cleanly, push when requested, and publish changed packages when requested.
 
 Launch readiness means the project is visitable, shareable, and ready for a first real audience. It covers go-live basics such as deployment, domain, HTTPS, environment variables, access gates, metadata, social previews, favicons, obvious placeholders, accidental robots/noindex blockers, and production settings for detected services. It should not expand into responsive, testing, security, code-health, or deep search-optimization work; those belong outside launch or Arc.
 
@@ -87,7 +87,7 @@ Arc should not expose external skill dependencies for those checks. If a special
 - Apply YAGNI when the proposed scope exceeds the user's goal.
 - Use TDD and verification for implementation work.
 - Keep quality continuous. Run relevant type, lint, build, and test checks during the work rather than only at the end.
-- Let knowledge compound. Capture solved problems, decisions, and progress where future sessions can reuse them.
+- Let knowledge compound through durable artifacts: vision, specs, plans, audits, and launch checklists.
 - Treat frontend implementation as part of software delivery, while deferring independent visual direction to the appropriate design source.
 - Prefer routing to the smallest relevant Arc workflow over preloading broad context.
 - Treat reviewers and audits as advisory. The user decides.

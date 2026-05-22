@@ -47,12 +47,6 @@ Paths in this skill use these conventions:
 
 Create, review, or revise a project vision document. The output should be useful to future humans and agents: specific enough to guide decisions, short enough to be read, and honest about constraints.
 
-<progress_context>
-**Use Read tool:** `docs/arc/progress.md` (first 50 lines)
-
-Check recent work context before revising or replacing vision language.
-</progress_context>
-
 ## Start
 
 When invoked:

@@ -631,7 +631,6 @@ AskUserQuestion:
     - label: "[Option B name]"
       description: "[Pros/cons summary for option B]"
 ```
-2. Record decision in progress journal
 3. Continue implementation using selected option
 
 **For ACTION:**
@@ -892,29 +891,6 @@ git branch -d feature/<feature-name>
 **Don't guess. Ask.**
 </when_to_stop>
 
-<progress_context>
-**Use Read tool:** `docs/arc/progress.md` (first 50 lines)
-
-Look for related ideate sessions and any prior implementation attempts.
-</progress_context>
-
-<progress_append>
-After completing implementation (or pausing), append to progress journal:
-
-```markdown
-## YYYY-MM-DD HH:MM — /arc:implement
-**Task:** [Feature name]
-**Outcome:** [Complete / In Progress (X/Y tasks) / Blocked]
-**Files:** [Key files created/modified]
-**Agents spawned:** [list of agents used]
-**Decisions:**
-- [Key implementation decision]
-**Next:** [PR created / Continue tomorrow / Blocked on X]
-
----
-```
-</progress_append>
-
 <arc_log>
 **After completing this skill, append to the activity log.**
 See: `references/arc-log.md`
@@ -930,7 +906,6 @@ Execution is complete when:
 - [ ] Plan completion verification passed when the full-plan path was used
 - [ ] PR created
 - [ ] User informed of completion
-- [ ] Progress journal updated
 - [ ] Orphaned agents cleaned up
 </success_criteria>
 
