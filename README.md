@@ -9,80 +9,65 @@
 
 The full arc from idea to shipped code.
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code): install as a plugin and run `/arc:*` commands in Claude.
-- Codex: this repo includes `.agents/skills` so the same `skills/*/SKILL.md` workflows can run directly in Codex (no Claude plugin install required).
+Arc is a self-contained software development lifecycle for coding agents. It helps move work from early project clarity through ideation, implementation, review, testing, launch readiness, and clean commits.
 
-Arc's canonical product definition and domain language live in [CONTEXT.md](./CONTEXT.md). This README is a user-facing summary.
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code): install as a plugin and run `/arc:*` commands.
+- Codex: install Arc as skills and invoke the same workflows with `$<skill-name>`.
 
-## What It Does
+Arc's canonical product definition and operating boundary live in [CONTEXT.md](./CONTEXT.md). This README is the user-facing guide.
 
-Arc provides skills covering the complete development lifecycle:
+## Workflow
 
 ```
-ENTRY   /arc:go       - Main entry point, routes to right workflow
+ENTRY   /arc:go         - Read project context and route to the right workflow
           ↓
-WHY     /arc:vision     - High-level goals (500-700 words)
+WHY     /arc:vision     - Define the project's purpose, audience, and non-goals
           ↓
-WHAT    /arc:ideate     - From idea to design doc
+WHAT    /arc:ideate     - Turn an idea into a validated design/spec
           ↓
-DO      /arc:implement  - Plan + execute with TDD
-        /arc:testing    - Backfill safety-net tests
-        /arc:launch     - Go-live checklist
+DO      /arc:implement  - Plan and build with TDD and verification
+        /arc:testing    - Backfill safety-net tests around existing code
+        /arc:launch     - Check go-live and shareability basics
 
-CROSS-CUTTING
-        /arc:review     - Review a plan, spec, design, or approach
-        /arc:audit      - Comprehensive codebase audit (includes hygiene)
-        /arc:refactor   - Find structural refactoring opportunities
-        /arc:suggest    - Project-local next-step triage
+REVIEW  /arc:review     - Review a plan, spec, design, or approach
+        /arc:audit      - Verify and audit current codebase health
+        /arc:refactor   - Find structural friction and propose refactors
 
-TOOLS   /arc:commit     - Smart commit + push with auto-splitting
+TOOLS   /arc:suggest    - Recommend the next project-local step
+        /arc:commit     - Create clean commits and optionally push
+        /arc:help       - Show the command catalog with relevance notes
 ```
 
-Arc also ships a small bootstrap skill, `using-arc`, which acts as the control plane for
-session start. It keeps startup context small and routes into the richer workflows only
-when they clearly apply.
+`using-arc`, `detail`, and `progress` are supporting skills. They keep startup context small, create implementation plans, and preserve useful session state, but they are not normally invoked directly.
 
-## Key Principles
+## What Arc Is For
 
-Arc's principles are defined in [CONTEXT.md](./CONTEXT.md). In short: keep the lifecycle visible, ask one focused question at a time, use TDD and verification for implementation work, weave review through the process, and keep specialist checks Arc-native.
+Arc owns the software development cycle:
+
+- Understand the project and route the work.
+- Clarify why the work matters.
+- Shape ideas into concrete specs and implementation plans.
+- Implement with tests, review checkpoints, and verification.
+- Backfill characterization tests before risky changes to old code.
+- Audit codebase health when you need a current-state report.
+- Prepare a project to be visitable, shareable, and ready for a first real audience.
+- Commit work in atomic, readable commits.
+
+Arc deliberately does not own every adjacent specialist practice. Brand identity, visual design systems, dependency upgrade campaigns, deep SEO, AI framework guidance, generated documentation, browser QA, and machine/editor automation are better handled by dedicated tools. Arc may notice those concerns during implementation, review, audit, or launch, but its public workflow stays focused on software delivery.
 
 ## Install
 
-### Claude Code (recommended)
+### Claude Code
 
-```
+```bash
 claude plugins install arc@howells
 ```
 
-Installs the full plugin: skills, agents, commands, references, and disciplines. This is the complete Arc experience — skills can dispatch specialized subagents, track tasks, and chain workflows together.
-
-### Any agent (via skills.sh)
-
-```bash
-npx skills add howells/arc
-```
-
-Installs skill prompts to Claude Code, Codex, Cursor, Gemini CLI, Windsurf, Cline, and [40+ agents](https://github.com/vercel-labs/skills#supported-agents). This only copies `SKILL.md` files — you get the skill instructions but not the supporting agents or orchestration that power the full workflow.
-
-## Install Modes
-
-Arc has two support tiers. Pick the one that matches the workflows you want:
-
-| Install mode | Claude plugin | Codex installer | `skills.sh` / prompt-only |
-|---|---|---|---|
-| Includes full Arc bundle (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`) | Yes | Yes | No |
-| Best for full-runtime workflows like `audit`, `review`, `implement`, `design`, `testing` | Yes | Yes | No |
-| Best for lightweight prompt-only routing and simple workflows | Yes | Yes | Yes |
-
-If a skill tells the agent to load Arc-owned files such as `agents/`, `references/`, `disciplines/`, `templates/`, or `scripts/`, treat that skill as **full-runtime**. Use the Claude plugin install or the Codex installer for those workflows.
+This installs the full Arc plugin: skills, slash commands, agents, references, disciplines, templates, scripts, and rules.
 
 ### Codex
 
-Codex discovers skills from `~/.agents/skills` (legacy `~/.codex/skills` still works, and repo-local `.agents/skills` is also discovered).
-
-**Recommended (install once, use anywhere):**
-
-Run:
+Recommended full-runtime install:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh | bash -s -- --auto-update --interval-hours 6
@@ -94,244 +79,176 @@ Install once without auto-update:
 curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh | bash
 ```
 
-## Using In Codex
+The Codex installer clones Arc to `~/.codex/arc`, exposes direct skills under `~/.codex/skills`, and mirrors them into `~/.agents/skills` for compatibility.
 
-### Install Once (Recommended)
+### Prompt-Only Install
 
-Follow `.codex/INSTALL.md` (or run the one-line installer above) for the supported Codex install, then invoke Arc skills in any project.
-
-This is the **full-runtime** Codex install. It clones the Arc repo to `~/.codex/arc`, installs direct skill entries under `~/.codex/skills` for Codex Desktop discovery, and mirrors them into `~/.agents/skills` for compatibility. Workflows that need bundled agents, references, disciplines, templates, and scripts work the same way they do in Claude Code.
-
-### Repo-Local (Project Skills)
-
-If you open this repo itself in Codex, it includes `.agents/skills/*` symlinks so Codex can discover the skills without a global install.
-
-### Invoking Skills
-
-Invoke skills explicitly (recommended):
-- In Codex, use `$<skill-name>`. Claude's `/arc:*` slash commands do not apply in Codex.
-- In CLI/IDE: run `/skills` or type `$` to pick a skill
-- In the Codex app: type `$<skill-name>` in chat
-
-```
-$go
-$audit
-$ideate add user authentication with magic links
-$implement
+```bash
+npx skills add howells/arc
 ```
 
-Codex loads the selected skill’s `SKILL.md` and follows its workflow. On supported
-platforms, Arc also injects `using-arc` at session start so skill routing is consistent
-without preloading the whole system.
+This copies `SKILL.md` prompts to supported agents. It is useful for lightweight guidance, but it does not include Arc's bundled agents, references, disciplines, templates, scripts, or rules. Workflows such as `audit`, `review`, `implement`, `refactor`, and `testing` work best with the Claude plugin or Codex full-runtime install.
 
-Common Codex entry points:
-- `$go`
-- `$audit`
-- `$ideate`
-- `$implement`
-- `$review`
-- `$testing`
-- `$deps`
-
-### Codex Notes
-
-- These skills are stored in `skills/<name>/SKILL.md` for Claude Code; `.agents/skills/<name>` is a symlink to the same folder so Codex can discover them.
-- The supported install exposes Arc as direct skill entries like `~/.codex/skills/audit`, `~/.codex/skills/ideate`, and `~/.codex/skills/implement`.
-- Arc also mirrors those links into `~/.agents/skills/*` because some Codex environments still surface home-local skills from that compatibility root.
-- Some skills reference Claude-specific tooling (e.g. `TaskList`, `mcp__claude-in-chrome__*`). In Codex, use the closest equivalent:
-  - terminal exploration instead of `Task` blocks
-  - `agent-browser` first, then Playwright, instead of Claude-in-Chrome MCP
-  - WireText MCP for wireframes when available; otherwise inline ASCII wireframes
-- Prompt-only installs copied via `skills.sh` are best-effort. They do not include Arc's bundled `agents/`, `references/`, `disciplines/`, `templates/`, or `scripts/`, so full-runtime workflows should upgrade to the Codex installer or Claude plugin before running.
-
-## Claude Code Dependencies (Optional)
-
-Arc uses these plugins and MCP integrations for enhanced functionality:
-
-| Integration | Used by |
-|-------------|---------|
-| **Figma** | `/arc:ideate`, `/arc:implement` |
-| **Context7** | research and implementation workflows |
-| **Claude in Chrome** | rendered verification during implementation |
-| **WireText MCP** | `/arc:ideate` wireframing |
-| **agent-browser** | browser automation fallback outside Claude Code |
-
-```
-# Official plugins
-/plugin install figma@claude-plugins-official
-/plugin install context7@claude-plugins-official
-
-# Chrome extension: https://chromewebstore.google.com/detail/claude-in-chrome/
-```
-
-Chrome remains the preferred rendered-browser verification path in Claude Code. Arc works without these integrations, but relevant features will fall back to `agent-browser`, Playwright, user screenshots, or inline wireframes depending on the workflow.
-
-**Note:** Arc maintains an activity log (`.arc/log.md`, gitignored) for knowledge persistence across sessions. Every skill auto-appends a brief entry on completion.
-
-### Optional: Vercel Labs Plugins
-
-These plugins provide additional review capabilities:
-
-| Plugin | Skill | Used by |
-|--------|-------|---------|
-| **[agent-skills](https://github.com/vercel-labs/agent-skills)** | `vercel-react-best-practices` | `/arc:implement`, `/arc:launch` |
-| | `vercel-composition-patterns` | `/arc:implement` |
-| | `vercel-react-native-skills` | `/arc:implement`, `/arc:launch` |
-| **[web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines)** | `web-design-guidelines` | `/arc:implement` |
-
-```
-# Vercel Labs plugins (optional)
-/plugin marketplace add vercel-labs/agent-skills
-/plugin install agent-skills@vercel-labs-agent-skills
-
-/plugin marketplace add vercel-labs/web-interface-guidelines
-/plugin install web-interface-guidelines@vercel-labs-web-interface-guidelines
-```
-
-These plugins are optional and outside Arc's product definition. Arc workflows should remain self-contained when they are not installed.
-
-## Getting Started
+## Invoking Arc
 
 ### Claude Code
 
-### 1. Open your project
+Use slash commands:
 
-```bash
-cd your-project
-claude
+```text
+/arc:go
+/arc:ideate add magic-link login
+/arc:implement
+/arc:audit
+/arc:commit push
 ```
-
-This starts an interactive Claude Code session in your terminal.
-
-### 2. Run a command
-
-Commands start with `/`. Type the command and press Enter:
-
-```
-/arc:ideate add user authentication with magic links
-```
-
-Claude will ask clarifying questions, explore your codebase, and create a design document.
-
-### 3. Follow the flow
-
-Arc commands chain together. After `/arc:ideate` creates a design:
-- Claude asks if you want to continue to `/arc:implement` (plan and build)
-- Implementation creates its own plan, then executes with TDD
-
-You can also jump in at any point if you already have docs.
 
 ### Codex
 
-1. Open your project in Codex.
-2. Ensure `.agents/skills` is present (see ["Using In Codex"](#using-in-codex)).
-3. Run skills in chat, e.g. `$start` or `$ideate ...`.
+Use skill names:
 
-### Quick Examples
-
-```bash
-# Design a new feature (full flow)
-/arc:ideate add a notification system
-
-# Get suggestions for what to work on
-/arc:suggest
-
-# Launch / go live
-/arc:launch
+```text
+$go
+$ideate add magic-link login
+$implement
+$audit
+$commit push
 ```
 
-### Tips for Newcomers
+Common Codex entry points:
 
-- **One question at a time** — Arc asks focused questions, not overwhelming lists
-- **You're in control** — Suggestions are questions, not mandates. Say no if you disagree.
-- **TDD by default** — Implementation writes tests first, then code
-- **Lifecycle artifacts are created** — Arc specs, plans, audits, and launch notes go in `docs/arc/` or `docs/audits/`
+- `$go`
+- `$ideate`
+- `$implement`
+- `$review`
+- `$audit`
+- `$refactor`
+- `$testing`
+- `$launch`
+- `$commit`
 
-## Primary Flow
-
-The main entry point is `/arc:ideate`, which flows through to implementation:
-
-```
-/arc:ideate → /arc:implement
-```
-
-Each step asks if you want to continue. You can also enter at any point:
-- Have a design doc already? Start at `/arc:implement`
-- Have an implementation plan? `/arc:implement` will use it
+If you open this repo itself in Codex, `.agents/skills/*` symlinks let Codex discover the local skills without a global install.
 
 ## Commands
 
-| Command | When to use | Output |
-|---------|-------------|--------|
-| `/arc:go` | Main entry point, routes to workflow | Context-aware guidance |
-| `/arc:vision` | Starting a new project | `docs/vision.md` |
-| `/arc:ideate` | From idea to design doc | `docs/arc/specs/YYYY-MM-DD-<feature>-design.md` |
-| `/arc:implement` | Scope-aware plan + execute with TDD | Code changes |
-| `/arc:testing` | Characterization tests before risky changes | Safety-net test files |
-| `/arc:launch` | Launch / go live | Public URL readiness |
-| `/arc:review` | Review a plan, spec, design, or approach | Updated plan file |
-| `/arc:audit` | Comprehensive codebase audit | `docs/audits/YYYY-MM-DD-*.md` |
-| `/arc:refactor` | Find structural refactoring opportunities | Refactor RFC / issue |
-| `/arc:suggest` | Project-local next-step triage | Recommendations |
-| `/arc:commit` | Commit and push changes | Git commits |
+| Command | Use when | Output |
+|---------|----------|--------|
+| `/arc:go` | You are starting a session or unsure which workflow applies | Context-aware routing |
+| `/arc:help` | You want the full catalog with relevance notes | Command guide |
+| `/arc:vision` | A project needs a concise north star | `docs/vision.md` |
+| `/arc:ideate` | An idea needs to become a concrete design/spec | `docs/arc/specs/...` |
+| `/arc:review` | A plan, spec, design, or approach needs expert challenge | Prioritized review findings |
+| `/arc:implement` | You are ready to build or continue implementation | Code changes with TDD and checks |
+| `/arc:testing` | Existing code needs characterization tests before change | Safety-net tests and risk notes |
+| `/arc:launch` | A project needs to be ready for a public URL | Launch readiness checklist |
+| `/arc:audit` | You need a verified current-state codebase health report | `docs/audits/...` |
+| `/arc:refactor` | Code feels tangled, shallow, duplicated, or hard to test | Refactor plan/RFC |
+| `/arc:suggest` | You want project-local next-step recommendations | Ranked options |
+| `/arc:commit` | You are ready to commit or push | Atomic git commits |
+
+## Typical Flows
+
+### Start A New Feature
+
+```text
+/arc:go
+/arc:ideate add team invitations
+/arc:review
+/arc:implement
+/arc:commit
+```
+
+### Continue From An Existing Plan
+
+```text
+/arc:implement docs/arc/plans/team-invitations.md
+```
+
+### Refactor Old Code Safely
+
+```text
+/arc:testing src/billing
+/arc:refactor src/billing
+/arc:implement
+```
+
+`/arc:testing` is intentionally about existing code. For new feature work, `/arc:implement` owns the TDD loop.
+
+### Prepare To Share
+
+```text
+/arc:audit
+/arc:launch
+/arc:commit push
+```
+
+## Full-Runtime Contents
+
+Arc's full install includes:
+
+- `skills/` — user-facing and supporting workflows.
+- `commands/` — Claude slash-command stubs that invoke skills.
+- `agents/` — specialist reviewers, implementers, test writers, runners, and workflow reviewers.
+- `disciplines/` — implementation practices such as TDD, systematic debugging, verification, and branch finishing.
+- `references/` — Arc-owned guidance for architecture, testing, review, auditing, platform tools, and related delivery concerns.
+- `rules/` — internal rule corpus used by Arc workflows.
+- `templates/` and `scripts/` — reusable workflow support.
+
+Prompt-only installs receive only the skill prompts, so full-runtime workflows may not have all supporting material.
 
 ## Agents
 
-Arc includes specialized agents across research, review, build, design, and workflow roles:
+Arc includes specialist agents for work that benefits from focused review or delegation:
 
 | Category | Agents |
 |----------|--------|
 | **Research** | docs-researcher, git-history-analyzer |
-| **Review** | architecture-engineer, daniel-product-engineer, data-engineer, lee-nextjs-engineer, performance-engineer, security-engineer, senior-engineer, accessibility-engineer, test-quality-engineer |
-| **Build** | implementer, fixer, debugger, figma-builder, unit-test-writer, integration-test-writer, e2e-test-writer, test-runner, e2e-runner, spec-reviewer, code-reviewer |
-| **Workflow** | spec-flow-analyzer, e2e-test-runner, spec-document-reviewer, plan-document-reviewer |
+| **Review** | accessibility-engineer, architecture-engineer, daniel-product-engineer, data-engineer, lee-nextjs-engineer, performance-engineer, security-engineer, senior-engineer, test-quality-engineer |
+| **Build** | implementer, fixer, debugger, unit-test-writer, integration-test-writer, e2e-test-writer, test-runner, e2e-runner, spec-reviewer, code-reviewer, plan-completion-reviewer |
+| **Workflow** | spec-flow-analyzer, spec-document-reviewer, plan-document-reviewer, e2e-test-runner |
+
+Agents are support machinery. Arc workflows decide when they are useful; users normally start with a command or skill.
 
 ## Disciplines
 
-Implementation methodologies in `disciplines/`:
+Arc's implementation workflows draw on:
 
-- **test-driven-development** — Red-green-refactor cycle
-- **systematic-debugging** — Methodical bug investigation
-- **verification-before-completion** — Prove it works before claiming done
-- **finishing-a-development-branch** — Cleanup after work complete
-- **subagent-driven-development** — Parallel agent execution
-- **dispatching-parallel-agents** — Efficient multi-agent coordination
-- **receiving-code-review** — Handling review feedback
+- **test-driven-development** — red-green-refactor implementation.
+- **systematic-debugging** — methodical bug investigation.
+- **verification-before-completion** — prove work before claiming completion.
+- **finishing-a-development-branch** — cleanup and integration checks.
+- **subagent-driven-development** — parallel execution for independent tasks.
+- **dispatching-parallel-agents** — efficient multi-agent coordination.
+- **receiving-code-review** — evaluating and applying review feedback.
+- **change-impact-testing** — selecting tests from change blast radius.
 
-## Interop
+## Notes
 
-Commands work together:
+- Arc asks one focused question at a time when clarification is needed.
+- Review is advisory. The user decides.
+- Implementation uses TDD and continuous verification.
+- Launch checks the basics needed for a public URL: deployment, domain, HTTPS, environment variables, access gates, metadata, social previews, favicons, placeholders, robots/noindex blockers, and detected service settings.
+- Activity is logged to `.arc/log.md` when workflows complete. The file is gitignored.
 
-- `/arc:suggest` reads project-local signals: current plans, progress, TODOs, failing checks, recent commits, and `/arc:vision`
-- `/arc:ideate` flows to `/arc:implement` (which creates plans internally)
-- `/arc:implement` scales from quick fixes to full plan-driven execution
-- `/arc:launch` records whether `/arc:testing` and `/arc:audit` are done, missing, or intentionally deferred
-- Claude Code uses TaskList for in-session task tracking.
+## Optional Integrations
 
-### Linear Integration (Optional)
+Arc is self-contained, but it can use connected tools when available:
 
-For complex projects, Arc integrates with Linear via MCP for issue tracking:
+| Integration | Used for |
+|-------------|----------|
+| Browser automation / Playwright | Rendered verification, E2E checks, launch evidence |
+| Context/documentation search | Research during implementation or review |
+| Linear MCP | Optional issue creation from audit findings |
+| GitHub tooling | Commit, push, branch, and PR workflows |
 
-```json
-// .mcp.json
-{
-  "mcpServers": {
-    "linear": {
-      "command": "npx",
-      "args": ["-y", "@anthropic/linear-mcp"]
-    }
-  }
-}
-```
-
-When Linear MCP is available, `/arc:audit` can create issues from findings.
+External skills and plugins can add specialist depth, but Arc should still remain understandable and usable without them.
 
 ## Acknowledgments
 
 Arc builds on patterns and disciplines from:
 
-- [superpowers](https://github.com/chadgauth/superpowers) — Implementation disciplines (TDD, debugging, verification)
-- [compound-engineering](https://github.com/minuva/compound-engineering) — Agent patterns and workflows
+- [superpowers](https://github.com/chadgauth/superpowers) — implementation disciplines such as TDD, debugging, and verification.
+- [compound-engineering](https://github.com/minuva/compound-engineering) — agent patterns and workflows.
 
 ## License
 

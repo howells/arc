@@ -1,5 +1,5 @@
 ---
-description: Test strategy and execution. Create test plans, run suites, or fix failing tests.
+description: Backfill characterization tests around existing code before risky changes.
 ---
 
 Invoke the testing skill with any arguments provided.

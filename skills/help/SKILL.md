@@ -15,7 +15,7 @@ website:
   what: |
     Help gathers lightweight context about your project (framework, existing plans, design docs, test setup, etc.) and presents the full Arc command catalog annotated with relevance signals. Commands that don't apply to your current situation are dimmed with a reason why.
   why: |
-    Arc has 30+ commands. Nobody memorizes them all. Help gives you the full picture with context so you can find the right command without trial and error.
+    Arc has a focused command set, but you should not have to memorize it. Help gives you the full picture with context so you can find the right command without trial and error.
   decisions:
     - Lightweight context gathering. Quick checks, not deep analysis.
     - Shows ALL commands. Doesn't hide irrelevant ones — dims them with explanation.
