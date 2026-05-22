@@ -1,24 +1,27 @@
 ---
 name: vision
 description: |
-  Create or review a high-level vision document capturing project goals and purpose.
-  Use when asked to "define the vision", "what is this project", "set goals",
-  or when starting a new project that needs clarity on purpose and direction.
+  Create, review, or revise a concise project vision document that captures what
+  a project is, who it is for, why it exists, success criteria, constraints,
+  non-goals, and decision principles. Use when starting a new project, clarifying
+  product direction, aligning a codebase for future agent work, defining a north
+  star, or turning a vague idea into docs/vision.md.
 license: MIT
 metadata:
   author: howells
 website:
   order: 2
   desc: Project north star
-  summary: Define what you're building and why. This document guides every future decision—yours and the AI's.
+  summary: Define what the project is, who it serves, why it exists, and what future decisions should optimize for.
   what: |
-    Vision creates a concise document (500-700 words) capturing why the project exists, who it's for, and what you're explicitly NOT building. Arc reads this document in future sessions, so the AI always understands the bigger picture when making implementation decisions.
+    Vision turns a vague product, codebase, or initiative into a concise project north star. It inspects existing project context before asking questions, then creates, reviews, or revises docs/vision.md so future humans and agents have a concrete decision reference.
   why: |
-    Projects drift. Features creep. Without a reference point, both you and the AI lose sight of the goal. The vision document is that reference—something you return to when decisions get hard, and something Arc consults to stay aligned with your intent.
+    Projects drift when their purpose is implicit. A good vision document is short enough to read, specific enough to guide implementation, and honest about constraints, non-goals, and unresolved assumptions.
   decisions:
-    - "Written for two audiences: you and the AI. Clear enough for both to act on."
-    - Non-goals section mandatory. What you won't build prevents scope creep.
-    - Lives in docs/vision.md. Arc reads it automatically in future sessions.
+    - Inspect the codebase before asking questions.
+    - Do not run a long interview when existing context is enough for a credible draft.
+    - Include non-goals and decision principles so the document can resolve tradeoffs.
+    - Keep the artifact focused on docs/vision.md unless the user specifies another path.
   workflow:
     position: spine
     after: go
@@ -28,7 +31,7 @@ website:
 # MANDATORY Tool Restrictions
 
 ## REQUIRED TOOLS:
-- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern for every question in this skill, including gathering context and validating drafts. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Keep context before the question to 2-3 sentences max, and do not narrate missing tools or fallbacks to the user.
+- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern for every question in this skill, including mode selection, missing context, and draft validation. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Keep context before the question to 2-3 sentences max, and do not narrate missing tools or fallbacks to the user.
 </tool_restrictions>
 
 <arc_runtime>
@@ -42,152 +45,165 @@ Paths in this skill use these conventions:
 
 # Vision Workflow
 
-Create or review a 500-700 word vision document that captures the high-level goals and purpose of the app or codebase.
+Create, review, or revise a project vision document. The output should be useful to future humans and agents: specific enough to guide decisions, short enough to be read, and honest about constraints.
 
 <progress_context>
 **Use Read tool:** `docs/arc/progress.md` (first 50 lines)
 
-Check for recent work that might inform vision decisions.
+Check recent work context before revising or replacing vision language.
 </progress_context>
 
-## Process
+## Start
 
-### Step 1: Check for Existing Vision
+When invoked:
 
-**Use Read tool:** `docs/vision.md`
+1. State that you are using `/arc:vision`.
+2. Determine whether the user wants to create, review, or revise a vision.
+3. Inspect existing project context before asking questions.
+4. Ask one focused question at a time only when the direction is still unclear.
 
-**If file exists:** Read it, then ask:
+## Context To Inspect
+
+Read what exists from this list. Do not fail if a file is absent:
+
+- `docs/vision.md`
+- `docs/arc/vision.md`
+- `README.md`
+- `AGENTS.md`
+- `CONTEXT.md`
+- `docs/brand-system.md`
+- `docs/design-context.md`
+- `package.json`
+- app, package, or domain folder names that reveal the product shape
+
+If `docs/vision.md` exists and the user did not specify a mode, ask:
+
 ```
 AskUserQuestion:
   question: "I found an existing vision document. What would you like to do?"
   header: "Existing Vision"
   options:
-    - label: "Review and discuss"
-      description: "Walk through the current vision and talk through it"
-    - label: "Update"
-      description: "Revise the vision based on a new direction"
+    - label: "Review"
+      description: "Assess the current vision and suggest improvements without overwriting it"
+    - label: "Revise"
+      description: "Update the vision based on current context or a new direction"
     - label: "Start fresh"
-      description: "Discard the current vision and write a new one"
+      description: "Replace it with a new vision document"
 ```
 
-**If not exists:** Proceed to Step 2.
+If no existing vision exists and the user's intent is clear, draft from available context. Do not force a long interview.
 
-### Step 2: Gather Context
+## Useful Questions
 
-Ask one question at a time. Wait for the user's response before asking the next question.
+Ask only the questions needed to fill real gaps:
 
-**Question 1:**
-```
-AskUserQuestion:
-  question: "What is this project? (one sentence)"
-  header: "Project Identity"
-  options:
-    - label: "I'll describe it"
-      description: "Type a one-sentence description of what you're building"
-```
+- What is the project?
+- Who is it for?
+- What problem does it solve?
+- What should be true if it succeeds?
+- What should it deliberately not become?
+- What constraints should future work respect?
+- What tradeoffs should future decisions optimize for?
 
-**Question 2:**
-```
-AskUserQuestion:
-  question: "Who is it for?"
-  header: "Target Audience"
-  options:
-    - label: "I'll describe them"
-      description: "Type who the target users or audience are"
-```
+## Output
 
-**Question 3:**
-```
-AskUserQuestion:
-  question: "What problem does it solve?"
-  header: "Core Problem"
-  options:
-    - label: "I'll explain"
-      description: "Type the problem this project addresses"
-```
+Create or update `docs/vision.md` by default unless the user specifies another path.
 
-**Question 4:**
-```
-AskUserQuestion:
-  question: "What does success look like?"
-  header: "Success Criteria"
-  options:
-    - label: "I'll define it"
-      description: "Type what success means for this project"
-```
-
-**Question 5:**
-```
-AskUserQuestion:
-  question: "Any constraints or non-goals?"
-  header: "Constraints"
-  options:
-    - label: "Yes, I have some"
-      description: "Type constraints or things you're explicitly not building"
-    - label: "None right now"
-      description: "Skip this and move on to drafting"
-```
-
-### Step 3: Draft Vision
-
-Write a 500-700 word vision document covering:
+Use this structure unless the project already has a better local convention:
 
 ```markdown
 # Vision
 
-## Purpose
-[One paragraph: What is this and why does it exist?]
+## What This Is
 
-## Goals
-[3-5 bullet points: What are we trying to achieve?]
+## Who It Serves
 
-## Target Users
-[Who is this for? What do they need?]
+## Why It Exists
 
-## Success Criteria
-[How do we know if we've succeeded?]
-
-## Non-Goals
-[What are we explicitly NOT trying to do?]
+## Success
 
 ## Principles
-[2-3 guiding principles for decisions]
+
+## Non-Goals
+
+## Open Questions
 ```
 
-### Step 4: Validate
+A good Arc vision document normally fits in 500-900 words.
 
-Present the draft in sections. After each section, ask:
-```
-AskUserQuestion:
-  question: "Does this capture it?"
-  header: "Section Review"
-  options:
-    - label: "Yes, looks good"
-      description: "Move on to the next section"
-    - label: "Needs changes"
-      description: "I'll tell you what to adjust"
-    - label: "Start this section over"
-      description: "Rewrite this section from scratch"
-```
+## Writing Rules
 
-### Step 5: Save
+- Describe the actual product, audience, and value, not a generic category.
+- Prefer concrete nouns and decision language over marketing claims.
+- Include non-goals. A vision without boundaries is not operational.
+- Include decision principles that can resolve future tradeoffs.
+- Separate facts from assumptions when the codebase or user input does not fully support a claim.
+- Avoid hype phrases such as "revolutionary", "seamless", "cutting-edge", or "delightful" unless the product context proves they are precise.
+- Do not invent business metrics, customer segments, compliance requirements, or committed timelines.
+- Do not add broad documentation files beyond the requested vision artifact.
+- Keep open questions explicit when direction depends on unresolved assumptions.
+
+## Review Mode
+
+When reviewing an existing vision, lead with issues:
+
+1. Missing or vague audience.
+2. Unclear problem statement.
+3. No observable success criteria.
+4. No non-goals or constraints.
+5. Claims contradicted by the codebase.
+6. Language too generic to guide implementation.
+7. Decision principles that are slogans rather than usable tradeoff rules.
+
+If the user asked only for a review, do not overwrite the file. Provide findings and a proposed revision excerpt instead.
+
+## Revise Mode
+
+When revising:
+
+1. Preserve accurate, specific claims from the existing document.
+2. Replace generic or outdated claims with codebase-backed language.
+3. Mark assumptions rather than presenting them as facts.
+4. Keep the document concise even when the project is complex.
+5. Save the final revision to `docs/vision.md` unless the user specified another path.
+
+## Save
+
+When creating or revising:
 
 ```bash
 mkdir -p docs
-# Write to docs/vision.md
+# Write to docs/vision.md unless another path was requested.
+```
+
+Commit the vision document when the user has asked Arc to own the change or when continuing an Arc workflow where committing is expected:
+
+```bash
 git add docs/vision.md
-git commit -m "docs: add project vision"
+git commit -m "docs: update project vision"
 ```
 
 <arc_log>
 **After completing this skill, append to the activity log.**
 See: `references/arc-log.md`
 
-Entry: `/arc:vision — [Created / Updated] vision document`
+Entry: `/arc:vision — [Created / Reviewed / Revised] vision document`
 </arc_log>
 
 ## Interop
 
-- **/arc:ideate** reads vision for context
-- **/arc:suggest** references vision as lowest-priority source
-- **/arc:launch** checks vision alignment
+- `/arc:go` uses vision to route new work.
+- `/arc:ideate` reads vision for product and scope context.
+- `/arc:suggest` references vision as a project-local signal.
+- `/arc:launch` checks whether launch posture still matches the project intent.
+
+<completion_check>
+Before finishing, verify that the vision:
+
+- Names the product and audience.
+- Explains why the project exists.
+- Gives future agents enough context to make implementation decisions.
+- Includes non-goals or constraints.
+- Includes decision principles that can resolve tradeoffs.
+- Lists open questions when the vision depends on unresolved assumptions.
+</completion_check>
