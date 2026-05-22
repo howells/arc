@@ -79,7 +79,6 @@ Look for:
 | `/arc:testing` | Test results, coverage changes |
 | `/arc:review` | Plan reviewed, changes made |
 | `/arc:audit` | Audit completed, issue counts by severity |
-| `/arc:design` | UI designed, aesthetic direction |
 | `/arc:launch` | Public URL status, checklist progress |
 | `/arc:commit` | What was committed, branch |
 

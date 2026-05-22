@@ -178,7 +178,7 @@ Based on their answer:
 | "Review a plan/spec/approach" | /arc:review |
 | "Assess existing code quality/risk" | /arc:audit |
 | "Find refactoring opportunities" | /arc:refactor |
-| "Make it responsive/fix mobile" | /arc:design |
+| "Make it responsive/fix mobile" | external UI/design skill such as Chiaroscuro |
 | "Launch / go live" | /arc:launch |
 | "Run tests" | /arc:testing |
 

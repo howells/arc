@@ -1,8 +1,8 @@
 ---
 name: review
 description: |
-  Run expert review on a plan, spec, design, or implementation approach with parallel reviewer agents. Presents findings as Socratic questions.
-  Use when asked to "review the plan", "get feedback on the design", "check this approach",
+  Run expert review on a plan, spec, or implementation approach with parallel reviewer agents. Presents findings as Socratic questions.
+  Use when asked to "review the plan", "check this approach",
   or before implementation to validate architectural decisions.
 
   Optional argument: reviewer name (e.g., `/arc:review daniel-product-engineer`)
@@ -14,9 +14,9 @@ website:
   desc: Get expert eyes
   summary: Get feedback from specialized reviewers—security, performance, architecture, and more. Runs automatically during ideate, or on-demand for plans and implementation approaches.
   what: |
-    Review spins up specialized agents based on the plan, spec, design, or approach being evaluated—a new auth flow gets security and architecture reviewers, a database change gets the data engineer. Each agent reviews independently, then their feedback is consolidated into a prioritized list of concrete items: things to fix, questions to answer, risks to consider.
+    Review spins up specialized agents based on the plan, spec, or approach being evaluated—a new auth flow gets security and architecture reviewers, a database change gets the data engineer. Each agent reviews independently, then their feedback is consolidated into a prioritized list of concrete items: things to fix, questions to answer, risks to consider.
   why: |
-    No single perspective catches everything. Review gives you a panel of experts without the scheduling overhead. It runs automatically at the end of /arc:ideate, but you can also invoke it on a plan, spec, design, or approach you're unsure about.
+    No single perspective catches everything. Review gives you a panel of experts without the scheduling overhead. It runs automatically at the end of /arc:ideate, but you can also invoke it on a plan, spec, or approach you're unsure about.
   decisions:
     - Runs during ideate automatically. You don't have to remember to ask for review.
     - Agent selection is dynamic. It picks reviewers based on the plan scope.
@@ -27,7 +27,6 @@ website:
     - architecture-engineer
     - data-engineer
     - senior-engineer
-    - designer
   workflow:
     position: spine
     after: ideate
@@ -78,7 +77,6 @@ Paths in this skill use these conventions:
 | data-engineer | database.md, testing.md, api.md |
 | senior-engineer | cloudflare-workers.md (if wrangler.toml exists) |
 | accessibility-engineer | (interface rules only — already in agent prompt) |
-| designer | design.md, colors.md, spacing.md, typography.md |
 </rules_context>
 
 <progress_context>
@@ -114,7 +112,6 @@ Reviewers must respect the plan's scope. This is non-negotiable:
 - `performance-engineer` — Bottlenecks, scalability
 - `security-engineer` — Vulnerabilities, OWASP
 - `data-engineer` — Migrations, transactions
-- `designer` — Visual design quality, UX fundamentals, AI slop detection
 
 ## Phase 1: Find the Plan
 
@@ -190,7 +187,6 @@ Reviewers must respect the plan's scope. This is non-negotiable:
 
 **Conditional addition (all UI project types):**
 - If plan involves UI components, forms, or user-facing features → add `agents/review/accessibility-engineer.md`
-- If plan involves UI components, pages, or visual design → add `agents/review/designer.md`
 
 ## Phase 3: Run Expert Review
 

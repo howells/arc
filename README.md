@@ -26,7 +26,6 @@ WHY     /arc:vision     - High-level goals (500-700 words)
 WHAT    /arc:ideate     - From idea to design doc
           ↓
 DO      /arc:implement  - Plan + execute with TDD
-        /arc:design     - UI/UX design with wireframes, reusable UI patterns, and critique
         /arc:testing    - Test strategy and execution
         /arc:launch     - Go-live checklist
 
@@ -118,7 +117,6 @@ Invoke skills explicitly (recommended):
 $go
 $audit
 $ideate add user authentication with magic links
-$design polish the dashboard hierarchy
 $implement
 ```
 
@@ -130,7 +128,6 @@ Common Codex entry points:
 - `$go`
 - `$audit`
 - `$ideate`
-- `$design`
 - `$implement`
 - `$review`
 - `$testing`
@@ -139,7 +136,7 @@ Common Codex entry points:
 ### Codex Notes
 
 - These skills are stored in `skills/<name>/SKILL.md` for Claude Code; `.agents/skills/<name>` is a symlink to the same folder so Codex can discover them.
-- The supported install exposes Arc as direct skill entries like `~/.codex/skills/audit`, `~/.codex/skills/ideate`, and `~/.codex/skills/design`.
+- The supported install exposes Arc as direct skill entries like `~/.codex/skills/audit`, `~/.codex/skills/ideate`, and `~/.codex/skills/implement`.
 - Arc also mirrors those links into `~/.agents/skills/*` because some Codex environments still surface home-local skills from that compatibility root.
 - Some skills reference Claude-specific tooling (e.g. `TaskList`, `mcp__claude-in-chrome__*`). In Codex, use the closest equivalent:
   - terminal exploration instead of `Task` blocks
@@ -153,10 +150,10 @@ Arc uses these plugins and MCP integrations for enhanced functionality:
 
 | Integration | Used by |
 |-------------|---------|
-| **Figma** | `/arc:ideate`, `/arc:implement`, `/arc:design` |
+| **Figma** | `/arc:ideate`, `/arc:implement` |
 | **Context7** | research and implementation workflows |
-| **Claude in Chrome** | `/arc:design`, `designer` review |
-| **WireText MCP** | `/arc:design`, `/arc:ideate` wireframing |
+| **Claude in Chrome** | rendered verification during implementation |
+| **WireText MCP** | `/arc:ideate` wireframing |
 | **agent-browser** | browser automation fallback outside Claude Code |
 
 ```
@@ -178,9 +175,9 @@ These plugins provide additional review capabilities:
 | Plugin | Skill | Used by |
 |--------|-------|---------|
 | **[agent-skills](https://github.com/vercel-labs/agent-skills)** | `vercel-react-best-practices` | `/arc:implement`, `/arc:launch` |
-| | `vercel-composition-patterns` | `/arc:implement`, `/arc:design` |
+| | `vercel-composition-patterns` | `/arc:implement` |
 | | `vercel-react-native-skills` | `/arc:implement`, `/arc:launch` |
-| **[web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines)** | `web-design-guidelines` | `/arc:design`, `/arc:implement` |
+| **[web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines)** | `web-design-guidelines` | `/arc:implement` |
 
 ```
 # Vercel Labs plugins (optional)
@@ -270,7 +267,6 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:vision` | Starting a new project | `docs/vision.md` |
 | `/arc:ideate` | From idea to design doc | `docs/arc/specs/YYYY-MM-DD-<feature>-design.md` |
 | `/arc:implement` | Scope-aware plan + execute with TDD | Code changes |
-| `/arc:design` | UI/UX work | Wireframes + code |
 | `/arc:testing` | Test strategy | Test files |
 | `/arc:launch` | Launch / go live | Public URL readiness |
 | `/arc:review` | Review a plan, spec, design, or approach | Updated plan file |
@@ -286,8 +282,8 @@ Arc includes specialized agents across research, review, build, design, and work
 | Category | Agents |
 |----------|--------|
 | **Research** | docs-researcher, git-history-analyzer |
-| **Review** | architecture-engineer, daniel-product-engineer, data-engineer, designer, lee-nextjs-engineer, performance-engineer, security-engineer, senior-engineer, accessibility-engineer, test-quality-engineer |
-| **Build** | implementer, fixer, debugger, ui-builder, figma-builder, design-specifier, unit-test-writer, integration-test-writer, e2e-test-writer, test-runner, e2e-runner, spec-reviewer, code-reviewer |
+| **Review** | architecture-engineer, daniel-product-engineer, data-engineer, lee-nextjs-engineer, performance-engineer, security-engineer, senior-engineer, accessibility-engineer, test-quality-engineer |
+| **Build** | implementer, fixer, debugger, figma-builder, unit-test-writer, integration-test-writer, e2e-test-writer, test-runner, e2e-runner, spec-reviewer, code-reviewer |
 | **Workflow** | spec-flow-analyzer, e2e-test-runner, spec-document-reviewer, plan-document-reviewer |
 
 ## Disciplines

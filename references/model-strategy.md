@@ -16,8 +16,7 @@
 | Spec compliance (spec-reviewer) | sonnet | Semantic comparison |
 | Implementation (implementer) | opus | Production code quality matters most |
 | E2E tests (writer + runner) | opus | Complex user flows, flaky test diagnosis |
-| UI/design (ui-builder, figma-builder) | opus | Aesthetic judgment |
-| Design decisions (design-specifier) | opus | Creative judgment |
+| Figma implementation (figma-builder) | opus | Design fidelity and UI implementation |
 
 ## Model Tiers
 
@@ -58,12 +57,11 @@ Task senior-engineer model: sonnet: "Review this code..."
 
 - Implementation (production code)
 - E2E test writing and running
-- UI building and design specification
-- Design review (aesthetic judgment)
+- Figma implementation
 
 ```
 Task implementer model: opus: "Implement [feature]..."
-Task ui-builder model: opus: "Build [component] from design spec..."
+Task figma-builder model: opus: "Implement [component] from Figma..."
 ```
 
 ## Rationale

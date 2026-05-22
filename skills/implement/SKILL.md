@@ -58,7 +58,6 @@ Paths in this skill use these conventions:
 5. references/arc-paths.md
 
 **Load these only when relevant:**
-- references/frontend-design.md — if UI work is involved
 - references/model-strategy.md — when choosing build models
 - disciplines/dispatching-parallel-agents.md — when parallel reviewers/build agents are needed
 - disciplines/finishing-a-development-branch.md — before finalizing the branch
@@ -77,8 +76,6 @@ Paths in this skill use these conventions:
 | `unit-test-writer` | sonnet | Unit tests (vitest) — pure functions, components |
 | `integration-test-writer` | sonnet | Integration tests (vitest + MSW) — API, auth |
 | `e2e-test-writer` | opus | E2E tests (Playwright) — user journeys |
-| `ui-builder` | opus | UI components from design spec — anti-slop, memorable |
-| `design-specifier` | opus | Design decisions when no spec exists — empty states, visual direction |
 | `figma-builder` | opus | Build UI directly from Figma URL |
 | `test-runner` | haiku | Run vitest, analyze failures |
 | `e2e-runner` | opus | Playwright tests — iterate until green or report blockers |
@@ -387,7 +384,7 @@ AskUserQuestion:
 ┌─────────────────────────────────────────────────────────┐
 │  1. CLASSIFY  → what type of task? what test level?     │
 │  2. TEST      → spawn test agent (unit/integration/e2e) │
-│  3. BUILD     → implementer / ui-builder / specialized  │
+│  3. BUILD     → implementer / specialized agents         │
 │  4. TDD       → run test (fail→impl→pass)               │
 │  5. FIX       → fixer (TS/lint cleanup)                 │
 │  6. SPEC      → spec-reviewer (matches spec?)           │
@@ -413,9 +410,9 @@ Determine which build agent(s) may be needed:
 | Write unit tests | unit-test-writer | Pure functions, components, hooks |
 | Write integration tests | integration-test-writer | API mocking, auth states |
 | Write E2E tests | e2e-test-writer | User journeys, Playwright |
-| Build UI from spec | ui-builder | UI components with existing design direction |
+| Build UI from spec | implementer | UI components with existing design direction |
 | Build UI from Figma | figma-builder | Figma URL provided |
-| Design decisions needed | design-specifier | No spec exists (empty states, visual direction) |
+| Design decisions needed | external design skill | Arc does not create visual direction |
 | Fix TS/lint errors | fixer | Mechanical cleanup |
 | Debug failing tests | debugger | Test failures |
 | Run E2E tests | e2e-runner | Playwright test suites |
@@ -424,8 +421,8 @@ Determine which build agent(s) may be needed:
 **Agent selection flow:**
 1. Is this general code (no UI)? → implementer
 2. Is this UI with Figma? → figma-builder
-3. Is this UI with design spec? → ui-builder
-4. Is this UI with no spec? → design-specifier first, then ui-builder
+3. Is this UI with design spec? → implementer
+4. Is this UI with no spec? → ask for an external design spec before creating visual direction
 5. Did something break? → debugger or fixer
 6. Task complete? → spec-reviewer to verify
 
@@ -485,7 +482,7 @@ File to create: [tests/feature.spec.ts]"
 
 ### Step 4: TDD Cycle (MANDATORY)
 
-**Hard gate:** Do NOT dispatch implementer/ui-builder until a failing test exists for the task. Test file first, implementation second. No exceptions.
+**Hard gate:** Do NOT dispatch implementer until a failing test exists for the task. Test file first, implementation second. No exceptions.
 
 ```
 1. Tests written (from Step 3)
@@ -668,23 +665,12 @@ Search the codebase (Glob + Grep) for existing functions that serve the same or 
 
 **Before starting UI tasks:**
 
-**If design spec exists** — spawn ui-builder:
+**If design spec exists** — spawn implementer with the design spec as a constraint:
 ```
-Read: agents/build/ui-builder.md
-```
-
-**If no design spec** (empty states, undefined visuals) — spawn design-specifier first:
-```
-Task [design-specifier] model: opus: "Create design spec for [component].
-
-Context: [what this is for, user's emotional state]
-Existing patterns: [what it should feel like]
-Project aesthetic: [tone from design doc]
-
-Output actionable spec for ui-builder to implement."
+Read: agents/build/implementer.md
 ```
 
-Then spawn ui-builder with the design-specifier's output.
+**If no design spec** (empty states, undefined visuals) — do not invent visual direction inside Arc. Ask for a design spec from Chiaroscuro or another external design source, or limit the task to behavior-preserving implementation against existing project patterns.
 
 **If Figma URL provided** — spawn figma-builder:
 ```
@@ -692,11 +678,11 @@ Read: agents/build/figma-builder.md
 Task [figma-builder] model: opus: "Implement from Figma: [URL]"
 ```
 
-**For ui-builder, spawn:
+**For UI implementation from a spec, spawn:
 ```
-Task [ui-builder] model: opus: "Build UI components for [feature].
+Task [implementer] model: opus: "Build UI components for [feature].
 
-Aesthetic Direction (from design doc):
+Design spec:
 - Tone: [tone]
 - Memorable element: [what stands out]
 - Typography: [fonts]
@@ -709,7 +695,7 @@ Files to create: [list from implementation plan]
 Interface rules: rules/interface/ (include tailwind-authoring.md, buttons.md, surfaces.md, sections.md when relevant)
 Project rules: .ruler/react.md, .ruler/tailwind.md
 
-Apply the aesthetic direction to every decision. Make it memorable, not generic."
+Treat the design spec as an external source of truth. Do not create new visual direction beyond it."
 ```
 
 **Fetch Figma context (if available):**
@@ -718,29 +704,7 @@ mcp__figma__get_design_context: fileKey, nodeId
 mcp__figma__get_screenshot: fileKey, nodeId
 ```
 
-**After completing ALL UI tasks — spawn designer review:**
-```
-Task [designer] model: opus: "Review the completed UI implementation.
-
-Aesthetic Direction (from design doc):
-- Tone: [tone]
-- Memorable element: [what stands out]
-- Typography: [fonts]
-- Color strategy: [approach]
-
-Files: [list of UI component files]
-Figma: [URL if available]
-
-Check for:
-- Generic AI aesthetics (Inter, purple gradients, cookie-cutter layouts)
-- Deviation from aesthetic direction
-- Missing memorable moments
-- Inconsistent application of design system
-- Accessibility concerns
-- Missing states (loading, error, empty)"
-```
-
-Address any review findings before proceeding.
+**After completing UI tasks** — verify against the external design spec and run rendered checks when available. Use external Chiaroscuro or Fieldtest workflows for visual critique when needed.
 
 **When implementing unfamiliar library APIs:**
 ```

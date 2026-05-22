@@ -30,7 +30,6 @@ website:
     - daniel-product-engineer
     - lee-nextjs-engineer
     - senior-engineer
-    - designer
     - data-engineer
   workflow:
     position: utility
@@ -127,16 +126,15 @@ Pass relevant rules to each reviewer agent.
 
 | Reviewer | Interface Rules to Pass |
 |----------|------------------------|
-| designer | design.md, colors.md, typography.md, marketing.md, tailwind-authoring.md, buttons.md, surfaces.md, sections.md |
 | daniel-product-engineer | forms.md, interactions.md, animation.md, performance.md, tailwind-authoring.md, buttons.md, surfaces.md |
 | lee-nextjs-engineer | layout.md, performance.md |
 Interface rules location: `rules/interface/`
 
 Pass relevant rules to each UI reviewer in their prompt. These inform what to look for, not mandates to redesign.
 
-**UI polish checks — include in prompts for designer and daniel-product-engineer:**
+**UI implementation checks — include in prompts for daniel-product-engineer and accessibility-engineer:**
 
-In addition to their domain-specific rules, both UI reviewers should verify:
+In addition to their domain-specific rules, UI reviewers should verify:
 - No layout shift on dynamic content (hardcoded dimensions, `tabular-nums`, no font-weight changes on hover)
 - Animations have `prefers-reduced-motion` support
 - Touch targets are 44px minimum
@@ -390,7 +388,6 @@ Include the mechanical summary in reviewer context, then continue to reviewer se
 
 **Conditional additions:**
 - If scope includes DB/migrations → add `data-engineer`
-- If UI-heavy (React/Next.js, medium/large) → add `designer`
 - If UI-heavy (React/Next.js, medium/large) → add `accessibility-engineer`
 - If test files detected (medium/large) → add `test-quality-engineer`
 
@@ -398,7 +395,6 @@ Include the mechanical summary in reviewer context, then continue to reviewer se
 - Security focus → prioritize `security-engineer`
 - Performance focus → prioritize `performance-engineer`
 - Architecture focus → prioritize `architecture-engineer`
-- Design focus → prioritize `designer`
 - Accessibility focus → prioritize `accessibility-engineer`
 
 **Final reviewer list:**
@@ -439,7 +435,6 @@ Batch 3: lee-nextjs-engineer, senior-engineer
 | lee-nextjs-engineer | sonnet | Framework pattern recognition |
 | senior-engineer | sonnet | Code review reasoning |
 | data-engineer | sonnet | Data safety reasoning |
-| **designer** | **opus** | **Aesthetic judgment requires premium model** |
 
 **Include project stage in every reviewer prompt.**
 
@@ -485,7 +480,7 @@ Reviewer-specific emphasis:
 - `lee-nextjs-engineer`: server/client boundaries, async client components, Suspense around `useSearchParams`, Server Action auth, route handler side effects, RSC payload shape, Next.js primitives.
 - `performance-engineer`: rerender hotspots, memoization defeats, hydration flicker, bundle imports, async waterfalls, DOM/CSS performance.
 - `security-engineer`: client-reachable secrets, unsafe HTML, eval-like execution, storage-backed trust, Server Action and route-handler auth.
-- `designer` and `accessibility-engineer`: UI/a11y/design hygiene signals. Treat design-tag rules as quality signals, not CI-blocking defects.
+- `accessibility-engineer`: UI/a11y hygiene signals. Treat design-tag rules as quality signals, not CI-blocking defects.
 - `architecture-engineer`: god components, boundary escape hatches, data-client placement, mutable server module state, duplicate query/mutation patterns.
 
 Include in each React reviewer prompt:
@@ -553,12 +548,6 @@ Focus on: N+1 queries, missing indexes, memory leaks, bundle size, render perfor
 [Include Scorecard section with Performance criteria table]
 "
 
-Task [designer] model: opus: "
-Review UI implementation for visual design quality.
-[similar structure, including stage calibration block]
-Focus on: aesthetic direction, memorable elements, typography, color cohesion, AI slop patterns.
-[Include Scorecard section with UI/Design BONUS criteria table]
-"
 ```
 
 **Scorecard axis assignments per reviewer:**
@@ -572,7 +561,6 @@ Focus on: aesthetic direction, memorable elements, typography, color cohesion, A
 | senior-engineer | 4. Code Quality |
 | daniel-product-engineer | 4. Code Quality (second opinion) + 6. Resilience |
 | test-quality-engineer | 5. Test Health |
-| designer | Bonus: UI/Design |
 | accessibility-engineer | Bonus: Accessibility |
 
 When a reviewer scores two axes (daniel-product-engineer), include both criteria tables and ask for both scores.
@@ -582,7 +570,7 @@ When a reviewer scores two axes (daniel-product-engineer), include both criteria
 Repeat for remaining batches:
 - Batch 2: architecture-engineer + senior-engineer
 - Batch 3: UI reviewers (daniel-product-engineer, lee-nextjs-engineer)
-- Batch 4: remaining reviewers (senior-engineer, designer, data-engineer)
+- Batch 4: remaining reviewers (senior-engineer, data-engineer)
 
 ## Phase 4: Consolidate Findings
 
@@ -640,7 +628,7 @@ Collect axis scores from reviewer outputs and apply derivation rules from `audit
    - Type errors or lint failures → 1
    - Clean build + CI exists → 2
    - Full pipeline with monitoring/logging → 3
-4. **Bonus axes:** Collect from designer and accessibility-engineer if they ran.
+4. **Bonus axes:** Collect from accessibility-engineer if it ran.
 5. **Sum** the 7 core scores for the total. Report bonus axes as `+N/M` separately.
 
 If a core axis had no reviewer (e.g., small project skipped architecture-engineer), score it based on the mechanical signals available or mark as `--` (not evaluated). Adjust the denominator: `X/18` if one axis skipped, etc.
@@ -692,10 +680,9 @@ File: `docs/audits/YYYY-MM-DD-[scope-slug]-audit.md`
 
 | Bonus | Score | |
 |-------|:-----:|-|
-| UI/Design | X/3 | [rationale] |
 | Accessibility | X/3 | [rationale] |
 | SEO | X/3 | [rationale] |
-| **Bonus** | **+X/9** | |
+| **Bonus** | **+X/6** | |
 
 ## Executive Summary
 

@@ -23,10 +23,9 @@ When multiple reviewers map to one axis, use the **lower** score (conservative).
 
 | Axis | When | Primary Reviewer(s) |
 |------|------|---------------------|
-| UI/Design | Frontend projects | designer |
 | Accessibility | Frontend projects | accessibility-engineer |
 
-Bonus axes are reported separately as `+N` (e.g., `14/21 +7/9`).
+Bonus axes are reported separately as `+N` (e.g., `14/21 +3/3`).
 
 ---
 
@@ -110,17 +109,6 @@ Is this ready to run and maintain?
 | 3 | Full pipeline — clean build, comprehensive CI, monitoring/alerting, structured logging, deployment with rollback capability |
 
 ---
-
-### Bonus: UI/Design (Frontend only)
-
-Is the interface visually cohesive and intentional?
-
-| Score | Criteria |
-|-------|----------|
-| 0 | No design system, inconsistent spacing/colors/type, broken layouts, obvious AI-generated aesthetics |
-| 1 | Functional but generic — basic styling applied, some inconsistencies, no clear design direction |
-| 2 | Cohesive — consistent design tokens, intentional typography and color, responsive. Lacks distinctive character |
-| 3 | Distinctive — memorable aesthetic direction, polished interactions, purposeful motion, consistent to micro-interactions |
 
 ### Bonus: Accessibility (Frontend only)
 

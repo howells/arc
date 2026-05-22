@@ -70,7 +70,6 @@ Look for:
 | `/arc:test` | Test results, coverage |
 | `/arc:review` | Plan reviewed, changes |
 | `/arc:audit` | Issue counts by severity |
-| `/arc:design` | UI designed, aesthetic direction |
 | `/arc:launch` | Public URL status |
 | `/arc:commit` | What was committed |
 | `/arc:vision` | Vision created/updated |

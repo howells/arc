@@ -97,7 +97,7 @@ For each command group, output:
 **Relevance rules:**
 - **Relevant** — the project has the prerequisites AND there's a reason to use it now
 - **Available** — the project has the prerequisites but no urgent reason
-- *Low relevance* — project is missing prerequisites (e.g., no UI = no `/arc:design`)
+- *Low relevance* — project is missing prerequisites (e.g., no tests = no test execution)
 - *Not applicable* — fundamentally doesn't apply (e.g., no codebase at all)
 
 ### The Catalog
@@ -124,7 +124,6 @@ Output ALL of these in order:
 | Command | What it does | When to use |
 |---------|-------------|-------------|
 | `/arc:ideate` | Turn an idea into a validated design through collaborative dialogue | New features that need thinking before building |
-| `/arc:design` | Create distinctive, non-generic UI with aesthetic direction and wireframes | When building UI that should be memorable |
 
 **EXECUTE**
 
@@ -178,7 +177,7 @@ Based on what I found in your project:
 Pick 2-4 commands that make the most sense given:
 - What's **missing** (no vision doc → suggest `/arc:vision`)
 - What's **stale** (old plans → mention them, but do not route to a cleanup workflow)
-- What **just changed** (recent UI edits → suggest `/arc:design` or `/arc:audit`)
+- What **just changed** (recent implementation edits → suggest `/arc:audit` or `/arc:testing`)
 - What **could be improved** (no tests → suggest `/arc:testing`)
 
 ---

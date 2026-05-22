@@ -49,7 +49,6 @@ If the work turns into deep code health, testing strategy, mobile layout, securi
 
 - Codebase health and risk -> `/arc:audit`
 - Behavior and test coverage -> `/arc:testing`
-- UI polish or asset design -> `/arc:design`
 
 ## Process
 

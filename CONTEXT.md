@@ -76,6 +76,8 @@ AI framework guidance is outside Arc's public workflow surface because the dedic
 
 Feature/API documentation generation is outside Arc's public workflow surface because Marginalia owns concise code documentation and IDE-friendly JSDoc. Arc may still create lifecycle artifacts such as specs, plans, audit reports, and launch checklists, but it should not own general docs generation, feature docs, public API docs, or package documentation workflows.
 
+Visual design direction, UI polish, and reusable Tailwind design systems are outside Arc's public workflow surface because Chiaroscuro owns that design truth. Arc can consume external design specs or Figma files during implementation, but it should not create independent visual direction, UI polish workflows, or design-review authorities.
+
 Arc should not expose external skill dependencies for those checks. If a specialist practice matters to Arc, make it Arc-native: name it plainly, explain the judgment, and place it in the workflow where it belongs.
 
 ## Design Principles

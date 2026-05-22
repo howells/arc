@@ -13,8 +13,6 @@ assert_file_contains "$PLUGIN_ROOT/references/platform-tools.md" "WireText MCP" 
 assert_file_contains "$PLUGIN_ROOT/references/platform-tools.md" "Claude Chrome MCP" \
     "platform tools keeps Chrome as preferred Claude path"
 
-assert_file_contains "$PLUGIN_ROOT/skills/design/SKILL.md" "Prefer WireText MCP when available" \
-    "design prefers WireText for wireframes"
 assert_file_not_contains "$PLUGIN_ROOT/README.md" "figma-implement" \
     "README has no stale figma-implement reference"
 assert_file_not_contains "$PLUGIN_ROOT/CLAUDE.md" "vercel:deploy" \

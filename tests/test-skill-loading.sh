@@ -12,7 +12,6 @@ section "Skill Loading Tests"
 EXPECTED_SKILLS=(
     "audit"
     "commit"
-    "design"
     "detail"
     "go"
     "help"

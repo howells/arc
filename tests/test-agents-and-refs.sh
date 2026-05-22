@@ -14,7 +14,6 @@ REVIEW_AGENTS=(
     "architecture-engineer"
     "daniel-product-engineer"
     "data-engineer"
-    "designer"
     "lee-nextjs-engineer"
     "performance-engineer"
     "security-engineer"
@@ -30,7 +29,6 @@ RESEARCH_AGENTS=(
 BUILD_AGENTS=(
     "code-reviewer"
     "debugger"
-    "design-specifier"
     "e2e-runner"
     "e2e-test-writer"
     "figma-builder"
@@ -39,7 +37,6 @@ BUILD_AGENTS=(
     "integration-test-writer"
     "spec-reviewer"
     "test-runner"
-    "ui-builder"
     "unit-test-writer"
 )
 

@@ -9,7 +9,7 @@ description: |
   user: "Implement the date formatting utility"
   assistant: "I'll dispatch the implementer to build this utility with tests"
   <commentary>
-  Utility functions don't need specialized agents like ui-builder. Implementer handles general tasks.
+  Utility functions don't need specialized agents. Implementer handles general tasks.
   </commentary>
   </example>
 
@@ -139,7 +139,6 @@ Before marking done, check:
 - Configuration setup
 
 **Don't handle (dispatch specialized agents):**
-- UI components → ui-builder
 - Failing test debugging → debugger
 - TS/lint cleanup → fixer
 - E2E tests → e2e-runner

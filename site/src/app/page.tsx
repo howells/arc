@@ -322,9 +322,7 @@ export default function ArcPage() {
                   <td className="py-2 pr-4 font-mono text-neutral-800">
                     Figma
                   </td>
-                  <td className="py-2">
-                    /arc:ideate, /arc:implement, /arc:design
-                  </td>
+                  <td className="py-2">/arc:ideate, /arc:implement</td>
                 </tr>
                 <tr className="border-neutral-100 border-b">
                   <td className="py-2 pr-4 font-mono text-neutral-800">
@@ -338,13 +336,15 @@ export default function ArcPage() {
                   <td className="py-2 pr-4 font-mono text-neutral-800">
                     Claude in Chrome
                   </td>
-                  <td className="py-2">/arc:design</td>
+                  <td className="py-2">
+                    Rendered verification during implementation
+                  </td>
                 </tr>
                 <tr className="border-neutral-100 border-b">
                   <td className="py-2 pr-4 font-mono text-neutral-800">
                     WireText MCP
                   </td>
-                  <td className="py-2">/arc:design, /arc:ideate wireframing</td>
+                  <td className="py-2">/arc:ideate wireframing</td>
                 </tr>
                 <tr className="border-neutral-100 border-b">
                   <td className="py-2 pr-4 font-mono text-neutral-800">

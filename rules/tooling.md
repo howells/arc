@@ -40,6 +40,6 @@ Rules for development tooling and integrations.
 
 ## Other MCP Integrations
 
-- **Figma MCP** — For design-to-code workflows (referenced in `/arc:design`)
+- **Figma MCP** — For design-to-code workflows during implementation
 - **Context7 MCP** — For library documentation lookup during implementation
 - **GitHub MCP** — For PR workflows and issue tracking (alternative to Linear)
