@@ -60,6 +60,7 @@ Backfill focused tests around existing code before a risky change. The goal is n
 Use this skill when:
 - Existing code has little or no test coverage.
 - A refactor needs a behavior-preserving safety net first.
+- A god file, duplicated implementation, or tangled module needs characterization before decomposition.
 - A bug fix touches unclear behavior and you need to capture the current contract before changing it.
 - Coverage reports show gaps around important public behavior.
 - Auth, API, state, or browser flows need targeted tests before launch or audit remediation.
@@ -73,6 +74,7 @@ Do not use this skill as the normal new-feature workflow. For new work, use `/ar
 3. `rules/testing.md` — Arc testing conventions
 4. `disciplines/change-impact-testing.md` — Blast radius analysis for code changes
 5. `references/llm-api-testing.md` — If testing LLM integrations
+6. `references/maintainability-review.md` — If tests are being added before decomposing a god file or tangled module
 </required_reading>
 
 ## Agents

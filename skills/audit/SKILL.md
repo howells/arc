@@ -74,6 +74,7 @@ If no native task/todo tool exists, skip task tracking and continue with the aud
 1. `disciplines/dispatching-parallel-agents.md`
 2. `references/audit-stage-calibration.md`
 3. `references/audit-scorecard.md`
+4. `references/maintainability-review.md`
 
 **Load when relevant:**
 - `references/react-audit-signals.md` — React, Next.js, TanStack Query, or React Native projects. Pass the relevant sections into reviewer prompts as audit signals.
@@ -463,6 +464,10 @@ Reviewer-specific emphasis:
 - `daniel-product-engineer`: treat suspiciously named long files as probable god components and inspect for mixed responsibilities, mode props, and unreadable frontend behavior.
 - `architecture-engineer`: use long-file and suspicious-name hotspots to find poor module boundaries and misplaced orchestration.
 - Other reviewers: use the manifest opportunistically; only report if it matters to your domain.
+
+**Include strict maintainability guidance in architecture, senior, and product reviewer prompts.**
+
+Pass `references/maintainability-review.md` to `architecture-engineer`, `senior-engineer`, and `daniel-product-engineer`. They should apply it as a demanding code-health lens: authored source-code files crossing 1000 lines are presumptive blockers unless generated, vendored, data-only, or structurally justified; god files, ad-hoc branching, weak abstractions, misplaced ownership, and avoidable duplication should be reported when evidence-backed.
 
 **Include React audit signals for React/Next.js/React Native projects.**
 

@@ -53,6 +53,7 @@ Paths in this skill use these conventions:
 Before starting, read these references:
 1. `references/architecture-patterns.md` — import depth rules, boundary violations
 2. `references/component-design.md` — compound vs simple component patterns
+3. `references/maintainability-review.md` — strict god-file, duplication, and structural simplification bar
 
 Also read, when present in the target project:
 - `CONTEXT.md` or the relevant context from `CONTEXT-MAP.md`

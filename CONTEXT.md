@@ -16,6 +16,7 @@ Arc should stay focused on the development cycle. It is not a general-purpose ca
 - **Review**: An advisory workflow for evaluating plans, specs, or implementation approaches before deciding what to change.
 - **Refactor**: A codebase-structure workflow for inspecting existing code with the explicit goal of producing a refactoring plan or RFC, including module/package extraction, god-file decomposition, duplication reduction, and testable interface design.
 - **Audit**: A verification and assessment workflow that combines mechanical checks with specialist review to report current codebase health.
+- **God file**: A memorable shorthand for an oversized or tangled source file whose responsibilities need interrogation. Arc uses specific classifications when reporting them: `god-component`, `god-script`, `god-module`, or `duplication`.
 - **Publish**: Releasing a changed package to its registry after the corresponding commit has been pushed and the package version is confirmed unpublished.
 - **Specialist lens**: A focused way of inspecting lifecycle work, such as reuse, API documentation, architecture boundaries, test quality, security, or performance.
 - **Self-contained**: Arc workflows may absorb useful patterns from adjacent tools, but they should explain and execute those patterns in Arc's own language.

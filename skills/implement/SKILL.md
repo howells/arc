@@ -59,6 +59,7 @@ Paths in this skill use these conventions:
 
 **Load these only when relevant:**
 - references/model-strategy.md — when choosing build models
+- references/maintainability-review.md — when a task touches large files, shared abstractions, ownership boundaries, duplicated logic, or risks creating a god file
 - disciplines/dispatching-parallel-agents.md — when parallel reviewers/build agents are needed
 - disciplines/finishing-a-development-branch.md — before finalizing the branch
 - disciplines/subagent-driven-development.md — when executing through build agents
