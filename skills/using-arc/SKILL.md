@@ -111,7 +111,7 @@ When a task needs a specialist lens, keep the routing Arc-native:
 - Reuse or duplicated UI patterns -> `design`, `implement`, `review`, or `audit`
 - Public API documentation -> `document`, `review`, or package-focused `implement`
 - Architecture boundaries or oversized modules -> `review`, `audit`, or `implement`
-- Rendered UX, browser behavior, and responsive issues -> `browse`, `responsive`, or `design`
+- Rendered UX, browser behavior, and responsive issues -> `browse` or `design`
 
 ## Artifact Locations
 

@@ -22,7 +22,6 @@ EXPECTED_SKILLS=(
     "launch"
     "progress"
     "refactor"
-    "responsive"
     "review"
     "suggest"
     "testing"

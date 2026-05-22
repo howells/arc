@@ -156,7 +156,6 @@ Output ALL of these in order:
 
 | Command | What it does | When to use |
 |---------|-------------|-------------|
-| `/arc:responsive` | Audit and fix mobile responsiveness with visual verification | After building desktop-first UI |
 | `/arc:commit` | Smart commit with auto-splitting across domains | When ready to commit changes |
 | `/arc:suggest` | Project-local next-step triage from plans, progress, TODOs, checks, and vision | Starting a session, unsure what to tackle |
 

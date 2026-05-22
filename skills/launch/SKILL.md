@@ -49,7 +49,6 @@ If the work turns into deep code health, testing strategy, mobile layout, securi
 
 - Codebase health and risk -> `/arc:audit`
 - Behavior and test coverage -> `/arc:testing`
-- Mobile and responsive layout -> `/arc:responsive`
 - UI polish or asset design -> `/arc:design`
 
 ## Process
@@ -163,7 +162,6 @@ Do not run every specialist workflow automatically. Record whether each is done,
 
 - `/arc:testing`
 - `/arc:audit`
-- `/arc:responsive`
 
 ## Output
 

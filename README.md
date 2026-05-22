@@ -36,7 +36,6 @@ CROSS-CUTTING
         /arc:refactor   - Find structural refactoring opportunities
         /arc:browse     - Rendered app evaluation through an expert persona
         /arc:suggest    - Project-local next-step triage
-        /arc:responsive  - Mobile responsive audit & fix
 
 TOOLS   /arc:commit     - Smart commit + push with auto-splitting
 ```
@@ -159,7 +158,7 @@ Arc uses these plugins and MCP integrations for enhanced functionality:
 |-------------|---------|
 | **Figma** | `/arc:ideate`, `/arc:implement`, `/arc:design` |
 | **Context7** | research and implementation workflows |
-| **Claude in Chrome** | `/arc:design`, `/arc:responsive`, `/arc:browse`, `designer` review |
+| **Claude in Chrome** | `/arc:design`, `/arc:browse`, `designer` review |
 | **WireText MCP** | `/arc:design`, `/arc:ideate` wireframing |
 | **agent-browser** | browser automation fallback outside Claude Code |
 
@@ -183,8 +182,8 @@ These plugins provide additional review capabilities:
 |--------|-------|---------|
 | **[agent-skills](https://github.com/vercel-labs/agent-skills)** | `vercel-react-best-practices` | `/arc:implement`, `/arc:launch` |
 | | `vercel-composition-patterns` | `/arc:implement`, `/arc:design` |
-| | `vercel-react-native-skills` | `/arc:implement`, `/arc:launch`, `/arc:responsive` |
-| **[web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines)** | `web-design-guidelines` | `/arc:design`, `/arc:implement`, `/arc:responsive` |
+| | `vercel-react-native-skills` | `/arc:implement`, `/arc:launch` |
+| **[web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines)** | `web-design-guidelines` | `/arc:design`, `/arc:implement` |
 
 ```
 # Vercel Labs plugins (optional)
@@ -286,7 +285,6 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:browse` | Evaluate rendered app experience through an expert persona | `docs/arc/browse/YYYY-MM-DD-*.md` |
 | `/arc:suggest` | Project-local next-step triage | Recommendations |
 | `/arc:commit` | Commit and push changes | Git commits |
-| `/arc:responsive` | Mobile responsive audit & fix | Responsive code changes |
 
 ## Agents
 
@@ -318,7 +316,7 @@ Commands work together:
 - `/arc:suggest` reads project-local signals: current plans, progress, TODOs, failing checks, recent commits, and `/arc:vision`
 - `/arc:ideate` flows to `/arc:implement` (which creates plans internally)
 - `/arc:implement` scales from quick fixes to full plan-driven execution
-- `/arc:launch` records whether `/arc:testing`, `/arc:audit`, and `/arc:responsive` are done, missing, or intentionally deferred
+- `/arc:launch` records whether `/arc:testing` and `/arc:audit` are done, missing, or intentionally deferred
 - Claude Code uses TaskList for in-session task tracking.
 
 ### Linear Integration (Optional)
