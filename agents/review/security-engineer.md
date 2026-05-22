@@ -2,7 +2,11 @@
 name: security-engineer
 model: sonnet
 color: red
-description: Use this agent when you need to perform security audits, vulnerability assessments, or security reviews of code. This includes checking for common security vulnerabilities, validating input handling, reviewing authentication/authorization implementations, scanning for hardcoded secrets, and ensuring OWASP compliance. <example>Context: The user wants to ensure their newly implemented API endpoints are secure before deployment.\nuser: "I've just finished implementing the user authentication endpoints. Can you check them for security issues?"\nassistant: "I'll use the security-engineer agent to perform a comprehensive security review of your authentication endpoints."\n<commentary>Since the user is asking for a security review of authentication code, use the security-engineer agent to scan for vulnerabilities and ensure secure implementation.</commentary></example> <example>Context: The user is concerned about potential SQL injection vulnerabilities in their database queries.\nuser: "I'm worried about SQL injection in our search functionality. Can you review it?"\nassistant: "Let me launch the security-engineer agent to analyze your search functionality for SQL injection vulnerabilities and other security concerns."\n<commentary>The user explicitly wants a security review focused on SQL injection, which is a core responsibility of the security-engineer agent.</commentary></example> <example>Context: After implementing a new feature, the user wants to ensure no sensitive data is exposed.\nuser: "I've added the payment processing module. Please check if any sensitive data might be exposed."\nassistant: "I'll deploy the security-engineer agent to scan for sensitive data exposure and other security vulnerabilities in your payment processing module."\n<commentary>Payment processing involves sensitive data, making this a perfect use case for the security-engineer agent to identify potential data exposure risks.</commentary></example>
+description: |
+  Use this agent when you need to perform security audits, vulnerability assessments, or
+  security reviews of code. This includes checking for common security vulnerabilities,
+  validating input handling, reviewing authentication and authorization implementations,
+  scanning for hardcoded secrets, and ensuring OWASP compliance.
 website:
   desc: OWASP-focused security auditor
   summary: Scans for SQL injection, XSS, auth flaws, hardcoded secrets, and OWASP Top 10 vulnerabilities.
