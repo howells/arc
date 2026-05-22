@@ -35,6 +35,17 @@ Paths in this skill use these conventions:
 
 Prepare a project to go live and be shareable. This is a checklist workflow, not a deep remediation workflow.
 
+<boundary>
+Launch is a passive readiness checklist unless the user explicitly asks for action.
+
+- Do not start a dev server, preview server, tunnel, deployment, or browser session just to answer `/arc:launch`.
+- Do not run exploratory UI QA or say the app "looks good" from a shallow homepage check.
+- Do not create, update, or redeploy hosting resources unless the user explicitly asks.
+- Do not change DNS, environment variables, provider dashboard settings, auth callbacks, payment webhooks, robots policy, or metadata unless the user explicitly asks.
+- If a local or public URL is already provided, you may record it as evidence. If none is known, mark the public URL as `Missing` or `Needs user`.
+- If rendered verification would be useful, list it as a next action instead of doing it automatically.
+</boundary>
+
 Launch should answer:
 
 - Can someone visit it at a public URL?
@@ -53,7 +64,7 @@ If the work turns into deep code health, safety-net test backfill, mobile layout
 
 ### Step 1: Detect The Project
 
-Scan the codebase for:
+Scan the codebase passively for:
 
 ```text
 Framework: package.json, app/router files, static site config
@@ -70,7 +81,7 @@ Content: TODOs, lorem ipsum, placeholder URLs, example copy, support/contact lin
 Legal/compliance: privacy policy, terms, cookie notice only when the project collects data, tracks visitors, or takes payments
 ```
 
-Report what was found in 5-10 bullets. Keep it factual.
+Report what was found in 5-10 bullets. Keep it factual. Do not start the app to gather these facts unless the user explicitly asked you to run or inspect the app.
 
 ### Step 2: Ask Missing Launch Facts
 
@@ -120,7 +131,7 @@ Use this shape:
 - HTTPS/SSL is active.
 - Canonical domain redirects are intentional (`www` vs apex, old domains, preview URLs).
 - Production environment variables are set.
-- Production build succeeds.
+- Production build status is known from existing evidence, or a build command is listed as the next verification step.
 - Password protection, maintenance mode, or preview deployment protection is off or intentionally kept.
 - Preview/local-only URLs are not hardcoded in metadata, callbacks, or share links.
 
@@ -176,6 +187,8 @@ Next action: [one concrete next step]
 ```
 
 If follow-up work is needed, offer to create tasks or start the highest-priority blocker. Do not deploy, change DNS, or create external accounts unless the user explicitly asks.
+
+Do not end with broad reassurance such as "everything looks good" unless every required checklist item has concrete evidence. Prefer `Shareable with caveats` when some checks are inferred, unrun, or require external dashboards.
 
 <arc_log>
 **After completing this skill, append to the activity log.**

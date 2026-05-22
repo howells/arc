@@ -1,6 +1,6 @@
 {
   "name": "arc-plugin",
-  "version": "2.0.2",
+  "version": "2.0.4",
   "private": true,
   "description": "Arc workflows for Claude Code and Codex",
   "scripts": {
