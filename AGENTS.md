@@ -14,7 +14,7 @@ arc/
 │   ├── go/SKILL.md         # 1. Entry point
 │   ├── using-arc/SKILL.md  # Bootstrap control plane
 │   ├── vision/SKILL.md     # 2. Foundation: project goals
-│   ├── ideate/SKILL.md     # 3. Design: idea → validated design
+│   ├── ideate/SKILL.md     # 3. Spec: idea → validated feature spec
 │   ├── detail/SKILL.md     # 4. Plan (internal, invoked by implement)
 │   ├── review/SKILL.md     # 5. Review: validate before execution
 │   ├── implement/SKILL.md  # 6. Execute: plan + TDD implementation
@@ -47,7 +47,7 @@ All commands use the `/arc:` namespace prefix. The typical workflow:
 0. HELP       /arc:help       → Context-aware guide to all commands
 1. ENTRY      /arc:go         → Routes to right workflow based on context
 2. FOUNDATION /arc:vision     → Define project goals (one-time setup)
-3. DESIGN     /arc:ideate     → Turn idea into validated design doc
+3. SPEC       /arc:ideate     → Turn idea into validated feature spec
 4. REVIEW     /arc:review     → Expert validation before execution
 5. EXECUTE    /arc:implement  → Plan + TDD implementation
 6. TEST       /arc:testing    → Backfill safety-net tests for existing code
@@ -77,15 +77,13 @@ See `CONTEXT.md` for Arc's canonical principles. In contributor work, preserve t
 External plugins can provide useful extra checks, but they are not part of Arc's product definition and Arc should not depend on them for core behavior.
 
 - **[agent-skills](https://github.com/vercel-labs/agent-skills)** — `vercel-react-best-practices`, `vercel-composition-patterns`, `vercel-react-native-skills`
-- **[web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines)** — `web-design-guidelines` skill for UI compliance review
 
 When an external plugin is available, use it only as an optional enhancement. Keep Arc workflows understandable and usable without it.
 
-## Browser And Wireframe Tools
+## Browser Tools
 
 - In Codex, prefer `mcp__claude-in-chrome__*` for rendered-page verification.
 - Outside Codex, prefer `agent-browser` for browser automation before dropping to Playwright.
-- Use WireText MCP for low-fidelity wireframes only. It does not replace Chrome-based rendered review.
 
 ## Publishing
 

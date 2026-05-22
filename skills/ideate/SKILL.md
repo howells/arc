@@ -1,24 +1,25 @@
 ---
 name: ideate
 description: |
-  Turn ideas into validated designs through collaborative dialogue with built-in expert review.
+  Turn ideas into validated feature specs through collaborative dialogue with built-in expert review.
   Use when asked to "design a feature", "plan an approach", "think through implementation",
-  or when starting new work that needs architectural thinking before coding.
+  or when starting new work that needs product and technical shaping before coding.
 license: MIT
 metadata:
   author: howells
 website:
   order: 3
-  desc: Idea → design doc
-  summary: Talk through your idea with a thinking partner who already knows your codebase. End up with a clear design doc of what to build.
+  desc: Idea → feature spec
+  summary: Talk through your idea with a thinking partner who already knows your codebase. End up with a clear feature spec of what to build.
   what: |
-    Ideate is a conversation with a thinking partner who's already read your code. You describe what you want, it asks clarifying questions, and together you arrive at a concrete design—user flows, data models, edge cases. Review happens throughout—scope checks early, approach validation mid-flow, simplification at every step.
+    Ideate is a conversation with a thinking partner who's already read your code. You describe what you want, it asks clarifying questions, and together you arrive at a concrete feature spec: user flows, data models, edge cases, constraints, and implementation posture. Review happens throughout—scope checks early, approach validation mid-flow, simplification at every step.
   why: |
     Vague ideas lead to wasted code. Ideate forces you to get specific—what exactly happens when a user clicks that button?—so you're not making it up as you implement. The conversation surfaces gaps you didn't know you had.
   decisions:
     - Knows your codebase first. Asks informed questions, not generic ones.
     - One question at a time. A real conversation, not a form to fill out.
-    - Output is a design doc. Implementation planning happens in /arc:implement.
+    - Output is a feature spec. Implementation planning happens in /arc:implement.
+    - Visual direction is an external input. Arc can record it, but Chiaroscuro/Figma/user-provided specs own it.
   agents:
     - security-engineer
     - performance-engineer
@@ -132,7 +133,7 @@ Paths in this skill use these conventions:
 <behavioral_mode>
 # This Is a Conversation, Not a Task
 
-You are a thinking partner. The conversation IS the work. The design doc at the end is just a record.
+You are a thinking partner. The conversation IS the work. The feature spec at the end is just a record.
 
 **Mental model:** A senior engineer at a whiteboard. You ask "what if", not "here's what I'd build."
 
@@ -173,7 +174,7 @@ Steps 2-8 each produce exactly: 0-2 sentences + AskUserQuestion. Nothing more.
 <process>
 # The Conversation
 
-There are three acts: **Understand**, **Explore**, **Design**. But they're a conversation, not a checklist. Go back when things don't make sense. Skip what's irrelevant. Stay in whichever act needs more time.
+There are three acts: **Understand**, **Explore**, **Specify**. But they're a conversation, not a checklist. Go back when things don't make sense. Skip what's irrelevant. Stay in whichever act needs more time.
 
 ## Act 1: Understand the Idea
 
@@ -229,19 +230,19 @@ AskUserQuestion:
     - label: "Quick review (Recommended)"
       description: "2-3 reviewers check if the approach is sound"
     - label: "Skip review"
-      description: "Move straight to detailed design"
+      description: "Move straight to the detailed spec"
 ```
 
 If yes: spawn 2-3 reviewers (architecture-engineer, senior-engineer, security-engineer as relevant). Transform findings into questions — "What if we..." not "You should..." — and walk through one at a time.
 
-## Act 3: Design Together
+## Act 3: Specify Together
 
-**Present the design in 200-300 word sections.** After each section, ask: "Does this look right so far?"
+**Present the spec in 200-300 word sections.** After each section, ask: "Does this look right so far?"
 
 Sections to cover (skip what's irrelevant):
 - Problem statement / user story
 - High-level approach
-- UI wireframes — if UI involved, see `<ui_design>` below
+- UI requirements — if UI involved, see `<ui_requirements>` below
 - Data model
 - Component/module structure
 - API surface
@@ -257,7 +258,7 @@ Present findings as questions, incorporate before moving on.
 
 ### Simplification Pass
 
-After the design is mostly shaped, run parallel expert review:
+After the spec is mostly shaped, run parallel expert review:
 - Spawn 2-3 reviewers based on project type
 - Transform critiques into collaborative questions:
   - "Remove the caching layer" → "Do we need caching in v1, or add it when we see issues?"
@@ -265,12 +266,12 @@ After the design is mostly shaped, run parallel expert review:
   - "Premature abstraction" → "We're building flexibility we might not need. What if we hardcoded it?"
 - Walk through one at a time. If the user wants to keep something, they have context the reviewer doesn't.
 
-### Writing the Design Doc
+### Writing the Feature Spec
 
 Location: `docs/arc/specs/YYYY-MM-DD-<topic>-design.md`
 
 ```markdown
-# [Feature Name] Design
+# [Feature Name] Feature Spec
 
 ## Reference Materials
 - [Figma links, external docs, images shared during conversation]
@@ -278,8 +279,8 @@ Location: `docs/arc/specs/YYYY-MM-DD-<topic>-design.md`
 ## Problem Statement
 ...
 
-## UI Wireframes
-[ASCII wireframes if applicable]
+## UI Requirements
+[User-visible states, interactions, and any external visual direction]
 
 ## Approach
 ...
@@ -293,11 +294,11 @@ Location: `docs/arc/specs/YYYY-MM-DD-<topic>-design.md`
 - ...
 ```
 
-Commit: `git add docs/arc/specs/ && git commit -m "docs: add <topic> design plan"`
+Commit: `git add docs/arc/specs/ && git commit -m "docs: add <topic> feature spec"`
 
 ### Spec Review Loop
 
-After writing the design doc:
+After writing the feature spec:
 
 1. Dispatch `agents/workflow/spec-document-reviewer.md`
 2. If issues are found, revise the spec and review again
@@ -307,7 +308,7 @@ After writing the design doc:
 
 Present the full arc:
 ```
-/arc:ideate     → Design doc ✓ YOU ARE HERE
+/arc:ideate     → Feature spec ✓ YOU ARE HERE
      ↓
 /arc:implement  → Plan + Execute
 ```
@@ -315,58 +316,48 @@ Present the full arc:
 Options via AskUserQuestion:
 1. **Implement on a new feature branch** (Recommended)
 2. **Implement on current branch**
-3. **Done for now** — just the design
+3. **Done for now** — just the spec
 </process>
 
-<ui_design>
-# UI Design (When Applicable)
+<ui_requirements>
+# UI Requirements (When Applicable)
 
-**Establish aesthetic direction BEFORE wireframes.** Ask one at a time:
+Arc does not create independent visual direction, brand systems, or UI polish workflows. If the work needs visual design, use an external source of truth such as Chiaroscuro, Figma, an existing `docs/brand-system.md`, or a user-provided design brief. Arc can capture that source and translate it into implementation-relevant requirements.
 
-1. "What tone fits this UI?" — minimal, bold, playful, editorial, luxury, brutalist, retro, organic
-2. "What should be memorable?" — animation, typography, layout, a specific interaction
-3. "Existing brand to match, or fresh start?"
+Ask only what is needed for product behavior and implementation:
 
-**Capture:**
+- "Which screens or states does this touch?"
+- "What should the user be able to do here?"
+- "Is there an existing design source to follow?"
+- "Are there any must-preserve project patterns?"
+
+**Capture external visual direction if provided:**
 ```markdown
-## Aesthetic Direction
-- **Tone**: [chosen]
-- **Memorable element**: [what stands out]
-- **Typography**: [display] + [body] (avoid Roboto/Arial/system-ui)
-- **Color strategy**: [approach]
-- **Motion**: [where it matters most]
+## UI Requirements
+- **Screens/states**: [screens, empty/loading/error/success states]
+- **Interactions**: [primary user actions and feedback]
+- **Existing patterns**: [components/routes to follow]
+- **Visual source of truth**: [Chiaroscuro spec, Figma, brand-system doc, existing app pattern, or none]
+- **Open design needs**: [anything that should be sent to an external design workflow before implementation]
 ```
 
-**Then create wireframes**:
-- Prefer WireText MCP when available for low-fidelity structural wireframes (see `references/wiretext.md`)
-- Otherwise create ASCII wireframes (see `references/ascii-ui-patterns.md`)
-- Key screens/states
-- Component hierarchy
-- Interactive elements
-- Loading/error/empty states
+If visual direction is missing and the feature depends on it, do not invent it. Ask whether to:
 
-Ask: "Does this layout and direction feel right?"
+- Continue with behavior and structure only.
+- Pause and create a design brief for Chiaroscuro or another external design source.
+- Match existing project patterns without introducing new visual language.
 
-**Reference files** (load when doing UI work):
-- `references/frontend-design.md`
-- `references/design-philosophy.md`
-- `references/wiretext.md`
-- `rules/interface/design.md`
-- `rules/interface/colors.md`
-- `rules/interface/spacing.md`
-- `rules/interface/layout.md`
-- `rules/interface/animation.md` (if motion involved)
-- `rules/interface/marketing.md` (if marketing pages)
-</ui_design>
+Low-fidelity structural sketches are acceptable when they clarify flow, but they are not visual direction. Use inline ASCII only when it helps implementation understand layout or state relationships.
+</ui_requirements>
 
 <reference_capture>
 # Capturing Reference Materials
 
-When user shares links, images, or Figma during the conversation — capture immediately. Links shared in conversation are lost when the session ends.
+When user shares links, images, Figma, or external design specs during the conversation — capture immediately. Links shared in conversation are lost when the session ends.
 
 **Figma links:** Extract fileKey/nodeId, fetch via MCP if available, save screenshots to `docs/arc/specs/assets/`
-**Images:** Describe in design doc, ask user to save to `docs/arc/specs/assets/` manually
-**External links:** Capture URL + description in design doc under "Reference Materials"
+**Images:** Describe in the spec, ask user to save to `docs/arc/specs/assets/` manually
+**External links/specs:** Capture URL + description in the spec under "Reference Materials"
 </reference_capture>
 
 <required_reading>
@@ -379,7 +370,7 @@ Read these when relevant (not all at once — load what the conversation needs):
 </required_reading>
 
 <progress_append>
-After completing the design, append to progress journal:
+After completing the spec, append to progress journal:
 
 ```markdown
 ## YYYY-MM-DD HH:MM — /arc:ideate
@@ -397,14 +388,14 @@ After completing the design, append to progress journal:
 </progress_append>
 
 <spec_flow_analysis>
-After the design document is written and committed, offer optional user flow analysis:
+After the feature spec is written and committed, offer optional user flow analysis:
 
-"Would you like me to analyze this design for missing user flows?"
+"Would you like me to analyze this spec for missing user flows?"
 
 If the user accepts:
-1. Spawn the spec-flow-analyzer agent with the design doc content
+1. Spawn the spec-flow-analyzer agent with the feature spec content
 2. Present the gaps found
-3. Offer to update the design doc with any missing flows
+3. Offer to update the spec with any missing flows
 
 Agent: `agents/workflow/spec-flow-analyzer.md`
 
@@ -412,12 +403,12 @@ This step is optional — skip if the user declines or wants to move straight to
 </spec_flow_analysis>
 
 <success_criteria>
-Design is complete when:
+Spec is complete when:
 - [ ] User's idea is fully understood through dialogue (not assumed)
 - [ ] 2-3 approaches were considered, trade-offs explained
-- [ ] UI wireframes created (if UI involved)
-- [ ] Design presented in sections, each validated by user
+- [ ] UI requirements and external visual source are captured if UI is involved
+- [ ] Spec presented in sections, each validated by user
 - [ ] Expert review completed, findings discussed as questions
-- [ ] Design document written and committed
+- [ ] Feature spec written and committed
 - [ ] User chose next step
 </success_criteria>

@@ -23,13 +23,13 @@ ENTRY   /arc:go         - Read project context and route to the right workflow
           ↓
 WHY     /arc:vision     - Define the project's purpose, audience, and non-goals
           ↓
-WHAT    /arc:ideate     - Turn an idea into a validated design/spec
+WHAT    /arc:ideate     - Turn an idea into a validated feature spec
           ↓
 DO      /arc:implement  - Plan and build with TDD and verification
         /arc:testing    - Backfill safety-net tests around existing code
         /arc:launch     - Check go-live and shareability basics
 
-REVIEW  /arc:review     - Review a plan, spec, design, or approach
+REVIEW  /arc:review     - Review a plan, spec, or implementation approach
         /arc:audit      - Verify and audit current codebase health
         /arc:refactor   - Find structural friction and propose refactors
 
@@ -136,8 +136,8 @@ If you open this repo itself in Codex, `.agents/skills/*` symlinks let Codex dis
 | `/arc:go` | You are starting a session or unsure which workflow applies | Context-aware routing |
 | `/arc:help` | You want the full catalog with relevance notes | Command guide |
 | `/arc:vision` | A project needs a concise north star | `docs/vision.md` |
-| `/arc:ideate` | An idea needs to become a concrete design/spec | `docs/arc/specs/...` |
-| `/arc:review` | A plan, spec, design, or approach needs expert challenge | Prioritized review findings |
+| `/arc:ideate` | An idea needs to become a concrete feature spec | `docs/arc/specs/...` |
+| `/arc:review` | A plan, spec, or implementation approach needs expert challenge | Prioritized review findings |
 | `/arc:implement` | You are ready to build or continue implementation | Code changes with TDD and checks |
 | `/arc:testing` | Existing code needs characterization tests before change | Safety-net tests and risk notes |
 | `/arc:launch` | A project needs to be ready for a public URL | Launch readiness checklist |
