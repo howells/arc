@@ -917,18 +917,6 @@ git checkout main
 git branch -d feature/<feature-name>
 ```
 
-## Phase 8: Cleanup
-
-**Kill orphaned subagent processes:**
-
-After spawning multiple build agents, some may not exit cleanly. Run cleanup:
-
-```bash
-scripts/cleanup-orphaned-agents.sh
-```
-
-This is especially important after parallel agent runs.
-
 </process>
 
 <when_to_stop>

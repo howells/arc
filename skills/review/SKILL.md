@@ -282,16 +282,6 @@ If reviewed an **implementation plan**:
 - "Ready to implement?" → `/arc:implement`
 - "Done for now" → end
 
-## Phase 7: Cleanup
-
-**Kill orphaned subagent processes:**
-
-After spawning reviewer agents, some may not exit cleanly. Run cleanup:
-
-```bash
-scripts/cleanup-orphaned-agents.sh
-```
-
 </process>
 
 <arc_log>

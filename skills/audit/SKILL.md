@@ -900,18 +900,6 @@ Do not auto-commit the plan unless the user explicitly asks for a commit.
 - Discuss the approach before taking action
 - After discussion, offer to start implementing or return to the action menu
 
-## Phase 7: Cleanup
-
-**Kill orphaned subagent processes:**
-
-After spawning multiple reviewer agents, some may not exit cleanly. Run cleanup to prevent memory accumulation:
-
-```bash
-scripts/cleanup-orphaned-agents.sh
-```
-
-This is especially important when auditing large codebases.
-
 </process>
 
 <arc_log>

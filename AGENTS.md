@@ -31,10 +31,8 @@ arc/
 │   ├── suggest/SKILL.md    # Cross-cutting: what to work on
 │   ├── document/SKILL.md   # Cross-cutting: capture solutions
 │   ├── tidy/SKILL.md       # Cross-cutting: cleanup plans
-│   ├── rules/SKILL.md      # Cross-cutting: coding standards
 │   ├── deps/SKILL.md       # Cross-cutting: dependency audit
 │   ├── help/SKILL.md       # Utility: context-aware command guide
-│   ├── prune-agents/SKILL.md # Utility: kill orphaned subagents
 │   └── progress/SKILL.md   # internal (progress journal)
 ├── agents/                  # Specialized subagents
 │   ├── build/
@@ -77,7 +75,6 @@ CROSS-CUTTING (available anytime):
               /arc:refactor   → Discover friction, propose structural refactors
               /arc:deps       → Dependency audit with batch upgrades
               /arc:help        → Context-aware guide to all commands
-              /arc:prune-agents → Kill orphaned subagent processes
 ```
 
 ## Development

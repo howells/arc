@@ -60,6 +60,8 @@ Project hook installation and machine/editor automation are outside Arc's core l
 
 Project-wide rule installation is outside Arc's core lifecycle because copied rule bundles can clog agent context and become another environment setup surface. Arc may keep its own `rules/` corpus as internal reference material for workflows, but it should not expose a public workflow that copies those rules into a user's project or distributes them to other tools.
 
+Machine process cleanup is outside Arc's core lifecycle. Arc workflows may finish cleanly and report spawned work, but they should not expose commands that kill local Claude, shell, editor, or background processes.
+
 Arc should not expose external skill dependencies for those checks. If a specialist practice matters to Arc, make it Arc-native: name it plainly, explain the judgment, and place it in the workflow where it belongs.
 
 ## Design Principles

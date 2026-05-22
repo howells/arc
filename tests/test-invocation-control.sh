@@ -11,7 +11,6 @@ section "Invocation Control Tests"
 
 # Skills that MUST have disable-model-invocation: true
 PROTECTED_SKILLS=(
-    "prune-agents"
     "commit"
     "launch"
     "tidy"

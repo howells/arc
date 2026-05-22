@@ -165,12 +165,6 @@ Output ALL of these in order:
 | `/arc:tidy` | Clean up completed plans in docs/arc/plans/ | When plan files accumulate |
 | `/arc:deps` | Dependency audit — outdated packages, CVEs, batch upgrades | Periodic maintenance, before shipping |
 
-**UTILITY**
-
-| Command | What it does | When to use |
-|---------|-------------|-------------|
-| `/arc:prune-agents` | Kill orphaned Claude subagent processes | When agents didn't exit cleanly |
-
 ---
 
 ## Step 3: Contextual Recommendations

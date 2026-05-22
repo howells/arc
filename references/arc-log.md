@@ -83,7 +83,6 @@ Look for:
 
 - `/arc:go` (routing only)
 - `/arc:suggest` (read-only)
-- `/arc:prune-agents` (utility)
 - `/arc:tidy` (utility)
 
 /arc:commit — 2 commits (`feat(web): clarify backend completion dashboard`, `feat(scrape): harden winners graph ingestion`)

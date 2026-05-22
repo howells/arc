@@ -24,7 +24,6 @@ EXPECTED_SKILLS=(
     "implement"
     "launch"
     "progress"
-    "prune-agents"
     "refactor"
     "responsive"
     "review"

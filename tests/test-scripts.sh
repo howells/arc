@@ -3,13 +3,11 @@
 #
 # Verifies:
 # - All scripts exist, are executable, and pass bash -n syntax check
-# - cleanup-orphaned-agents.sh handles flags correctly
 # - validate-plugin.sh runs cleanly on our own plugin
 
 section "Script Existence & Permissions Tests"
 
 FUNCTIONAL_SCRIPTS=(
-    "scripts/cleanup-orphaned-agents.sh"
     ".husky/validate-plugin.sh"
 )
 
@@ -36,34 +34,6 @@ for script in "${FUNCTIONAL_SCRIPTS[@]}"; do
     fi
 done
 
-section "Cleanup Script Tests"
-
-CLEANUP="$PLUGIN_ROOT/scripts/cleanup-orphaned-agents.sh"
-
-# --dry-run should never kill anything and should exit 0
-if output=$(bash "$CLEANUP" --dry-run 2>&1); then
-    pass "cleanup --dry-run exits cleanly"
-else
-    fail "cleanup --dry-run exited with error"
-fi
-
-# --dry-run --quiet should combine flags without error
-if output=$(bash "$CLEANUP" --dry-run --quiet 2>&1); then
-    pass "cleanup --dry-run --quiet exits cleanly"
-else
-    # Even with orphans found, --dry-run should exit 0
-    pass "cleanup --dry-run --quiet exits cleanly"
-fi
-
-# NOTE: We don't test without --dry-run because the script would kill
-# orphaned Claude processes — including the one running this test suite!
-
-# Should not contain hardcoded paths
-assert_file_not_contains "$CLEANUP" "/opt/homebrew" \
-    "cleanup has no hardcoded /opt/homebrew paths"
-assert_file_not_contains "$CLEANUP" "/tmp/" \
-    "cleanup has no /tmp logging"
-
 section "Validate Plugin Script Tests"
 
 VALIDATE="$PLUGIN_ROOT/.husky/validate-plugin.sh"
@@ -89,4 +59,3 @@ assert_file_contains "$VALIDATE" "plugin.json" \
 # Must check for required frontmatter in skills
 assert_file_contains "$VALIDATE" "frontmatter" \
     "validate-plugin.sh validates frontmatter"
-
