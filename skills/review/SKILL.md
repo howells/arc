@@ -136,7 +136,7 @@ Reviewers must respect the plan's scope. This is non-negotiable:
    **Fallback:** `docs/plans/*.md`
 
    - Sort results by modification time (newest first)
-   - Show all plan files (design, implementation, etc.)
+   - Show all plan/spec files (feature specs, implementation plans, etc.)
 
 3. **Present options if multiple found:**
    - List up to 5 most recent plans
@@ -261,7 +261,7 @@ If plan came from a file:
 
 **Show remaining arc:**
 ```
-/arc:ideate     → Design doc (on main) ✓
+/arc:ideate     → Feature spec ✓
      ↓
 /arc:review     → Review ✓ YOU ARE HERE
      ↓
@@ -270,7 +270,7 @@ If plan came from a file:
 
 **Offer next steps based on what was reviewed:**
 
-If reviewed a **design doc**:
+If reviewed a **feature spec**:
 - "Ready to implement?" → `/arc:implement` (which will create the plan internally)
 - "Done for now" → end
 

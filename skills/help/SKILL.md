@@ -2,7 +2,7 @@
 name: help
 description: |
   Show all Arc commands with context-aware relevance. Reads the codebase to understand
-  what's present (framework, tests, plans, design docs, etc.) and annotates each command
+  what's present (framework, tests, plans, feature specs, etc.) and annotates each command
   with whether it's relevant right now. Use when asked "what can arc do", "help",
   "list commands", "what commands are available", or "how does arc work".
 license: MIT
@@ -13,7 +13,7 @@ website:
   desc: Context-aware command guide
   summary: Lists every Arc command with relevance to your current project. Shows what each does, when to use it, and which ones matter right now.
   what: |
-    Help gathers lightweight context about your project (framework, existing plans, design docs, test setup, etc.) and presents the full Arc command catalog annotated with relevance signals. Commands that don't apply to your current situation are dimmed with a reason why.
+    Help gathers lightweight context about your project (framework, existing plans, feature specs, test setup, etc.) and presents the full Arc command catalog annotated with relevance signals. Commands that don't apply to your current situation are dimmed with a reason why.
   why: |
     Arc has a focused command set, but you should not have to memorize it. Help gives you the full picture with context so you can find the right command without trial and error.
   decisions:
@@ -50,8 +50,8 @@ ls package.json next.config.* vite.config.* nuxt.config.* 2>/dev/null | head -5
 # Arc artifacts?
 ls docs/vision.md docs/arc/specs/*.md docs/arc/plans/*.md 2>/dev/null | head -10
 
-# Design docs?
-ls docs/design-context.md docs/arc/specs/design-*.md 2>/dev/null | head -5
+# Feature specs?
+ls docs/design-context.md docs/arc/specs/*.md 2>/dev/null | head -5
 
 # Test setup?
 ls vitest.config.* jest.config.* playwright.config.* cypress.config.* 2>/dev/null | head -5
@@ -123,7 +123,7 @@ Output ALL of these in order:
 
 | Command | What it does | When to use |
 |---------|-------------|-------------|
-| `/arc:ideate` | Turn an idea into a validated design through collaborative dialogue | New features that need thinking before building |
+| `/arc:ideate` | Turn an idea into a validated feature spec through collaborative dialogue | New features that need thinking before building |
 
 **EXECUTE**
 
@@ -135,7 +135,7 @@ Output ALL of these in order:
 
 | Command | What it does | When to use |
 |---------|-------------|-------------|
-| `/arc:review` | Expert review of a plan, spec, design, or implementation approach | Before implementation, when deciding whether a plan is sound |
+| `/arc:review` | Expert review of a plan, spec, or implementation approach | Before implementation, when deciding whether a plan is sound |
 | `/arc:audit` | Mechanical verification plus comprehensive codebase audit | Existing codebase health checks, risk assessment, before shipping |
 | `/arc:refactor` | Inspect existing code to produce a structural refactor plan/RFC | When code feels tangled, shallow, duplicated, or hard to test |
 
