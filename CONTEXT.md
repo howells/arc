@@ -65,7 +65,7 @@ Machine process cleanup is outside Arc's core lifecycle. Arc workflows may finis
 
 Plan cleanup is outside Arc's public workflow surface. Arc may create and reference plans during implementation, but it should not expose a separate command for deleting, archiving, or housekeeping old planning files.
 
-Next-work suggestion and generic session routing are outside Arc's public workflow surface. Users should invoke the workflow they want directly, or use `/arc:help` to see the catalog.
+Next-work suggestion, generic session routing, and command-catalog helpers are outside Arc's public workflow surface. Users should invoke the workflow they want directly and use README/docs for the command catalog.
 
 Dependency and package maintenance are outside Arc's public workflow surface because Monogrove owns that space. Arc may notice dependency risk as part of broader audits, but it should not expose dependency update, CVE remediation, alternative discovery, or batch-upgrade workflows.
 

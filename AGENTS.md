@@ -22,7 +22,6 @@ arc/
 │   ├── refactor/SKILL.md   # Cross-cutting: structural refactor planning
 │   ├── audit/SKILL.md      # Cross-cutting: codebase audit
 │   ├── commit/SKILL.md     # Cross-cutting: smart commits
-│   ├── help/SKILL.md       # Utility: context-aware command guide
 │   └── progress/SKILL.md   # internal (progress journal)
 ├── agents/                  # Specialized subagents
 │   ├── build/
@@ -42,7 +41,6 @@ arc/
 All commands use the `/arc:` namespace prefix. The typical workflow:
 
 ```
-0. HELP       /arc:help       → Context-aware guide to all commands
 1. FOUNDATION /arc:vision     → Define project goals (one-time setup)
 2. SPEC       /arc:ideate     → Turn idea into validated feature spec
 3. REVIEW     /arc:review     → Expert validation before execution
@@ -54,7 +52,6 @@ CROSS-CUTTING (available anytime):
               /arc:audit      → Comprehensive codebase audit
               /arc:commit     → Smart commits, push, and package publishing
               /arc:refactor   → Discover friction, propose structural refactors
-              /arc:help        → Context-aware guide to all commands
 ```
 
 ## Development

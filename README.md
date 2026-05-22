@@ -32,7 +32,6 @@ REVIEW  /arc:review     - Review a plan, spec, or implementation approach
         /arc:refactor   - Find structural friction and propose refactors
 
 TOOLS   /arc:commit     - Create clean commits, optionally push and publish
-        /arc:help       - Show the command catalog with relevance notes
 ```
 
 `using-arc`, `detail`, and `progress` are supporting skills. They keep startup context small, create implementation plans, and preserve useful session state, but they are not normally invoked directly.
@@ -126,7 +125,6 @@ If you open this repo itself in Codex, `.agents/skills/*` symlinks let Codex dis
 
 | Command | Use when | Output |
 |---------|----------|--------|
-| `/arc:help` | You want the full catalog with relevance notes | Command guide |
 | `/arc:vision` | A project needs a concise north star | `docs/vision.md` |
 | `/arc:ideate` | An idea needs to become a concrete feature spec | `docs/arc/specs/...` |
 | `/arc:review` | A plan, spec, or implementation approach needs expert challenge | Prioritized review findings |

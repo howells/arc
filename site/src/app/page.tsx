@@ -109,13 +109,13 @@ export default function ArcPage() {
           </h2>
           <div className="group max-w-md">
             <div className="flex items-center justify-between border-neutral-300 border-b py-3 font-mono text-sm transition-colors">
-              <span>/arc:help</span>
-              <CopyButton text="/arc:help" />
+              <span>/arc:ideate add team invitations</span>
+              <CopyButton text="/arc:ideate add team invitations" />
             </div>
           </div>
           <p className="mt-[calc(var(--baseline)*1)] max-w-lg text-pretty text-neutral-600 text-sm leading-relaxed">
-            Shows the Arc catalog with relevance notes. Pick the workflow you
-            want and invoke it directly.
+            Start with the workflow you need. For a new feature, turn the idea
+            into a concrete spec first.
           </p>
         </section>
 
@@ -152,12 +152,12 @@ export default function ArcPage() {
             </div>
             <div className="flex items-center gap-3 font-mono text-sm">
               <span className="shrink-0 text-neutral-400">#</span>
-              <span className="text-neutral-500">Show the catalog</span>
+              <span className="text-neutral-500">Audit current health</span>
             </div>
             <div className="group">
               <div className="flex items-center justify-between border-neutral-200 border-b py-2 font-mono text-sm">
-                <span className="text-neutral-800">/arc:help</span>
-                <CopyButton text="/arc:help" />
+                <span className="text-neutral-800">/arc:audit</span>
+                <CopyButton text="/arc:audit" />
               </div>
             </div>
             <div className="flex items-center gap-3 font-mono text-sm">
@@ -289,8 +289,8 @@ export default function ArcPage() {
             <li className="flex gap-3 text-neutral-600 text-sm leading-relaxed">
               <span className="select-none text-[var(--color-accent)]">→</span>
               <span>
-                <span className="font-mono text-neutral-800">/arc:help</span>{" "}
-                shows the available workflows without starting one for you.
+                Arc workflows are invoked directly; the README carries the
+                command catalog.
               </span>
             </li>
           </ul>
