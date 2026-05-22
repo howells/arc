@@ -18,7 +18,7 @@ arc/
 │   ├── detail/SKILL.md     # 4. Plan (internal, invoked by implement)
 │   ├── review/SKILL.md     # 5. Review: validate before execution
 │   ├── implement/SKILL.md  # 6. Execute: plan + TDD implementation
-│   ├── testing/SKILL.md    # 7. Test: strategy & execution
+│   ├── testing/SKILL.md    # 7. Test: safety-net backfill
 │   ├── launch/SKILL.md     # 8. Launch: go-live checklist
 │   ├── refactor/SKILL.md   # Cross-cutting: structural refactor planning
 │   ├── audit/SKILL.md      # Cross-cutting: codebase audit
@@ -50,7 +50,7 @@ All commands use the `/arc:` namespace prefix. The typical workflow:
 3. DESIGN     /arc:ideate     → Turn idea into validated design doc
 4. REVIEW     /arc:review     → Expert validation before execution
 5. EXECUTE    /arc:implement  → Plan + TDD implementation
-6. TEST       /arc:testing    → Test strategy and execution
+6. TEST       /arc:testing    → Backfill safety-net tests for existing code
 7. SHIP       /arc:launch     → Go-live checklist
 
 CROSS-CUTTING (available anytime):

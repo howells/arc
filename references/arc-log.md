@@ -67,7 +67,7 @@ Look for:
 | `/arc:ideate` | Feature designed, approach chosen |
 | `/arc:detail` | Plan created, task count |
 | `/arc:implement` | Tasks completed, remaining |
-| `/arc:test` | Test results, coverage |
+| `/arc:testing` | Safety-net tests added, behavior characterized |
 | `/arc:review` | Plan reviewed, changes |
 | `/arc:audit` | Issue counts by severity |
 | `/arc:launch` | Public URL status |

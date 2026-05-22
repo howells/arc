@@ -134,7 +134,7 @@ If user picks one, route to the relevant Arc workflow.
 - "Found [N] TODOs in [area] — want to address them?"
 - "Test coverage is thin in [area]"
 - "Outdated pattern in [file] — could modernize"
-- "Recent commits touched [area] but no tests changed — run `/arc:testing`?"
+- "Upcoming refactor touches under-tested [area] — run `/arc:testing` first?"
 
 **From Vision:**
 - "Vision mentions [goal] but I don't see it implemented"
@@ -143,7 +143,7 @@ If user picks one, route to the relevant Arc workflow.
 ## What Suggest is NOT
 
 - Not a code review (use /arc:audit or /arc:review)
-- Not a test runner (use /arc:testing)
+- Not a generic test runner; use /arc:testing when existing code needs characterization or a safety net
 - Not a planner (use /arc:ideate)
 - Not a Linear triage tool
 - Not external discovery, market research, or competitor analysis

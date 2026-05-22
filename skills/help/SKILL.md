@@ -143,7 +143,7 @@ Output ALL of these in order:
 
 | Command | What it does | When to use |
 |---------|-------------|-------------|
-| `/arc:testing` | Test strategy and execution — unit, integration, E2E with specialist agents | Creating test plans, running suites, fixing failures |
+| `/arc:testing` | Characterization tests and safety-net backfill for existing code | Before refactoring or changing under-tested code |
 
 **SHIP**
 
@@ -177,8 +177,8 @@ Based on what I found in your project:
 Pick 2-4 commands that make the most sense given:
 - What's **missing** (no vision doc → suggest `/arc:vision`)
 - What's **stale** (old plans → mention them, but do not route to a cleanup workflow)
-- What **just changed** (recent implementation edits → suggest `/arc:audit` or `/arc:testing`)
-- What **could be improved** (no tests → suggest `/arc:testing`)
+- What **just changed** (recent implementation edits → suggest `/arc:audit`; suggest `/arc:testing` if follow-up work needs a safety net)
+- What **could be improved** (important existing behavior has no tests → suggest `/arc:testing`)
 
 ---
 

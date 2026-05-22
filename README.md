@@ -26,7 +26,7 @@ WHY     /arc:vision     - High-level goals (500-700 words)
 WHAT    /arc:ideate     - From idea to design doc
           ↓
 DO      /arc:implement  - Plan + execute with TDD
-        /arc:testing    - Test strategy and execution
+        /arc:testing    - Backfill safety-net tests
         /arc:launch     - Go-live checklist
 
 CROSS-CUTTING
@@ -267,7 +267,7 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:vision` | Starting a new project | `docs/vision.md` |
 | `/arc:ideate` | From idea to design doc | `docs/arc/specs/YYYY-MM-DD-<feature>-design.md` |
 | `/arc:implement` | Scope-aware plan + execute with TDD | Code changes |
-| `/arc:testing` | Test strategy | Test files |
+| `/arc:testing` | Characterization tests before risky changes | Safety-net test files |
 | `/arc:launch` | Launch / go live | Public URL readiness |
 | `/arc:review` | Review a plan, spec, design, or approach | Updated plan file |
 | `/arc:audit` | Comprehensive codebase audit | `docs/audits/YYYY-MM-DD-*.md` |

@@ -1,24 +1,27 @@
 ---
 name: testing
 description: |
-  Comprehensive testing strategy. Creates test plans covering unit, integration, and E2E.
-  Uses specialist agents for each test type. Supports vitest and Playwright with auth testing
-  guidance for Clerk and WorkOS.
+  Characterization testing and safety-net backfill for existing code. Use when legacy,
+  under-tested, or risky code needs tests before a refactor, bug fix, or behavior change.
+  Captures current behavior through public interfaces, identifies coverage gaps, and adds
+  focused unit, integration, or E2E tests without replacing TDD implementation workflows.
 license: MIT
 metadata:
   author: howells
 website:
   order: 10
-  desc: Run & fix tests
-  summary: Run your tests, fix failures, or create a test strategy. Supports vitest, jest, playwright—with special handling for auth testing (Clerk, WorkOS).
+  desc: Backfill safety-net tests
+  summary: Add focused tests around existing code before changing it. Characterizes current behavior, finds coverage gaps, and creates a safety net for refactors or risky fixes.
   what: |
-    Testing runs your test suite and helps fix what's broken. For unit tests (vitest, jest), it's straightforward—run, read failures, fix. For e2e tests (playwright), it spawns a dedicated agent that can handle the verbose output, retry flaky tests, and work through failures methodically. Includes specialized guidance for auth testing with Clerk and WorkOS.
+    Testing is for old or under-tested code that needs a safety net before you touch it. It discovers the public behavior, runs the current suite, identifies the riskiest gaps, then adds focused characterization tests one vertical slice at a time. It can use unit, integration, and E2E tests, but only where they protect real behavior.
   why: |
-    E2e tests are painful—slow, flaky, verbose output that fills your context. Testing handles this by running playwright in a background agent that can retry, screenshot failures, and fix issues without overwhelming your main session. Auth testing gets special treatment because mocking Clerk/WorkOS is tricky.
+    New feature work already belongs in /arc:implement and its TDD loop. This skill brings something different: it makes existing behavior observable before refactoring or changing fragile code, so you know whether later edits preserved behavior or intentionally changed it.
   decisions:
-    - Framework detection is automatic. It finds your test config and runs the right thing.
-    - E2e tests get special treatment. Background agent handles retries and verbose output.
-    - Auth testing guidance built in. Clerk mocks, WorkOS mocks, test bypass endpoints.
+    - This is not the default path for new feature TDD. Use /arc:implement, $tdd, or superpowers:test-driven-development for that.
+    - Characterize through public interfaces first. Tests should protect behavior users or callers can observe.
+    - Add tests in vertical slices. Avoid broad horizontal plans that write every test outline before proving any one behavior.
+    - Use the smallest useful test level. Prefer unit or integration tests unless only an E2E flow proves the risk.
+    - Existing behavior tests may pass immediately; prove they are sensitive before trusting them.
   agents:
     - unit-test-writer
     - integration-test-writer
@@ -50,239 +53,227 @@ Paths in this skill use these conventions:
 - `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
 </arc_runtime>
 
-# Testing Strategy Workflow
+# Characterization Testing Workflow
 
-Create comprehensive test strategies covering the full test pyramid. Execute with specialist agents.
+Backfill focused tests around existing code before a risky change. The goal is not "more tests" in the abstract; it is a trustworthy safety net around behavior that must survive a refactor, migration, or bug fix.
+
+Use this skill when:
+- Existing code has little or no test coverage.
+- A refactor needs a behavior-preserving safety net first.
+- A bug fix touches unclear behavior and you need to capture the current contract before changing it.
+- Coverage reports show gaps around important public behavior.
+- Auth, API, state, or browser flows need targeted tests before launch or audit remediation.
+
+Do not use this skill as the normal new-feature workflow. For new work, use `/arc:implement` or a dedicated TDD skill so RED/GREEN/REFACTOR remains the governing loop.
 
 <required_reading>
-**Read before planning:**
+**Read before testing:**
 1. `references/testing-patterns.md` — Test philosophy, vitest/playwright patterns
-2. `rules/testing.md` — Project conventions
-3. `references/llm-api-testing.md` — If testing LLM integrations
+2. `references/testing-anti-patterns.md` — What weak or misleading tests look like
+3. `rules/testing.md` — Arc testing conventions
 4. `disciplines/change-impact-testing.md` — Blast radius analysis for code changes
+5. `references/llm-api-testing.md` — If testing LLM integrations
 </required_reading>
 
 ## Agents
 
-**This skill uses 3 writers + 2 runners:**
+Use specialist agents only when the slice is large enough to justify delegation:
 
 | Agent | Model | Purpose | Framework |
 |-------|-------|---------|-----------|
-| `unit-test-writer` | sonnet | Write unit tests | vitest |
-| `integration-test-writer` | sonnet | Write integration tests (API, auth) | vitest + MSW |
-| `e2e-test-writer` | opus | Write E2E tests | Playwright |
-| `test-runner` | haiku | Run vitest, analyze failures | vitest |
-| `e2e-runner` | opus | Run Playwright, fix issues, iterate | Playwright |
-
-**Test Pyramid:**
-```
-         /\
-        /  \       E2E (few)
-       /────\      - Critical user journeys
-      /      \     - Auth flows
-     /────────\    Integration (some)
-    /          \   - API interactions
-   /────────────\  - Component + state
-  /              \ Unit (many)
- /────────────────\- Pure functions
-                   - Isolated components
-```
+| `unit-test-writer` | sonnet | Characterize pure functions, hooks, or isolated components | vitest |
+| `integration-test-writer` | sonnet | Characterize API, auth, state, and component integration behavior | vitest + MSW |
+| `e2e-test-writer` | opus | Characterize critical browser journeys | Playwright |
+| `test-runner` | haiku | Run unit/integration suites and analyze failures | vitest |
+| `e2e-runner` | opus | Run Playwright, inspect screenshots/traces, iterate on failures | Playwright |
 
 <rules_context>
 **Check for project testing rules:**
 
 **Use Glob tool:** `.ruler/testing.md`
 
-If exists, read for MUST/SHOULD/NEVER constraints.
+If it exists, read it for MUST/SHOULD/NEVER constraints.
 
 **Detect test framework:**
 
 | File | Framework |
 |------|-----------|
-| `vitest.config.*` | vitest (unit + integration) |
-| `playwright.config.*` | Playwright (E2E) |
+| `vitest.config.*` | vitest |
+| `jest.config.*` | jest |
+| `playwright.config.*` | Playwright |
+| `package.json` scripts | Project-specific test commands |
 </rules_context>
 
 ## Process
 
-### Step 1: Determine Intent
+### Step 1: Confirm The Safety-Net Target
+
+Ask one question only if the target is unclear:
 
 ```
 AskUserQuestion:
-  question: "What would you like to do?"
-  header: "Testing Intent"
-  options:
-    - label: "Create test strategy"
-      description: "Full test plan across unit, integration, and E2E — then dispatch agents"
-    - label: "Run tests"
-      description: "Execute existing tests with the appropriate runner"
-    - label: "Fix failing tests"
-      description: "Dispatch debugger or e2e-runner to fix broken tests"
-    - label: "Review coverage"
-      description: "Analyze gaps in test coverage and recommend improvements"
+  question: "What existing code or behavior needs a safety net before we change it?"
+  header: "Test Target"
 ```
 
-### Step 2: Understand What's Being Tested
+Then identify:
+- The files, routes, packages, components, or commands involved.
+- The planned change or refactor the tests must protect.
+- The public interfaces where behavior is observable.
+- Any business-critical, auth, persistence, payment, data, or browser-flow risk.
 
-Gather context:
-1. What feature or component?
-2. Does it have auth? (Clerk, WorkOS, custom)
-3. Does it call APIs?
-4. Does it have critical user flows?
-5. What's the risk level?
+### Step 2: Establish The Baseline
 
-### Step 3: Create Test Plan
+Gather evidence before writing tests:
+- Read the target code and nearby tests.
+- Read recent commits or plans when they explain the intended behavior.
+- Run the smallest existing relevant test command.
+- If no test command exists, identify the project’s likely framework and package manager.
+- Note current failures separately from new failures.
 
-**For each feature, plan across all levels:**
+Do not silently fix production behavior during baseline work. If you discover an obvious bug, capture it as either:
+- A current-behavior characterization test if the change is meant to preserve it.
+- A failing desired-behavior test if the user is asking for the bug to be fixed.
+
+### Step 3: Map Public Behavior
+
+List behavior in terms of callers or users, not internal implementation details:
 
 ```markdown
-## Test Plan: [Feature Name]
+## Safety Net: [Target]
 
-### Risk Assessment
-- **Criticality**: [high/medium/low]
-- **Has Auth**: [yes/no — Clerk/WorkOS/custom]
-- **Has API Calls**: [yes/no]
-- **User-Facing**: [yes/no]
+### Planned Change
+- [Refactor / bug fix / migration / cleanup]
 
-### Unit Tests (vitest)
-**Agent:** unit-test-writer
+### Public Interfaces
+- [Function/component/API route/page/CLI command]
 
-| Test Case | What it Verifies |
-|-----------|------------------|
-| `should [behavior]` | [Pure function/component behavior] |
-| `should [behavior]` | [Edge case handling] |
-| `should [behavior]` | [Error throwing] |
+### Current Observable Behavior
+| Behavior | Evidence | Risk |
+|----------|----------|------|
+| [behavior] | [code path, existing test, manual observation] | [high/medium/low] |
 
-**Files to create:**
-- `src/[path]/[module].test.ts`
-
-### Integration Tests (vitest + MSW)
-**Agent:** integration-test-writer
-
-| Test Case | What it Verifies |
-|-----------|------------------|
-| `should [behavior]` | [Component + API interaction] |
-| `should [behavior]` | [Auth state handling] |
-| `should [behavior]` | [Error from API] |
-
-**Mocking required:**
-- API endpoints: [list]
-- Auth: [Clerk/WorkOS mock setup]
-
-**Files to create:**
-- `src/[path]/[feature].integration.test.ts`
-
-### E2E Tests (Playwright)
-**Agent:** e2e-test-writer
-
-| Test Case | What it Verifies |
-|-----------|------------------|
-| `should [complete flow]` | [Happy path journey] |
-| `should [handle error]` | [User-visible error] |
-| `should [auth flow]` | [Login/logout if applicable] |
-
-**Auth setup required:**
-- Provider: [Clerk/WorkOS/none]
-- Test user: [env var names]
-
-**Files to create:**
-- `tests/[feature].spec.ts`
-- `tests/auth.setup.ts` (if auth needed)
+### Test Slices
+| Slice | Level | Why this level |
+|-------|-------|----------------|
+| [one behavior] | [unit/integration/e2e] | [fastest useful proof] |
 ```
 
-### Step 4: Execute Test Plan
+### Step 4: Add Tests One Vertical Slice At A Time
 
-Dispatch specialists in order:
+For each slice:
+1. Choose one public behavior.
+2. Choose the smallest useful test level.
+3. Write the test.
+4. Run only the relevant test.
+5. Prove the test is sensitive:
+   - For current-behavior characterization, the test may pass immediately. Temporarily perturb the assertion, fixture, or input to prove it fails for the right reason, then restore it.
+   - For desired behavior or bug fixes, follow RED/GREEN/REFACTOR. Do not change production code before the failing test exists.
+6. Commit no temporary mutations.
+7. Move to the next slice only after the current slice is trustworthy.
 
-**1. Unit tests first (fastest feedback):**
+### Step 5: Keep Test Seams Small
+
+If existing code is hard to test:
+- Prefer testing through an existing public interface.
+- Extract only the smallest seam needed to observe behavior.
+- Preserve behavior while extracting.
+- Avoid large refactors before the safety net exists.
+- Avoid mocking internal modules just to force a unit test.
+
+Mocks are acceptable for true boundaries: network, time, filesystem, database, auth providers, payment providers, and external LLM APIs. Prefer real code inside the project boundary.
+
+### Step 6: Run Scoped Then Broader Verification
+
+Run checks in widening order:
+1. The single new test file or test name.
+2. The relevant package or feature test suite.
+3. The project’s normal test command.
+4. E2E only when the risk is browser-level or cross-system.
+
+When E2E output is verbose or flaky, dispatch `e2e-runner` with the exact test file and failure evidence.
+
+### Step 7: Report The Safety Net
+
+End with a concise report:
+
+```markdown
+## Safety Net Result
+
+**Target:** [code/feature]
+**Reason:** [refactor/bug fix/legacy coverage/launch risk]
+**Tests added:** [files]
+**Behavior characterized:**
+- [behavior]
+
+**Verification:**
+- [command] — [pass/fail]
+
+**Remaining risk:**
+- [untested behavior or reason it was deferred]
+
+**Ready for next change:** [yes/no]
 ```
-Task [unit-test-writer] model: sonnet: "Write unit tests for [feature].
 
-Test cases from plan:
-[paste unit test cases]
+## Choosing Test Level
 
-Files to create: [paths]
-Follow vitest patterns from testing-patterns.md"
-```
+| Level | Use when | Avoid when |
+|-------|----------|------------|
+| Unit | Pure functions, deterministic formatting, isolated hooks, small state transitions | Behavior depends on routing, browser, API, auth, or multiple components |
+| Integration | Component + state, API routes, auth states, form submissions, data adapters | A single pure function is enough or only a real browser proves it |
+| E2E | Critical user journeys, auth flows, checkout/signup, routing/browser behavior | The behavior can be proven faster below the browser |
 
-**2. Integration tests second:**
-```
-Task [integration-test-writer] model: sonnet: "Write integration tests for [feature].
+### Coverage Guidelines
 
-Test cases from plan:
-[paste integration test cases]
-
-Auth: [Clerk/WorkOS/none]
-API mocking: [endpoints to mock]
-Files to create: [paths]"
-```
-
-**3. E2E tests last:**
-```
-Task [e2e-test-writer] model: opus: "Write E2E tests for [feature].
-
-Test cases from plan:
-[paste e2e test cases]
-
-Auth: [Clerk/WorkOS/none]
-Fixtures needed: [list]
-Files to create: [paths]"
-```
-
-### Step 5: Run and Verify
-
-**Unit + Integration (inline):**
-```bash
-pnpm vitest run
-```
-
-**E2E (background agent — avoids terminal issues):**
-```
-Task [e2e-runner] model: opus: "Run E2E tests and fix any failures.
-
-Test files: [list]
-Iterate until green or report blockers."
-```
-
----
+| Feature Type | First Useful Backfill | Notes |
+|--------------|----------------------|-------|
+| Utility functions | Unit | Cover edge cases and invariants through exported functions |
+| UI components | Integration | Prefer user-visible behavior over snapshots |
+| Forms | Integration | Add E2E only for critical end-to-end flows |
+| API routes | Integration | Exercise request/response behavior and error paths |
+| Auth flows | Integration + selective E2E | Mock provider states below browser; use real/browser flow sparingly |
+| Checkout/payment | Integration + E2E | Mock external provider below browser; keep one critical browser path |
+| LLM integrations | Unit/integration with fixtures | Avoid live calls unless explicitly required |
 
 ## Auth Testing Quick Reference
 
+Use this only when auth behavior is part of the safety net.
+
 ### Clerk Testing
 
-**Integration tests (vitest):**
-- Mock `useAuth` and `useUser` hooks
-- Test loading, signed in, signed out states
-- Mock `getToken` for API calls
+**Integration tests:**
+- Mock `useAuth` and `useUser` hooks.
+- Test loading, signed-in, and signed-out states.
+- Mock `getToken` for API calls.
 
-**E2E tests (Playwright):**
-- Create `tests/auth.setup.ts` for login flow
-- Store session in `playwright/.auth/user.json`
-- Use `storageState` in playwright.config.ts
+**E2E tests:**
+- Create `tests/auth.setup.ts` for login flow.
+- Store session in `playwright/.auth/user.json`.
+- Use `storageState` in `playwright.config.ts`.
 
 **Common issues:**
-- ❌ Trying to mock ClerkProvider (mock hooks instead)
-- ❌ Not handling `isLoaded: false` state
-- ❌ Hardcoding tokens (use `getToken` mock)
+- Trying to mock `ClerkProvider` instead of hooks.
+- Missing the `isLoaded: false` state.
+- Hardcoding tokens instead of using a `getToken` mock.
 
 ### WorkOS Testing
 
-**Integration tests (vitest):**
-- Mock `getUser` from `@workos-inc/authkit-nextjs`
-- Test with full user object including `organizationId`, `role`, `permissions`
-- Test SSO redirect behavior
+**Integration tests:**
+- Mock `getUser` from `@workos-inc/authkit-nextjs`.
+- Test with full user object including `organizationId`, `role`, and `permissions`.
+- Test SSO redirect behavior.
 
-**E2E tests (Playwright):**
-- SSO flows are slow — consider test bypass endpoint
-- Create `/api/auth/test-login` for faster auth (test env only)
-- Store session state after auth
+**E2E tests:**
+- SSO flows are slow; consider a test bypass endpoint.
+- Create `/api/auth/test-login` for faster auth in test environments only.
+- Store session state after auth.
 
 **Common issues:**
-- ❌ Forgetting `organizationId` in mock (required for org-level features)
-- ❌ Not testing permission checks
-- ❌ SSO redirect timing issues (add proper waits)
+- Missing `organizationId` in org-level features.
+- Not testing permission checks.
+- SSO redirect timing issues without proper waits.
 
-### Bypass Auth for Speed
+### Bypass Auth For Speed
 
 For faster E2E tests, create a test-only auth endpoint:
 
@@ -297,45 +288,23 @@ export async function POST(request: Request) {
 }
 ```
 
----
+## Fail-Fast Configuration
 
-## Test Patterns
-
-### What to Test at Each Level
-
-| Level | Test | Don't Test |
-|-------|------|------------|
-| **Unit** | Pure functions, isolated components, hooks | API calls, multi-component flows |
-| **Integration** | Component + API, auth states, form submissions | Full user journeys |
-| **E2E** | Critical paths, auth flows, checkout/signup | Every possible input |
-
-### Coverage Guidelines
-
-| Feature Type | Unit | Integration | E2E |
-|--------------|------|-------------|-----|
-| Utility functions | ✅ heavy | ❌ none | ❌ none |
-| UI components | ✅ rendering | ✅ with state | ❌ only if critical |
-| Forms | ✅ validation | ✅ submission | ✅ critical forms |
-| API routes | ✅ handlers | ✅ with mocking | ❌ via E2E |
-| Auth flows | ❌ none | ✅ mock states | ✅ real flow |
-| Checkout/payment | ✅ calculations | ✅ flow | ✅ full journey |
-
-### Fail-Fast Configuration
-
-**Tests must fail fast. Never:**
-- Global timeout of minutes
-- 5+ retries to mask flakiness
-- Arbitrary sleeps
+Tests must fail fast. Never:
+- Use global timeouts of minutes.
+- Add many retries to mask flakiness.
+- Use arbitrary sleeps.
 
 **Playwright config:**
+
 ```typescript
 export default defineConfig({
-  timeout: 30_000,        // 30s max per test
+  timeout: 30_000,
   expect: {
-    timeout: 5_000,       // 5s for assertions
+    timeout: 5_000,
   },
   use: {
-    actionTimeout: 10_000, // 10s per action
+    actionTimeout: 10_000,
   },
 });
 ```
@@ -343,31 +312,32 @@ export default defineConfig({
 ---
 
 <progress_append>
-After creating test strategy or running tests:
+After backfilling tests or running a safety-net check:
 
 ```markdown
 ## YYYY-MM-DD HH:MM — /arc:testing
-**Task:** [Create strategy / Run tests / Fix failing]
-**Feature:** [What was tested]
-**Coverage:**
-- Unit: [N] tests
-- Integration: [N] tests
-- E2E: [N] tests
-**Auth:** [Clerk/WorkOS/none]
+**Task:** [Characterize behavior / Backfill tests / Run safety net / Fix failing test]
+**Target:** [What was tested]
+**Reason:** [Refactor / bug fix / launch risk / coverage gap]
+**Tests added/changed:**
+- [path]
+**Behavior protected:**
+- [behavior]
 **Result:** [All passing / X failing]
-**Next:** [Fix failures / Done]
+**Remaining risk:** [Untested gaps or none]
+**Next:** [Proceed with refactor / Fix failures / Add another slice]
 
 ---
 ```
 </progress_append>
 
 <success_criteria>
-Test strategy is complete when:
-- [ ] Risk assessment done
-- [ ] Unit test cases identified
-- [ ] Integration test cases identified (with mocking plan)
-- [ ] E2E test cases identified (with auth setup if needed)
-- [ ] Specialist agents dispatched
-- [ ] All tests written and passing
-- [ ] Coverage gaps noted
+The safety-net pass is complete when:
+- [ ] Target behavior and planned change are clear
+- [ ] Current relevant test baseline is known
+- [ ] Public interfaces are identified
+- [ ] Highest-risk behavior has focused tests
+- [ ] New characterization tests were proven sensitive
+- [ ] Scoped and relevant broader checks were run
+- [ ] Remaining untested risks are stated plainly
 </success_criteria>

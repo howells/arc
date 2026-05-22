@@ -180,7 +180,7 @@ Based on their answer:
 | "Find refactoring opportunities" | /arc:refactor |
 | "Make it responsive/fix mobile" | external UI/design skill such as Chiaroscuro |
 | "Launch / go live" | /arc:launch |
-| "Run tests" | /arc:testing |
+| "Backfill tests / add a safety net before refactor" | /arc:testing |
 
 **Invoke the skill:**
 ```

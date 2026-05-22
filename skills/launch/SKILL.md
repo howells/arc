@@ -45,10 +45,10 @@ Launch should answer:
 - Are accidental launch blockers such as `noindex`, disallow rules, maintenance mode, or preview passwords absent or intentional?
 - Have deeper checks been run or intentionally deferred?
 
-If the work turns into deep code health, testing strategy, mobile layout, security remediation, or deep search optimization, route outside launch instead:
+If the work turns into deep code health, safety-net test backfill, mobile layout, security remediation, or deep search optimization, route outside launch instead:
 
 - Codebase health and risk -> `/arc:audit`
-- Behavior and test coverage -> `/arc:testing`
+- Untested behavior that needs a safety net -> `/arc:testing`
 
 ## Process
 

@@ -76,7 +76,7 @@ Look for:
 |-------|-------------|
 | `/arc:ideate` | Feature designed, key decisions, approach chosen |
 | `/arc:implement` | Tasks completed, tasks remaining, blockers |
-| `/arc:testing` | Test results, coverage changes |
+| `/arc:testing` | Safety-net tests added, behavior characterized, remaining gaps |
 | `/arc:review` | Plan reviewed, changes made |
 | `/arc:audit` | Audit completed, issue counts by severity |
 | `/arc:launch` | Public URL status, checklist progress |
