@@ -15,7 +15,7 @@ import { PageContent } from "./page-content";
 export const metadata: Metadata = {
   title: "Arc – The full arc from idea to shipped code",
   description:
-    "A full development workflow for Claude Code and Codex. Commands and agents that handle ideation, design, planning, implementation, review, testing, and release readiness.",
+    "A software development workflow for Claude Code and Codex. Commands and agents that handle vision, ideation, implementation, testing, review, refactoring, audit, launch, and commit.",
   alternates: { canonical: "/" },
 };
 
@@ -232,9 +232,10 @@ export default function ArcPage() {
               <span className="select-none text-[var(--color-accent)]">—</span>
               <span>
                 <span className="text-neutral-900">
-                  Frontend-design integrated.
+                  Frontend delivery included.
                 </span>{" "}
-                Bold aesthetic direction, not generic AI slop.
+                Implement the experience, but defer independent visual direction
+                to the project&apos;s design source of truth.
               </span>
             </li>
             <li className="flex gap-3 text-neutral-600 text-sm leading-relaxed">
@@ -263,7 +264,7 @@ export default function ArcPage() {
                 <span className="font-mono text-neutral-800">
                   /arc:implement
                 </span>{" "}
-                — design, then build with TDD.
+                — specify, then build with TDD.
               </span>
             </li>
             <li className="flex gap-3 text-neutral-600 text-sm leading-relaxed">
@@ -340,30 +341,9 @@ export default function ArcPage() {
                 </tr>
                 <tr className="border-neutral-100 border-b">
                   <td className="py-2 pr-4 font-mono text-neutral-800">
-                    WireText MCP
-                  </td>
-                  <td className="py-2">/arc:ideate wireframing</td>
-                </tr>
-                <tr className="border-neutral-100 border-b">
-                  <td className="py-2 pr-4 font-mono text-neutral-800">
                     Linear MCP
                   </td>
                   <td className="py-2">/arc:audit issue tracking</td>
-                </tr>
-                <tr>
-                  <td className="py-2 pr-4 font-mono text-neutral-800">
-                    <Link
-                      className="prose-link"
-                      href="https://github.com/vercel-labs/agent-skills"
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      Vercel Labs
-                    </Link>
-                  </td>
-                  <td className="py-2">
-                    React best practices, composition patterns, UI compliance
-                  </td>
                 </tr>
               </tbody>
             </table>

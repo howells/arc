@@ -58,7 +58,7 @@ export function InstallTabs() {
             </h3>
             <CodeBlock command="claude plugins install arc@howells" />
             <p className="mt-[calc(var(--baseline)*0.5)] text-pretty text-neutral-500 text-xs leading-relaxed">
-              Full plugin: skills, agents, hooks, commands, references, and
+              Full plugin: skills, agents, commands, references, and
               disciplines. Requires{" "}
               <Link
                 className="prose-link"

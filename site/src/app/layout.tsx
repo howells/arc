@@ -7,11 +7,11 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://usearc.dev"),
   title: "Arc – The full arc from idea to shipped code",
   description:
-    "A full development workflow for Claude Code and Codex. Commands and agents that handle ideation, design, planning, implementation, review, and deployment.",
+    "A software development workflow for Claude Code and Codex. Commands and agents that handle vision, ideation, implementation, testing, review, refactoring, audit, launch, and commit.",
   openGraph: {
     title: "Arc – The full arc from idea to shipped code",
     description:
-      "A full development workflow for Claude Code and Codex. Commands and agents that handle ideation, design, planning, implementation, review, and deployment.",
+      "A software development workflow for Claude Code and Codex. Commands and agents that handle vision, ideation, implementation, testing, review, refactoring, audit, launch, and commit.",
     url: "https://usearc.dev",
     siteName: "Arc",
     locale: "en_US",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Arc – The full arc from idea to shipped code",
     description:
-      "A full development workflow for Claude Code and Codex. Commands and agents that handle ideation, design, planning, implementation, review, and deployment.",
+      "A software development workflow for Claude Code and Codex. Commands and agents that handle vision, ideation, implementation, testing, review, refactoring, audit, launch, and commit.",
     creator: "@howells",
   },
 };
