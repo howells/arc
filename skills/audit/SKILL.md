@@ -271,6 +271,25 @@ Store a **structural hotspot manifest** with:
 - Overlap set: suspiciously named files that are also long
 - `"use client"` overlap: suspiciously named files that also opt into a client boundary
 
+**Collect complexity hotspot signals (source projects only):**
+
+This is a cheap first pass for performance reviewers. These are **signals, not findings**. Reviewers must inspect surrounding code and report only evidence-backed issues.
+
+```bash
+# Repeated scans, nested iteration, sorting in loops, and data access inside loops.
+rg -n --glob '*.{ts,tsx,js,jsx,py,go,rb,php,java,cs,cpp,c,swift}' \
+  "forEach\\(|\\.map\\(|\\.filter\\(|\\.reduce\\(|\\.some\\(|\\.every\\(|\\.find\\(|\\.findIndex\\(|\\.includes\\(|\\.indexOf\\(|\\.sort\\(|sorted\\(|findMany\\(|findUnique\\(|query\\(|execute\\(|fetch\\(|axios\\." \
+  ${scope:-.} 2>/dev/null | head -160
+```
+
+Store a **complexity signal manifest** with:
+- Repeated membership/search calls inside loop-like code
+- Nested lookup or pairwise comparison candidates
+- Sorting or grouping work that may repeat
+- Query/fetch/request calls near loops
+- Expensive render-path derivations in React/Next.js components
+- Shared utilities where complexity improvement would compound across callers
+
 **Detect project scale:**
 
 Use file counts to determine appropriate audit depth:
@@ -359,6 +378,7 @@ Has database: [yes/no]
 Has tests: [yes/no]
 Dead code: [X unused files, Y unused exports, Z unused deps] or "N/A (not JS/TS)"
 Structural hotspots: [X long files >250 LOC, Y severe >400 LOC, Z suspicious boundary files, W suspicious+long overlap]
+Complexity signals: [X repeated scans, Y sorting/grouping, Z data-access/render-path candidates] or "N/A"
 React audit signals: [X state/effect, Y boundary, Z data-client, W security/frontend/perf hotspots] or "N/A (not React)"
 Coding rules: [yes/no]
 Focus: [all / security / performance / architecture / accessibility / user-provided focus]
@@ -502,6 +522,10 @@ Reviewer-specific emphasis:
 **Include strict maintainability guidance in architecture, senior, and product reviewer prompts.**
 
 Pass `references/maintainability-review.md` to `architecture-engineer`, `senior-engineer`, and `daniel-product-engineer`. They should apply it as a demanding code-health lens: authored source-code files crossing 1000 lines are presumptive blockers unless generated, vendored, data-only, or structurally justified; god files, ad-hoc branching, weak abstractions, misplaced ownership, and avoidable duplication should be reported when evidence-backed.
+
+**Include complexity optimization guidance in performance reviewer prompts.**
+
+Pass `references/complexity-optimization.md` and the complexity signal manifest to `performance-engineer`. The reviewer should rank opportunities by likely impact, inspect surrounding code before reporting, and include current pattern, estimated current complexity, recommended change, estimated complexity after, risk, and tests or benchmarks needed. Do not report micro-optimizations, cold-path linear code, or scanner-only findings.
 
 **Include React audit signals for React/Next.js/React Native projects.**
 

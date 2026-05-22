@@ -61,6 +61,7 @@ Use this skill when:
 - Existing code has little or no test coverage.
 - A refactor needs a behavior-preserving safety net first.
 - A god file, duplicated implementation, or tangled module needs characterization before decomposition.
+- A performance optimization needs current behavior pinned before changing data structures, batching, memoization, caching, or ordering.
 - A bug fix touches unclear behavior and you need to capture the current contract before changing it.
 - Coverage reports show gaps around important public behavior.
 - Auth, API, state, or browser flows need targeted tests before launch or audit remediation.
@@ -75,6 +76,7 @@ Do not use this skill as the normal new-feature workflow. For new work, use `/ar
 4. `disciplines/change-impact-testing.md` — Blast radius analysis for code changes
 5. `references/llm-api-testing.md` — If testing LLM integrations
 6. `references/maintainability-review.md` — If tests are being added before decomposing a god file or tangled module
+7. `references/complexity-optimization.md` — If tests are being added before optimizing algorithmic complexity, rendering churn, or N+1 behavior
 </required_reading>
 
 ## Agents
@@ -123,6 +125,7 @@ Then identify:
 - The planned change or refactor the tests must protect.
 - The public interfaces where behavior is observable.
 - Any business-critical, auth, persistence, payment, data, or browser-flow risk.
+- Any ordering, duplication, identity, mutability, pagination, permission, cache invalidation, or tenant/filtering behavior that an optimization must preserve.
 
 ### Step 2: Establish The Baseline
 

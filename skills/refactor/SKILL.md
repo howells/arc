@@ -54,6 +54,7 @@ Before starting, read these references:
 1. `references/architecture-patterns.md` — import depth rules, boundary violations
 2. `references/component-design.md` — compound vs simple component patterns
 3. `references/maintainability-review.md` — strict god-file, duplication, and structural simplification bar
+4. `references/complexity-optimization.md` — safe optimization patterns and behavior-preservation checks
 
 Also read, when present in the target project:
 - `CONTEXT.md` or the relevant context from `CONTEXT-MAP.md`
@@ -148,6 +149,7 @@ Do NOT follow rigid heuristics. Explore organically and note where you experienc
 - Where is a coherent concern spread across an app and ready to become a discrete package/module?
 - Where are god components, god scripts, oversized modules, or mixed responsibilities making changes risky?
 - Where is duplication a sign that a shared concept needs one implementation?
+- Where do repeated scans, nested lookups, sorting inside loops, rendering churn, or N+1 calls indicate a better data structure or boundary?
 - Where are there deep relative imports (5+ levels) indicating boundary violations?
 - Which parts of the codebase are untested, or hard to test?
 - Where do barrel files re-export everything, hiding the real dependency graph?
@@ -168,6 +170,7 @@ Present a numbered list of refactoring opportunities. For each candidate:
 | **Dependency category** | See categories below |
 | **Locality / leverage** | What change gets concentrated, and what callers gain |
 | **Test impact** | What existing tests would be replaced by boundary tests, or what characterization tests are needed first |
+| **Complexity impact** | Current complexity, proposed complexity, and behavior-preservation risk when performance is part of the refactor |
 | **Severity** | How much this costs day-to-day |
 
 Ask the user: **"Which of these would you like to explore?"**
