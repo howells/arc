@@ -142,7 +142,7 @@ If you open this repo itself in Codex, `.agents/skills/*` symlinks let Codex dis
 | `/arc:testing` | Existing code needs characterization tests before change | Safety-net tests and risk notes |
 | `/arc:launch` | A project needs to be ready for a public URL | Launch readiness checklist |
 | `/arc:audit` | You need a verified current-state codebase health report | `docs/audits/...` |
-| `/arc:refactor` | Code feels tangled, shallow, duplicated, or hard to test | Refactor plan/RFC |
+| `/arc:refactor` | Code feels tangled, shallow, duplicated, oversized, or ready for package/module extraction | Refactor plan/RFC |
 | `/arc:suggest` | You want project-local next-step recommendations | Ranked options |
 | `/arc:commit` | You are ready to commit or push | Atomic git commits |
 
@@ -238,7 +238,7 @@ Arc is self-contained, but it can use connected tools when available:
 |-------------|----------|
 | Browser automation / Playwright | Rendered verification, E2E checks, launch evidence |
 | Context/documentation search | Research during implementation or review |
-| Linear MCP | Optional issue creation from audit findings |
+| Project-local task planning | Turning audit findings into implementation plans |
 | GitHub tooling | Commit, push, branch, and PR workflows |
 
 External skills and plugins can add specialist depth, but Arc should still remain understandable and usable without them.

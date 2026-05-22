@@ -14,7 +14,7 @@ Arc should stay focused on the development cycle. It is not a general-purpose ca
 - **Control plane**: The lightweight routing layer that decides which workflow applies without loading every workflow into context.
 - **Supporting skill**: An internal or enabling Arc skill that helps workflows run but is not itself a user-facing lifecycle workflow.
 - **Review**: An advisory workflow for evaluating plans, specs, or implementation approaches before deciding what to change.
-- **Refactor**: A codebase-structure workflow for inspecting existing code with the explicit goal of producing a refactoring plan or RFC.
+- **Refactor**: A codebase-structure workflow for inspecting existing code with the explicit goal of producing a refactoring plan or RFC, including module/package extraction, god-file decomposition, duplication reduction, and testable interface design.
 - **Audit**: A verification and assessment workflow that combines mechanical checks with specialist review to report current codebase health.
 - **Specialist lens**: A focused way of inspecting lifecycle work, such as reuse, API documentation, architecture boundaries, test quality, security, or performance.
 - **Self-contained**: Arc workflows may absorb useful patterns from adjacent tools, but they should explain and execute those patterns in Arc's own language.
@@ -51,6 +51,8 @@ Arc owns the software development cycle:
 Launch readiness means the project is visitable, shareable, and ready for a first real audience. It covers go-live basics such as deployment, domain, HTTPS, environment variables, access gates, metadata, social previews, favicons, obvious placeholders, accidental robots/noindex blockers, and production settings for detected services. It should not expand into responsive, testing, security, code-health, or deep search-optimization work; those belong outside launch or Arc.
 
 Arc may include specialist checks when they are part of that cycle. For example, implementation and review workflows can check for reusable components, concise public API docs, architecture boundaries, oversized files, testability, security, and performance risk.
+
+Refactoring is inside Arc when it serves codebase structure: finding where concerns belong, extracting coherent grouped behavior into discrete modules or packages, breaking up god components/scripts/modules, reducing real duplication, and creating a safe test-backed decomposition order. Arc should stop at a refactoring plan or RFC unless the user explicitly asks for implementation.
 
 Brand identity creation is outside Arc's core lifecycle. Arc implementation workflows may consume an existing `docs/brand-system.md`, but Arc should not own brand discovery, identity direction generation, or brand asset production.
 
