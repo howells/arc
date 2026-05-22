@@ -23,6 +23,7 @@ website:
     - Audit has one public default path.
     - Mechanical checks always run before reviewers.
     - Optional focus text may narrow reviewer selection, but the workflow stays the same.
+    - Security is gated by launch and sensitive-surface signals so early development audits do not become premature production-hardening reviews.
   agents:
     - security-engineer
     - performance-engineer
@@ -316,6 +317,28 @@ Infer the project stage from heuristic signals:
 
 Default to `development` if signals are ambiguous. When in doubt, err toward the earlier stage — it's better to under-flag than to overwhelm with premature requirements.
 
+**Detect security readiness gate:**
+
+Run a lightweight security gate before reviewer selection. This gate decides whether to include the full `security-engineer` reviewer. Mechanical secrets and critical/high dependency scans still run for every audit.
+
+Security reviewer is **included** when any of these are true:
+
+- User focus includes security, auth, privacy, compliance, payments, production, launch, or public release.
+- Project stage is `pre-launch` or `production`.
+- Public/launch signals exist: custom domain, production URL, deployment config plus production env references, preview protection/public access settings, or launch checklist artifacts.
+- Sensitive surface exists: auth, payments, webhooks, user accounts, multi-tenancy, admin areas, file uploads, email sending, public write APIs, database-backed user data, or third-party secrets.
+- Mechanical checks find critical/high dependency vulnerabilities, likely hardcoded credentials, unsafe HTML/eval patterns, auth packages, or server endpoints handling untrusted input.
+
+Security reviewer is **skipped** when all of these are true:
+
+- Project stage is `prototype` or `development`.
+- No user security focus was requested.
+- No public/launch signal is present.
+- No sensitive surface is detected.
+- Mechanical secret and critical/high vulnerability scans are clean.
+
+When skipped, record `Security gate: lightweight only` in the detection summary and score Security Posture as `--` unless mechanical evidence supports a concrete score. Do not let skipped production-hardening concerns lower the audit score.
+
 **Confirm stage with user:**
 
 After detection, briefly confirm:
@@ -331,6 +354,7 @@ Scope: [path or "full codebase"]
 Project type: [Next.js / React / Python / etc.]
 Project scale: [small / medium / large]
 Project stage: [prototype / development / pre-launch / production]
+Security gate: [full reviewer / lightweight only] ([reason])
 Has database: [yes/no]
 Has tests: [yes/no]
 Dead code: [X unused files, Y unused exports, Z unused deps] or "N/A (not JS/TS)"
@@ -364,13 +388,19 @@ Include the mechanical summary in reviewer context, then continue to reviewer se
 
 ## Phase 2: Select Reviewers
 
+**Apply security readiness gate first:**
+
+- If the gate says `full reviewer`, include `security-engineer`.
+- If the gate says `lightweight only`, do not include `security-engineer`; carry forward the mechanical secrets/dependency scan summary and any concrete dangerous findings.
+- If a concrete dangerous finding appears after reviewer selection, add `security-engineer` back before Phase 3.
+
 **Base reviewer selection by project scale:**
 
 | Scale | Core Reviewers |
 |-------|----------------|
-| Small | security-engineer, performance-engineer |
-| Medium | security-engineer, performance-engineer, architecture-engineer |
-| Large | security-engineer, performance-engineer, architecture-engineer, senior-engineer |
+| Small | performance-engineer |
+| Medium | performance-engineer, architecture-engineer |
+| Large | performance-engineer, architecture-engineer, senior-engineer |
 
 **Add framework-specific reviewers (medium/large only):**
 
@@ -381,6 +411,7 @@ Include the mechanical summary in reviewer context, then continue to reviewer se
 | Python/Rust/Go | (none additional) |
 
 **Conditional additions:**
+- If security gate says `full reviewer` → add `security-engineer`
 - If scope includes DB/migrations → add `data-engineer`
 - If frontend-heavy (React/Next.js, medium/large) → add `accessibility-engineer`
 - If test files detected (medium/large) → add `test-quality-engineer`
@@ -395,6 +426,7 @@ Include the mechanical summary in reviewer context, then continue to reviewer se
 - Small projects: 2-3 reviewers
 - Medium projects: 3-4 reviewers
 - Large projects: 4+ reviewers as needed for the scope
+- Early prototype/development projects with no sensitive surface may have no security reviewer. This is intentional. The audit should preserve cadence while still surfacing concrete dangerous issues from mechanical checks.
 
 ## Phase 3: Run Audit
 
@@ -410,19 +442,21 @@ Run reviewers in **batches of 2** to avoid resource exhaustion on large codebase
 
 **Example with 6 reviewers:**
 ```
-Batch 1: security-engineer, performance-engineer
+Batch 1: performance-engineer, architecture-engineer
   → Wait for both to complete
-Batch 2: architecture-engineer, daniel-product-engineer
+Batch 2: daniel-product-engineer, lee-nextjs-engineer
   → Wait for both to complete
-Batch 3: lee-nextjs-engineer, senior-engineer
+Batch 3: security-engineer, senior-engineer
   → Wait for both to complete
 ```
+
+If the security gate skipped `security-engineer`, omit that reviewer from the batches instead of replacing it with another security pass.
 
 **Model selection per reviewer:**
 
 | Reviewer | Model | Why |
 |----------|-------|-----|
-| security-engineer | sonnet | Pattern recognition + context |
+| security-engineer | sonnet | Pattern recognition + context; only when the security gate includes it |
 | performance-engineer | sonnet | Algorithmic reasoning |
 | architecture-engineer | sonnet | Structural analysis |
 | daniel-product-engineer | sonnet | Code quality judgment |
@@ -563,6 +597,10 @@ Focus on: N+1 queries, missing indexes, memory leaks, bundle size, render perfor
 
 When a reviewer scores two axes (daniel-product-engineer), include both criteria tables and ask for both scores.
 
+If `security-engineer` was skipped by the security readiness gate, do not fabricate a full Security Posture score from absence of review. Use `--` for axis 1 and adjust the denominator, unless mechanical evidence gives a concrete security result:
+- Critical/high vulnerability or likely credential exposure found → add `security-engineer` before scoring.
+- Clean dependency scan and clean secret scan in a prototype/development project with no sensitive surface → mark `Security Posture: -- (lightweight gate clean; full security review deferred)`.
+
 **Wait for batch to complete before starting next batch.**
 
 Repeat for remaining batches:
@@ -618,6 +656,7 @@ Aim for 3-8 clusters. If you have more than 8, merge the smallest ones. If you h
 Collect axis scores from reviewer outputs and apply derivation rules from `audit-scorecard.md`:
 
 1. **Reviewer-scored axes (1-4, 6):** Take the score each reviewer returned. For multi-reviewer axes (Architecture, Code Quality), use the **lower** score.
+   - If Security Posture had no reviewer because the security readiness gate skipped it, mark it `--` and adjust the denominator unless mechanical evidence triggered a full security review.
 2. **Test Health (axis 5):** Use reviewer score if test-quality-engineer ran. Apply mechanical overrides:
    - No test files found → cap at 0
    - Test failures in mechanical checks → cap at 1
