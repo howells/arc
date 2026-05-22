@@ -66,7 +66,7 @@ Machine process cleanup is outside Arc's core lifecycle. Arc workflows may finis
 
 Plan cleanup is outside Arc's public workflow surface. Arc may create and reference plans during implementation, but it should not expose a separate command for deleting, archiving, or housekeeping old planning files.
 
-Next-work suggestion is inside Arc only when it stays project-local and lifecycle-oriented. `/arc:suggest` may triage visible repository signals such as current plans, progress, TODOs, failing checks, recent commits, and vision gaps; it should not own Linear priority queues, external market discovery, competitor research, or net-new product ideation.
+Next-work suggestion is outside Arc's public workflow surface. `/arc:go` can help orient a session and route from the user's stated intent, but Arc should not expose a separate recommendation command or priority queue.
 
 The main entry workflow is also project-local. `/arc:go` should route from repository context, recent progress, plans, staleness, and the user's stated intent; it should not check Linear, present external issue queues, or make issue trackers the starting point.
 

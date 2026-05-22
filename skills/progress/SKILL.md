@@ -84,6 +84,5 @@ Look for:
 
 ## What Doesn't Get Logged
 
-- `/arc:suggest` (read-only)
 - Linear issues (external system)
 - Failed/abandoned attempts (unless valuable context)

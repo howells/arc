@@ -33,8 +33,7 @@ REVIEW  /arc:review     - Review a plan, spec, or implementation approach
         /arc:audit      - Verify and audit current codebase health
         /arc:refactor   - Find structural friction and propose refactors
 
-TOOLS   /arc:suggest    - Recommend the next project-local step
-        /arc:commit     - Create clean commits and optionally push
+TOOLS   /arc:commit     - Create clean commits and optionally push
         /arc:help       - Show the command catalog with relevance notes
 ```
 
@@ -143,7 +142,6 @@ If you open this repo itself in Codex, `.agents/skills/*` symlinks let Codex dis
 | `/arc:launch` | A project needs to be ready for a public URL | Launch readiness checklist |
 | `/arc:audit` | You need a verified current-state codebase health report | `docs/audits/...` |
 | `/arc:refactor` | Code feels tangled, shallow, duplicated, oversized, or ready for package/module extraction | Refactor plan/RFC |
-| `/arc:suggest` | You want project-local next-step recommendations | Ranked options |
 | `/arc:commit` | You are ready to commit or push | Atomic git commits |
 
 ## Typical Flows

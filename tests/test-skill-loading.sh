@@ -21,7 +21,6 @@ EXPECTED_SKILLS=(
     "progress"
     "refactor"
     "review"
-    "suggest"
     "testing"
     "using-arc"
     "vision"

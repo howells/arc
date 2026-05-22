@@ -156,7 +156,6 @@ Output ALL of these in order:
 | Command | What it does | When to use |
 |---------|-------------|-------------|
 | `/arc:commit` | Smart commit with auto-splitting across domains | When ready to commit changes |
-| `/arc:suggest` | Project-local next-step triage from plans, progress, TODOs, checks, and vision | Starting a session, unsure what to tackle |
 
 ---
 
@@ -178,7 +177,7 @@ Pick 2-4 commands that make the most sense given:
 - What's **missing** (no vision doc → suggest `/arc:vision`)
 - What's **stale** (old plans → mention them, but do not route to a cleanup workflow)
 - What **just changed** (recent implementation edits → suggest `/arc:audit`; suggest `/arc:testing` if follow-up work needs a safety net)
-- What **could be improved** (important existing behavior has no tests → suggest `/arc:testing`)
+- What **could be improved** (important existing behavior has no tests → mention `/arc:testing`)
 
 ---
 

@@ -129,9 +129,10 @@ export default function ArcPage() {
               Open your project in Claude Code or Codex and run a command.
               Commands chain together:{" "}
               <span className="font-mono text-neutral-800">/arc:ideate</span>{" "}
-              creates a design doc, then asks if you want to continue to{" "}
+              creates a feature spec, then asks if you want to continue to{" "}
               <span className="font-mono text-neutral-800">/arc:implement</span>
-              . You can enter at any point — already have a design doc? Start at{" "}
+              . You can enter at any point — already have a feature spec? Start
+              at{" "}
               <span className="font-mono text-neutral-800">/arc:implement</span>
               .
             </p>
@@ -151,14 +152,12 @@ export default function ArcPage() {
             </div>
             <div className="flex items-center gap-3 font-mono text-sm">
               <span className="shrink-0 text-neutral-400">#</span>
-              <span className="text-neutral-500">
-                What should I build next?
-              </span>
+              <span className="text-neutral-500">Orient a session</span>
             </div>
             <div className="group">
               <div className="flex items-center justify-between border-neutral-200 border-b py-2 font-mono text-sm">
-                <span className="text-neutral-800">/arc:suggest</span>
-                <CopyButton text="/arc:suggest" />
+                <span className="text-neutral-800">/arc:go</span>
+                <CopyButton text="/arc:go" />
               </div>
             </div>
             <div className="flex items-center gap-3 font-mono text-sm">
@@ -290,9 +289,9 @@ export default function ArcPage() {
             <li className="flex gap-3 text-neutral-600 text-sm leading-relaxed">
               <span className="select-none text-[var(--color-accent)]">→</span>
               <span>
-                <span className="font-mono text-neutral-800">/arc:suggest</span>{" "}
-                reads project-local plans, progress, TODOs, recent commits,
-                failing checks, and vision.
+                <span className="font-mono text-neutral-800">/arc:go</span>{" "}
+                reads project-local context and routes to the smallest relevant
+                workflow.
               </span>
             </li>
           </ul>

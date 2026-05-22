@@ -35,7 +35,6 @@ UNPROTECTED_SKILLS=(
     "ideate"
     "implement"
     "testing"
-    "suggest"
 )
 
 for skill in "${UNPROTECTED_SKILLS[@]}"; do

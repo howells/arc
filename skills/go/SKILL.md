@@ -12,7 +12,7 @@ website:
   desc: Main entry point
   summary: The front door to Arc. Understands your codebase, reads recent project-local context, and routes you to the right workflow.
   what: |
-    Go explores your codebase to understand what you're working with, reads recent progress and existing plans, and asks what you want to do. Based on your answer, it routes you to the appropriate Arc command—ideate for new features, implement for execution, suggest if you're unsure.
+    Go explores your codebase to understand what you're working with, reads recent progress and existing plans, and asks what you want to do. Based on your answer, it routes you to the appropriate Arc command or asks one sharper follow-up.
   why: |
     Starting is the hardest part. Go gives you context immediately and asks one focused question: what do you want to work on? No need to remember which Arc command does what.
   decisions:
@@ -91,8 +91,8 @@ AskUserQuestion:
       description: "Check if it builds, review outdated deps, and surface what needs attention"
     - label: "I know what I want to work on"
       description: "Skip the checkup and jump straight in"
-    - label: "See suggestions"
-      description: "Run /arc:suggest for ideas on what to work on"
+    - label: "Talk me through options"
+      description: "Use the repo context to choose between audit, refactor, testing, or new work"
 ```
 
 **If recent plans exist:**
@@ -131,8 +131,8 @@ AskUserQuestion:
       description: "Describe a feature or change you want to make"
     - label: "Fix a bug"
       description: "Describe the bug you want to fix"
-    - label: "Explore what needs work"
-      description: "Run /arc:suggest to discover what could be improved"
+    - label: "Orient me"
+      description: "Use the repo context to choose between audit, refactor, testing, or new work"
 ```
 
 ### Step 3.5: Scope Posture (feature work only)
@@ -174,7 +174,7 @@ Based on their answer:
 | "I want to build [feature]" | /arc:ideate (with posture from Step 3.5) |
 | "Quick fix/small change" | /arc:implement |
 | "Continue [existing plan]" | /arc:implement |
-| "Not sure what to work on" | /arc:suggest |
+| "Not sure what to work on" | Clarify with one focused question, then route |
 | "Review a plan/spec/approach" | /arc:review |
 | "Assess existing code quality/risk" | /arc:audit |
 | "Find refactoring opportunities" | /arc:refactor |
@@ -195,9 +195,8 @@ When the user picks "Run a health check", run these sequentially — stop and re
    - Mechanical checks run first, then Arc surfaces the most relevant codebase risks.
    - If critical failures appear, report them and ask if the user wants to fix before continuing.
 
-2. **Surface what needs attention** — `Skill arc:suggest`
-   - TODOs, technical debt, stale plans, vision gaps.
-   - Gives the user a prioritized list of what to tackle.
+2. **Ask what kind of attention matters**
+   - Use the audit result and visible repo context to ask whether the user wants to fix breakage, improve structure, add tests, continue a plan, or start new work.
 
 After all three, summarize:
 
@@ -205,7 +204,7 @@ After all three, summarize:
 ## Health Check Summary
 
 **Build:** [passing / failing — brief detail if failing]
-**What needs attention:** [top 2-3 items from suggest]
+**What needs attention:** [top audit findings or context signals]
 ```
 
 Then ask:
@@ -215,10 +214,10 @@ AskUserQuestion:
   question: "What would you like to tackle?"
   header: "Health Check Complete"
   options:
-    - label: "[Top suggestion from results]"
-      description: "[Brief rationale]"
-    - label: "[Second suggestion]"
-      description: "[Brief rationale]"
+    - label: "Fix audit findings"
+      description: "Start with the highest-priority issue from the health check"
+    - label: "Improve structure"
+      description: "Run /arc:refactor against the area with the clearest friction"
     - label: "Something else"
       description: "Tell me what you want to work on"
 ```
@@ -232,5 +231,5 @@ AskUserQuestion:
 
 - Routes to all other /arc:* commands
 - Reads project-local plans, /arc:vision, and progress for context
-- Uses /arc:suggest when user is unsure
-- Chains /arc:audit → /arc:suggest for stale repo health checks
+- Asks one clarifying question when the user is unsure
+- Uses /arc:audit for stale repo health checks, then routes from the result

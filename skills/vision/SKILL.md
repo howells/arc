@@ -194,7 +194,6 @@ Entry: `/arc:vision — [Created / Reviewed / Revised] vision document`
 
 - `/arc:go` uses vision to route new work.
 - `/arc:ideate` reads vision for product and scope context.
-- `/arc:suggest` references vision as a project-local signal.
 - `/arc:launch` checks whether launch posture still matches the project intent.
 
 <completion_check>

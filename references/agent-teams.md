@@ -23,7 +23,7 @@ Agent teams enable multiple Claude Code instances to work as teammates — debat
 **Not worth it:**
 - `/arc:implement` — Sequential tasks with dependencies
 - `/arc:testing` — Independent safety-net slices
-- `/arc:suggest`, `/arc:detail` — Sequential research pipelines
+- `/arc:detail` — Sequential research pipeline
 </when_to_use>
 
 <team_composition>
