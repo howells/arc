@@ -163,7 +163,6 @@ Output ALL of these in order:
 | `/arc:suggest` | What to work on next — analyzes codebase, issues, and debt | Starting a session, unsure what to tackle |
 | `/arc:document` | Capture solved problems as searchable documentation | After solving a non-obvious problem |
 | `/arc:tidy` | Clean up completed plans in docs/arc/plans/ | When plan files accumulate |
-| `/arc:rules` | Apply Arc's coding rules to the project | Setting up a new project with Arc conventions |
 | `/arc:deps` | Dependency audit — outdated packages, CVEs, batch upgrades | Periodic maintenance, before shipping |
 
 **UTILITY**

@@ -1,16 +1,8 @@
 # Complete Ruleset
 
-These rules are designed for [Ruler](https://github.com/intellectronica/ruler) — a tool that distributes a single `.ruler/` directory of markdown instructions to every AI coding agent (Claude Code, Cursor, Copilot, Aider, etc.) in the right format. Write rules once, `ruler apply`, and all agents follow the same standards.
+These rules are Arc-owned reference material for workflows and agents. They capture coding standards that remain relevant, but they should be loaded selectively instead of copied wholesale into every project context.
 
-## Quick Setup
-
-```bash
-# Copy rules to your project's .ruler/ directory
-cp -r /path/to/arc/rules/* /your-project/.ruler/
-
-# Apply to all configured agents
-npx ruler apply
-```
+Arc no longer exposes a public workflow for installing these rules into `.ruler/` or distributing them through Ruler. Use them as internal guidance when a workflow needs a specific standard.
 
 ## Rule Index
 
@@ -62,7 +54,7 @@ All rule docs use RFC 2119 terms (MUST/SHOULD/NEVER). Files are lowercase/kebab-
 
 ## Customization
 
-Adapt these rules to fit your project:
+If a project intentionally adopts these rules, adapt them before use:
 
 1. **Remove unused rules** - Delete files for tech you don't use
 2. **Update package names** - Replace `@project/ui`, `@project/env` with your actual package names

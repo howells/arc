@@ -44,7 +44,6 @@ CROSS-CUTTING
         /arc:prune-agents - Kill orphaned subagent processes
 
 TOOLS   /arc:commit     - Smart commit + push with auto-splitting
-        /arc:rules      - Apply coding standards to project
 ```
 
 Arc also ships a small bootstrap skill, `using-arc`, which acts as the control plane for
@@ -293,7 +292,6 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:document` | Document features | `docs/features/<feature>.md` |
 | `/arc:suggest` | What to work on next (+ discovery mode) | Recommendations |
 | `/arc:commit` | Commit and push changes | Git commits |
-| `/arc:rules` | Apply coding standards | `.ruler/` directory |
 | `/arc:tidy` | Clean up completed plans | Archived/deleted plans |
 | `/arc:deps` | Dependency management | Updated dependencies |
 | `/arc:responsive` | Mobile responsive audit & fix | Responsive code changes |

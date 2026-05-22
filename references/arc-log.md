@@ -85,7 +85,6 @@ Look for:
 - `/arc:suggest` (read-only)
 - `/arc:prune-agents` (utility)
 - `/arc:tidy` (utility)
-- `/arc:rules` (one-time setup)
 
 /arc:commit — 2 commits (`feat(web): clarify backend completion dashboard`, `feat(scrape): harden winners graph ingestion`)
 /arc:commit — 1 commit (`docs: structure Agent Surface documentation`)

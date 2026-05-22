@@ -74,7 +74,6 @@ CROSS-CUTTING (available anytime):
               /arc:suggest    → What to work on next (+ discovery mode)
               /arc:document   → Capture solved problems
               /arc:tidy       → Clean up completed plans
-              /arc:rules      → Apply coding standards
               /arc:refactor   → Discover friction, propose deep-module refactors
               /arc:deps       → Dependency audit with batch upgrades
               /arc:help        → Context-aware guide to all commands

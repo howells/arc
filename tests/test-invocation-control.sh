@@ -6,7 +6,6 @@
 # - launch (go-live checklist)
 # - legal (generates legal documents)
 # - tidy (deletes/archives files)
-# - rules (modifies project files)
 
 section "Invocation Control Tests"
 
@@ -15,7 +14,6 @@ PROTECTED_SKILLS=(
     "prune-agents"
     "commit"
     "launch"
-    "rules"
     "tidy"
 )
 

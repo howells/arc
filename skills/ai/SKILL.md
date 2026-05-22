@@ -151,7 +151,7 @@ If `.ruler/ai-sdk.md` exists, it's already loaded by build agents. Note this to 
 If it doesn't exist but `.ruler/` does exist:
 ```
 Your project has coding rules (.ruler/) but no AI SDK rules yet.
-Run /arc:rules to update, or I can copy them now.
+I can consult Arc's internal AI SDK rules selectively if they are relevant.
 ```
 
 ## Step 6: Offer Next Steps
@@ -173,6 +173,6 @@ If user selects "Review existing AI code":
 <notes>
 - This skill is cross-cutting — invoke anytime, not just during implementation
 - The reference file (references/ai-sdk.md) is also loaded by /arc:implement when it detects `ai` in package.json
-- The rules file (rules/ai-sdk.md) is copied to .ruler/ by /arc:rules and loaded by all build agents
+- The rules file (rules/ai-sdk.md) is Arc-owned reference material. Consult it selectively when AI SDK work needs those conventions.
 - OpenRouter is the default provider per stack.md. The patterns use it throughout.
 </notes>

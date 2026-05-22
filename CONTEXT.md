@@ -58,6 +58,8 @@ Project, product, package, and feature naming is outside Arc's core lifecycle. A
 
 Project hook installation and machine/editor automation are outside Arc's core lifecycle. Arc may recommend verification commands during implementation or commit workflows, but it should not own installing Claude hooks, git hooks, shell automation, editor configuration, or personal environment guardrails.
 
+Project-wide rule installation is outside Arc's core lifecycle because copied rule bundles can clog agent context and become another environment setup surface. Arc may keep its own `rules/` corpus as internal reference material for workflows, but it should not expose a public workflow that copies those rules into a user's project or distributes them to other tools.
+
 Arc should not expose external skill dependencies for those checks. If a specialist practice matters to Arc, make it Arc-native: name it plainly, explain the judgment, and place it in the workflow where it belongs.
 
 ## Design Principles

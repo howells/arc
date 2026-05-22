@@ -123,10 +123,10 @@ These rules define MUST/SHOULD/NEVER constraints. Follow them during implementat
 
 **If `.ruler/` doesn't exist:**
 ```
-No coding rules found. Run /arc:rules to set up standards, or continue without rules.
+No project-local coding rules found. Continue with the project's existing conventions and consult Arc's internal rules selectively when relevant.
 ```
 
-Rules are optional — proceed without them if the user prefers.
+Project-local rules are optional. Do not copy Arc's rule bundle into the project unless the user explicitly asks for that setup.
 
 **For UI/frontend work, also load interface rules:**
 

@@ -68,19 +68,9 @@ export function ContentBrowser({
 
       <Tabs.Content value="rules">
         <p className="mb-[calc(var(--baseline)*1)] max-w-lg text-pretty text-neutral-600 text-sm leading-relaxed">
-          Opinionated coding rules using RFC 2119 terms (MUST/SHOULD/NEVER).
-          Apply to any project via{" "}
-          <span className="font-mono text-neutral-800">/arc:rules</span>
-          —designed for{" "}
-          <a
-            className="prose-link"
-            href="https://github.com/intellectronica/ruler"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Ruler
-          </a>{" "}
-          to distribute to any AI coding agent.
+          Opinionated coding rules using RFC 2119 terms (MUST/SHOULD/NEVER),
+          kept as Arc-owned reference material for workflows to load
+          selectively.
         </p>
         <RuleList onRuleClick={onRuleClick} rules={rules} />
       </Tabs.Content>

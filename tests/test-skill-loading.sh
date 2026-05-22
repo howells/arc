@@ -28,7 +28,6 @@ EXPECTED_SKILLS=(
     "refactor"
     "responsive"
     "review"
-    "rules"
     "seo"
     "suggest"
     "testing"
