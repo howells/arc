@@ -44,7 +44,6 @@ BUILD_AGENTS=(
 )
 
 WORKFLOW_AGENTS=(
-    "docs-writer"
     "e2e-test-runner"
     "plan-document-reviewer"
     "spec-document-reviewer"

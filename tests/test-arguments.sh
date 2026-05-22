@@ -11,7 +11,6 @@ section "Argument Handling Tests"
 SKILLS_WITH_ARGS=(
     "audit:<path-or-focus>"
     "commit:[push]"
-    "document:path-or-description"
 )
 
 echo "Verifying argument-hint is at root level..."

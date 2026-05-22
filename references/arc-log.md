@@ -72,7 +72,6 @@ Look for:
 | `/arc:audit` | Issue counts by severity |
 | `/arc:design` | UI designed, aesthetic direction |
 | `/arc:launch` | Public URL status |
-| `/arc:document` | Solution documented |
 | `/arc:commit` | What was committed |
 | `/arc:vision` | Vision created/updated |
 | `/arc:figma` | Components implemented |

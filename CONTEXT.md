@@ -74,6 +74,8 @@ Deep SEO auditing is outside Arc's public workflow surface because other special
 
 AI framework guidance is outside Arc's public workflow surface because the dedicated AI skill collection owns that space. Arc may implement AI-related product work when asked, but it should not maintain Vercel AI SDK references, migration rules, provider defaults, or AI-framework-specific setup workflows.
 
+Feature/API documentation generation is outside Arc's public workflow surface because Marginalia owns concise code documentation and IDE-friendly JSDoc. Arc may still create lifecycle artifacts such as specs, plans, audit reports, and launch checklists, but it should not own general docs generation, feature docs, public API docs, or package documentation workflows.
+
 Arc should not expose external skill dependencies for those checks. If a specialist practice matters to Arc, make it Arc-native: name it plainly, explain the judgment, and place it in the workflow where it belongs.
 
 ## Design Principles

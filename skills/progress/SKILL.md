@@ -81,7 +81,6 @@ Look for:
 | `/arc:audit` | Audit completed, issue counts by severity |
 | `/arc:design` | UI designed, aesthetic direction |
 | `/arc:launch` | Public URL status, checklist progress |
-| `/arc:document` | Solution documented, category |
 | `/arc:commit` | What was committed, branch |
 
 ## What Doesn't Get Logged

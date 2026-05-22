@@ -35,7 +35,6 @@ CROSS-CUTTING
         /arc:audit      - Comprehensive codebase audit (includes hygiene)
         /arc:refactor   - Find structural refactoring opportunities
         /arc:browse     - Rendered app evaluation through an expert persona
-        /arc:document   - Feature documentation
         /arc:suggest    - Project-local next-step triage
         /arc:responsive  - Mobile responsive audit & fix
 
@@ -75,7 +74,7 @@ Arc has two support tiers. Pick the one that matches the workflows you want:
 | Install mode | Claude plugin | Codex installer | `skills.sh` / prompt-only |
 |---|---|---|---|
 | Includes full Arc bundle (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`) | Yes | Yes | No |
-| Best for full-runtime workflows like `audit`, `review`, `implement`, `design`, `document`, `testing` | Yes | Yes | No |
+| Best for full-runtime workflows like `audit`, `review`, `implement`, `design`, `testing` | Yes | Yes | No |
 | Best for lightweight prompt-only routing and simple workflows | Yes | Yes | Yes |
 
 If a skill tells the agent to load Arc-owned files such as `agents/`, `references/`, `disciplines/`, `templates/`, or `scripts/`, treat that skill as **full-runtime**. Use the Claude plugin install or the Codex installer for those workflows.
@@ -256,7 +255,7 @@ You can also jump in at any point if you already have docs.
 - **One question at a time** — Arc asks focused questions, not overwhelming lists
 - **You're in control** — Suggestions are questions, not mandates. Say no if you disagree.
 - **TDD by default** — Implementation writes tests first, then code
-- **Documents are created** — Arc specs and plans go in `docs/arc/`, features in `docs/features/`
+- **Lifecycle artifacts are created** — Arc specs, plans, audits, and launch notes go in `docs/arc/` or `docs/audits/`
 
 ## Primary Flow
 
@@ -285,7 +284,6 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:audit` | Comprehensive codebase audit | `docs/audits/YYYY-MM-DD-*.md` |
 | `/arc:refactor` | Find structural refactoring opportunities | Refactor RFC / issue |
 | `/arc:browse` | Evaluate rendered app experience through an expert persona | `docs/arc/browse/YYYY-MM-DD-*.md` |
-| `/arc:document` | Document features | `docs/features/<feature>.md` |
 | `/arc:suggest` | Project-local next-step triage | Recommendations |
 | `/arc:commit` | Commit and push changes | Git commits |
 | `/arc:responsive` | Mobile responsive audit & fix | Responsive code changes |
@@ -299,7 +297,7 @@ Arc includes specialized agents across research, review, build, design, and work
 | **Research** | docs-researcher, git-history-analyzer |
 | **Review** | architecture-engineer, daniel-product-engineer, data-engineer, designer, lee-nextjs-engineer, performance-engineer, security-engineer, senior-engineer, accessibility-engineer, test-quality-engineer |
 | **Build** | implementer, fixer, debugger, ui-builder, figma-builder, design-specifier, unit-test-writer, integration-test-writer, e2e-test-writer, test-runner, e2e-runner, spec-reviewer, code-reviewer |
-| **Workflow** | spec-flow-analyzer, e2e-test-runner, docs-writer, spec-document-reviewer, plan-document-reviewer |
+| **Workflow** | spec-flow-analyzer, e2e-test-runner, spec-document-reviewer, plan-document-reviewer |
 
 ## Disciplines
 

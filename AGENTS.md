@@ -27,7 +27,6 @@ arc/
 │   ├── audit/SKILL.md      # Cross-cutting: codebase audit
 │   ├── commit/SKILL.md     # Cross-cutting: smart commits
 │   ├── suggest/SKILL.md    # Cross-cutting: what to work on
-│   ├── document/SKILL.md   # Cross-cutting: capture solutions
 │   ├── help/SKILL.md       # Utility: context-aware command guide
 │   └── progress/SKILL.md   # internal (progress journal)
 ├── agents/                  # Specialized subagents
@@ -64,7 +63,6 @@ CROSS-CUTTING (available anytime):
               /arc:audit      → Comprehensive codebase audit
               /arc:commit     → Smart commits with auto-splitting
               /arc:suggest    → Project-local next-step triage
-              /arc:document   → Capture solved problems
               /arc:refactor   → Discover friction, propose structural refactors
               /arc:help        → Context-aware guide to all commands
 ```

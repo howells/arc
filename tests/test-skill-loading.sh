@@ -15,7 +15,6 @@ EXPECTED_SKILLS=(
     "commit"
     "design"
     "detail"
-    "document"
     "go"
     "help"
     "ideate"
