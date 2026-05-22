@@ -195,11 +195,7 @@ When the user picks "Run a health check", run these sequentially — stop and re
    - Mechanical checks run first, then Arc surfaces the most relevant codebase risks.
    - If critical failures appear, report them and ask if the user wants to fix before continuing.
 
-2. **Check dependencies** — `Skill arc:deps`
-   - Outdated packages, known CVEs, major version bumps available.
-   - Present the deps report but don't auto-apply upgrades.
-
-3. **Surface what needs attention** — `Skill arc:suggest`
+2. **Surface what needs attention** — `Skill arc:suggest`
    - TODOs, technical debt, stale plans, vision gaps.
    - Gives the user a prioritized list of what to tackle.
 
@@ -209,7 +205,6 @@ After all three, summarize:
 ## Health Check Summary
 
 **Build:** [passing / failing — brief detail if failing]
-**Dependencies:** [N outdated, N with CVEs — or "all current"]
 **What needs attention:** [top 2-3 items from suggest]
 ```
 
@@ -238,4 +233,4 @@ AskUserQuestion:
 - Routes to all other /arc:* commands
 - Reads project-local plans, /arc:vision, and progress for context
 - Uses /arc:suggest when user is unsure
-- Chains /arc:audit → /arc:deps → /arc:suggest for stale repo health checks
+- Chains /arc:audit → /arc:suggest for stale repo health checks

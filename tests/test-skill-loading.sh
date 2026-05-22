@@ -14,7 +14,6 @@ EXPECTED_SKILLS=(
     "audit"
     "browse"
     "commit"
-    "deps"
     "design"
     "detail"
     "document"

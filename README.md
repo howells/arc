@@ -37,7 +37,6 @@ CROSS-CUTTING
         /arc:browse     - Rendered app evaluation through an expert persona
         /arc:document   - Feature documentation
         /arc:suggest    - Project-local next-step triage
-        /arc:deps       - Dependency management and updates
         /arc:responsive  - Mobile responsive audit & fix
         /arc:seo        - Deep SEO audit for web projects
 
@@ -290,7 +289,6 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:document` | Document features | `docs/features/<feature>.md` |
 | `/arc:suggest` | Project-local next-step triage | Recommendations |
 | `/arc:commit` | Commit and push changes | Git commits |
-| `/arc:deps` | Dependency management | Updated dependencies |
 | `/arc:responsive` | Mobile responsive audit & fix | Responsive code changes |
 | `/arc:seo` | Deep SEO audit for web projects | `docs/audits/YYYY-MM-DD-seo.md` |
 

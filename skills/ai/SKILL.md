@@ -16,7 +16,7 @@ website:
   why: |
     AI SDK v6 renamed or removed ~15 core APIs. Every AI coding tool has memorized the old APIs and will reliably generate broken code. This skill loads the correct patterns so agents produce working code on the first try.
   decisions:
-    - Cross-cutting skill. Available anytime, like /arc:deps or /arc:responsive.
+    - Cross-cutting skill. Available anytime, like /arc:responsive.
     - Loads both patterns (reference) and constraints (rules). Patterns teach what to do. Rules prevent what not to do.
     - Version-aware. Checks installed AI SDK version and warns about v5 → v6 migration.
   workflow:

@@ -68,6 +68,8 @@ Next-work suggestion is inside Arc only when it stays project-local and lifecycl
 
 The main entry workflow is also project-local. `/arc:go` should route from repository context, recent progress, plans, staleness, and the user's stated intent; it should not check Linear, present external issue queues, or make issue trackers the starting point.
 
+Dependency and package maintenance are outside Arc's public workflow surface because Monogrove owns that space. Arc may notice dependency risk as part of broader audits, but it should not expose dependency update, CVE remediation, alternative discovery, or batch-upgrade workflows.
+
 Arc should not expose external skill dependencies for those checks. If a specialist practice matters to Arc, make it Arc-native: name it plainly, explain the judgment, and place it in the workflow where it belongs.
 
 ## Design Principles

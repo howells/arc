@@ -162,7 +162,6 @@ Output ALL of these in order:
 | `/arc:commit` | Smart commit with auto-splitting across domains | When ready to commit changes |
 | `/arc:suggest` | Project-local next-step triage from plans, progress, TODOs, checks, and vision | Starting a session, unsure what to tackle |
 | `/arc:document` | Capture solved problems as searchable documentation | After solving a non-obvious problem |
-| `/arc:deps` | Dependency audit — outdated packages, CVEs, batch upgrades | Periodic maintenance, before shipping |
 
 ---
 

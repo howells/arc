@@ -77,7 +77,6 @@ Look for:
 | `/arc:vision` | Vision created/updated |
 | `/arc:figma` | Components implemented |
 | `/arc:seo` | SEO audit results |
-| `/arc:deps` | Dependency audit results |
 
 ## What Doesn't Get Logged
 
