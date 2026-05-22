@@ -66,6 +66,8 @@ Plan cleanup is outside Arc's public workflow surface. Arc may create and refere
 
 Next-work suggestion is inside Arc only when it stays project-local and lifecycle-oriented. `/arc:suggest` may triage visible repository signals such as current plans, progress, TODOs, failing checks, recent commits, and vision gaps; it should not own Linear priority queues, external market discovery, competitor research, or net-new product ideation.
 
+The main entry workflow is also project-local. `/arc:go` should route from repository context, recent progress, plans, staleness, and the user's stated intent; it should not check Linear, present external issue queues, or make issue trackers the starting point.
+
 Arc should not expose external skill dependencies for those checks. If a specialist practice matters to Arc, make it Arc-native: name it plainly, explain the judgment, and place it in the workflow where it belongs.
 
 ## Design Principles

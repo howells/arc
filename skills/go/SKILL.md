@@ -10,14 +10,14 @@ metadata:
 website:
   order: 1
   desc: Main entry point
-  summary: The front door to Arc. Understands your codebase, checks Linear for active issues, and routes you to the right workflow.
+  summary: The front door to Arc. Understands your codebase, reads recent project-local context, and routes you to the right workflow.
   what: |
-    Go explores your codebase to understand what you're working with, checks Linear for active issues (if MCP available), reads recent progress, and asks what you want to do. Based on your answer, it routes you to the appropriate Arc command—ideate for new features, implement for execution, suggest if you're unsure.
+    Go explores your codebase to understand what you're working with, reads recent progress and existing plans, and asks what you want to do. Based on your answer, it routes you to the appropriate Arc command—ideate for new features, implement for execution, suggest if you're unsure.
   why: |
     Starting is the hardest part. Go gives you context immediately and asks one focused question: what do you want to work on? No need to remember which Arc command does what.
   decisions:
     - Codebase exploration first. Knows your stack before asking questions.
-    - Linear integration. Shows active issues if Linear MCP is available.
+    - Project-local context only. Use repository signals, plans, progress, and staleness.
     - Routes, doesn't replace. Points you to the right command, then gets out of the way.
   workflow:
     position: spine
@@ -55,9 +55,6 @@ Keep it brief — 5-10 bullet points max."
 ls docs/vision.md docs/arc/specs/*.md docs/arc/plans/*.md docs/plans/*.md 2>/dev/null | head -10
 ```
 
-**Check Linear (if MCP available):**
-If `mcp__linear__*` tools exist, check for active issues.
-
 **Read progress journal for recent work:**
 ```bash
 head -50 docs/arc/progress.md 2>/dev/null
@@ -94,20 +91,6 @@ AskUserQuestion:
       description: "Check if it builds, review outdated deps, and surface what needs attention"
     - label: "I know what I want to work on"
       description: "Skip the checkup and jump straight in"
-    - label: "See suggestions"
-      description: "Run /arc:suggest for ideas on what to work on"
-```
-
-**If Linear has active issues:**
-```
-AskUserQuestion:
-  question: "You have [N] active issues in Linear. What would you like to do?"
-  header: "Active Issues Found"
-  options:
-    - label: "Work on an issue"
-      description: "Pick one of the active Linear issues to work on"
-    - label: "Start something new"
-      description: "Ignore existing issues and start fresh"
     - label: "See suggestions"
       description: "Run /arc:suggest for ideas on what to work on"
 ```
@@ -253,6 +236,6 @@ AskUserQuestion:
 ## Interop
 
 - Routes to all other /arc:* commands
-- Reads Linear issues (if MCP available), /arc:vision, progress for context
+- Reads project-local plans, /arc:vision, and progress for context
 - Uses /arc:suggest when user is unsure
 - Chains /arc:audit → /arc:deps → /arc:suggest for stale repo health checks
