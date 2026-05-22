@@ -17,9 +17,9 @@ assert_dir_exists "$PLUGIN_ROOT/commands" "commands/ directory"
 # The skills/ directory SHOULD exist
 assert_dir_exists "$PLUGIN_ROOT/skills" "skills/ directory"
 
-# plugin.json should exist
+# Claude plugin.json should exist
 PLUGIN_JSON="$PLUGIN_ROOT/.claude-plugin/plugin.json"
-assert_file_exists "$PLUGIN_JSON" "plugin.json"
+assert_file_exists "$PLUGIN_JSON" "Claude plugin.json"
 
 # plugin.json should contain "commands" key
 assert_file_contains "$PLUGIN_JSON" '"commands"' \
@@ -29,7 +29,13 @@ assert_file_contains "$PLUGIN_JSON" '"commands"' \
 assert_file_contains "$PLUGIN_JSON" '"skills"' \
     "plugin.json references skills"
 
-# Version should be 1.0.67 or higher
+# Codex plugin.json should exist and point at the shared skills directory
+CODEX_PLUGIN_JSON="$PLUGIN_ROOT/.codex-plugin/plugin.json"
+assert_file_exists "$CODEX_PLUGIN_JSON" "Codex plugin.json"
+assert_file_contains "$CODEX_PLUGIN_JSON" '"skills"' \
+    "Codex plugin.json references skills"
+
+# Version should be present
 echo ""
 echo "Checking version..."
 version=$(grep '"version"' "$PLUGIN_JSON" | head -1 | sed 's/.*"version": *"\([^"]*\)".*/\1/')

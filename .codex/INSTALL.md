@@ -1,6 +1,6 @@
 # Installing Arc for Codex
 
-Enable Arc skills in Codex with the supported full-runtime install.
+Enable Arc in Codex with the supported full-runtime install. Arc also includes a native `.codex-plugin/plugin.json` manifest for Codex plugin hosts that install from plugin metadata.
 
 Codex Desktop indexes installed skills from `~/.codex/skills`. Arc also mirrors them into
 `~/.agents/skills` as a compatibility layer for environments that still surface home-local
@@ -54,7 +54,7 @@ done
 ## Verify
 
 ```bash
-ls -la ~/.codex/skills/{go,audit,design}
+ls -la ~/.codex/skills/{audit,ideate,implement}
 readlink ~/.codex/skills/audit
 ```
 
@@ -62,7 +62,7 @@ You should see direct skill symlinks pointing into `~/.codex/arc/.agents/skills/
 If you want to confirm the compatibility mirror too:
 
 ```bash
-ls -la ~/.agents/skills/{go,audit,design}
+ls -la ~/.agents/skills/{audit,ideate,implement}
 readlink ~/.agents/skills/audit
 ```
 

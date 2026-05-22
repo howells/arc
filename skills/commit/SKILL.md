@@ -1,6 +1,5 @@
 ---
 name: commit
-disable-model-invocation: true
 description: |
   Smart commit, push, and npm publish with auto-splitting across domains.
   Creates atomic commits. Use when asked to "commit", "push changes", "publish",

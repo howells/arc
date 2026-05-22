@@ -12,7 +12,7 @@ The full arc from idea to shipped code.
 Arc is a self-contained software development lifecycle for coding agents. It helps move work from early project clarity through ideation, implementation, review, testing, launch readiness, and clean commits.
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code): install as a plugin and run `/arc:*` commands.
-- Codex: install Arc as skills and invoke the same workflows with `$<skill-name>`.
+- Codex: install Arc as skills or as a native Codex plugin, then invoke workflows with `$<skill-name>`.
 
 Arc's canonical product definition and operating boundary live in [CONTEXT.md](./CONTEXT.md). This README is the user-facing guide.
 
@@ -75,6 +75,7 @@ curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh 
 ```
 
 The Codex installer clones Arc to `~/.codex/arc`, exposes direct skills under `~/.codex/skills`, and mirrors them into `~/.agents/skills` for compatibility.
+Arc also includes `.codex-plugin/plugin.json` for native Codex plugin hosts that install from plugin manifests.
 
 ### Prompt-Only Install
 
@@ -82,7 +83,7 @@ The Codex installer clones Arc to `~/.codex/arc`, exposes direct skills under `~
 npx skills add howells/arc
 ```
 
-This copies `SKILL.md` prompts to supported agents. It is useful for lightweight guidance, but it does not include Arc's bundled agents, references, disciplines, templates, scripts, or rules. Workflows such as `audit`, `review`, `implement`, `refactor`, and `testing` work best with the Claude plugin or Codex full-runtime install.
+This copies `SKILL.md` prompts to supported agents. It is useful for lightweight guidance, but it does not include Arc's bundled agents, references, disciplines, templates, scripts, or rules. Workflows such as `audit`, `review`, `implement`, `refactor`, and `testing` work best with the Claude plugin, native Codex plugin, or Codex full-runtime install.
 
 ## Invoking Arc
 

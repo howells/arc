@@ -1,6 +1,5 @@
 ---
 name: launch
-disable-model-invocation: true
 description: |
   Go-live and shareability checklist covering the basics needed to make a project visitable,
   shareable, and ready for a first real audience. Use when asked to "launch", "go live",

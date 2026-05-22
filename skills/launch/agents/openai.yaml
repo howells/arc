@@ -1,0 +1,6 @@
+interface:
+  display_name: "Arc Launch"
+  short_description: "Check go-live readiness basics"
+  default_prompt: "Use $launch to check whether this project is ready to go live."
+policy:
+  allow_implicit_invocation: false
