@@ -5,7 +5,6 @@
 # - commit (user controls when to commit)
 # - launch (go-live checklist)
 # - legal (generates legal documents)
-# - tidy (deletes/archives files)
 
 section "Invocation Control Tests"
 
@@ -13,7 +12,6 @@ section "Invocation Control Tests"
 PROTECTED_SKILLS=(
     "commit"
     "launch"
-    "tidy"
 )
 
 echo "Verifying destructive skills are protected..."

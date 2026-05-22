@@ -30,7 +30,6 @@ arc/
 │   ├── commit/SKILL.md     # Cross-cutting: smart commits
 │   ├── suggest/SKILL.md    # Cross-cutting: what to work on
 │   ├── document/SKILL.md   # Cross-cutting: capture solutions
-│   ├── tidy/SKILL.md       # Cross-cutting: cleanup plans
 │   ├── deps/SKILL.md       # Cross-cutting: dependency audit
 │   ├── help/SKILL.md       # Utility: context-aware command guide
 │   └── progress/SKILL.md   # internal (progress journal)
@@ -71,7 +70,6 @@ CROSS-CUTTING (available anytime):
               /arc:commit     → Smart commits with auto-splitting
               /arc:suggest    → What to work on next (+ discovery mode)
               /arc:document   → Capture solved problems
-              /arc:tidy       → Clean up completed plans
               /arc:refactor   → Discover friction, propose structural refactors
               /arc:deps       → Dependency audit with batch upgrades
               /arc:help        → Context-aware guide to all commands

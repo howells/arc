@@ -162,7 +162,6 @@ Output ALL of these in order:
 | `/arc:commit` | Smart commit with auto-splitting across domains | When ready to commit changes |
 | `/arc:suggest` | What to work on next — analyzes codebase, issues, and debt | Starting a session, unsure what to tackle |
 | `/arc:document` | Capture solved problems as searchable documentation | After solving a non-obvious problem |
-| `/arc:tidy` | Clean up completed plans in docs/arc/plans/ | When plan files accumulate |
 | `/arc:deps` | Dependency audit — outdated packages, CVEs, batch upgrades | Periodic maintenance, before shipping |
 
 ---
@@ -183,7 +182,7 @@ Based on what I found in your project:
 
 Pick 2-4 commands that make the most sense given:
 - What's **missing** (no vision doc → suggest `/arc:vision`)
-- What's **stale** (old plans → suggest `/arc:tidy`)
+- What's **stale** (old plans → mention them, but do not route to a cleanup workflow)
 - What **just changed** (recent UI edits → suggest `/arc:design` or `/arc:audit`)
 - What **could be improved** (no tests → suggest `/arc:testing`)
 

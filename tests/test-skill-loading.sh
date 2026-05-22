@@ -30,7 +30,6 @@ EXPECTED_SKILLS=(
     "seo"
     "suggest"
     "testing"
-    "tidy"
     "using-arc"
     "vision"
 )

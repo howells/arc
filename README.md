@@ -40,7 +40,6 @@ CROSS-CUTTING
         /arc:deps       - Dependency management and updates
         /arc:responsive  - Mobile responsive audit & fix
         /arc:seo        - Deep SEO audit for web projects
-        /arc:tidy       - Clean up completed plans
 
 TOOLS   /arc:commit     - Smart commit + push with auto-splitting
 ```
@@ -291,7 +290,6 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:document` | Document features | `docs/features/<feature>.md` |
 | `/arc:suggest` | What to work on next (+ discovery mode) | Recommendations |
 | `/arc:commit` | Commit and push changes | Git commits |
-| `/arc:tidy` | Clean up completed plans | Archived/deleted plans |
 | `/arc:deps` | Dependency management | Updated dependencies |
 | `/arc:responsive` | Mobile responsive audit & fix | Responsive code changes |
 | `/arc:seo` | Deep SEO audit for web projects | `docs/audits/YYYY-MM-DD-seo.md` |

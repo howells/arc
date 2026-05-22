@@ -62,6 +62,8 @@ Project-wide rule installation is outside Arc's core lifecycle because copied ru
 
 Machine process cleanup is outside Arc's core lifecycle. Arc workflows may finish cleanly and report spawned work, but they should not expose commands that kill local Claude, shell, editor, or background processes.
 
+Plan cleanup is outside Arc's public workflow surface. Arc may create and reference plans during implementation, but it should not expose a separate command for deleting, archiving, or housekeeping old planning files.
+
 Arc should not expose external skill dependencies for those checks. If a specialist practice matters to Arc, make it Arc-native: name it plainly, explain the judgment, and place it in the workflow where it belongs.
 
 ## Design Principles
