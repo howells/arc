@@ -148,8 +148,8 @@ export function InstallTabs() {
                 SKILL.md
               </code>{" "}
               files only — you get the skill instructions but not the supporting
-              agents, hooks, or orchestration. Best for lightweight prompt-only
-              usage. Full-runtime workflows that load Arc-owned `agents/`,
+              agents or orchestration. Best for lightweight prompt-only usage.
+              Full-runtime workflows that load Arc-owned `agents/`,
               `references/`, `disciplines/`, `templates/`, or `scripts/` require
               the Claude plugin or Codex installer tabs above.
             </p>

@@ -56,6 +56,8 @@ Brand identity creation is outside Arc's core lifecycle. Arc design workflows ma
 
 Project, product, package, and feature naming is outside Arc's core lifecycle. Arc vision or ideation workflows may ask for or use an existing name, but Arc should not own naming strategy, domain availability checks, GitHub conflict checks, or product-name validation.
 
+Project hook installation and machine/editor automation are outside Arc's core lifecycle. Arc may recommend verification commands during implementation or commit workflows, but it should not own installing Claude hooks, git hooks, shell automation, editor configuration, or personal environment guardrails.
+
 Arc should not expose external skill dependencies for those checks. If a specialist practice matters to Arc, make it Arc-native: name it plainly, explain the judgment, and place it in the workflow where it belongs.
 
 ## Design Principles

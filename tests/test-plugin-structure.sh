@@ -17,9 +17,6 @@ assert_dir_exists "$PLUGIN_ROOT/commands" "commands/ directory"
 # The skills/ directory SHOULD exist
 assert_dir_exists "$PLUGIN_ROOT/skills" "skills/ directory"
 
-# Plugin-level hooks should exist
-assert_file_exists "$PLUGIN_ROOT/hooks/hooks.json" "hooks/hooks.json"
-
 # plugin.json should exist
 PLUGIN_JSON="$PLUGIN_ROOT/.claude-plugin/plugin.json"
 assert_file_exists "$PLUGIN_JSON" "plugin.json"

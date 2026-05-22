@@ -165,7 +165,6 @@ Output ALL of these in order:
 | `/arc:tidy` | Clean up completed plans in docs/arc/plans/ | When plan files accumulate |
 | `/arc:rules` | Apply Arc's coding rules to the project | Setting up a new project with Arc conventions |
 | `/arc:deps` | Dependency audit — outdated packages, CVEs, batch upgrades | Periodic maintenance, before shipping |
-| `/arc:hooks` | Install Claude Code hooks for auto-formatting, linting, context | Setting up development environment |
 
 **UTILITY**
 

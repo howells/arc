@@ -33,7 +33,6 @@ arc/
 │   ├── tidy/SKILL.md       # Cross-cutting: cleanup plans
 │   ├── rules/SKILL.md      # Cross-cutting: coding standards
 │   ├── deps/SKILL.md       # Cross-cutting: dependency audit
-│   ├── hooks/SKILL.md      # Cross-cutting: auto-format + context hooks
 │   ├── help/SKILL.md       # Utility: context-aware command guide
 │   ├── prune-agents/SKILL.md # Utility: kill orphaned subagents
 │   └── progress/SKILL.md   # internal (progress journal)
@@ -42,7 +41,6 @@ arc/
 │   ├── review/
 │   ├── research/
 │   └── workflow/
-├── hooks/                   # Claude Code hooks (statusline, context monitor)
 ├── disciplines/             # Implementation methodologies
 ├── references/              # Domain knowledge
 ├── templates/               # Output templates
@@ -79,7 +77,6 @@ CROSS-CUTTING (available anytime):
               /arc:rules      → Apply coding standards
               /arc:refactor   → Discover friction, propose deep-module refactors
               /arc:deps       → Dependency audit with batch upgrades
-              /arc:hooks      → Auto-format, lint, and context monitor hooks
               /arc:help        → Context-aware guide to all commands
               /arc:prune-agents → Kill orphaned subagent processes
 ```

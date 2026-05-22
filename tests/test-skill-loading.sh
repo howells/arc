@@ -20,7 +20,6 @@ EXPECTED_SKILLS=(
     "document"
     "go"
     "help"
-    "hooks"
     "ideate"
     "implement"
     "launch"

@@ -1,6 +1,6 @@
 {
   "name": "arc",
-  "version": "1.3.30",
+  "version": "1.3.32",
   "description": "The full arc from idea to shipped code. Scope-aware implementation, design, audit, and review workflows for Claude Code and Codex.",
   "skills": "./skills/",
   "commands": "./commands/",
