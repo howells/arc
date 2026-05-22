@@ -47,7 +47,7 @@ Task general-purpose model: haiku: "Run tsc --noEmit and fix errors"
 - Debugging failing tests
 - Spec compliance checks
 - Writing unit and integration tests
-- Research agents (docs, git history, naming)
+- Research agents (docs, git history)
 
 ```
 Task debugger model: sonnet: "Debug failing test..."

@@ -125,7 +125,6 @@ Output ALL of these in order:
 |---------|-------------|-------------|
 | `/arc:ideate` | Turn an idea into a validated design through collaborative dialogue | New features that need thinking before building |
 | `/arc:design` | Create distinctive, non-generic UI with aesthetic direction and wireframes | When building UI that should be memorable |
-| `/arc:naming` | Generate and validate project names with domain/GitHub checks | Naming a new project or product |
 
 **EXECUTE**
 

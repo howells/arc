@@ -54,6 +54,8 @@ Arc may include specialist checks when they are part of that cycle. For example,
 
 Brand identity creation is outside Arc's core lifecycle. Arc design workflows may consume an existing `docs/brand-system.md`, but Arc should not own brand discovery, identity direction generation, or brand asset production.
 
+Project, product, package, and feature naming is outside Arc's core lifecycle. Arc vision or ideation workflows may ask for or use an existing name, but Arc should not own naming strategy, domain availability checks, GitHub conflict checks, or product-name validation.
+
 Arc should not expose external skill dependencies for those checks. If a specialist practice matters to Arc, make it Arc-native: name it plainly, explain the judgment, and place it in the workflow where it belongs.
 
 ## Design Principles

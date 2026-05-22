@@ -37,7 +37,6 @@ CROSS-CUTTING
         /arc:browse     - Rendered app evaluation through an expert persona
         /arc:document   - Feature documentation
         /arc:suggest    - Opinionated next-step recommendations (+ discovery mode)
-        /arc:naming     - Generate and validate project names
         /arc:deps       - Dependency management and updates
         /arc:responsive  - Mobile responsive audit & fix
         /arc:seo        - Deep SEO audit for web projects
@@ -293,7 +292,6 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:browse` | Evaluate rendered app experience through an expert persona | `docs/arc/browse/YYYY-MM-DD-*.md` |
 | `/arc:document` | Document features | `docs/features/<feature>.md` |
 | `/arc:suggest` | What to work on next (+ discovery mode) | Recommendations |
-| `/arc:naming` | Generate project names | Name candidates |
 | `/arc:commit` | Commit and push changes | Git commits |
 | `/arc:rules` | Apply coding standards | `.ruler/` directory |
 | `/arc:tidy` | Clean up completed plans | Archived/deleted plans |
@@ -308,7 +306,7 @@ Arc includes specialized agents across research, review, build, design, and work
 
 | Category | Agents |
 |----------|--------|
-| **Research** | docs-researcher, git-history-analyzer, naming |
+| **Research** | docs-researcher, git-history-analyzer |
 | **Review** | architecture-engineer, daniel-product-engineer, data-engineer, designer, lee-nextjs-engineer, performance-engineer, security-engineer, senior-engineer, seo-engineer, accessibility-engineer, test-quality-engineer |
 | **Build** | implementer, fixer, debugger, ui-builder, figma-builder, design-specifier, unit-test-writer, integration-test-writer, e2e-test-writer, test-runner, e2e-runner, spec-reviewer, code-reviewer |
 | **Workflow** | spec-flow-analyzer, e2e-test-runner, docs-writer, spec-document-reviewer, plan-document-reviewer |

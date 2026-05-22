@@ -26,7 +26,6 @@ REVIEW_AGENTS=(
 RESEARCH_AGENTS=(
     "docs-researcher"
     "git-history-analyzer"
-    "naming"
 )
 
 BUILD_AGENTS=(

@@ -22,7 +22,6 @@ arc/
 │   ├── ai/SKILL.md         # 6. Execute: AI SDK patterns
 │   ├── testing/SKILL.md    # 7. Test: strategy & execution
 │   ├── launch/SKILL.md     # 8. Launch: go-live checklist
-│   ├── naming/SKILL.md     # Cross-cutting: project naming
 │   ├── refactor/SKILL.md   # Cross-cutting: structural refactor planning
 │   ├── browse/SKILL.md     # Cross-cutting: expert browser experience evaluation
 │   ├── responsive/SKILL.md # Cross-cutting: mobile responsive audit
@@ -70,7 +69,6 @@ All commands use the `/arc:` namespace prefix. The typical workflow:
 
 CROSS-CUTTING (available anytime):
               /arc:browse     → Expert browser experience evaluation
-              /arc:naming     → Generate and validate project names
               /arc:responsive → Mobile responsive audit & fix
               /arc:seo        → Deep SEO audit
               /arc:audit      → Comprehensive codebase audit

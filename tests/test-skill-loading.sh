@@ -24,7 +24,6 @@ EXPECTED_SKILLS=(
     "ideate"
     "implement"
     "launch"
-    "naming"
     "progress"
     "prune-agents"
     "refactor"
