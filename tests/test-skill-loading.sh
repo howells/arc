@@ -10,7 +10,6 @@ section "Skill Loading Tests"
 
 # Expected skills
 EXPECTED_SKILLS=(
-    "ai"
     "audit"
     "browse"
     "commit"

@@ -37,7 +37,6 @@ Paths in this skill use these conventions:
 **Load these only if relevant:**
 - references/model-strategy.md — if dispatching build agents
 - references/frontend-design.md — if UI work involved
-- references/ai-sdk.md — if `ai` in package.json
 
 **For UI work, also load interface rules:**
 - rules/interface/design.md — Visual principles

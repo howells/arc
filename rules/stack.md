@@ -17,7 +17,6 @@ Every project uses these. Non-negotiable.
 | Biome + Ultracite | Formatting/linting | Single tool, Rust-based. See [code-style.md](code-style.md) |
 | Vercel | Hosting | Deployment, preview environments, cron jobs |
 | TanStack React Query | Server state | MUST for all client-side data fetching |
-| Vercel AI SDK 6 | AI integration | MUST for any AI features. See [ai-sdk.md](ai-sdk.md) for v6 API changes. Run `/arc:ai` for guided setup |
 
 ## Default (SHOULD)
 
@@ -91,12 +90,6 @@ Proven options for specific needs. Install when the project requires them.
 ### Files
 
 - **Stow** — Managed file upload and delivery
-
-### AI
-
-- **OpenRouter** — Multi-model API access (Claude, Gemini, etc.). Use with AI SDK via `@openrouter/ai-sdk-provider`
-- **fal.ai** — Image generation (GPT-Image, Flux, etc.)
-- **Voyage AI** — Embeddings for semantic search and RAG
 
 ### Native
 

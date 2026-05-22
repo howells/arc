@@ -131,7 +131,6 @@ Output ALL of these in order:
 | Command | What it does | When to use |
 |---------|-------------|-------------|
 | `/arc:implement` | Scope-aware planning and execution with TDD | Small fixes through substantial features |
-| `/arc:ai` | AI SDK guidance — correct patterns, deprecated API warnings | Before implementing any AI feature |
 
 **REVIEW**
 

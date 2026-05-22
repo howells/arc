@@ -116,7 +116,6 @@ Task [agent-name] model: [model]: "[task description with context]"
 | Always | security.md |
 | `drizzle` or `prisma` in package.json | database.md |
 | `wrangler.toml` exists | cloudflare-workers.md |
-| `ai` in package.json | ai-sdk.md |
 | `@clerk/nextjs` or `@workos-inc/authkit-nextjs` in package.json | auth.md |
 
 These rules define MUST/SHOULD/NEVER constraints. Follow them during implementation.
@@ -145,7 +144,6 @@ Project-local rules are optional. Do not copy Arc's rule bundle into the project
 - `references/nextjs-app-router.md` — Next.js App Router patterns (if using Next.js)
 - `references/tanstack-query-trpc.md` — TanStack Query + tRPC patterns (if data fetching)
 - `references/tanstack-table.md` — TanStack Table v8 patterns (if data tables)
-- `references/ai-sdk.md` — AI SDK 6 patterns (if `ai` in package.json)
 </rules_context>
 
 <process>

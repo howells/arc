@@ -118,9 +118,9 @@ Pass relevant rules to each reviewer agent.
 | security-engineer | api.md, env.md, integrations.md, auth.md (if Clerk/WorkOS), react-correctness.md (security section) |
 | architecture-engineer | stack.md, turborepo.md |
 | lee-nextjs-engineer | nextjs.md, api.md, react-correctness.md (Next.js-specific rules) |
-| senior-engineer | code-style.md, typescript.md, react.md, error-handling.md, ai-sdk.md (if AI SDK) |
+| senior-engineer | code-style.md, typescript.md, react.md, error-handling.md |
 | data-engineer | testing.md, api.md |
-| daniel-product-engineer | react.md, typescript.md, ai-sdk.md (if AI SDK), react-performance.md, react-correctness.md |
+| daniel-product-engineer | react.md, typescript.md, react-performance.md, react-correctness.md |
 | performance-engineer | react-performance.md |
 
 **For UI/frontend audits, also load interface rules:**
@@ -181,17 +181,6 @@ Do not advertise audit flags or variants. If the user provides a path or focus, 
 **Check for database/migrations:**
 
 **Use Glob tool:** `prisma/*`, `drizzle/*`, `migrations/*` → has-db
-
-**Check for AI SDK:**
-
-**Use Grep tool:** `"ai"` in `package.json` → has-ai-sdk
-
-If detected, run a quick deprecated API scan:
-```bash
-grep -rn --include='*.ts' --include='*.tsx' -E 'generateObject|maxTokens[^A-Z]|toDataStreamResponse|addToolResult|maxSteps[^A-Z]|part\.args|part\.result[^s]' src/ app/ 2>/dev/null | head -20
-```
-
-If deprecated APIs found, include count in the detection summary and flag for reviewers. These are mechanical fixes — load `rules/ai-sdk.md` and pass the migration table to the implementing agent.
 
 **Collect React audit signal manifest (React/Next.js/React Native projects only):**
 
@@ -351,7 +340,6 @@ Project type: [Next.js / React / Python / etc.]
 Project scale: [small / medium / large]
 Project stage: [prototype / development / pre-launch / production]
 Has database: [yes/no]
-Has AI SDK: [yes/no + deprecated API count if any]
 Has tests: [yes/no]
 Dead code: [X unused files, Y unused exports, Z unused deps] or "N/A (not JS/TS)"
 Structural hotspots: [X long files >250 LOC, Y severe >400 LOC, Z suspicious boundary files, W suspicious+long overlap]

@@ -72,7 +72,6 @@ You build interfaces that are memorable, not generic. You have strong design opi
 **Also check project rules:**
 - `.ruler/react.md` — Project React conventions
 - `.ruler/tailwind.md` — Project Tailwind conventions
-- `.ruler/ai-sdk.md` — If AI SDK (`ai` package, for useChat patterns)
 </rules_context>
 
 ## Before You Build

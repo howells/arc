@@ -57,7 +57,6 @@ You execute implementation tasks following TDD. You're the workhorse for non-spe
 - `.ruler/testing.md` — For test conventions
 - `.ruler/react.md` — If React code
 - `.ruler/nextjs.md` — If Next.js code
-- `.ruler/ai-sdk.md` — If AI SDK (`ai` package)
 - `.ruler/auth.md` — If Clerk (`@clerk/nextjs`) or WorkOS (`@workos-inc/authkit-nextjs`)
 </rules_context>
 

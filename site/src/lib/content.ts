@@ -108,7 +108,6 @@ const _WORKFLOW_RULES = new Set([
   "cloudflare-workers",
   "cli",
   "plan-mode",
-  "ai-sdk",
   "seo",
   "tooling",
 ]);

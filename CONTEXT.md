@@ -72,6 +72,8 @@ Dependency and package maintenance are outside Arc's public workflow surface bec
 
 Deep SEO auditing is outside Arc's public workflow surface because other specialist skills own that space. Arc launch keeps basic shareability and accidental noindex/robots blocker checks, but it should not own sitemap depth, Search Console, structured data, canonical strategy, or search-optimization audits.
 
+AI framework guidance is outside Arc's public workflow surface because the dedicated AI skill collection owns that space. Arc may implement AI-related product work when asked, but it should not maintain Vercel AI SDK references, migration rules, provider defaults, or AI-framework-specific setup workflows.
+
 Arc should not expose external skill dependencies for those checks. If a specialist practice matters to Arc, make it Arc-native: name it plainly, explain the judgment, and place it in the workflow where it belongs.
 
 ## Design Principles
