@@ -25,7 +25,6 @@ When multiple reviewers map to one axis, use the **lower** score (conservative).
 |------|------|---------------------|
 | UI/Design | Frontend projects | designer |
 | Accessibility | Frontend projects | accessibility-engineer |
-| SEO | Public-facing web | seo-engineer |
 
 Bonus axes are reported separately as `+N` (e.g., `14/21 +7/9`).
 
@@ -133,19 +132,6 @@ Can everyone use this?
 | 1 | Some semantic elements, basic alt text, but keyboard nav broken, poor contrast, no focus management |
 | 2 | Semantic HTML, keyboard navigable, proper ARIA, good contrast. Missing prefers-reduced-motion or focus trapping in modals |
 | 3 | WCAG 2.1 AA — screen reader tested, reduced-motion support, skip links, focus management, form accessibility complete |
-
-### Bonus: SEO (Public-facing web only)
-
-Will search engines and social platforms find and understand this?
-
-| Score | Criteria |
-|-------|----------|
-| 0 | No meta tags, no sitemap, no robots.txt, no structured data |
-| 1 | Basic meta tags but incomplete — missing OG images on some pages, no structured data |
-| 2 | Complete meta tags, OG images, sitemap, robots.txt. Missing structured data or pages lack unique descriptions |
-| 3 | Full SEO — unique meta per page, JSON-LD structured data, OG images, sitemap, canonical URLs, proper heading hierarchy |
-
----
 
 ## Interpreting the Total
 

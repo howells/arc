@@ -76,7 +76,6 @@ Look for:
 | `/arc:commit` | What was committed |
 | `/arc:vision` | Vision created/updated |
 | `/arc:figma` | Components implemented |
-| `/arc:seo` | SEO audit results |
 
 ## What Doesn't Get Logged
 
@@ -99,7 +98,6 @@ Look for:
 /arc:commit — 1 commit (`chore(materialvision): ignore pnpm lockfile`)
 /arc:commit — 1 commit (`docs: record architecture decisions`)
 /arc:commit — 1 commit (`feat(evaluation): add depth policy`)
-/arc:seo — Architizer SEO audit completed: sitemap coverage is the launch blocker; canonical/social metadata, Search Console verification, detail-page metadata, and structured data coverage need a focused SEO infrastructure pass.
 /arc:commit — 1 commit (`docs(surface): refresh skill workflow`)
 /arc:commit — 1 commit (`feat(home): add agentic primitives section`)
 /arc:commit — 1 commit (`feat: add provider-aware generation matrix`)

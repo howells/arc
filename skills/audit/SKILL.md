@@ -122,7 +122,6 @@ Pass relevant rules to each reviewer agent.
 | data-engineer | testing.md, api.md |
 | daniel-product-engineer | react.md, typescript.md, ai-sdk.md (if AI SDK), react-performance.md, react-correctness.md |
 | performance-engineer | react-performance.md |
-| seo-engineer | seo.md |
 
 **For UI/frontend audits, also load interface rules:**
 
@@ -406,7 +405,6 @@ Include the mechanical summary in reviewer context, then continue to reviewer se
 - If UI-heavy (React/Next.js, medium/large) → add `designer`
 - If UI-heavy (React/Next.js, medium/large) → add `accessibility-engineer`
 - If test files detected (medium/large) → add `test-quality-engineer`
-- If project has marketing/public pages (pre-launch/production stage) → add `seo-engineer`
 
 **Focus guidance:**
 - Security focus → prioritize `security-engineer`
@@ -414,7 +412,6 @@ Include the mechanical summary in reviewer context, then continue to reviewer se
 - Architecture focus → prioritize `architecture-engineer`
 - Design focus → prioritize `designer`
 - Accessibility focus → prioritize `accessibility-engineer`
-- SEO focus → prioritize `seo-engineer`
 
 **Final reviewer list:**
 - Small projects: 2-3 reviewers
@@ -455,7 +452,6 @@ Batch 3: lee-nextjs-engineer, senior-engineer
 | senior-engineer | sonnet | Code review reasoning |
 | data-engineer | sonnet | Data safety reasoning |
 | **designer** | **opus** | **Aesthetic judgment requires premium model** |
-| seo-engineer | sonnet | Pattern recognition for SEO elements |
 
 **Include project stage in every reviewer prompt.**
 
@@ -590,7 +586,6 @@ Focus on: aesthetic direction, memorable elements, typography, color cohesion, A
 | test-quality-engineer | 5. Test Health |
 | designer | Bonus: UI/Design |
 | accessibility-engineer | Bonus: Accessibility |
-| seo-engineer | Bonus: SEO |
 
 When a reviewer scores two axes (daniel-product-engineer), include both criteria tables and ask for both scores.
 
@@ -657,7 +652,7 @@ Collect axis scores from reviewer outputs and apply derivation rules from `audit
    - Type errors or lint failures → 1
    - Clean build + CI exists → 2
    - Full pipeline with monitoring/logging → 3
-4. **Bonus axes:** Collect from designer, accessibility-engineer, seo-engineer if they ran.
+4. **Bonus axes:** Collect from designer and accessibility-engineer if they ran.
 5. **Sum** the 7 core scores for the total. Report bonus axes as `+N/M` separately.
 
 If a core axis had no reviewer (e.g., small project skipped architecture-engineer), score it based on the mechanical signals available or mark as `--` (not evaluated). Adjust the denominator: `X/18` if one axis skipped, etc.

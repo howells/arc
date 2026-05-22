@@ -48,7 +48,7 @@ Arc owns the software development cycle:
 6. Prepare the project to ship.
 7. Commit, document, and keep progress legible.
 
-Launch readiness means the project is visitable, shareable, and ready for a first real audience. It covers go-live basics such as deployment, domain, HTTPS, environment variables, access gates, metadata, social previews, favicons, obvious placeholders, accidental robots/noindex blockers, and production settings for detected services. It should not expand into deep SEO, responsive, testing, security, or code-health work; those belong to specialist workflows.
+Launch readiness means the project is visitable, shareable, and ready for a first real audience. It covers go-live basics such as deployment, domain, HTTPS, environment variables, access gates, metadata, social previews, favicons, obvious placeholders, accidental robots/noindex blockers, and production settings for detected services. It should not expand into responsive, testing, security, code-health, or deep search-optimization work; those belong outside launch or Arc.
 
 Arc may include specialist checks when they are part of that cycle. For example, implementation and review workflows can check for reusable components, concise public API docs, architecture boundaries, oversized files, responsive behavior, and browser-visible regressions.
 
@@ -69,6 +69,8 @@ Next-work suggestion is inside Arc only when it stays project-local and lifecycl
 The main entry workflow is also project-local. `/arc:go` should route from repository context, recent progress, plans, staleness, and the user's stated intent; it should not check Linear, present external issue queues, or make issue trackers the starting point.
 
 Dependency and package maintenance are outside Arc's public workflow surface because Monogrove owns that space. Arc may notice dependency risk as part of broader audits, but it should not expose dependency update, CVE remediation, alternative discovery, or batch-upgrade workflows.
+
+Deep SEO auditing is outside Arc's public workflow surface because other specialist skills own that space. Arc launch keeps basic shareability and accidental noindex/robots blocker checks, but it should not own sitemap depth, Search Console, structured data, canonical strategy, or search-optimization audits.
 
 Arc should not expose external skill dependencies for those checks. If a specialist practice matters to Arc, make it Arc-native: name it plainly, explain the judgment, and place it in the workflow where it belongs.
 

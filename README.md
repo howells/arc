@@ -38,7 +38,6 @@ CROSS-CUTTING
         /arc:document   - Feature documentation
         /arc:suggest    - Project-local next-step triage
         /arc:responsive  - Mobile responsive audit & fix
-        /arc:seo        - Deep SEO audit for web projects
 
 TOOLS   /arc:commit     - Smart commit + push with auto-splitting
 ```
@@ -290,7 +289,6 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:suggest` | Project-local next-step triage | Recommendations |
 | `/arc:commit` | Commit and push changes | Git commits |
 | `/arc:responsive` | Mobile responsive audit & fix | Responsive code changes |
-| `/arc:seo` | Deep SEO audit for web projects | `docs/audits/YYYY-MM-DD-seo.md` |
 
 ## Agents
 
@@ -299,7 +297,7 @@ Arc includes specialized agents across research, review, build, design, and work
 | Category | Agents |
 |----------|--------|
 | **Research** | docs-researcher, git-history-analyzer |
-| **Review** | architecture-engineer, daniel-product-engineer, data-engineer, designer, lee-nextjs-engineer, performance-engineer, security-engineer, senior-engineer, seo-engineer, accessibility-engineer, test-quality-engineer |
+| **Review** | architecture-engineer, daniel-product-engineer, data-engineer, designer, lee-nextjs-engineer, performance-engineer, security-engineer, senior-engineer, accessibility-engineer, test-quality-engineer |
 | **Build** | implementer, fixer, debugger, ui-builder, figma-builder, design-specifier, unit-test-writer, integration-test-writer, e2e-test-writer, test-runner, e2e-runner, spec-reviewer, code-reviewer |
 | **Workflow** | spec-flow-analyzer, e2e-test-runner, docs-writer, spec-document-reviewer, plan-document-reviewer |
 
@@ -322,7 +320,7 @@ Commands work together:
 - `/arc:suggest` reads project-local signals: current plans, progress, TODOs, failing checks, recent commits, and `/arc:vision`
 - `/arc:ideate` flows to `/arc:implement` (which creates plans internally)
 - `/arc:implement` scales from quick fixes to full plan-driven execution
-- `/arc:launch` records whether `/arc:testing`, `/arc:audit`, `/arc:seo`, and `/arc:responsive` are done, missing, or intentionally deferred
+- `/arc:launch` records whether `/arc:testing`, `/arc:audit`, and `/arc:responsive` are done, missing, or intentionally deferred
 - Claude Code uses TaskList for in-session task tracking.
 
 ### Linear Integration (Optional)

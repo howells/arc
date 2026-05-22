@@ -25,7 +25,6 @@ arc/
 │   ├── refactor/SKILL.md   # Cross-cutting: structural refactor planning
 │   ├── browse/SKILL.md     # Cross-cutting: expert browser experience evaluation
 │   ├── responsive/SKILL.md # Cross-cutting: mobile responsive audit
-│   ├── seo/SKILL.md        # Cross-cutting: SEO audit
 │   ├── audit/SKILL.md      # Cross-cutting: codebase audit
 │   ├── commit/SKILL.md     # Cross-cutting: smart commits
 │   ├── suggest/SKILL.md    # Cross-cutting: what to work on
@@ -64,7 +63,6 @@ All commands use the `/arc:` namespace prefix. The typical workflow:
 CROSS-CUTTING (available anytime):
               /arc:browse     → Expert browser experience evaluation
               /arc:responsive → Mobile responsive audit & fix
-              /arc:seo        → Deep SEO audit
               /arc:audit      → Comprehensive codebase audit
               /arc:commit     → Smart commits with auto-splitting
               /arc:suggest    → Project-local next-step triage

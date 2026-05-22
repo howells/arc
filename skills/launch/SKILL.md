@@ -45,11 +45,10 @@ Launch should answer:
 - Are accidental launch blockers such as `noindex`, disallow rules, maintenance mode, or preview passwords absent or intentional?
 - Have deeper checks been run or intentionally deferred?
 
-If the work turns into deep code health, testing strategy, SEO, mobile layout, or security remediation, route to the specialist workflow instead:
+If the work turns into deep code health, testing strategy, mobile layout, security remediation, or deep search optimization, route outside launch instead:
 
 - Codebase health and risk -> `/arc:audit`
 - Behavior and test coverage -> `/arc:testing`
-- Search/crawl/social metadata depth -> `/arc:seo`
 - Mobile and responsive layout -> `/arc:responsive`
 - UI polish or asset design -> `/arc:design`
 
@@ -164,7 +163,6 @@ Do not run every specialist workflow automatically. Record whether each is done,
 
 - `/arc:testing`
 - `/arc:audit`
-- `/arc:seo`
 - `/arc:responsive`
 
 ## Output

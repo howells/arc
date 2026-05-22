@@ -116,7 +116,7 @@ Recommendations should be concrete work items, not generic quality advice. Inclu
 - `/arc:implement` for a clear scoped code change
 - `/arc:ideate` when the idea needs shaping
 - `/arc:refactor` when structural planning is needed
-- `/arc:audit`, `/arc:testing`, `/arc:responsive`, `/arc:seo`, or `/arc:launch` when the next action is a specialist check
+- `/arc:audit`, `/arc:testing`, `/arc:responsive`, or `/arc:launch` when the next action is a specialist check
 
 ### Step 6: Offer to Act
 

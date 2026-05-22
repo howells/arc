@@ -19,7 +19,6 @@ REVIEW_AGENTS=(
     "performance-engineer"
     "security-engineer"
     "senior-engineer"
-    "seo-engineer"
     "test-quality-engineer"
 )
 

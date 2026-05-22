@@ -26,7 +26,6 @@ EXPECTED_SKILLS=(
     "refactor"
     "responsive"
     "review"
-    "seo"
     "suggest"
     "testing"
     "using-arc"
