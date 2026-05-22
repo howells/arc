@@ -1,7 +1,7 @@
 ---
 name: suggest
 description: |
-  Opinionated recommendations for what to work on next based on Linear issues, tasks, and codebase.
+  Opinionated project-local recommendations for what to work on next.
   Use when asked "what should I work on", "what's next", "suggest priorities",
   or when starting a session and unsure where to begin.
 license: MIT
@@ -9,19 +9,19 @@ metadata:
   author: howells
 website:
   order: 17
-  desc: Opinionated next steps
-  summary: Opinionated recommendations for what to work on next based on existing tasks and codebase. Includes a discovery mode that researches market trends and proposes new features.
+  desc: Next-step triage
+  summary: "Opinionated recommendations for what to work on next based on project-local signals: current plans, progress, TODOs, failing checks, recent commits, and vision gaps."
   what: |
-    Suggest checks your existing tasks, scans your codebase for TODOs and technical debt, and compares against your vision. It synthesizes this into 3-5 ranked recommendations with clear rationale and the command to start each one. When the normal cascade runs dry, it offers to research external trends and propose entirely new feature ideas.
+    Suggest scans the current repository for visible work signals and turns them into 3-5 ranked recommendations with clear rationale and the Arc command to start each one.
   why: |
     Starting is the hardest part. When you sit down with an hour to code, decision fatigue can burn half of it. Suggest removes the "what should I work on?" loop.
   decisions:
-    - "Priority cascade: Linear issues first, tasks second, codebase issues third, vision gaps fourth, discovery fifth."
-    - Opinionated, not neutral. It picks winners and says why.
-    - One click to act. Each suggestion includes the exact command to run.
-    - Discovery mode researches externally — market trends, competitors, emerging tech — and proposes new features.
+    - "Project-local cascade: active plans, recent progress, failing checks, TODOs, codebase gaps, then vision gaps."
+    - Opinionated, not neutral. Pick winners and say why.
+    - Each suggestion includes the exact Arc command to run.
+    - No external discovery, competitor research, market trend research, or Linear priority queue ownership.
   workflow:
-    position: utility
+    position: cross-cutting
 ---
 
 <arc_runtime>
@@ -41,62 +41,57 @@ Check what was recently worked on to avoid re-suggesting completed work.
 
 # Suggest Workflow
 
-Analyze Linear issues, tasks, codebase, and vision to give opinionated recommendations for what to work on next.
+Analyze project-local signals to give opinionated recommendations for what to work on next.
 
 ## Priority Cascade
 
-1. **Linear issues** (highest priority, if MCP available) — Already triaged, most immediate
-2. **Existing tasks** — Already noted, pending action
-3. **Codebase issues** — Technical debt, gaps, patterns
-4. **Vision gaps** — Goals not yet implemented
-5. **Discovery** (lowest priority, opt-in) — New feature ideas from external research
+1. **Current plans** — In-progress or ready plans under `docs/arc/plans/` or `docs/plans/`
+2. **Recent progress** — Work noted in `.arc/log.md`, `docs/arc/progress.md`, or recent commits
+3. **Failing checks** — Known test, typecheck, lint, build, or CI failures visible in the repo
+4. **Codebase signals** — TODOs, FIXMEs, missing tests, stale patterns, incomplete features
+5. **Vision gaps** — Goals in `docs/vision.md`, `docs/arc/vision.md`, or `CONTEXT.md` not reflected in the code
 
 ## Process
 
-### Step 1: Check Linear (if available)
+### Step 1: Read Current Work
 
-**Check for Linear MCP:**
-Look for `mcp__linear__*` tools in available tools.
+Check for active planning and progress:
 
-**If Linear MCP available:**
-```
-mcp__linear__list_issues: { filter: { state: { type: { in: ["started", "unstarted"] } } }, first: 10 }
-```
-
-Prioritize issues marked as high priority or in current cycle.
-
-**If Linear not available:** Check TaskList.
-
-### Step 1b: Check Tasks
-
-**Use TaskList tool** to check for existing tasks.
-
-If tasks exist with status `pending`:
-→ Recommend those first with brief rationale
-
-### Step 2: Analyze Codebase
-
-**Use Task tool to spawn exploration agent:**
-```
-Task Explore model: haiku: "Analyze this codebase for:
-- Incomplete features (TODOs, FIXMEs)
-- Technical debt (outdated patterns, missing tests)
-- Quality issues (type escapes, inconsistencies)
-- Missing documentation
-- Performance concerns
-
-Prioritize by impact."
+```bash
+find docs/arc/plans docs/plans -maxdepth 1 -type f -name "*.md" 2>/dev/null
+ls .arc/log.md docs/arc/progress.md docs/vision.md docs/arc/vision.md CONTEXT.md 2>/dev/null
+git log --oneline -5
 ```
 
-### Step 3: Read Vision (if needed)
+Read only the files that exist. Prefer recent progress and unfinished plans over speculative ideas.
 
-Only if no Linear issues/tasks exist AND codebase analysis found nothing urgent:
+### Step 2: Check Known Failures
 
-**Use Read tool:** `docs/vision.md`
+Inspect project scripts and recent status for obvious broken checks:
 
-Compare vision goals to current state. Identify gaps.
+```bash
+git status --short
+cat package.json 2>/dev/null
+find . -maxdepth 3 \( -name "vitest.config.*" -o -name "jest.config.*" -o -name "playwright.config.*" -o -name "turbo.json" \) 2>/dev/null
+```
 
-### Step 4: Synthesize Recommendations
+Do not run expensive checks by default. If a check should be run before ranking work, ask or state it as the first recommended action.
+
+### Step 3: Analyze Codebase Signals
+
+Search locally:
+
+```bash
+rg -n "TODO|FIXME|HACK|XXX|@ts-expect-error|@ts-ignore|eslint-disable|any\\b|Not implemented|throw new Error\\(\"TODO" .
+```
+
+Sample enough files to understand clusters. Do not turn this into a full audit; use `/arc:audit` for comprehensive review.
+
+### Step 4: Compare Vision
+
+If no immediate plan, progress, failure, or codebase signal dominates, compare vision goals to current repo state and identify concrete next steps.
+
+### Step 5: Synthesize Recommendations
 
 Present top 3-5 suggestions:
 
@@ -105,6 +100,7 @@ Present top 3-5 suggestions:
 
 ### 1. [Top recommendation]
 **Why:** [Brief rationale]
+**Evidence:** [file:line, plan title, recent commit, or visible check signal]
 **Command:** /arc:ideate [topic]
 
 ### 2. [Second recommendation]
@@ -116,39 +112,40 @@ Present top 3-5 suggestions:
 **Command:** [relevant command]
 ```
 
-### Step 5: Offer to Act
+Recommendations should be concrete work items, not generic quality advice. Include the smallest useful next command:
+- `/arc:implement` for a clear scoped code change
+- `/arc:ideate` when the idea needs shaping
+- `/arc:refactor` when structural planning is needed
+- `/arc:audit`, `/arc:testing`, `/arc:responsive`, `/arc:seo`, or `/arc:launch` when the next action is a specialist check
 
-"Want me to dive deeper into any of these with `/arc:ideate`?"
+### Step 6: Offer to Act
 
-If user picks one, invoke the relevant command.
+"Want me to start the top recommendation?"
+
+If user picks one, route to the relevant Arc workflow.
 
 ## Suggestion Categories
 
-**From Linear:**
-- "High priority: [issue title] — ready to tackle it?"
-- "Current cycle has [N] issues — start with [X]?"
-
-**From Tasks:**
-- "You noted [X] — ready to tackle it?"
+**From plans/progress:**
+- "The current plan for [topic] is ready to execute — start with `/arc:implement`?"
+- "Recent progress ended with [follow-up] — continue there?"
 
 **From Codebase:**
 - "Found [N] TODOs in [area] — want to address them?"
 - "Test coverage is thin in [area]"
 - "Outdated pattern in [file] — could modernize"
+- "Recent commits touched [area] but no tests changed — run `/arc:testing`?"
 
 **From Vision:**
 - "Vision mentions [goal] but I don't see it implemented"
 - "Vision says [X] is a non-goal but code does [X]"
-
-**From Discovery:**
-- "Competitors in [space] are adding [feature] — your architecture already supports it"
-- "[Emerging tech] could unlock [capability] with [effort level] effort"
-- "Revenue opportunity: [strategy] is trending in [domain] and fits your stack"
 
 ## What Suggest is NOT
 
 - Not a code review (use /arc:audit or /arc:review)
 - Not a test runner (use /arc:testing)
 - Not a planner (use /arc:ideate)
+- Not a Linear triage tool
+- Not external discovery, market research, or competitor analysis
 
-It's a compass, not a map. Discovery mode just points the compass outward.
+It's a project-local compass, not a map.

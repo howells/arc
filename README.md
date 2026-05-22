@@ -36,7 +36,7 @@ CROSS-CUTTING
         /arc:refactor   - Find structural refactoring opportunities
         /arc:browse     - Rendered app evaluation through an expert persona
         /arc:document   - Feature documentation
-        /arc:suggest    - Opinionated next-step recommendations (+ discovery mode)
+        /arc:suggest    - Project-local next-step triage
         /arc:deps       - Dependency management and updates
         /arc:responsive  - Mobile responsive audit & fix
         /arc:seo        - Deep SEO audit for web projects
@@ -288,7 +288,7 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:refactor` | Find structural refactoring opportunities | Refactor RFC / issue |
 | `/arc:browse` | Evaluate rendered app experience through an expert persona | `docs/arc/browse/YYYY-MM-DD-*.md` |
 | `/arc:document` | Document features | `docs/features/<feature>.md` |
-| `/arc:suggest` | What to work on next (+ discovery mode) | Recommendations |
+| `/arc:suggest` | Project-local next-step triage | Recommendations |
 | `/arc:commit` | Commit and push changes | Git commits |
 | `/arc:deps` | Dependency management | Updated dependencies |
 | `/arc:responsive` | Mobile responsive audit & fix | Responsive code changes |
@@ -321,11 +321,11 @@ Implementation methodologies in `disciplines/`:
 
 Commands work together:
 
-- `/arc:suggest` reads Linear issues (if configured), in-session tasks (TaskList), codebase, and `/arc:vision` (priority cascade with opt-in discovery mode)
+- `/arc:suggest` reads project-local signals: current plans, progress, TODOs, failing checks, recent commits, and `/arc:vision`
 - `/arc:ideate` flows to `/arc:implement` (which creates plans internally)
 - `/arc:implement` scales from quick fixes to full plan-driven execution
 - `/arc:launch` records whether `/arc:testing`, `/arc:audit`, `/arc:seo`, and `/arc:responsive` are done, missing, or intentionally deferred
-- Claude Code uses TaskList for in-session task tracking; Linear MCP for persistent issue tracking
+- Claude Code uses TaskList for in-session task tracking.
 
 ### Linear Integration (Optional)
 
@@ -343,7 +343,7 @@ For complex projects, Arc integrates with Linear via MCP for issue tracking:
 }
 ```
 
-When Linear MCP is available, `/arc:suggest` queries active issues and `/arc:audit` can create issues from findings.
+When Linear MCP is available, `/arc:audit` can create issues from findings.
 
 ## Acknowledgments
 

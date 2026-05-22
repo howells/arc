@@ -68,7 +68,7 @@ CROSS-CUTTING (available anytime):
               /arc:seo        → Deep SEO audit
               /arc:audit      → Comprehensive codebase audit
               /arc:commit     → Smart commits with auto-splitting
-              /arc:suggest    → What to work on next (+ discovery mode)
+              /arc:suggest    → Project-local next-step triage
               /arc:document   → Capture solved problems
               /arc:refactor   → Discover friction, propose deep-module refactors
               /arc:deps       → Dependency audit with batch upgrades

@@ -306,8 +306,8 @@ export default function ArcPage() {
               <span className="select-none text-[var(--color-accent)]">→</span>
               <span>
                 <span className="font-mono text-neutral-800">/arc:suggest</span>{" "}
-                reads Linear issues (if configured), tasks, codebase, and
-                vision.
+                reads project-local plans, progress, TODOs, recent commits,
+                failing checks, and vision.
               </span>
             </li>
             <li className="flex gap-3 text-neutral-600 text-sm leading-relaxed">
@@ -375,9 +375,7 @@ export default function ArcPage() {
                   <td className="py-2 pr-4 font-mono text-neutral-800">
                     Linear MCP
                   </td>
-                  <td className="py-2">
-                    /arc:suggest, /arc:audit issue tracking
-                  </td>
+                  <td className="py-2">/arc:audit issue tracking</td>
                 </tr>
                 <tr>
                   <td className="py-2 pr-4 font-mono text-neutral-800">

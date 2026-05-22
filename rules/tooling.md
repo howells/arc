@@ -5,7 +5,7 @@ Rules for development tooling and integrations.
 ## Issue Tracking
 
 - SHOULD: Use Linear MCP for projects with multiple features in flight or team collaboration
-- SHOULD: Connect Linear issues to Arc workflows (`/arc:suggest` queries issues, `/arc:audit` creates issues)
+- SHOULD: Connect Linear issues to Arc workflows when persistent issue tracking is useful (`/arc:audit` can create issues)
 - MAY: Skip issue tracking for small solo projects or quick prototypes
 
 **Linear MCP setup:**
@@ -34,10 +34,9 @@ Rules for development tooling and integrations.
 ## Arc + Linear Workflow
 
 1. Create issues in Linear for planned work
-2. `/arc:suggest` surfaces active issues as recommendations
-3. `/arc:ideate` creates design docs linked to issues
-4. `/arc:implement` executes with issue context
-5. `/arc:audit` creates issues from findings
+2. `/arc:ideate` creates design docs linked to issues
+3. `/arc:implement` executes with issue context
+4. `/arc:audit` creates issues from findings
 
 ## Other MCP Integrations
 
