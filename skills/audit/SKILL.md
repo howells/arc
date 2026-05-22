@@ -16,7 +16,7 @@ website:
   desc: Codebase audit
   summary: Mechanical verification plus specialist review with a scored codebase health report.
   what: |
-    Audit runs build, typecheck, lint, tests, debug-log scanning, git status, secrets scanning, and cheap structural signal collection first. It then dispatches relevant specialist reviewers, consolidates findings, and produces a scored scorecard across 7 axes (0-21) with optional bonus axes for UI, accessibility, and SEO.
+    Audit runs build, typecheck, lint, tests, debug-log scanning, git status, secrets scanning, and cheap structural signal collection first. It then dispatches relevant specialist reviewers, consolidates findings, and produces a scored scorecard across 7 codebase-health axes (0-21) with an optional accessibility axis for frontend projects.
   why: |
     Mechanical checks catch obvious breakage. Reviewers catch the judgment calls that linters miss. Keeping both in one default workflow removes the "verify or audit?" decision.
   decisions:
@@ -122,19 +122,19 @@ Pass relevant rules to each reviewer agent.
 | daniel-product-engineer | react.md, typescript.md, react-performance.md, react-correctness.md |
 | performance-engineer | react-performance.md |
 
-**For UI/frontend audits, also load interface rules:**
+**For frontend implementation audits, also load code-level interface rules:**
 
 | Reviewer | Interface Rules to Pass |
 |----------|------------------------|
-| daniel-product-engineer | forms.md, interactions.md, animation.md, performance.md, tailwind-authoring.md, buttons.md, surfaces.md |
-| lee-nextjs-engineer | layout.md, performance.md |
+| daniel-product-engineer | forms.md, interactions.md, performance.md, tailwind-authoring.md, buttons.md |
+| lee-nextjs-engineer | performance.md |
 Interface rules location: `rules/interface/`
 
-Pass relevant rules to each UI reviewer in their prompt. These inform what to look for, not mandates to redesign.
+Pass relevant rules to each frontend reviewer in their prompt. These inform implementation and accessibility checks only. Do not score visual taste, invent a visual direction, or create redesign findings; defer visual design direction to the project's design source of truth.
 
-**UI implementation checks — include in prompts for daniel-product-engineer and accessibility-engineer:**
+**Frontend implementation checks — include in prompts for daniel-product-engineer and accessibility-engineer:**
 
-In addition to their domain-specific rules, UI reviewers should verify:
+In addition to their domain-specific rules, frontend reviewers should verify:
 - No layout shift on dynamic content (hardcoded dimensions, `tabular-nums`, no font-weight changes on hover)
 - Animations have `prefers-reduced-motion` support
 - Touch targets are 44px minimum
@@ -155,7 +155,7 @@ In addition to their domain-specific rules, UI reviewers should verify:
 **Parse arguments:**
 - `$ARGUMENTS` may contain:
   - A path (e.g., `apps/web`, `packages/ui`, `src/`)
-  - A plain-language focus (e.g., "security", "performance", "architecture", "design")
+  - A plain-language focus (e.g., "security", "performance", "architecture", "accessibility")
 
 Do not advertise audit flags or variants. If the user provides a path or focus, treat it as scope guidance for the same default audit workflow.
 
@@ -185,7 +185,7 @@ Do not advertise audit flags or variants. If the user provides a path or focus, 
 This pass gives reviewers concrete hotspots for React Doctor-style rule families without running React Doctor. These are **signals, not findings**. Reviewers must still inspect code and report only evidence-backed issues.
 
 ```bash
-# High-signal React/Next/TanStack/security/UI patterns. Scope to source-like files.
+# High-signal React/Next/TanStack/security/frontend patterns. Scope to source-like files.
 rg -n --glob '*.{ts,tsx,js,jsx}' \
   "useEffect\\(|dangerouslySetInnerHTML|\\beval\\(|new Function\\(|setTimeout\\(|setInterval\\(|useSearchParams\\(|new QueryClient\\(|useQuery\\(|useMutation\\(|<Image\\b|<img\\b|transition-all|outline-none|will-change|z-\\[?9999|localStorage|sessionStorage" \
   ${scope:-.} 2>/dev/null | head -120
@@ -204,7 +204,7 @@ Store a **React audit signal manifest** with:
 - Boundary hotspots: `"use client"` files, async client components, suspicious client wrappers
 - Data-client hotspots: TanStack Query/tRPC hooks, unstable `QueryClient`, mutations/invalidation
 - Security hotspots: `dangerouslySetInnerHTML`, eval-like calls, client storage, secret-shaped identifiers in client-reachable files
-- UI/performance hotspots: `next/image`, raw `<img>`, transition/will-change/z-index/focus classes, heavy client imports
+- Frontend/performance hotspots: `next/image`, raw `<img>`, transition/will-change/z-index/focus classes, heavy client imports
 - Legacy React hotspots: deprecated React/ReactDOM APIs and fragile child traversal
 
 **Run dependency vulnerability scan (critical/high only):**
@@ -341,9 +341,9 @@ Has database: [yes/no]
 Has tests: [yes/no]
 Dead code: [X unused files, Y unused exports, Z unused deps] or "N/A (not JS/TS)"
 Structural hotspots: [X long files >250 LOC, Y severe >400 LOC, Z suspicious boundary files, W suspicious+long overlap]
-React audit signals: [X state/effect, Y boundary, Z data-client, W security/UI/perf hotspots] or "N/A (not React)"
+React audit signals: [X state/effect, Y boundary, Z data-client, W security/frontend/perf hotspots] or "N/A (not React)"
 Coding rules: [yes/no]
-Focus: [all / security / performance / architecture / design / user-provided focus]
+Focus: [all / security / performance / architecture / accessibility / user-provided focus]
 ```
 
 ## Phase 1.5: Mechanical Checks
@@ -388,7 +388,7 @@ Include the mechanical summary in reviewer context, then continue to reviewer se
 
 **Conditional additions:**
 - If scope includes DB/migrations → add `data-engineer`
-- If UI-heavy (React/Next.js, medium/large) → add `accessibility-engineer`
+- If frontend-heavy (React/Next.js, medium/large) → add `accessibility-engineer`
 - If test files detected (medium/large) → add `test-quality-engineer`
 
 **Focus guidance:**
@@ -400,7 +400,7 @@ Include the mechanical summary in reviewer context, then continue to reviewer se
 **Final reviewer list:**
 - Small projects: 2-3 reviewers
 - Medium projects: 3-4 reviewers
-- Large projects: 4-6 reviewers
+- Large projects: 4+ reviewers as needed for the scope
 
 ## Phase 3: Run Audit
 
@@ -467,7 +467,7 @@ Structural hotspots:
 
 Reviewer-specific emphasis:
 - `lee-nextjs-engineer`: interrogate `*-client.*` and `*-wrapper.*` first. Ask whether they are "escape hatches" around App Router server-first architecture and whether the real fix is to push interactivity down to leaf client components.
-- `daniel-product-engineer`: treat suspiciously named long files as probable god components and inspect for mixed responsibilities, mode props, and unreadable UI shape.
+- `daniel-product-engineer`: treat suspiciously named long files as probable god components and inspect for mixed responsibilities, mode props, and unreadable frontend behavior.
 - `architecture-engineer`: use long-file and suspicious-name hotspots to find poor module boundaries and misplaced orchestration.
 - Other reviewers: use the manifest opportunistically; only report if it matters to your domain.
 
@@ -476,11 +476,11 @@ Reviewer-specific emphasis:
 Read `references/react-audit-signals.md` and pass the relevant sections plus the React audit signal manifest to reviewers. The goal is to make Arc's own audit pick up React Doctor-style issues through reviewer inspection.
 
 Reviewer-specific emphasis:
-- `daniel-product-engineer`: state/effects, rendering correctness, TanStack Query misuse, UI completeness, legacy React APIs.
+- `daniel-product-engineer`: state/effects, rendering correctness, TanStack Query misuse, frontend behavior completeness, legacy React APIs.
 - `lee-nextjs-engineer`: server/client boundaries, async client components, Suspense around `useSearchParams`, Server Action auth, route handler side effects, RSC payload shape, Next.js primitives.
 - `performance-engineer`: rerender hotspots, memoization defeats, hydration flicker, bundle imports, async waterfalls, DOM/CSS performance.
 - `security-engineer`: client-reachable secrets, unsafe HTML, eval-like execution, storage-backed trust, Server Action and route-handler auth.
-- `accessibility-engineer`: UI/a11y hygiene signals. Treat design-tag rules as quality signals, not CI-blocking defects.
+- `accessibility-engineer`: accessibility and interaction hygiene signals. Do not critique visual direction.
 - `architecture-engineer`: god components, boundary escape hatches, data-client placement, mutable server module state, duplicate query/mutation patterns.
 
 Include in each React reviewer prompt:
@@ -569,7 +569,7 @@ When a reviewer scores two axes (daniel-product-engineer), include both criteria
 
 Repeat for remaining batches:
 - Batch 2: architecture-engineer + senior-engineer
-- Batch 3: UI reviewers (daniel-product-engineer, lee-nextjs-engineer)
+- Batch 3: frontend reviewers (daniel-product-engineer, lee-nextjs-engineer)
 - Batch 4: remaining reviewers (senior-engineer, data-engineer)
 
 ## Phase 4: Consolidate Findings
@@ -681,8 +681,7 @@ File: `docs/audits/YYYY-MM-DD-[scope-slug]-audit.md`
 | Bonus | Score | |
 |-------|:-----:|-|
 | Accessibility | X/3 | [rationale] |
-| SEO | X/3 | [rationale] |
-| **Bonus** | **+X/6** | |
+| **Bonus** | **+X/3** | |
 
 ## Executive Summary
 
@@ -785,7 +784,7 @@ Report: docs/audits/YYYY-MM-DD-[scope]-audit.md
 
 ### Scorecard
 Security: X | Perf: X | Arch: X | Quality: X | Tests: X | Resilience: X | Ops: X
-[+X/9 bonus if applicable]
+[+X/3 bonus if applicable]
 
 ### Findings
 - Critical: X | High: X | Medium: X | Low: X
@@ -810,9 +809,7 @@ Present these options (include all that apply):
 
 3. **Add to tasks** → Use **TaskCreate** to create tasks for critical/high clusters. Each cluster becomes a task with findings in the description. Lower severity clusters are omitted — they're in the audit report if needed later.
 
-4. **Create Linear issues** → If Linear MCP is available (`mcp__linear__*` tools exist), create Linear issues for critical/high findings. Each cluster becomes an issue with findings in the description.
-
-5. **Deep dive on a cluster** → User picks a cluster to explore in detail. Show full findings, relevant code snippets, and discuss approach before committing to action.
+4. **Deep dive on a cluster** → User picks a cluster to explore in detail. Show full findings, relevant code snippets, and discuss approach before committing to action.
 
 5. **Done for now** → End session. Report is saved, user can return to it later.
 
@@ -862,7 +859,7 @@ Do not auto-commit the plan unless the user explicitly asks for a commit.
 - Use the platform's native task/todo creation flow for each critical/high cluster when available
 - Each task gets the cluster name as subject, findings as description, and present continuous activeForm
 - Lower severity clusters stay in the audit report only
-- If no native task/todo creation flow exists, offer the plan file or Linear issue path instead
+- If no native task/todo creation flow exists, offer the plan file instead
 
 **If user selects "Deep dive on a cluster":**
 - Ask which cluster (by number or name)
@@ -882,7 +879,7 @@ Entry: `/arc:audit — [scope] ([N] critical, [N] high)`
 Audit is complete when:
 - [ ] Scope detected (path, full codebase, or focus)
 - [ ] Project type detected
-- [ ] 4-6 reviewers selected based on context
+- [ ] Reviewers selected based on scope and project scale
 - [ ] Reviewers run in batches of 2
 - [ ] All reviewers completed
 - [ ] Findings consolidated and deduplicated
@@ -892,5 +889,5 @@ Audit is complete when:
 - [ ] Summary presented to user
 - [ ] Next steps offered
 - [ ] Progress journal checked if present
-- [ ] Orphaned agents cleaned up (run cleanup script)
+- [ ] Any delegated reviewer work has completed or blockers are reported
 </success_criteria>
