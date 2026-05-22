@@ -5,27 +5,24 @@ description: |
   Comprehensive codebase audit with verification and specialized reviewers.
   Generates actionable reports.
   Use when asked to "audit the codebase", "review code quality", "check for issues",
-  "security review", or "performance audit". Accepts path scope like "apps/web".
-
-  Verification-only modes (`quick`, `pre-commit`, `pre-pr`) skip reviewer agents and run
-  the mechanical checks directly. Full and focused modes run those checks first, then the
-  reviewer agents. `--harden` preserves the interactive UI resilience flow.
+  "security review", or "performance audit". By default, run the complete audit:
+  mechanical checks first, then specialist reviewers, then a scored report.
 license: MIT
-argument-hint: "[quick|pre-commit|pre-pr|<path-or-focus>] [--parallel] [--diff [base]] [--stage=prototype|development|pre-launch|production] [--security|--performance|--architecture|--organization|--design|--accessibility|--hygiene|--seo|--docs|--copy|--harden]"
+argument-hint: "[<path-or-focus>]"
 metadata:
   author: howells
 website:
   order: 13
   desc: Codebase audit
-  summary: Verification plus specialist review with a scored scorecard. Run fast mechanical checks, focused audits, or the full multi-reviewer pass from one command.
+  summary: Mechanical verification plus specialist review with a scored codebase health report.
   what: |
-    Audit now handles both the old "verify" path and the reviewer-driven audit path. In quick modes it runs build, typecheck, lint, tests, debug-log scanning, git status, and secrets scanning without spawning agents — and produces a partial scorecard. In full or focused modes it runs those mechanical checks first, then dispatches the relevant reviewers, consolidates findings, and produces a scored scorecard across 7 axes (0-21) with optional bonus axes for UI, accessibility, and SEO.
+    Audit runs build, typecheck, lint, tests, debug-log scanning, git status, secrets scanning, and cheap structural signal collection first. It then dispatches relevant specialist reviewers, consolidates findings, and produces a scored scorecard across 7 axes (0-21) with optional bonus axes for UI, accessibility, and SEO.
   why: |
-    Mechanical checks catch obvious breakage. Reviewers catch the judgment calls that linters miss. Putting both in one workflow removes the "verify or audit?" decision and keeps the fast path fast.
+    Mechanical checks catch obvious breakage. Reviewers catch the judgment calls that linters miss. Keeping both in one default workflow removes the "verify or audit?" decision.
   decisions:
-    - "`quick`, `pre-commit`, and `pre-pr` are verification-only modes. No agents."
-    - Full and focused audits run mechanical checks before reviewers.
-    - "`--harden` stays interactive and does not fork into reviewer mode."
+    - Audit has one public default path.
+    - Mechanical checks always run before reviewers.
+    - Optional focus text may narrow reviewer selection, but the workflow stays the same.
   agents:
     - security-engineer
     - performance-engineer
@@ -156,50 +153,14 @@ In addition to their domain-specific rules, both UI reviewers should verify:
 </rules_context>
 
 <process>
-## Phase 0: Mode Detection
-
-Parse `$ARGUMENTS` first and choose the correct path.
-
-| Argument | Mode | What Runs |
-|----------|------|-----------|
-| `quick` | Quick | Build + typecheck + lint |
-| `pre-commit` | Pre-commit | Build + typecheck + lint + debug logs |
-| `pre-pr` | Pre-PR | Build + typecheck + lint + tests + debug logs + secrets scan |
-| `--harden` | Harden | Interactive UI resilience pass, no reviewer agents |
-| anything else / none | Full or focused audit | Mechanical checks, then reviewers |
-
-**Critical behavior:**
-- `quick`, `pre-commit`, and `pre-pr` skip scope detection, hotspots, knip, and reviewer dispatch.
-- `--harden` is a separate interactive code path. Do not spawn review agents. Preserve the user-interactive hardening flow.
-
 ## Phase 1: Detect Scope & Project Type
 
-**Parse arguments (full / focused audit path only):**
+**Parse arguments:**
 - `$ARGUMENTS` may contain:
   - A path (e.g., `apps/web`, `packages/ui`, `src/`)
-  - A focus flag (e.g., `--security`, `--performance`, `--architecture`, `--design`)
-  - `--parallel` flag to run all reviewers simultaneously (resource-intensive)
-  - `--diff` or `--diff [base]` flag to scope audit to only changed files vs a base branch
-  - A stage override (e.g., `--stage=production`, `--stage=prototype`)
-  - Combinations (e.g., `apps/web --security`, `src/ --parallel`, `--design`, `--diff develop`)
+  - A plain-language focus (e.g., "security", "performance", "architecture", "design")
 
-**If `--diff` flag is set:**
-
-Determine changed files:
-```bash
-# Default base is main, user can override with --diff develop
-git diff --name-only --diff-filter=ACMR ${base:-main}...HEAD | grep -E '\.(tsx?|jsx?|py|go|rs)$'
-```
-
-Store the file list. Pass it to every reviewer agent as a scope constraint:
-```
-IMPORTANT: Only review these files (changed in current branch):
-[file list]
-
-Do not flag issues in files not on this list.
-```
-
-If `--diff` produces 0 files, report "No changed files found vs [base]" and exit.
+Do not advertise audit flags or variants. If the user provides a path or focus, treat it as scope guidance for the same default audit workflow.
 
 **If no scope provided:**
 
@@ -260,8 +221,6 @@ Store a **React audit signal manifest** with:
 - UI/performance hotspots: `next/image`, raw `<img>`, transition/will-change/z-index/focus classes, heavy client imports
 - Legacy React hotspots: deprecated React/ReactDOM APIs and fragile child traversal
 
-If `--diff` is active, intersect the manifest with changed files before passing it to reviewers.
-
 **Run dependency vulnerability scan (critical/high only):**
 
 ```bash
@@ -295,8 +254,6 @@ Include dead code count in the detection summary. Pass findings to relevant revi
 
 If knip finds >20 unused exports, flag as a separate task cluster rather than distributing across reviewers.
 
-If `--diff` flag is set, cross-reference knip results with the changed file list (knip does not support diff mode natively, so run on full project but only surface findings that touch changed files).
-
 **Run structural hotspot scan (JS/TS/TSX/JSX projects):**
 
 This is a cheap mechanical pass to surface "probably worth interrogating" files before reviewer agents start. The goal is not to auto-convict large files, but to give reviewers a map of where complexity is likely hiding.
@@ -325,7 +282,6 @@ Interpretation guidance:
 - `*-client.*` and `*-wrapper.*` are explicit red flags. They often mean "I needed a client boundary, so I wrapped the real component instead of pushing interactivity down."
 - `*-content.*`, `*-shell.*`, and `*-ui.*` are weaker signals, but worth interrogating when they are also long or marked `"use client"`.
 - When a file is both **long** and suspiciously named, elevate it as a probable god-component / server-client-boundary smell.
-- In `--diff` mode, still run the scan on the requested scope, but only surface hotspots that intersect the changed files.
 
 Store a **structural hotspot manifest** with:
 - Long files over 250 LOC
@@ -356,7 +312,7 @@ find . -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx"
 
 **Detect project lifecycle stage:**
 
-If `--stage=<stage>` was provided in arguments, use that directly. Otherwise, infer the stage from heuristic signals:
+Infer the project stage from heuristic signals:
 
 | Signal | Tool | Indicates |
 |--------|------|-----------|
@@ -391,7 +347,7 @@ If the user corrects it, use their override.
 
 **Summarize detection:**
 ```
-Scope: [path or "full codebase"] [diff vs [base] if --diff]
+Scope: [path or "full codebase"]
 Project type: [Next.js / React / Python / etc.]
 Project scale: [small / medium / large]
 Project stage: [prototype / development / pre-launch / production]
@@ -402,8 +358,7 @@ Dead code: [X unused files, Y unused exports, Z unused deps] or "N/A (not JS/TS)
 Structural hotspots: [X long files >250 LOC, Y severe >400 LOC, Z suspicious boundary files, W suspicious+long overlap]
 React audit signals: [X state/effect, Y boundary, Z data-client, W security/UI/perf hotspots] or "N/A (not React)"
 Coding rules: [yes/no]
-Focus: [all / security / performance / architecture / design]
-Execution mode: [batched (default) / parallel / team]
+Focus: [all / security / performance / architecture / design / user-provided focus]
 ```
 
 ## Phase 1.5: Mechanical Checks
@@ -421,35 +376,12 @@ Run these before any reviewer agents so obvious breakage gets caught cheaply.
 1. Build — stop immediately if it fails
 2. Typecheck — report errors and continue
 3. Lint — auto-fix first, then report remaining issues
-4. Tests — skip in `quick` and `pre-commit`
-5. Debug log audit — skip in `quick`
+4. Tests — run when test tooling is detected
+5. Debug log audit
 6. Git status
-7. Secrets scan — `pre-pr` only
+7. Secrets scan — run when a suitable scanner or safe grep fallback is available
 
-### Mode Behavior
-- `quick`, `pre-commit`, `pre-pr`: report the summary table with **partial scorecard** and stop. No reviewers.
-- Full or focused audit: include the mechanical summary in reviewer context, then continue.
-
-**Partial scorecard for quick modes:**
-
-Derive scores for mechanically-evaluable axes only:
-
-| Axis | Signal |
-|------|--------|
-| 4. Code Quality | Lint results (clean = 2, warnings = 1, errors = 0). Bump to 3 if lint clean + no dead code |
-| 5. Test Health | `pre-pr` only: tests exist + pass = 2, exist + fail = 1, no tests = 0 |
-| 7. Operations | Build pass + types clean + lint clean = 2, any failure = 0-1 |
-
-Report as: `X/9 (partial — 3 of 7 axes)`. Other axes show `--`.
-
-```
-## Quick Check — X/9 (partial)
-
-Quality: X | Tests: X | Ops: X
-Security: -- | Perf: -- | Arch: -- | Resilience: --
-
-Run full audit for complete scorecard.
-```
+Include the mechanical summary in reviewer context, then continue to reviewer selection.
 
 ## Phase 2: Select Reviewers
 
@@ -476,43 +408,18 @@ Run full audit for complete scorecard.
 - If test files detected (medium/large) → add `test-quality-engineer`
 - If project has marketing/public pages (pre-launch/production stage) → add `seo-engineer`
 
-**Focus flag overrides:**
-- `--security` → only `security-engineer`
-- `--performance` → only `performance-engineer`
-- `--architecture` → only `architecture-engineer`
-- `--design` → only `designer`
-- `--accessibility` → only `accessibility-engineer`
-- `--seo` → only `seo-engineer`
+**Focus guidance:**
+- Security focus → prioritize `security-engineer`
+- Performance focus → prioritize `performance-engineer`
+- Architecture focus → prioritize `architecture-engineer`
+- Design focus → prioritize `designer`
+- Accessibility focus → prioritize `accessibility-engineer`
+- SEO focus → prioritize `seo-engineer`
 
 **Final reviewer list:**
 - Small projects: 2-3 reviewers
 - Medium projects: 3-4 reviewers
 - Large projects: 4-6 reviewers
-
-## Phase 2.5: Team Mode Check
-
-<team_mode_check>
-**Check if agent teams are available** by attempting to detect team support in the current environment.
-
-**If teams are available**, offer the user a choice:
-
-```
-Execution mode:
-1. Team mode — Reviewers debate findings before consolidation (higher quality, 3-5x token cost)
-2. Standard mode — Independent reviewers, batched or parallel (faster, lower cost)
-```
-
-Use the platform's structured question prompt if available. Otherwise ask a concise plain-text question with the same two options:
-- **"Team mode (Recommended for pre-launch/production)"** — Reviewers cross-review and challenge each other's findings. Conflicts resolved with evidence-based rationale. Best for high-stakes audits.
-- **"Standard mode"** — Independent reviewers run in batches (default) or parallel (--parallel). Faster and cheaper. Findings consolidated by the skill.
-
-**If teams are NOT available**, proceed silently with standard mode. Do not mention teams to the user.
-
-**If team mode selected**, read the team reference:
-```
-references/agent-teams.md
-```
-</team_mode_check>
 
 ## Phase 3: Run Audit
 
@@ -524,11 +431,7 @@ agents/review/[reviewer-name].md
 
 **Execution strategy:**
 
-By default, reviewers run in **batches of 2** to avoid resource exhaustion on large codebases. If `--parallel` flag is set, all reviewers run simultaneously. If user opted into **team mode**, reviewers collaborate as teammates.
-
-### Batched Execution (Default)
-
-Split reviewers into batches of 2. Run each batch, wait for completion, then run next batch.
+Run reviewers in **batches of 2** to avoid resource exhaustion on large codebases. Do not ask the user to choose an execution strategy.
 
 **Example with 6 reviewers:**
 ```
@@ -698,101 +601,9 @@ Repeat for remaining batches:
 - Batch 3: UI reviewers (daniel-product-engineer, lee-nextjs-engineer)
 - Batch 4: remaining reviewers (senior-engineer, designer, data-engineer)
 
-### Parallel Execution (--parallel flag)
-
-Only if `--parallel` flag is explicitly set, spawn all reviewers simultaneously:
-
-```
-Task [security-engineer] model: sonnet: "..."
-Task [performance-engineer] model: sonnet: "..."
-Task [architecture-engineer] model: sonnet: "..."
-[All additional reviewers in same message...]
-```
-
-⚠️ **Warning:** Parallel execution spawns 4-6 Claude instances simultaneously. This can cause system unresponsiveness on resource-constrained machines or large codebases.
-
-**Wait for all agents to complete.**
-
-### Team Execution (Agent Teams mode)
-
-Only if user opted into team mode in Phase 2.5.
-
-**Round 1 — Initial Analysis:**
-
-Create team `arc-audit-[scope-slug]` with all selected reviewers as teammates. Each reviewer performs their standard analysis using the same prompts as subagent mode (including stage calibration, coding rules, and domain-specific focus areas).
-
-```
-Create team: arc-audit-[scope-slug]
-Teammates: [all selected reviewers]
-
-Each teammate runs their initial analysis independently.
-Same prompts, same model selection as batched/parallel mode.
-```
-
-**Round 2 — Cross-Review:**
-
-Each reviewer reads the others' findings and responds:
-- **Confirms** findings with supporting evidence from their domain
-- **Challenges** findings they believe are incorrect or overstated, citing code-level evidence
-- **Reconciles** conflicting findings by synthesizing both perspectives into a resolution
-
-```
-Each teammate reviews others' Round 1 findings.
-Responses: confirm (with evidence), challenge (with code citations), or reconcile (with synthesis).
-```
-
-**Resolution rules:**
-- Code-level evidence wins over principle-based reasoning
-- Domain authority wins within domain (security-engineer's security judgment > architecture-engineer's security opinion)
-- Project stage context breaks ties
-- Every challenge must include explicit rationale
-
-**Round 2 output:** Each finding is now annotated with peer review status — confirmed, modified after challenge, or dropped with rationale.
-
-**Wait for team to complete.**
-
-### Structural Diff Checklist (--diff mode only)
-
-**Skip this section if `--diff` is not active.**
-
-After all reviewer agents complete, run an additional structural pass using the diff checklist. This catches mechanical issues (race conditions, trust boundary violations, dead code) that domain-specific reviewers may not focus on.
-
-1. **Read the checklist:**
-   ```
-   Read: references/diff-review-checklist.md
-   ```
-
-2. **Get the full diff:**
-   ```bash
-   git diff origin/${base:-main}
-   ```
-
-3. **Apply the two-pass review** from the checklist against the diff:
-   - Pass 1 (CRITICAL): Race conditions, trust boundaries, data safety
-   - Pass 2 (INFORMATIONAL): Conditional side effects, stale references, test gaps, dead code, performance
-
-4. **Merge findings** into the reviewer agent results before consolidation:
-   - Checklist CRITICAL findings → treated as Critical severity
-   - Checklist INFORMATIONAL findings → treated as Medium severity
-   - Attribute these as "structural-checklist" in the flagged-by column
-   - Deduplicate against reviewer findings (if a reviewer already flagged the same file:line, keep the reviewer's finding)
-
 ## Phase 4: Consolidate Findings
 
 **Collect all agent outputs.**
-
-<team_consolidation>
-**If team mode was used**, consolidation is simplified — reviewers already did the hard work:
-
-- **Deduplication: already done.** Reviewers identified overlapping findings during cross-review.
-- **Conflict resolution: already done.** Contradictory findings were debated with evidence-based rationale. Each resolution includes the reasoning from both sides.
-- **Severity validation: still needed.** Apply the stage-based severity calibration table below as a final sanity check.
-- **Task clustering: still needed.** Group debated findings into work clusters.
-
-Skip the deduplication and conflict resolution steps below and proceed directly to "Validate severity against project stage."
-</team_consolidation>
-
-**If standard mode was used**, proceed with full consolidation:
 
 **Deduplicate:**
 - Same file:line mentioned by multiple reviewers → merge into single finding
@@ -1099,7 +910,7 @@ After spawning multiple reviewer agents, some may not exit cleanly. Run cleanup 
 scripts/cleanup-orphaned-agents.sh
 ```
 
-This is especially important after `--parallel` runs or when auditing large codebases.
+This is especially important when auditing large codebases.
 
 </process>
 
@@ -1111,11 +922,10 @@ Entry: `/arc:audit — [scope] ([N] critical, [N] high)`
 
 <success_criteria>
 Audit is complete when:
-- [ ] Scope detected (path, full codebase, or focus flag)
+- [ ] Scope detected (path, full codebase, or focus)
 - [ ] Project type detected
-- [ ] Execution mode determined (batched default, --parallel, or team)
 - [ ] 4-6 reviewers selected based on context
-- [ ] Reviewers run in batches of 2 (or all at once if --parallel)
+- [ ] Reviewers run in batches of 2
 - [ ] All reviewers completed
 - [ ] Findings consolidated and deduplicated
 - [ ] Scorecard derived (7 core axes + bonus if applicable)

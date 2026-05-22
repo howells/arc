@@ -22,7 +22,7 @@ assert_file_not_contains "$PLUGIN_ROOT/README.md" "figma-implement" \
     "README has no stale figma-implement reference"
 assert_file_not_contains "$PLUGIN_ROOT/CLAUDE.md" "vercel:deploy" \
     "CLAUDE.md has no stale vercel:deploy reference"
-assert_file_not_contains "$PLUGIN_ROOT/skills/letsgo/SKILL.md" "vercel:deploy" \
-    "letsgo has no stale vercel:deploy reference"
+assert_file_not_contains "$PLUGIN_ROOT/skills/launch/SKILL.md" "vercel:deploy" \
+    "launch has no stale vercel:deploy reference"
 assert_file_not_contains "$PLUGIN_ROOT/skills/responsive/SKILL.md" "Chrome MCP required. No fallback path" \
     "responsive no longer hard-requires Chrome without fallback"

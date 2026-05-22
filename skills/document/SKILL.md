@@ -402,7 +402,7 @@ Options:
 
 **Doc staleness detection:** `/arc:implement` checks for stale docs after completing work. If changed files have associated documentation, they prompt the user to update inline.
 
-**Production readiness:** `/arc:letsgo` includes documentation coverage as a checklist item.
+**Launch readiness:** `/arc:launch` includes documentation coverage as a checklist item.
 
 **Design context:** `/arc:ideate` reads existing docs to understand the current feature set.
 

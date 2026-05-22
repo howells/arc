@@ -15,7 +15,7 @@ import { PageContent } from "./page-content";
 export const metadata: Metadata = {
   title: "Arc – The full arc from idea to shipped code",
   description:
-    "A full development workflow for Claude Code and Codex. Commands and agents that handle ideation, design, planning, implementation, review, and deployment.",
+    "A full development workflow for Claude Code and Codex. Commands and agents that handle ideation, design, planning, implementation, review, testing, and release readiness.",
   alternates: { canonical: "/" },
 };
 
@@ -177,12 +177,12 @@ export default function ArcPage() {
             </div>
             <div className="flex items-center gap-3 font-mono text-sm">
               <span className="shrink-0 text-neutral-400">#</span>
-              <span className="text-neutral-500">Ship to production</span>
+              <span className="text-neutral-500">Launch / go live</span>
             </div>
             <div className="group">
               <div className="flex items-center justify-between border-neutral-200 border-b py-2 font-mono text-sm">
-                <span className="text-neutral-800">/arc:letsgo</span>
-                <CopyButton text="/arc:letsgo" />
+                <span className="text-neutral-800">/arc:launch</span>
+                <CopyButton text="/arc:launch" />
               </div>
             </div>
           </div>
@@ -293,12 +293,13 @@ export default function ArcPage() {
             <li className="flex gap-3 text-neutral-600 text-sm leading-relaxed">
               <span className="select-none text-[var(--color-accent)]">→</span>
               <span>
-                <span className="font-mono text-neutral-800">/arc:letsgo</span>{" "}
-                runs{" "}
+                <span className="font-mono text-neutral-800">/arc:launch</span>{" "}
+                records whether{" "}
                 <span className="font-mono text-neutral-800">/arc:testing</span>{" "}
                 and{" "}
-                <span className="font-mono text-neutral-800">/arc:audit</span>{" "}
-                as part of quality checks.
+                <span className="font-mono text-neutral-800">/arc:audit</span>,{" "}
+                plus SEO and responsive checks, are done, missing, or
+                intentionally deferred.
               </span>
             </li>
             <li className="flex gap-3 text-neutral-600 text-sm leading-relaxed">

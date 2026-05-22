@@ -123,7 +123,6 @@ Output ALL of these in order:
 
 | Command | What it does | When to use |
 |---------|-------------|-------------|
-| `/arc:brand` | Create a visual identity system — palette, typography, tone, and generated assets | New projects, rebranding, before design work |
 | `/arc:ideate` | Turn an idea into a validated design through collaborative dialogue | New features that need thinking before building |
 | `/arc:design` | Create distinctive, non-generic UI with aesthetic direction and wireframes | When building UI that should be memorable |
 | `/arc:naming` | Generate and validate project names with domain/GitHub checks | Naming a new project or product |
@@ -139,19 +138,21 @@ Output ALL of these in order:
 
 | Command | What it does | When to use |
 |---------|-------------|-------------|
-| `/arc:review` | Expert review with parallel specialized agents (security, design, performance, etc.) | Before merging, after implementation |
-| `/arc:audit` | Mechanical verification plus comprehensive audit | Quick checks, focused audits, before shipping |
+| `/arc:review` | Expert review of a plan, spec, design, or implementation approach | Before implementation, when deciding whether a plan is sound |
+| `/arc:audit` | Mechanical verification plus comprehensive codebase audit | Existing codebase health checks, risk assessment, before shipping |
+| `/arc:refactor` | Inspect existing code to produce a structural refactor plan/RFC | When code feels tangled, shallow, duplicated, or hard to test |
 
 **TEST**
 
 | Command | What it does | When to use |
 |---------|-------------|-------------|
 | `/arc:testing` | Test strategy and execution — unit, integration, E2E with specialist agents | Creating test plans, running suites, fixing failures |
+
 **SHIP**
 
 | Command | What it does | When to use |
 |---------|-------------|-------------|
-| `/arc:letsgo` | Production readiness checklist | Final gate before production deployment |
+| `/arc:launch` | Go-live and shareability checklist | Before sharing a public URL |
 
 **CROSS-CUTTING**
 
@@ -192,7 +193,7 @@ Based on what I found in your project:
 Pick 2-4 commands that make the most sense given:
 - What's **missing** (no vision doc → suggest `/arc:vision`)
 - What's **stale** (old plans → suggest `/arc:tidy`)
-- What **just changed** (recent UI edits → suggest `/arc:design` or `/arc:audit --harden`)
+- What **just changed** (recent UI edits → suggest `/arc:design` or `/arc:audit`)
 - What **could be improved** (no tests → suggest `/arc:testing`)
 
 ---

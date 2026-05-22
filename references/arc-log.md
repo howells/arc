@@ -71,7 +71,7 @@ Look for:
 | `/arc:review` | Plan reviewed, changes |
 | `/arc:audit` | Issue counts by severity |
 | `/arc:design` | UI designed, aesthetic direction |
-| `/arc:letsgo` | Deployment status |
+| `/arc:launch` | Public URL status |
 | `/arc:document` | Solution documented |
 | `/arc:commit` | What was committed |
 | `/arc:vision` | Vision created/updated |

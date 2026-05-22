@@ -413,7 +413,7 @@ SEO audit is complete when:
 
 - Reads **rules/seo.md** for baseline vitals
 - References **/arc:detail** for creating implementation plans (10+ file fixes)
-- Can be invoked after **/arc:letsgo** for deeper analysis
+- Can be invoked after **/arc:launch** for deeper analysis
 - SEO agent (**seo-engineer**) handles the lighter audit in `/arc:audit`
 
 <arc_log>

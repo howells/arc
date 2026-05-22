@@ -167,15 +167,3 @@ Will search engines and social platforms find and understand this?
    - Test failures -> Test Health capped at 1
 4. **Stage context is interpretation, not scoring.** A prototype scoring 10/21 is expected and healthy. A production app scoring 10/21 needs attention. The score is absolute; stage context goes in the written interpretation.
 5. **Bonus axes** are reported as `+N/M` after the core score. Not included in the /21 total to keep the core score comparable across project types.
-
-## Quick Mode Partial Scores
-
-In `quick`, `pre-commit`, and `pre-pr` modes, only mechanically-derivable axes are scored:
-
-| Axis | Quick Mode Signal |
-|------|-------------------|
-| Operations | Build + typecheck + lint results |
-| Code Quality | Lint results + dead code scan (if run) |
-| Test Health | Test existence + pass/fail (pre-pr only) |
-
-Other axes show `--` (requires full audit). The partial score is reported as `X/9 (partial)` from the 3 mechanical axes.

@@ -190,4 +190,4 @@ Entry: `/arc:vision — [Created / Updated] vision document`
 
 - **/arc:ideate** reads vision for context
 - **/arc:suggest** references vision as lowest-priority source
-- **/arc:letsgo** checks vision alignment
+- **/arc:launch** checks vision alignment

@@ -80,7 +80,7 @@ Look for:
 | `/arc:review` | Plan reviewed, changes made |
 | `/arc:audit` | Audit completed, issue counts by severity |
 | `/arc:design` | UI designed, aesthetic direction |
-| `/arc:letsgo` | Deployment status, checklist progress |
+| `/arc:launch` | Public URL status, checklist progress |
 | `/arc:document` | Solution documented, category |
 | `/arc:commit` | What was committed, branch |
 

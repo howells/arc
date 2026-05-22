@@ -154,7 +154,7 @@ AskUserQuestion:
 
 ### Step 3.5: Scope Posture (feature work only)
 
-**Skip this step** if the user's intent is a quick fix, continuing an existing plan, running tests, shipping, or reviewing code. Only ask when routing to `/arc:ideate` or `/arc:implement` for a new feature.
+**Skip this step** if the user's intent is a quick fix, continuing an existing plan, running tests, shipping, reviewing a plan, or assessing existing code. Only ask when routing to `/arc:ideate` or `/arc:implement` for a new feature.
 
 Ask one question:
 
@@ -192,9 +192,11 @@ Based on their answer:
 | "Quick fix/small change" | /arc:implement |
 | "Continue [existing plan]" | /arc:implement |
 | "Not sure what to work on" | /arc:suggest |
-| "Review/improve existing code" | /arc:audit or /arc:review |
+| "Review a plan/spec/approach" | /arc:review |
+| "Assess existing code quality/risk" | /arc:audit |
+| "Find refactoring opportunities" | /arc:refactor |
 | "Make it responsive/fix mobile" | /arc:responsive |
-| "Ship to production" | /arc:letsgo |
+| "Launch / go live" | /arc:launch |
 | "Run tests" | /arc:testing |
 
 **Invoke the skill:**
@@ -206,9 +208,9 @@ Skill arc:[chosen]: "[user's description]"
 
 When the user picks "Run a health check", run these sequentially — stop and report if anything critical fails:
 
-1. **Run mechanical checks** — `Skill arc:audit: "quick"`
-   - Does it build? Typecheck? Lint? Tests pass?
-   - If critical failures, report them and ask if the user wants to fix before continuing.
+1. **Run a codebase audit** — `Skill arc:audit`
+   - Mechanical checks run first, then Arc surfaces the most relevant codebase risks.
+   - If critical failures appear, report them and ask if the user wants to fix before continuing.
 
 2. **Check dependencies** — `Skill arc:deps`
    - Outdated packages, known CVEs, major version bumps available.
@@ -253,4 +255,4 @@ AskUserQuestion:
 - Routes to all other /arc:* commands
 - Reads Linear issues (if MCP available), /arc:vision, progress for context
 - Uses /arc:suggest when user is unsure
-- Chains /arc:audit quick → /arc:deps → /arc:suggest for stale repo health checks
+- Chains /arc:audit → /arc:deps → /arc:suggest for stale repo health checks

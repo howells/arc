@@ -17,8 +17,17 @@ Project-local files stay relative to the user's repository (`.ruler/`, `docs/`, 
 
 # Using Arc
 
+Arc's canonical product definition, domain language, and operating boundary live in
+`CONTEXT.md` at the Arc repository root. This skill applies that context at session
+startup.
+
 Arc has a broad workflow surface. Use this skill as the small control plane that decides
 how to route work without loading every workflow into context at once.
+
+Arc is self-contained and lifecycle-focused. Its job is to move software work from idea
+to shipped code through Arc-owned workflows, not to act as a general registry for
+external personal skills. When a specialist practice is useful, absorb it into the
+relevant Arc workflow in Arc's own language.
 
 ## Instruction Priority
 
@@ -40,6 +49,10 @@ Before substantial work, decide whether an Arc skill clearly applies.
 - If the task is small, direct, or outside Arc's workflows, respond normally.
 
 Arc should improve routing, not create ceremony for every trivial request.
+
+Do not route users to external skill collections as part of Arc's normal operation.
+External skills can inspire Arc workflow design, but Arc workflows must remain usable on
+their own.
 
 ## Platform Adaptation
 
@@ -89,8 +102,16 @@ Use these defaults:
 - Small scoped change -> `implement`
 - Architecture or quality review -> `review` or `audit`
 - Testing work -> `testing`
-- Production readiness -> `letsgo`
+- Go-live/shareability readiness -> `launch`
 - Unsure what to do -> `go` or `suggest`
+
+When a task needs a specialist lens, keep the routing Arc-native:
+
+- Ambiguous product intent -> `vision`, `ideate`, or `review` with one focused clarifying question
+- Reuse or duplicated UI patterns -> `design`, `implement`, `review`, or `audit`
+- Public API documentation -> `document`, `review`, or package-focused `implement`
+- Architecture boundaries or oversized modules -> `review`, `audit`, or `implement`
+- Rendered UX, browser behavior, and responsive issues -> `browse`, `responsive`, or `design`
 
 ## Artifact Locations
 

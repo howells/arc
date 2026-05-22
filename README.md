@@ -12,6 +12,8 @@ The full arc from idea to shipped code.
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code): install as a plugin and run `/arc:*` commands in Claude.
 - Codex: this repo includes `.agents/skills` so the same `skills/*/SKILL.md` workflows can run directly in Codex (no Claude plugin install required).
 
+Arc's canonical product definition and domain language live in [CONTEXT.md](./CONTEXT.md). This README is a user-facing summary.
+
 ## What It Does
 
 Arc provides skills covering the complete development lifecycle:
@@ -26,11 +28,12 @@ WHAT    /arc:ideate     - From idea to design doc
 DO      /arc:implement  - Plan + execute with TDD
         /arc:design     - UI/UX design with wireframes, reusable UI patterns, and critique
         /arc:testing    - Test strategy and execution
-        /arc:letsgo     - Production readiness checklist
+        /arc:launch     - Go-live checklist
 
 CROSS-CUTTING
-        /arc:review     - Review a plan for feasibility
+        /arc:review     - Review a plan, spec, design, or approach
         /arc:audit      - Comprehensive codebase audit (includes hygiene)
+        /arc:refactor   - Find structural refactoring opportunities
         /arc:browse     - Rendered app evaluation through an expert persona
         /arc:document   - Feature documentation
         /arc:suggest    - Opinionated next-step recommendations (+ discovery mode)
@@ -51,12 +54,7 @@ when they clearly apply.
 
 ## Key Principles
 
-- **Review is woven throughout, not bolted on at the end** — Each design section gets micro-reviewed before moving on
-- **Reviewers advise, the user decides** — Suggestions are presented as questions, not mandates
-- **One question at a time** — Never overwhelm with multiple questions
-- **YAGNI where appropriate** — Simplifications suggested, but user has final say
-- **TDD mandatory** — Tests first, implementation second
-- **Frontend-design integrated** — Bold aesthetic direction, not generic AI slop
+Arc's principles are defined in [CONTEXT.md](./CONTEXT.md). In short: keep the lifecycle visible, ask one focused question at a time, use TDD and verification for implementation work, weave review through the process, and keep specialist checks Arc-native.
 
 ## Install
 
@@ -127,7 +125,7 @@ Invoke skills explicitly (recommended):
 
 ```
 $go
-$audit quick
+$audit
 $browse as a first-time user
 $ideate add user authentication with magic links
 $design polish the dashboard hierarchy
@@ -190,9 +188,9 @@ These plugins provide additional review capabilities:
 
 | Plugin | Skill | Used by |
 |--------|-------|---------|
-| **[agent-skills](https://github.com/vercel-labs/agent-skills)** | `vercel-react-best-practices` | `/arc:implement`, `/arc:letsgo` |
+| **[agent-skills](https://github.com/vercel-labs/agent-skills)** | `vercel-react-best-practices` | `/arc:implement`, `/arc:launch` |
 | | `vercel-composition-patterns` | `/arc:implement`, `/arc:design` |
-| | `vercel-react-native-skills` | `/arc:implement`, `/arc:letsgo`, `/arc:responsive` |
+| | `vercel-react-native-skills` | `/arc:implement`, `/arc:launch`, `/arc:responsive` |
 | **[web-interface-guidelines](https://github.com/vercel-labs/web-interface-guidelines)** | `web-design-guidelines` | `/arc:design`, `/arc:implement`, `/arc:responsive` |
 
 ```
@@ -204,7 +202,7 @@ These plugins provide additional review capabilities:
 /plugin install web-interface-guidelines@vercel-labs-web-interface-guidelines
 ```
 
-When installed, Arc commands will automatically use these skills for React/Next.js performance reviews and UI compliance checks.
+These plugins are optional and outside Arc's product definition. Arc workflows should remain self-contained when they are not installed.
 
 ## Getting Started
 
@@ -255,8 +253,8 @@ You can also jump in at any point if you already have docs.
 # Evaluate a rendered app experience
 /arc:browse as a designer
 
-# Ship to production
-/arc:letsgo
+# Launch / go live
+/arc:launch
 ```
 
 ### Tips for Newcomers
@@ -288,9 +286,10 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:implement` | Scope-aware plan + execute with TDD | Code changes |
 | `/arc:design` | UI/UX work | Wireframes + code |
 | `/arc:testing` | Test strategy | Test files |
-| `/arc:letsgo` | Ship to production | Deployment |
-| `/arc:review` | Review a plan for feasibility | Updated plan file |
+| `/arc:launch` | Launch / go live | Public URL readiness |
+| `/arc:review` | Review a plan, spec, design, or approach | Updated plan file |
 | `/arc:audit` | Comprehensive codebase audit | `docs/audits/YYYY-MM-DD-*.md` |
+| `/arc:refactor` | Find structural refactoring opportunities | Refactor RFC / issue |
 | `/arc:browse` | Evaluate rendered app experience through an expert persona | `docs/arc/browse/YYYY-MM-DD-*.md` |
 | `/arc:document` | Document features | `docs/features/<feature>.md` |
 | `/arc:suggest` | What to work on next (+ discovery mode) | Recommendations |
@@ -333,7 +332,7 @@ Commands work together:
 - `/arc:suggest` reads Linear issues (if configured), in-session tasks (TaskList), codebase, and `/arc:vision` (priority cascade with opt-in discovery mode)
 - `/arc:ideate` flows to `/arc:implement` (which creates plans internally)
 - `/arc:implement` scales from quick fixes to full plan-driven execution
-- `/arc:letsgo` runs `/arc:testing`, `/arc:audit pre-pr`, and `/arc:audit --harden` as part of quality checks
+- `/arc:launch` records whether `/arc:testing`, `/arc:audit`, `/arc:seo`, and `/arc:responsive` are done, missing, or intentionally deferred
 - Claude Code uses TaskList for in-session task tracking; Linear MCP for persistent issue tracking
 
 ### Linear Integration (Optional)

@@ -1,25 +1,25 @@
 ---
 name: review
 description: |
-  Run expert review on a plan or branch diff with parallel reviewer agents. Presents findings as Socratic questions.
+  Run expert review on a plan, spec, design, or implementation approach with parallel reviewer agents. Presents findings as Socratic questions.
   Use when asked to "review the plan", "get feedback on the design", "check this approach",
-  "review my changes", "review the diff", or before implementation to validate architectural decisions.
+  or before implementation to validate architectural decisions.
 
-  Optional argument: reviewer name (e.g., `/arc:review daniel-product-engineer`) or `--diff` to review branch changes
+  Optional argument: reviewer name (e.g., `/arc:review daniel-product-engineer`)
 license: MIT
 metadata:
   author: howells
 website:
   order: 5
   desc: Get expert eyes
-  summary: Get feedback from specialized reviewers—security, performance, architecture, and more. Runs automatically during ideate, or on-demand for any code.
+  summary: Get feedback from specialized reviewers—security, performance, architecture, and more. Runs automatically during ideate, or on-demand for plans and implementation approaches.
   what: |
-    Review spins up specialized agents based on what it's looking at—a new auth flow gets security and architecture reviewers, a database change gets the data engineer. Each agent reviews independently, then their feedback is consolidated into a prioritized list of concrete items: things to fix, questions to answer, risks to consider.
+    Review spins up specialized agents based on the plan, spec, design, or approach being evaluated—a new auth flow gets security and architecture reviewers, a database change gets the data engineer. Each agent reviews independently, then their feedback is consolidated into a prioritized list of concrete items: things to fix, questions to answer, risks to consider.
   why: |
-    No single perspective catches everything. Review gives you a panel of experts without the scheduling overhead. It runs automatically at the end of /arc:ideate, but you can also invoke it on an entire app, a specific file, or a plan you're unsure about.
+    No single perspective catches everything. Review gives you a panel of experts without the scheduling overhead. It runs automatically at the end of /arc:ideate, but you can also invoke it on a plan, spec, design, or approach you're unsure about.
   decisions:
     - Runs during ideate automatically. You don't have to remember to ask for review.
-    - Agent selection is dynamic. It picks reviewers based on what the code touches.
+    - Agent selection is dynamic. It picks reviewers based on the plan scope.
     - Output is prioritized and concrete. Not vague concerns—specific items you can act on.
   agents:
     - security-engineer
@@ -99,11 +99,7 @@ Reviewers must respect the plan's scope. This is non-negotiable:
 </scope_discipline>
 
 <process>
-## Phase 0: Check for Specific Reviewer or Diff Mode
-
-**If `--diff` argument provided:**
-- Switch to **diff review mode** — skip Phase 1 (plan search) entirely
-- Jump to Phase 1D (Diff Review) below
+## Phase 0: Check for Specific Reviewer
 
 **If argument provided** (e.g., `daniel-product-engineer`):
 - Look for `agents/review/{argument}.md`
@@ -151,53 +147,12 @@ Reviewers must respect the plan's scope. This is non-negotiable:
    - Ask user: "Which plan should I review?"
 
 4. **If no plans found:**
-   - Check if the current branch has changes vs main:
-     ```bash
-     git fetch origin main --quiet && git diff origin/main --stat
-     ```
-   - **If branch has changes:** Offer to review the diff instead:
-     "No plans found, but this branch has changes against main. Want me to review the diff?"
-     - If yes → switch to Phase 1D (Diff Review)
-     - If no → "Can you point me to a plan file, or paste the plan you'd like me to review?"
-   - **If no changes:** "I couldn't find any plans or branch changes to review."
+   - "I couldn't find a plan to review. Can you point me to a plan file, paste the plan, or describe the approach you'd like reviewed?"
 
 **Once plan located:**
 - Store the plan content
 - Note the source (conversation, file path, or user-provided)
 - Proceed to Phase 2
-
-## Phase 1D: Diff Review
-
-**This phase runs instead of plan review** when `--diff` is passed or the user opts into diff review from Phase 1.
-
-1. **Check branch state:**
-   ```bash
-   git branch --show-current
-   ```
-   If on `main` with no changes: "Nothing to review — you're on main with no changes." Stop.
-
-2. **Read the checklist:**
-   ```
-   Read: references/diff-review-checklist.md
-   ```
-
-3. **Get the diff:**
-   ```bash
-   git fetch origin main --quiet
-   git diff origin/main
-   ```
-
-4. **Run two-pass review** applying the checklist against the diff:
-   - **Pass 1 (CRITICAL):** Race conditions, trust boundaries, data safety
-   - **Pass 2 (INFORMATIONAL):** Conditional side effects, stale references, test gaps, dead code, performance
-
-5. **Present findings** using the checklist's output format.
-
-6. **If CRITICAL issues found:** For each critical issue, present as a Socratic question:
-   - "This pattern reads then writes without a transaction — what happens if two requests hit this simultaneously?"
-   - Wait for user to decide: fix now, acknowledge, or mark as false positive
-
-7. **Skip to Phase 6** (Summary and Next Steps) — diff review doesn't need the full plan review pipeline.
 
 ## Phase 2: Detect Project Type
 
@@ -237,38 +192,9 @@ Reviewers must respect the plan's scope. This is non-negotiable:
 - If plan involves UI components, forms, or user-facing features → add `agents/review/accessibility-engineer.md`
 - If plan involves UI components, pages, or visual design → add `agents/review/designer.md`
 
-## Phase 2.5: Team Mode Check
-
-<team_mode_check>
-**Skip if specific reviewer was provided in Phase 0** (single reviewer, no team needed).
-
-**Check if agent teams are available** by attempting to detect team support in the current environment.
-
-**If teams are available**, offer the user a choice:
-
-```
-Execution mode:
-1. Team mode — Reviewers challenge each other's findings before you see them (higher quality, 3-5x token cost)
-2. Standard mode — Independent reviewers, findings consolidated by skill (faster, lower cost)
-```
-
-Use the AskUserQuestion interaction pattern with:
-- **"Team mode"** — Reviewers cross-review and debate findings. Questions that survive peer scrutiny are stronger. Best when reviewing complex or high-stakes plans.
-- **"Standard mode (Recommended)"** — Independent reviewers run in parallel. Faster and cheaper. Good default for most reviews.
-
-**If teams are NOT available**, proceed silently with standard mode. Do not mention teams to the user.
-
-**If team mode selected**, read the team reference:
-```
-references/agent-teams.md
-```
-</team_mode_check>
-
 ## Phase 3: Run Expert Review
 
 **If specific reviewer from Phase 0:** Spawn single reviewer agent.
-
-**If team mode selected:** Run team review (see Team Execution below).
 
 **Otherwise:** Spawn 3 reviewer agents in parallel:
 
@@ -284,52 +210,7 @@ Task [reviewer-2] model: sonnet: "Review this plan for [specialty concerns]..."
 Task [reviewer-3] model: sonnet: "Review this plan for [specialty concerns]..."
 ```
 
-### Team Execution (Agent Teams mode)
-
-Only if user opted into team mode in Phase 2.5.
-
-Create team `arc-review-[plan-slug]` with the 3 selected reviewers as teammates.
-
-**Round 1 — Initial Review:**
-
-Each reviewer performs their standard analysis independently (same prompts as standard mode).
-
-```
-Create team: arc-review-[plan-slug]
-Teammates: [reviewer-1], [reviewer-2], [reviewer-3]
-
-Each teammate reviews the plan through their domain lens.
-Same prompts and focus areas as standard mode.
-```
-
-**Round 2 — Cross-Review:**
-
-Each reviewer reads the others' findings and responds:
-- **"My analysis supports this"** — Confirms another reviewer's concern with additional evidence
-- **"My analysis addresses that"** — Points out that their recommendation already handles the concern
-- **"I disagree because"** — Challenges a finding with code-level evidence or domain reasoning
-
-**Resolution rules (from agent-teams reference):**
-- Code-level evidence wins over principle-based reasoning
-- Domain authority wins within domain
-- Every challenge must include explicit rationale
-
-**Round 2 output:** Pre-debated findings where each concern has either been confirmed by peers, refined through challenge, or dropped with stated rationale.
-
-**Wait for team to complete.**
-
-**If team creation fails**, fall back silently to standard parallel dispatch above.
-
 ## Phase 4: Consolidate and Present
-
-<team_consolidation>
-**If team mode was used**, consolidation is simpler:
-
-- Findings already survived peer scrutiny — false positives were caught and removed during debate
-- Conflicting recommendations already resolved with rationale from both sides
-- Socratic questions derived from team-debated findings carry more weight: "Two reviewers independently flagged this — what if we..."
-- Focus on transforming debated findings into questions (skip deduplication and conflict resolution)
-</team_consolidation>
 
 **Transform findings into Socratic questions:**
 
@@ -361,7 +242,7 @@ For each decision:
 
 If plan came from a file:
 - Update the file with changes
-- Commit: `git commit -m "docs: update <plan> based on review"`
+- Leave git commit decisions to `/arc:commit` or the user.
 
 ## Phase 6: Summary and Next Steps
 
@@ -430,16 +311,7 @@ Entry: `/arc:review — [Plan name] reviewed`
 - [ ] Plan updated (if from file)
 - [ ] Summary presented
 - [ ] Remaining arc shown (based on plan type)
-- [ ] User chose next step (detail/implement or done)
+- [ ] User chose next step (`/arc:implement` or done)
 - [ ] Progress journal updated
 - [ ] Orphaned agents cleaned up
-
-**Diff review** is complete when:
-- [ ] Branch has changes vs main
-- [ ] Checklist loaded from references/diff-review-checklist.md
-- [ ] Full diff read before flagging anything
-- [ ] Two-pass review applied (critical then informational)
-- [ ] Findings presented (critical as Socratic questions)
-- [ ] User decided on each critical finding
-- [ ] Summary presented
 </success_criteria>
