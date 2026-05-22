@@ -36,16 +36,6 @@ Paths in this skill use these conventions:
 
 **Load these only if relevant:**
 - references/model-strategy.md — if dispatching build agents
-- references/frontend-design.md — if UI work involved
-
-**For UI work, also load interface rules:**
-- rules/interface/design.md — Visual principles
-- rules/interface/colors.md — Color methodology
-- rules/interface/spacing.md — Spacing system
-- rules/interface/layout.md — Layout patterns
-- rules/interface/animation.md — Motion rules
-- rules/interface/forms.md — If forms involved
-- rules/interface/interactions.md — Interaction patterns
 - references/component-design.md — React component patterns
 </required_reading>
 
@@ -73,18 +63,18 @@ Paths in this skill use these conventions:
 - Package manager: [pnpm/yarn/npm/pip/uv]
 - Framework: [next/react/fastapi/etc]
 
-## Step 2: Load Design Document
+## Step 2: Load Feature Spec
 
-**Find the design doc:**
+**Find the feature spec:**
 ```
-Glob: docs/arc/specs/*-design.md
+Glob: docs/arc/specs/*.md
 Fallback: docs/plans/*-design.md
 ```
 
 Pick the most recent one (highest date prefix). Read it. This is the source of truth for what to build.
 
-**Derive implementation plan filename:** Replace `-design.md` with `-implementation.md`.
-- Design: `docs/arc/specs/2025-06-15-user-dashboard-design.md`
+**Derive implementation plan filename:** Replace `-design.md` or `-spec.md` with `-implementation.md`.
+- Feature spec: `docs/arc/specs/2025-06-15-user-dashboard-design.md`
 - Implementation: `docs/arc/plans/2025-06-15-user-dashboard-implementation.md`
 
 ## Step 2.2: Lock File Structure Before Tasks
@@ -96,12 +86,12 @@ Before defining tasks, write a short file map:
 - Where boundaries or interfaces matter
 - Whether any file is already too large or too tangled for a clean change
 
-If the design implies multiple independent subsystems, stop and split the work into
+If the feature spec implies multiple independent subsystems, stop and split the work into
 separate plans instead of forcing everything into one implementation plan.
 
-**Extract from the design doc:**
+**Extract from the feature spec:**
 - User stories / acceptance criteria
-- ASCII UI wireframes
+- UI requirements and any external visual source
 - Data model
 - Component structure
 - API surface
@@ -112,7 +102,7 @@ separate plans instead of forcing everything into one implementation plan.
 
 ```
 Task Explore model: haiku: "Find existing patterns in this codebase that we can
-reuse for: [list components/features from design].
+reuse for: [list components/features from spec].
 Look for: similar components, utility functions, hooks, types, test patterns.
 
 Structure your findings as:
@@ -270,9 +260,9 @@ pnpm jest src/path/to/file.test.tsx -t "test name"
 ```
 </test_commands>
 
-## Step 5: Include UI References
+## Step 5: Include UI Implementation Constraints
 
-For each UI task, embed aesthetic direction and references directly in the `<action>`:
+For each UI task, embed implementation-relevant UI requirements and external visual sources directly in the `<action>`. Do not invent visual direction in this skill. If the feature spec says the UI needs a visual direction that does not exist yet, create a checkpoint asking whether to pause for Chiaroscuro/Figma/user design input or continue by matching existing project patterns.
 
 ```xml
 <task id="7" depends="5,6" type="auto">
@@ -286,46 +276,50 @@ For each UI task, embed aesthetic direction and references directly in the `<act
     src/lib/utils.ts
   </read_first>
   <action>
-    Aesthetic Direction (from design doc):
-    - Tone: luxury/refined
-    - Memorable: hover lift with shadow bloom
-    - Typography: GT Sectra display + IBM Plex Sans body
-    - Color: warm neutrals, gold accent
-    - Motion: subtle hover states, no page transitions
+    UI requirements from feature spec:
+    - Screens/states: product card in listing, loading, empty image fallback
+    - Interaction: Add to Cart button updates state and announces result
+    - Existing patterns: match src/components/product-list.tsx and src/components/ui/button.tsx
+    - Visual source of truth: Figma URL below
 
     Figma: https://figma.com/design/xxx/yyy?node-id=123-456
     Screenshot: docs/arc/specs/assets/YYYY-MM-DD-topic/figma-123-456.png
     Fetch fresh context: mcp__figma__get_design_context fileKey="xxx" nodeId="123:456"
 
-    ASCII Wireframe:
+    Structural sketch, if useful:
     ┌─────────────────┐
     │   [image]       │
     ├─────────────────┤
     │ Product Name    │
     │ $99.00          │
-    │ [Add to Cart]   │  ← hover lift + shadow bloom
+    │ [Add to Cart]   │
     └─────────────────┘
 
-    AVOID: Roboto/Arial/system-ui, purple gradients, generic shadows
-    ENSURE: The hover effect is the memorable moment
+    Do not introduce new brand colors, typography, or motion beyond the external source or existing project patterns.
   </action>
   <test_code>
     // component rendering and interaction tests
   </test_code>
   <verify>
     pnpm vitest run src/components/product-card.test.tsx — all pass
-    Visual: hover effect produces distinct shadow bloom, not generic box-shadow
+    Component matches feature spec states and external visual source
   </verify>
-  <done>ProductCard renders with luxury aesthetic, hover lift works, tests pass</done>
-  <commit>feat(ui): add ProductCard with hover shadow bloom</commit>
+  <done>ProductCard renders required states, Add to Cart works, tests pass</done>
+  <commit>feat(ui): add product card interaction</commit>
 </task>
 ```
 
-**Why all three (aesthetic + Figma + ASCII):**
-- Aesthetic direction = the creative vision
-- ASCII = structure and layout intent
-- Figma = exact implementation details
-- All three ensure the result is intentional, not generic
+**Allowed UI sources:**
+- Feature spec UI requirements
+- Existing project components and patterns
+- Chiaroscuro or other external design spec
+- Figma URL or user-provided screenshots
+- `docs/brand-system.md` if present
+
+**Not allowed:**
+- Creating a new brand direction
+- Choosing new typography/color/motion systems without an external source
+- Treating structural sketches as visual design authority
 
 ## Step 6: Write Implementation Plan
 
@@ -335,8 +329,8 @@ For each UI task, embed aesthetic direction and references directly in the `<act
 
 > **For Arc:** Use /arc:implement to execute this plan. Subagents should report DONE, DONE_WITH_CONCERNS, NEEDS_CONTEXT, or BLOCKED.
 
-**Design:** `docs/arc/specs/YYYY-MM-DD-<topic>-design.md` (or legacy fallback path)
-**Goal:** [One sentence from design doc's problem statement]
+**Feature spec:** `docs/arc/specs/YYYY-MM-DD-<topic>-design.md` (or legacy fallback path)
+**Goal:** [One sentence from feature spec's problem statement]
 **Stack:** [Framework] + [Test runner] + [Package manager]
 
 ---
@@ -368,13 +362,13 @@ Plan is ready. Tell the user the plan is saved and offer next steps as plain tex
 <success_criteria>
 Implementation plan is complete when:
 - [ ] Test framework detected
-- [ ] Design document loaded
+- [ ] Feature spec loaded
 - [ ] Tasks written as XML with all required elements (`<name>`, `<files>`, `<read_first>`, `<action>`, `<test_code>`, `<verify>`, `<done>`, `<commit>`)
 - [ ] Each task has exact file paths in `<files>`
 - [ ] Each `<action>` contains inline values (no "look it up" references)
 - [ ] Each `<verify>` has concrete, observable criteria (no "works correctly")
 - [ ] Each `<read_first>` lists files the agent must check before acting
-- [ ] UI tasks include aesthetic direction, wireframes, and Figma refs in `<action>`
+- [ ] UI tasks include implementation requirements and external visual source when relevant
 - [ ] Plan-document-reviewer passes all 7 validation dimensions
 - [ ] Plan committed to git
 </success_criteria>

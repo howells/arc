@@ -3,7 +3,7 @@ name: implement
 description: |
   Scope-aware implementation workflow with TDD and continuous quality checks.
   Use when asked to "implement this", "build this feature", "execute the plan",
-  or after /arc:ideate has created a design doc. For small work it creates a
+  or after /arc:ideate has created a feature spec. For small work it creates a
   lightweight inline plan; for larger work it creates or loads a full implementation
   plan and executes task-by-task with build agents.
 license: MIT
@@ -147,7 +147,7 @@ Project-local rules are optional. Do not copy Arc's rule bundle into the project
 
 **You are here in the arc:**
 ```
-/arc:ideate     → Design doc (on main) ✓
+/arc:ideate     → Feature spec ✓
      ↓
 /arc:implement  → Plan + Execute ← YOU ARE HERE
      ↓
@@ -162,8 +162,8 @@ Assess what is being asked before choosing the heavier workflow.
 |--------|-------------|-------------|
 | Files affected | 1-5 | 6+ |
 | New patterns | No | Yes |
-| Design decisions | Minimal | Significant |
-| Spec or design doc exists | Maybe | Should |
+| Product/technical decisions | Minimal | Significant |
+| Feature spec or implementation plan exists | Maybe | Should |
 
 **Use the small-scope path when the change is bounded and the implementation shape is already obvious:**
 - Stay in the current shared workspace. Create a simple feature branch if needed.
@@ -195,7 +195,7 @@ Read: skills/detail/SKILL.md
 ```
 
 The detail skill will:
-1. Load design document
+1. Load feature spec
 2. Detect project stack
 3. Find reusable patterns
 4. Break down into TDD tasks
@@ -410,9 +410,9 @@ Determine which build agent(s) may be needed:
 | Write unit tests | unit-test-writer | Pure functions, components, hooks |
 | Write integration tests | integration-test-writer | API mocking, auth states |
 | Write E2E tests | e2e-test-writer | User journeys, Playwright |
-| Build UI from spec | implementer | UI components with existing design direction |
+| Build UI from spec | implementer | UI components with feature-spec requirements or an external visual source |
 | Build UI from Figma | figma-builder | Figma URL provided |
-| Design decisions needed | external design skill | Arc does not create visual direction |
+| Visual direction needed | external design skill | Arc does not create visual direction |
 | Fix TS/lint errors | fixer | Mechanical cleanup |
 | Debug failing tests | debugger | Test failures |
 | Run E2E tests | e2e-runner | Playwright test suites |
@@ -421,8 +421,8 @@ Determine which build agent(s) may be needed:
 **Agent selection flow:**
 1. Is this general code (no UI)? → implementer
 2. Is this UI with Figma? → figma-builder
-3. Is this UI with design spec? → implementer
-4. Is this UI with no spec? → ask for an external design spec before creating visual direction
+3. Is this UI with feature-spec UI requirements or an external visual source? → implementer
+4. Is this UI with no visual source and no existing pattern? → ask whether to pause for external design input or match existing patterns
 5. Did something break? → debugger or fixer
 6. Task complete? → spec-reviewer to verify
 
@@ -665,12 +665,12 @@ Search the codebase (Glob + Grep) for existing functions that serve the same or 
 
 **Before starting UI tasks:**
 
-**If design spec exists** — spawn implementer with the design spec as a constraint:
+**If feature-spec UI requirements or an external visual source exist** — spawn implementer with those constraints:
 ```
 Read: agents/build/implementer.md
 ```
 
-**If no design spec** (empty states, undefined visuals) — do not invent visual direction inside Arc. Ask for a design spec from Chiaroscuro or another external design source, or limit the task to behavior-preserving implementation against existing project patterns.
+**If no visual source exists** (empty states, undefined visuals) — do not invent visual direction inside Arc. Ask for a design spec from Chiaroscuro or another external design source, or limit the task to behavior-preserving implementation against existing project patterns.
 
 **If Figma URL provided** — spawn figma-builder:
 ```
@@ -678,16 +678,15 @@ Read: agents/build/figma-builder.md
 Task [figma-builder] model: opus: "Implement from Figma: [URL]"
 ```
 
-**For UI implementation from a spec, spawn:
+**For UI implementation from a spec or external visual source, spawn:
 ```
 Task [implementer] model: opus: "Build UI components for [feature].
 
-Design spec:
-- Tone: [tone]
-- Memorable element: [what stands out]
-- Typography: [fonts]
-- Color strategy: [approach]
-- Motion: [philosophy]
+Feature-spec UI requirements:
+- Screens/states: [states]
+- Interactions: [actions and feedback]
+- Existing patterns: [components/routes]
+- External visual source: [Chiaroscuro/Figma/brand-system/user screenshots/none]
 
 Figma: [URL if available]
 Files to create: [list from implementation plan]
@@ -695,7 +694,7 @@ Files to create: [list from implementation plan]
 Interface rules: rules/interface/ (include tailwind-authoring.md, buttons.md, surfaces.md, sections.md when relevant)
 Project rules: .ruler/react.md, .ruler/tailwind.md
 
-Treat the design spec as an external source of truth. Do not create new visual direction beyond it."
+Treat external visual sources as constraints. Do not create new visual direction beyond them."
 ```
 
 **Fetch Figma context (if available):**
@@ -704,7 +703,7 @@ mcp__figma__get_design_context: fileKey, nodeId
 mcp__figma__get_screenshot: fileKey, nodeId
 ```
 
-**After completing UI tasks** — verify against the external design spec and run rendered checks when available. Use external Chiaroscuro or Fieldtest workflows for visual critique when needed.
+**After completing UI tasks** — verify against the feature spec and any external visual source. Use external Chiaroscuro or Fieldtest workflows for visual critique when needed.
 
 **When implementing unfamiliar library APIs:**
 ```
@@ -859,8 +858,8 @@ gh pr create --title "feat: <description>" --body "$(cat <<'EOF'
 ## Screenshots
 [Include if UI changes]
 
-## Design Doc
-[Link to design doc]
+## Feature Spec
+[Link to feature spec]
 
 ## Implementation Plan
 [Link to implementation plan]
