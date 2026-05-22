@@ -22,7 +22,6 @@ arc/
 │   ├── testing/SKILL.md    # 7. Test: strategy & execution
 │   ├── launch/SKILL.md     # 8. Launch: go-live checklist
 │   ├── refactor/SKILL.md   # Cross-cutting: structural refactor planning
-│   ├── browse/SKILL.md     # Cross-cutting: rendered app experience evaluation
 │   ├── audit/SKILL.md      # Cross-cutting: codebase audit
 │   ├── commit/SKILL.md     # Cross-cutting: smart commits
 │   ├── suggest/SKILL.md    # Cross-cutting: what to work on
@@ -57,7 +56,6 @@ All commands use the `/arc:` namespace prefix. The typical workflow:
 7. SHIP       /arc:launch     → Go-live checklist
 
 CROSS-CUTTING (available anytime):
-              /arc:browse     → Evaluate rendered app experience through a persona
               /arc:audit      → Comprehensive codebase audit
               /arc:commit     → Smart commits with auto-splitting
               /arc:suggest    → Project-local next-step triage

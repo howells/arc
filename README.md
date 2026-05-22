@@ -34,7 +34,6 @@ CROSS-CUTTING
         /arc:review     - Review a plan, spec, design, or approach
         /arc:audit      - Comprehensive codebase audit (includes hygiene)
         /arc:refactor   - Find structural refactoring opportunities
-        /arc:browse     - Rendered app evaluation through an expert persona
         /arc:suggest    - Project-local next-step triage
 
 TOOLS   /arc:commit     - Smart commit + push with auto-splitting
@@ -118,7 +117,6 @@ Invoke skills explicitly (recommended):
 ```
 $go
 $audit
-$browse as a first-time user
 $ideate add user authentication with magic links
 $design polish the dashboard hierarchy
 $implement
@@ -131,7 +129,6 @@ without preloading the whole system.
 Common Codex entry points:
 - `$go`
 - `$audit`
-- `$browse`
 - `$ideate`
 - `$design`
 - `$implement`
@@ -158,7 +155,7 @@ Arc uses these plugins and MCP integrations for enhanced functionality:
 |-------------|---------|
 | **Figma** | `/arc:ideate`, `/arc:implement`, `/arc:design` |
 | **Context7** | research and implementation workflows |
-| **Claude in Chrome** | `/arc:design`, `/arc:browse`, `designer` review |
+| **Claude in Chrome** | `/arc:design`, `designer` review |
 | **WireText MCP** | `/arc:design`, `/arc:ideate` wireframing |
 | **agent-browser** | browser automation fallback outside Claude Code |
 
@@ -242,9 +239,6 @@ You can also jump in at any point if you already have docs.
 # Get suggestions for what to work on
 /arc:suggest
 
-# Evaluate a rendered app experience
-/arc:browse as a designer
-
 # Launch / go live
 /arc:launch
 ```
@@ -282,7 +276,6 @@ Each step asks if you want to continue. You can also enter at any point:
 | `/arc:review` | Review a plan, spec, design, or approach | Updated plan file |
 | `/arc:audit` | Comprehensive codebase audit | `docs/audits/YYYY-MM-DD-*.md` |
 | `/arc:refactor` | Find structural refactoring opportunities | Refactor RFC / issue |
-| `/arc:browse` | Evaluate rendered app experience through an expert persona | `docs/arc/browse/YYYY-MM-DD-*.md` |
 | `/arc:suggest` | Project-local next-step triage | Recommendations |
 | `/arc:commit` | Commit and push changes | Git commits |
 

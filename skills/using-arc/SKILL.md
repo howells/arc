@@ -109,9 +109,9 @@ When a task needs a specialist lens, keep the routing Arc-native:
 
 - Ambiguous product intent -> `vision`, `ideate`, or `review` with one focused clarifying question
 - Reuse or duplicated UI patterns -> `design`, `implement`, `review`, or `audit`
-- Public API documentation -> `document`, `review`, or package-focused `implement`
+- Public API documentation -> package-focused `implement` or external documentation skills
 - Architecture boundaries or oversized modules -> `review`, `audit`, or `implement`
-- Rendered UX, browser behavior, and responsive issues -> `browse` or `design`
+- Rendered UX, browser behavior, and responsive issues -> `design` when tied to Arc UI work, otherwise external rendered-app QA skills
 
 ## Artifact Locations
 
