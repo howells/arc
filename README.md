@@ -192,7 +192,7 @@ Arc includes specialist agents for work that benefits from focused review or del
 | Category | Agents |
 |----------|--------|
 | **Research** | docs-researcher, git-history-analyzer |
-| **Review** | accessibility-engineer, architecture-engineer, daniel-product-engineer, data-engineer, lee-nextjs-engineer, performance-engineer, security-engineer, senior-engineer, test-quality-engineer |
+| **Review** | accessibility-engineer, architecture-engineer, daniel-product-engineer, data-engineer, lee-nextjs-engineer, mastra-agent-engineer, performance-engineer, security-engineer, senior-engineer, test-quality-engineer |
 | **Build** | implementer, fixer, debugger, unit-test-writer, integration-test-writer, e2e-test-writer, test-runner, e2e-runner, spec-reviewer, code-reviewer, plan-completion-reviewer |
 | **Workflow** | spec-flow-analyzer, spec-document-reviewer, plan-document-reviewer, e2e-test-runner |
 

@@ -15,6 +15,7 @@ REVIEW_AGENTS=(
     "daniel-product-engineer"
     "data-engineer"
     "lee-nextjs-engineer"
+    "mastra-agent-engineer"
     "performance-engineer"
     "security-engineer"
     "senior-engineer"

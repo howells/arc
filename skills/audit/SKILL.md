@@ -30,6 +30,7 @@ website:
     - architecture-engineer
     - daniel-product-engineer
     - lee-nextjs-engineer
+    - mastra-agent-engineer
     - senior-engineer
     - data-engineer
   workflow:
@@ -115,6 +116,7 @@ Pass relevant rules to each reviewer agent.
 | senior-engineer | code-style.md, typescript.md, react.md, error-handling.md |
 | data-engineer | testing.md, api.md |
 | daniel-product-engineer | react.md, typescript.md, react-performance.md, react-correctness.md |
+| mastra-agent-engineer | api.md, integrations.md, typescript.md, error-handling.md |
 | performance-engineer | react-performance.md |
 
 **For frontend implementation audits, also load code-level interface rules:**
@@ -441,6 +443,7 @@ Include the mechanical summary in reviewer context, then continue to reviewer se
 - Performance focus → prioritize `performance-engineer`
 - Architecture focus → prioritize `architecture-engineer`
 - Accessibility focus → prioritize `accessibility-engineer`
+| Mastra/agent systems | mastra-agent-engineer |
 
 **Final reviewer list:**
 - Small projects: 2-3 reviewers
@@ -448,11 +451,13 @@ Include the mechanical summary in reviewer context, then continue to reviewer se
 - Large projects: 4+ reviewers as needed for the scope
 - Early prototype/development projects with no sensitive surface may have no security reviewer. This is intentional. The audit should preserve cadence while still surfacing concrete dangerous issues from mechanical checks.
 
+- If `@mastra/*`, Mastra config/code, MCP servers, agent/tool/workflow definitions, memory/RAG, model routing, browser/sandbox tools, or agent-readable surfaces are detected → add `mastra-agent-engineer`
 ## Phase 3: Run Audit
 
 **Read agent prompts:**
 For each selected reviewer, read:
 ```
+- Agent systems or Mastra focus → prioritize `mastra-agent-engineer`
 agents/review/[reviewer-name].md
 ```
 
@@ -494,6 +499,7 @@ references/audit-stage-calibration.md
 Include in every reviewer prompt:
 ```
 Project stage: [prototype / development / pre-launch / production]
+| mastra-agent-engineer | sonnet | Mastra API verification and agent-system judgment |
 
 SEVERITY CALIBRATION FOR THIS STAGE:
 [Paste the matching stage block from audit-stage-calibration.md]
@@ -619,7 +625,7 @@ Focus on: N+1 queries, missing indexes, memory leaks, bundle size, render perfor
 | test-quality-engineer | 5. Test Health |
 | accessibility-engineer | Bonus: Accessibility |
 
-When a reviewer scores two axes (daniel-product-engineer), include both criteria tables and ask for both scores.
+When a reviewer scores two axes (`daniel-product-engineer` or `mastra-agent-engineer`), include both criteria tables and ask for both scores.
 
 If `security-engineer` was skipped by the security readiness gate, do not fabricate a full Security Posture score from absence of review. Use `--` for axis 1 and adjust the denominator, unless mechanical evidence gives a concrete security result:
 - Critical/high vulnerability or likely credential exposure found → add `security-engineer` before scoring.
@@ -645,6 +651,7 @@ Repeat for remaining batches:
 Use the severity validation table and conflict resolution rules from:
 ```
 references/audit-stage-calibration.md
+| mastra-agent-engineer | 3. Architecture (agent-system second opinion) + 6. Resilience |
 ```
 
 Downgrade findings that are rated higher than the stage warrants. Add note: `[Severity adjusted for [stage] stage — would be [original] in production]`

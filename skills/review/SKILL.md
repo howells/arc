@@ -26,6 +26,7 @@ website:
     - performance-engineer
     - architecture-engineer
     - data-engineer
+    - mastra-agent-engineer
     - senior-engineer
   workflow:
     position: spine
@@ -73,6 +74,7 @@ Paths in this skill use these conventions:
 | lee-nextjs-engineer | nextjs.md, api.md |
 | senior-engineer | code-style.md, typescript.md, react.md |
 | architecture-engineer | stack.md, turborepo.md |
+| mastra-agent-engineer | api.md, integrations.md, typescript.md |
 | security-engineer | security.md, api.md, env.md |
 | data-engineer | database.md, testing.md, api.md |
 | senior-engineer | cloudflare-workers.md (if wrangler.toml exists) |
@@ -106,6 +108,7 @@ Reviewers must respect the plan's scope. This is non-negotiable:
 - `performance-engineer` — Bottlenecks, scalability
 - `security-engineer` — Vulnerabilities, OWASP
 - `data-engineer` — Migrations, transactions
+- `mastra-agent-engineer` — Mastra, agents, workflows, tools, memory/RAG, MCP, agent-readable surfaces
 
 ## Phase 1: Find the Plan
 
@@ -182,11 +185,14 @@ Reviewers must respect the plan's scope. This is non-negotiable:
 **Conditional addition (all UI project types):**
 - If plan involves UI components, forms, or user-facing features → add `agents/review/accessibility-engineer.md`
 
+**Conditional addition (all project types):**
+- If `package.json` includes `@mastra/*` or the plan involves agents, tools, workflows, memory, RAG, MCP, model routing, browser/sandbox capabilities, or agent-readable software surfaces → add `agents/review/mastra-agent-engineer.md`
+
 ## Phase 3: Run Expert Review
 
 **If specific reviewer from Phase 0:** Spawn single reviewer agent.
 
-**Otherwise:** Spawn 3 reviewer agents in parallel:
+**Otherwise:** Spawn selected reviewer agents in parallel:
 
 ```
 Task [reviewer-1] model: sonnet: "Review this plan for [specialty concerns].
@@ -198,6 +204,8 @@ Focus on: [specific area based on reviewer type]"
 Task [reviewer-2] model: sonnet: "Review this plan for [specialty concerns]..."
 
 Task [reviewer-3] model: sonnet: "Review this plan for [specialty concerns]..."
+
+Task [conditional-reviewer] model: sonnet: "Review this plan for [specialty concerns]..."
 ```
 
 ## Phase 4: Consolidate and Present
@@ -285,7 +293,7 @@ Entry: `/arc:review — [Plan name] reviewed`
 **Plan review** is complete when:
 - [ ] Plan located (conversation, file, or user-provided)
 - [ ] Project type detected and reviewers selected
-- [ ] Parallel expert review completed (3 agents)
+- [ ] Parallel expert review completed (selected agents)
 - [ ] All findings presented as Socratic questions
 - [ ] User made decisions on each finding
 - [ ] Plan updated (if from file)

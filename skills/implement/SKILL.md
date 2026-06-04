@@ -819,6 +819,7 @@ See agents/review/architecture-engineer.md"
 | Auth, sessions, API keys, user data | security-engineer |
 | Significant UI (components, pages) | senior-engineer |
 | Database migrations, data models | data-engineer |
+| Mastra, agents, workflows, tools, memory/RAG, MCP, model routing, browser/sandbox agent capabilities | mastra-agent-engineer |
 
 Present findings as Socratic questions (see `references/review-patterns.md`).
 Blockers → fix → re-verify (max 2 cycles). Should-fix → fix if quick, otherwise note as follow-up.

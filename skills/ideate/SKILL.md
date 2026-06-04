@@ -252,6 +252,7 @@ Sections to cover (skip what's irrelevant):
 - Data model → spawn data-engineer
 - API design → spawn architecture-engineer
 - Security-sensitive → spawn security-engineer
+- Mastra, agents, workflows, tools, memory/RAG, MCP, model routing, or browser/sandbox agent capabilities → spawn mastra-agent-engineer
 
 Present findings as questions, incorporate before moving on.
 
