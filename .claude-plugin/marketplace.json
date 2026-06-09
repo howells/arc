@@ -5,14 +5,14 @@
   },
   "metadata": {
     "description": "The full arc from idea to shipped code. Lifecycle workflows for vision, ideation, implementation, review, testing, audit, launch, and commits.",
-    "version": "2.0.13"
+    "version": "2.1.1"
   },
   "plugins": [
     {
       "name": "arc",
       "source": "./",
       "description": "The full arc from idea to shipped code. Lifecycle workflows for vision, ideation, implementation, review, testing, audit, launch, and commits.",
-      "version": "2.0.13",
+      "version": "2.1.1",
       "author": {
         "name": "Daniel Howells"
       },
