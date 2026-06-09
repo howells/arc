@@ -103,15 +103,15 @@ Use these defaults:
 - Architecture or quality review -> `review` or `audit`
 - Testing work -> `testing`
 - Go-live/shareability readiness -> `launch`
-- Unsure what to do -> `help`
+- Unsure what to do -> ask one focused question, then route to the smallest matching workflow
 
 When a task needs a specialist lens, keep the routing Arc-native:
 
 - Ambiguous product intent -> `vision`, `ideate`, or `review` with one focused clarifying question
-- Reuse or duplicated UI patterns -> `design`, `implement`, `review`, or `audit`
+- Reuse or duplicated UI patterns -> `implement`, `review`, or `audit`
 - Public API documentation -> package-focused `implement` or external documentation skills
 - Architecture boundaries or oversized modules -> `review`, `audit`, or `implement`
-- Rendered UX, browser behavior, and responsive issues -> `design` when tied to Arc UI work, otherwise external rendered-app QA skills
+- Rendered UX, browser behavior, and responsive issues -> `implement` when tied to Arc UI work, otherwise external rendered-app QA skills
 
 ## Artifact Locations
 

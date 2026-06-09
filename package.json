@@ -1,14 +1,18 @@
 {
   "name": "arc-plugin",
-  "version": "2.0.11",
+  "version": "2.0.12",
   "private": true,
   "description": "Arc workflows for Claude Code and Codex",
   "scripts": {
     "dev": "pnpm --dir site dev",
     "test": "bash tests/run-skill-tests.sh",
-    "prepare": "husky"
+    "prepare": "husky",
+    "lint": "howells-ox-check --config=oxlint.config.ts package.json skills tests scripts references oxlint.config.ts oxfmt.config.ts",
+    "lint:fix": "howells-ox-fix --config=oxlint.config.ts package.json skills tests scripts references oxlint.config.ts oxfmt.config.ts",
+    "format": "howells-oxfmt --write package.json skills tests scripts references oxlint.config.ts oxfmt.config.ts README.md"
   },
   "devDependencies": {
+    "@howells/lint": "^0.2.1",
     "husky": "^9.0.0"
   }
 }

@@ -22,8 +22,8 @@ Options:
   --repo-url <url>              Override Arc repository URL.
   --branch <name>               Branch to track (default: main).
   --arc-home <path>             Install/update clone location.
-  --codex-skills-root <path>    Codex Desktop skills root (default: ~/.codex/skills).
-  --agents-skills-root <path>   Compatibility skills root (default: ~/.agents/skills).
+  --agents-skills-root <path>   Codex user skills root (default: ~/.agents/skills).
+  --codex-skills-root <path>    Compatibility mirror root (default: ~/.codex/skills).
   --skills-root <path>          Back-compat alias for --agents-skills-root.
   -h, --help                    Show this help.
 EOF
@@ -167,8 +167,10 @@ link_skills_into_root() {
   echo "Arc skills linked into $root_label: $root"
 }
 
-link_skills_into_root "$CODEX_SKILLS_ROOT" "Codex Desktop root"
-link_skills_into_root "$AGENTS_SKILLS_ROOT" "compatibility root"
+# ~/.agents/skills is Codex's documented user-scope skills directory; link there first.
+# ~/.codex/skills is a compatibility mirror for older builds that surfaced skills there.
+link_skills_into_root "$AGENTS_SKILLS_ROOT" "Codex user skills root"
+link_skills_into_root "$CODEX_SKILLS_ROOT" "compatibility mirror"
 
 if [[ "$AUTO_UPDATE" == "true" ]]; then
   if [[ ! -x "$ARC_HOME/.codex/enable-auto-update.sh" ]]; then

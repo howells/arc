@@ -12,7 +12,8 @@ The full arc from idea to shipped code.
 Arc is a self-contained software development lifecycle for coding agents. It helps move work from early project clarity through ideation, implementation, review, testing, launch readiness, and clean commits.
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code): install as a plugin and run `/arc:*` commands.
-- Codex: install Arc as skills or as a native Codex plugin, then invoke workflows with `$<skill-name>`.
+- [Codex](https://developers.openai.com/codex): install as a native plugin and invoke workflows with `$<skill-name>`.
+- [Cursor](https://cursor.com/docs/skills): Arc's `SKILL.md` workflows are discovered from the shared skills directory; invoke with `/<skill-name>`.
 
 Arc's canonical product definition and operating boundary live in [CONTEXT.md](./CONTEXT.md). This README is the user-facing guide.
 
@@ -62,20 +63,20 @@ This installs the full Arc plugin: skills, slash commands, agents, references, d
 
 ### Codex
 
-Recommended full-runtime install:
+Install as a native Codex plugin (Codex CLI 0.117+):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh | bash -s -- --auto-update --interval-hours 6
+codex plugin marketplace add howells/arc
+codex plugin add arc@howells
 ```
 
-Install once without auto-update:
+This installs the full Arc plugin — skills, agents, references, disciplines, templates, scripts, and rules — into Codex's plugin cache. Update with `codex plugin marketplace upgrade`. Invoke workflows with `$<skill-name>`.
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh | bash
-```
+For older Codex builds without `codex plugin`, a legacy clone-and-symlink installer is documented in [.codex/INSTALL.md](./.codex/INSTALL.md); it links Arc skills into `~/.agents/skills` (Codex's user skills directory).
 
-The Codex installer clones Arc to `~/.codex/arc`, exposes direct skills under `~/.codex/skills`, and mirrors them into `~/.agents/skills` for compatibility.
-Arc also includes `.codex-plugin/plugin.json` for native Codex plugin hosts that install from plugin manifests.
+### Cursor
+
+Cursor 2.4+ discovers Arc's `SKILL.md` workflows from the shared skills directories it reads — `~/.agents/skills`, plus `~/.claude/skills` and `~/.codex/skills` as compatibility paths. Installing Arc for Claude Code or Codex therefore makes it available in Cursor with no extra step; invoke with `/<skill-name>`. Cursor does not load Arc's bundled `agents/`/`references/`, so full-runtime workflows run best in Claude Code or Codex.
 
 ### Prompt-Only Install
 
@@ -83,7 +84,7 @@ Arc also includes `.codex-plugin/plugin.json` for native Codex plugin hosts that
 npx skills add howells/arc
 ```
 
-This copies `SKILL.md` prompts to supported agents. It is useful for lightweight guidance, but it does not include Arc's bundled agents, references, disciplines, templates, scripts, or rules. Workflows such as `audit`, `review`, `implement`, `refactor`, and `testing` work best with the Claude plugin, native Codex plugin, or Codex full-runtime install.
+This copies `SKILL.md` prompts to supported agents. It is useful for lightweight guidance, but it does not include Arc's bundled agents, references, disciplines, templates, scripts, or rules. Workflows such as `audit`, `review`, `implement`, `refactor`, and `testing` work best with the Claude plugin or native Codex plugin.
 
 ## Invoking Arc
 
@@ -124,17 +125,17 @@ If you open this repo itself in Codex, `.agents/skills/*` symlinks let Codex dis
 
 ## Commands
 
-| Command | Use when | Output |
-|---------|----------|--------|
-| `/arc:vision` | A project needs a concise north star | `docs/vision.md` |
-| `/arc:ideate` | An idea needs to become a concrete feature spec | `docs/arc/specs/...` |
-| `/arc:review` | A plan, spec, or implementation approach needs expert challenge | Prioritized review findings |
-| `/arc:implement` | You are ready to build or continue implementation | Code changes with TDD and checks |
-| `/arc:testing` | Existing code needs characterization tests before change | Safety-net tests and risk notes |
-| `/arc:launch` | A project needs to be ready for a public URL | Launch readiness checklist |
-| `/arc:audit` | You need a verified current-state codebase health report | `docs/audits/...` |
-| `/arc:refactor` | Code feels tangled, shallow, duplicated, oversized, or ready for package/module extraction | Refactor plan/RFC |
-| `/arc:commit` | You are ready to commit, push, or publish changed npm packages | Atomic git commits |
+| Command          | Use when                                                                                   | Output                           |
+| ---------------- | ------------------------------------------------------------------------------------------ | -------------------------------- |
+| `/arc:vision`    | A project needs a concise north star                                                       | `docs/vision.md`                 |
+| `/arc:ideate`    | An idea needs to become a concrete feature spec                                            | `docs/arc/specs/...`             |
+| `/arc:review`    | A plan, spec, or implementation approach needs expert challenge                            | Prioritized review findings      |
+| `/arc:implement` | You are ready to build or continue implementation                                          | Code changes with TDD and checks |
+| `/arc:testing`   | Existing code needs characterization tests before change                                   | Safety-net tests and risk notes  |
+| `/arc:launch`    | A project needs to be ready for a public URL                                               | Launch readiness checklist       |
+| `/arc:audit`     | You need a verified current-state codebase health report                                   | `docs/audits/...`                |
+| `/arc:refactor`  | Code feels tangled, shallow, duplicated, oversized, or ready for package/module extraction | Refactor plan/RFC                |
+| `/arc:commit`    | You are ready to commit, push, or publish changed npm packages                             | Atomic git commits               |
 
 ## Typical Flows
 
@@ -189,12 +190,12 @@ Prompt-only installs receive only the skill prompts, so full-runtime workflows m
 
 Arc includes specialist agents for work that benefits from focused review or delegation:
 
-| Category | Agents |
-|----------|--------|
-| **Research** | docs-researcher, git-history-analyzer |
-| **Review** | accessibility-engineer, architecture-engineer, daniel-product-engineer, data-engineer, lee-nextjs-engineer, mastra-agent-engineer, performance-engineer, security-engineer, senior-engineer, test-quality-engineer |
-| **Build** | implementer, fixer, debugger, unit-test-writer, integration-test-writer, e2e-test-writer, test-runner, e2e-runner, spec-reviewer, code-reviewer, plan-completion-reviewer |
-| **Workflow** | spec-flow-analyzer, spec-document-reviewer, plan-document-reviewer, e2e-test-runner |
+| Category     | Agents                                                                                                                                                                                                             |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Research** | docs-researcher, git-history-analyzer                                                                                                                                                                              |
+| **Review**   | accessibility-engineer, architecture-engineer, daniel-product-engineer, data-engineer, lee-nextjs-engineer, mastra-agent-engineer, performance-engineer, security-engineer, senior-engineer, test-quality-engineer |
+| **Build**    | implementer, fixer, debugger, unit-test-writer, integration-test-writer, e2e-test-writer, test-runner, e2e-runner, spec-reviewer, code-reviewer, plan-completion-reviewer                                          |
+| **Workflow** | spec-flow-analyzer, spec-document-reviewer, plan-document-reviewer, e2e-test-runner                                                                                                                                |
 
 Agents are support machinery. Arc workflows decide when they are useful; users normally start with a command or skill.
 
@@ -223,13 +224,13 @@ Arc's implementation workflows draw on:
 
 Arc is self-contained, but it can use connected tools when available:
 
-| Integration | Used for |
-|-------------|----------|
-| Browser automation / Playwright | Rendered verification, E2E checks, launch evidence |
-| Context/documentation search | Research during implementation or review |
-| Project-local task planning | Turning audit findings into implementation plans |
-| Git tooling | Commit and push workflows |
-| npm registry | Publishing changed packages after a successful push |
+| Integration                     | Used for                                            |
+| ------------------------------- | --------------------------------------------------- |
+| Browser automation / Playwright | Rendered verification, E2E checks, launch evidence  |
+| Context/documentation search    | Research during implementation or review            |
+| Project-local task planning     | Turning audit findings into implementation plans    |
+| Git tooling                     | Commit and push workflows                           |
+| npm registry                    | Publishing changed packages after a successful push |
 
 External skills and plugins can add specialist depth, but Arc should still remain understandable and usable without them.
 
