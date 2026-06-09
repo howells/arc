@@ -12,9 +12,10 @@ test('creates user', async () => {
   const mockDb = { insert: vi.fn().mockResolvedValue({ id: '1' }) };
   await createUser(mockDb, { name: 'Alice' });
 
-  expect(mockDb.insert).toHaveBeenCalledWith('users', { name: 'Alice' });
+expect(mockDb.insert).toHaveBeenCalledWith('users', { name: 'Alice' });
 });
-```
+
+````
 Tests that `insert` was called with specific args. Refactor `createUser` to batch inserts? Test breaks, even if behavior is identical.
 </Bad>
 
@@ -27,7 +28,8 @@ test('creates user', async () => {
   const user = await db.query('SELECT * FROM users WHERE name = ?', ['Alice']);
   expect(user).toMatchObject({ name: 'Alice' });
 });
-```
+````
+
 Tests observable outcome — a user exists in the database. Implementation can change freely.
 </Good>
 
@@ -41,11 +43,12 @@ test('adds item to cart', () => {
   const cart = new Cart();
   cart.add({ id: 'abc', price: 10 });
 
-  // Reaching into internals
-  expect(cart._items).toHaveLength(1);
-  expect(cart._items[0].id).toBe('abc');
+// Reaching into internals
+expect(cart.\_items).toHaveLength(1);
+expect(cart.\_items[0].id).toBe('abc');
 });
-```
+
+````
 Breaks if `_items` is renamed, restructured, or made truly private.
 </Bad>
 
@@ -58,7 +61,8 @@ test('adds item to cart', () => {
   expect(cart.getItems()).toHaveLength(1);
   expect(cart.getTotal()).toBe(10);
 });
-```
+````
+
 Uses the public interface. Any implementation that maintains the same behavior passes.
 </Good>
 
@@ -73,14 +77,15 @@ vi.mock('./email-service', () => ({
 }));
 
 test('registers user and sends welcome email', async () => {
-  await registerUser({ email: 'alice@test.com' });
+await registerUser({ email: 'alice@test.com' });
 
-  expect(sendEmail).toHaveBeenCalledWith(
-    'alice@test.com',
-    'Welcome!'
-  );
+expect(sendEmail).toHaveBeenCalledWith(
+'alice@test.com',
+'Welcome!'
+);
 });
-```
+
+````
 If `sendEmail` signature changes, this test still passes — it's testing the mock, not real integration. The mock also hides bugs where `registerUser` passes wrong arguments.
 </Bad>
 
@@ -100,7 +105,8 @@ test('registers user and sends welcome email', async () => {
     { to: 'alice@test.com', subject: 'Welcome!' },
   ]);
 });
-```
+````
+
 Dependency injection with a simple fake. Tests real code path. Signature changes break the test correctly.
 </Good>
 
@@ -113,17 +119,18 @@ Exposing internals solely for testing convenience.
 class OrderProcessor {
   private queue: Order[] = [];
 
-  // Added just for tests
-  _getQueueForTesting(): Order[] {
-    return this.queue;
-  }
-
-  async process(order: Order) {
-    this.queue.push(order);
-    // ... processing logic
-  }
+// Added just for tests
+\_getQueueForTesting(): Order[] {
+return this.queue;
 }
-```
+
+async process(order: Order) {
+this.queue.push(order);
+// ... processing logic
+}
+}
+
+````
 Production code now carries test baggage. The underscore convention doesn't prevent misuse.
 </Bad>
 
@@ -142,7 +149,8 @@ class OrderProcessor {
     return this.queue.find(o => o.id === orderId)?.status ?? 'unknown';
   }
 }
-```
+````
+
 If the only way to observe behavior is through a test-only method, the class is missing a real feature. Add the method that production code also needs.
 </Good>
 
@@ -156,9 +164,10 @@ test('processes batch', async () => {
   const mockProcessor = vi.fn();
   await processBatch(items, mockProcessor);
 
-  expect(mockProcessor).toHaveBeenCalledTimes(3);
+expect(mockProcessor).toHaveBeenCalledTimes(3);
 });
-```
+
+````
 Test breaks if implementation switches from sequential to parallel, or batches calls differently. The user doesn't care about call count — they care that all items were processed.
 </Bad>
 
@@ -173,7 +182,8 @@ test('processes batch', async () => {
     { id: '3', status: 'done' },
   ]);
 });
-```
+````
+
 Tests the outcome. Sequential, parallel, batched — doesn't matter as long as all items are processed correctly.
 </Good>
 
@@ -188,10 +198,11 @@ test('renders without crashing', () => {
 });
 
 test('matches snapshot', () => {
-  const { container } = render(<Dashboard />);
-  expect(container).toMatchSnapshot();
+const { container } = render(<Dashboard />);
+expect(container).toMatchSnapshot();
 });
-```
+
+````
 "Renders without crashing" passes for an empty `<div>`. Snapshots fail on every change and get auto-updated without review.
 </Bad>
 
@@ -206,6 +217,7 @@ test('displays user metrics after loading', async () => {
   render(<Dashboard />);
   expect(await screen.findByText('Active Users: 42')).toBeInTheDocument();
 });
-```
+````
+
 Tests specific, observable behavior. These tests fail when real functionality breaks, not when CSS changes.
 </Good>

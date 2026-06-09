@@ -13,6 +13,7 @@ Psychology-based principles for interface design. Use these as review criteria a
 - Edge and corner targets are effectively infinite size (screen boundaries act as walls)
 
 **Application:**
+
 - Primary actions should be large and prominent
 - Destructive actions should be small and distant from primary actions
 - Place frequent actions near the user's current focus
@@ -20,6 +21,7 @@ Psychology-based principles for interface design. Use these as review criteria a
 - Place navigation at screen edges (infinite target area)
 
 **Common violations:**
+
 - Tiny icon-only buttons for primary actions
 - Important actions buried in overflow menus
 - Equal-sized buttons for "Save" and "Cancel"
@@ -36,6 +38,7 @@ Psychology-based principles for interface design. Use these as review criteria a
 - This applies to menus, settings, form fields, navigation items
 
 **Application:**
+
 - Limit primary navigation to 5–7 items
 - Break complex forms into multi-step wizards
 - Use progressive disclosure — show only what's needed now
@@ -43,6 +46,7 @@ Psychology-based principles for interface design. Use these as review criteria a
 - Group related options to reduce perceived count
 
 **Common violations:**
+
 - Settings page with 30+ ungrouped toggles
 - Dropdown with 50 flat options (use search or categories)
 - Modal with 5+ action buttons
@@ -53,14 +57,15 @@ Psychology-based principles for interface design. Use these as review criteria a
 
 **Productivity soars when response time is under 400ms.**
 
-| Latency | Perception |
-|---------|-----------|
-| < 100ms | Instant — no feedback needed |
-| 100–300ms | Slight delay — show state change immediately |
-| 300–1000ms | Noticeable — show loading indicator |
-| > 1000ms | Disruptive — show progress, allow cancellation |
+| Latency    | Perception                                     |
+| ---------- | ---------------------------------------------- |
+| < 100ms    | Instant — no feedback needed                   |
+| 100–300ms  | Slight delay — show state change immediately   |
+| 300–1000ms | Noticeable — show loading indicator            |
+| > 1000ms   | Disruptive — show progress, allow cancellation |
 
 **Application:**
+
 - User-initiated animations must complete within 300ms
 - Optimistic UI for mutations (show result before server confirms)
 - Skeleton loading for content fetches > 300ms
@@ -76,6 +81,7 @@ Psychology-based principles for interface design. Use these as review criteria a
 How humans perceive visual grouping:
 
 ### Proximity
+
 Elements close together are perceived as related. **This is the most powerful grouping tool.**
 
 ```
@@ -91,6 +97,7 @@ Good: [Header]
 ```
 
 ### Similarity
+
 Elements that look alike are perceived as related.
 
 - Consistent styling for same-function elements
@@ -98,6 +105,7 @@ Elements that look alike are perceived as related.
 - Color, size, shape, and weight all contribute
 
 ### Continuation
+
 The eye follows smooth lines and curves.
 
 - Align elements along clear axes
@@ -105,6 +113,7 @@ The eye follows smooth lines and curves.
 - Visual flow guides reading order
 
 ### Closure
+
 The mind completes incomplete shapes.
 
 - Icons don't need every detail — suggestion works
@@ -112,6 +121,7 @@ The mind completes incomplete shapes.
 - Progress indicators work because we mentally complete the circle
 
 ### Common Region
+
 Elements within a shared boundary are perceived as grouped.
 
 - Cards, containers, and backgrounds create groups
@@ -119,6 +129,7 @@ Elements within a shared boundary are perceived as grouped.
 - Nested containers create hierarchy of grouping
 
 ### Figure/Ground
+
 We separate foreground from background instinctively.
 
 - Modal overlays use this (dark backdrop = ground, modal = figure)
@@ -145,11 +156,13 @@ We separate foreground from background instinctively.
 **Show only what's needed at each step. Reveal complexity as it becomes relevant.**
 
 Levels:
+
 1. **Default view** — essential information and primary actions
 2. **On demand** — secondary info behind expandable sections, "Show more", or hover
 3. **Deep dive** — advanced settings, detailed data behind dedicated pages
 
 **Application:**
+
 - Forms: show required fields first, optional behind "More options"
 - Settings: group by frequency of use, hide advanced
 - Tables: show key columns, let users add more
@@ -162,11 +175,13 @@ Levels:
 **Working memory holds ~4 items. Minimize what users must hold in their heads.**
 
 Three types:
+
 1. **Intrinsic** — complexity inherent to the task (can't reduce)
 2. **Extraneous** — caused by poor design (eliminate this)
 3. **Germane** — effort spent learning/understanding (support this)
 
 **Reduce extraneous load:**
+
 - Don't make users remember information between steps
 - Show context inline (don't make them navigate to find it)
 - Use recognition over recall (dropdowns > text input for known options)
@@ -233,16 +248,16 @@ Three types:
 
 ## Quick Reference: Which Law Applies When
 
-| Design Decision | Primary Law |
-|----------------|------------|
-| Button sizing and placement | Fitts's Law |
-| Number of menu items | Hick's Law |
-| Loading and feedback timing | Doherty Threshold |
-| Visual grouping and spacing | Gestalt (Proximity) |
-| Navigation patterns | Jakob's Law |
-| Form complexity | Progressive Disclosure |
-| Information density | Cognitive Load, Miller's Law |
-| CTA prominence | Von Restorff Effect |
-| Onboarding and completion flows | Peak-End Rule |
-| Input validation | Postel's Law |
-| Visual polish priority | Aesthetic-Usability Effect |
+| Design Decision                 | Primary Law                  |
+| ------------------------------- | ---------------------------- |
+| Button sizing and placement     | Fitts's Law                  |
+| Number of menu items            | Hick's Law                   |
+| Loading and feedback timing     | Doherty Threshold            |
+| Visual grouping and spacing     | Gestalt (Proximity)          |
+| Navigation patterns             | Jakob's Law                  |
+| Form complexity                 | Progressive Disclosure       |
+| Information density             | Cognitive Load, Miller's Law |
+| CTA prominence                  | Von Restorff Effect          |
+| Onboarding and completion flows | Peak-End Rule                |
+| Input validation                | Postel's Law                 |
+| Visual polish priority          | Aesthetic-Usability Effect   |

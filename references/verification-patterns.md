@@ -6,12 +6,12 @@ Systematic patterns for detecting hollow implementations that pass linting but d
 
 Every piece of implementation should be checked at four levels:
 
-| Level | Question | How to Check |
-|-------|----------|--------------|
-| 1. **Exists** | Is the file present at the expected path? | `ls`, glob |
-| 2. **Substantive** | Is the content real implementation, not placeholder? | Grep for stub patterns |
-| 3. **Wired** | Is it connected to the rest of the system? | Grep for imports/usage |
-| 4. **Functional** | Does it actually work when invoked? | Run the app, execute tests |
+| Level              | Question                                             | How to Check               |
+| ------------------ | ---------------------------------------------------- | -------------------------- |
+| 1. **Exists**      | Is the file present at the expected path?            | `ls`, glob                 |
+| 2. **Substantive** | Is the content real implementation, not placeholder? | Grep for stub patterns     |
+| 3. **Wired**       | Is it connected to the rest of the system?           | Grep for imports/usage     |
+| 4. **Functional**  | Does it actually work when invoked?                  | Run the app, execute tests |
 
 Levels 1-3 can be checked programmatically. Level 4 often requires running the application or targeted tests.
 
@@ -27,6 +27,7 @@ grep -rn "TODO\|FIXME\|PLACEHOLDER\|HACK\|XXX\|implement later\|coming soon\|not
 ```
 
 Red flags:
+
 - `// TODO: implement this`
 - `// PLACEHOLDER — replace with real logic`
 - `/* coming soon */`
@@ -51,6 +52,7 @@ grep -rn "^\s*pass$" src/
 ```
 
 Red flags:
+
 - `export function handleSubmit() { return null; }`
 - `const fetchData = async () => {}`
 - `onChange={() => {}}`
@@ -91,6 +93,7 @@ grep -rn "return null" src/ --include="*.tsx"
 ```
 
 Stub examples:
+
 ```tsx
 // Stub: renders nothing meaningful
 export function UserProfile() {
@@ -104,6 +107,7 @@ export function Dashboard() {
 ```
 
 Substantive indicators:
+
 - Uses props or state in the JSX
 - Has event handlers with real logic (not empty or log-only)
 - Renders dynamic content from data fetching or state
@@ -151,6 +155,7 @@ wc -l src/app/api/**/route.ts | sort -n | head -20
 ```
 
 Stub examples:
+
 ```typescript
 // Stub: returns static message
 export async function GET() {
@@ -165,6 +170,7 @@ export async function POST(req: Request) {
 ```
 
 Substantive indicators:
+
 - Parses request body or query parameters
 - Queries a database or external service
 - Has input validation
@@ -186,12 +192,14 @@ grep -rn "api/route-name\|/api/route-name" src/ --include="*.ts" --include="*.ts
 **Level 2 — Substantive checks:**
 
 Stub indicators:
+
 - Model with only an `id` field
 - All fields typed as `String` (no proper types)
 - Missing critical fields: `userId`, `createdAt`, `updatedAt`, `status`
 - TODO comments in schema files
 
 Substantive indicators:
+
 - Has relationships (foreign keys, references)
 - Appropriate field types (not all String)
 - Indexes on fields used in queries
@@ -210,6 +218,7 @@ grep -rn "() => {}" src/hooks/ src/lib/
 ```
 
 Stub examples:
+
 ```typescript
 // Stub: hardcoded return
 export function useUser() {
@@ -223,6 +232,7 @@ export function formatCurrency(amount: number): string {
 ```
 
 Substantive indicators:
+
 - Uses React hooks (useState, useEffect, useMemo)
 - Has conditional logic
 - Has error handling
@@ -256,6 +266,7 @@ grep -A5 "await fetch\|\.mutate(" src/components/FeatureName/
 ```
 
 Red flags:
+
 - `fetch` exists but response is not awaited or assigned
 - Response assigned to variable but variable never used
 - Fetch URL is commented out or points to a placeholder endpoint
@@ -274,6 +285,7 @@ grep -A3 "await.*db\.\|await.*prisma\.\|await.*drizzle\." src/app/api/
 ```
 
 Red flags:
+
 - Query exists but result is not returned in the response
 - Query is not awaited (returns a Promise instead of data)
 - Route imports DB client but never uses it
@@ -288,6 +300,7 @@ grep -rn "onSubmit\|handleSubmit" src/ --include="*.tsx"
 ```
 
 Red flags:
+
 - Handler only calls `e.preventDefault()` with nothing else
 - Handler only logs to console
 - Handler is an empty function
@@ -298,6 +311,7 @@ Red flags:
 **Check:** Does the component render its state, or is content hardcoded?
 
 Red flags:
+
 - State variable exists (`useState`, `useQuery`) but JSX has hardcoded text
 - `.map()` call exists but maps over an empty array literal, not state
 - Loading/error states handled but success state renders placeholder

@@ -10,6 +10,7 @@ Skills append to `.arc/log.md` on completion to maintain a running history of wh
 
 ```markdown
 ## YYYY-MM-DD HH:MM
+
 /arc:[skill] — [Brief description of what was done]
 Files: [comma-separated list of key files]
 
@@ -21,6 +22,7 @@ Files: [comma-separated list of key files]
 After completing the skill's main work:
 
 1. **Ensure .arc/ exists and is gitignored:**
+
 ```bash
 mkdir -p .arc
 if ! grep -q "^\.arc/$" .gitignore 2>/dev/null; then
@@ -29,6 +31,7 @@ fi
 ```
 
 2. **Prepend the new entry** (newest first):
+
 ```bash
 # Create entry
 cat > /tmp/arc-log-entry.md << 'EOF'
@@ -56,24 +59,25 @@ head -50 .arc/log.md 2>/dev/null
 ```
 
 Look for:
+
 - Recent work on related features
 - Decisions that affect current work
 - Patterns in what's been done
 
 ## What Gets Logged
 
-| Skill | What to Log |
-|-------|-------------|
-| `/arc:ideate` | Feature designed, approach chosen |
-| `/arc:detail` | Plan created, task count |
-| `/arc:implement` | Tasks completed, remaining |
-| `/arc:testing` | Safety-net tests added, behavior characterized |
-| `/arc:review` | Plan reviewed, changes |
-| `/arc:audit` | Issue counts by severity |
-| `/arc:launch` | Public URL status |
-| `/arc:commit` | What was committed |
-| `/arc:vision` | Vision created/updated |
-| `/arc:figma` | Components implemented |
+| Skill            | What to Log                                    |
+| ---------------- | ---------------------------------------------- |
+| `/arc:ideate`    | Feature designed, approach chosen              |
+| `/arc:detail`    | Plan created, task count                       |
+| `/arc:implement` | Tasks completed, remaining                     |
+| `/arc:testing`   | Safety-net tests added, behavior characterized |
+| `/arc:review`    | Plan reviewed, changes                         |
+| `/arc:audit`     | Issue counts by severity                       |
+| `/arc:launch`    | Public URL status                              |
+| `/arc:commit`    | What was committed                             |
+| `/arc:vision`    | Vision created/updated                         |
+| `/arc:figma`     | Components implemented                         |
 
 /arc:commit — 2 commits (`feat(web): clarify backend completion dashboard`, `feat(scrape): harden winners graph ingestion`)
 /arc:commit — 1 commit (`docs: structure Agent Surface documentation`)

@@ -3,6 +3,7 @@
 Comprehensive auth patterns for Clerk, WorkOS, and provider-agnostic implementations. Load this when building or reviewing auth features.
 
 <mental_model>
+
 ## Mental Model
 
 Authentication has two planes:
@@ -36,9 +37,11 @@ export async function getProject(projectId: string) {
   });
 }
 ```
+
 </mental_model>
 
 <clerk_patterns>
+
 ## Clerk Patterns
 
 ### Server Auth (App Router)
@@ -58,6 +61,7 @@ export default async function DashboardPage() {
 ```
 
 Anti-pattern:
+
 ```typescript
 // ❌ Forgetting await — auth() returns a Promise in Next.js 15+
 const { userId } = auth(); // This is a Promise, not the auth object!
@@ -92,6 +96,7 @@ export const config = {
 ```
 
 Anti-pattern:
+
 ```typescript
 // ❌ Blocking webhooks with auth middleware
 const isPublicRoute = createRouteMatcher(["/", "/sign-in(.*)"]);
@@ -119,6 +124,7 @@ export async function deleteProject(projectId: string) {
 ```
 
 Anti-pattern:
+
 ```typescript
 // ❌ Using auth() instead of auth.protect() in Server Actions
 export async function deleteProject(projectId: string) {
@@ -147,11 +153,12 @@ export async function getCachedProjects() {
 ```
 
 Anti-pattern:
+
 ```typescript
 // ❌ Missing userId in cache key — users see each other's data
 return unstable_cache(
   () => db.query.projects.findMany({ where: eq(projects.userId, userId) }),
-  ["projects"], // Shared cache key — first user's data served to everyone
+  ["projects"] // Shared cache key — first user's data served to everyone
 )();
 ```
 
@@ -166,7 +173,10 @@ export async function updateOrgSettings(orgId: string, settings: OrgSettings) {
   if (activeOrgId !== orgId) throw new Error("Wrong organization");
   if (orgRole !== "org:admin") throw new Error("Admin access required");
 
-  await db.update(organizations).set(settings).where(eq(organizations.id, orgId));
+  await db
+    .update(organizations)
+    .set(settings)
+    .where(eq(organizations.id, orgId));
 }
 ```
 
@@ -209,10 +219,16 @@ export async function POST(req: Request) {
 
   switch (evt.type) {
     case "user.created":
-      await db.insert(users).values({ id: evt.data.id, email: evt.data.email_addresses[0]?.email_address });
+      await db.insert(users).values({
+        id: evt.data.id,
+        email: evt.data.email_addresses[0]?.email_address,
+      });
       break;
     case "user.updated":
-      await db.update(users).set({ email: evt.data.email_addresses[0]?.email_address }).where(eq(users.id, evt.data.id));
+      await db
+        .update(users)
+        .set({ email: evt.data.email_addresses[0]?.email_address })
+        .where(eq(users.id, evt.data.id));
       break;
     case "user.deleted":
       await db.delete(users).where(eq(users.id, evt.data.id!));
@@ -243,9 +259,11 @@ test("authenticated flow", async ({ page }) => {
   await expect(page.getByText("Welcome")).toBeVisible();
 });
 ```
+
 </clerk_patterns>
 
 <workos_patterns>
+
 ## WorkOS AuthKit Patterns
 
 ### Next.js Setup
@@ -266,6 +284,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 ```
 
 Anti-pattern:
+
 ```typescript
 // ❌ Missing AuthKitProvider — auth silently fails, no error thrown
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -289,6 +308,7 @@ export const config = {
 ```
 
 Anti-pattern:
+
 ```typescript
 // ❌ No proxy/middleware — auth state never populated, fails silently
 // (Just forgetting to create proxy.ts)
@@ -308,6 +328,7 @@ export default async function DashboardPage() {
 ```
 
 Anti-pattern:
+
 ```typescript
 // ❌ Forgetting ensureSignedIn — returns null user instead of redirecting
 const { user } = await withAuth(); // user can be null!
@@ -357,9 +378,11 @@ const workos = await createClient();
 const workos = createClient();
 await workos.users.getUser(userId); // TypeError: workos.users is undefined
 ```
+
 </workos_patterns>
 
 <provider_agnostic>
+
 ## Provider-Agnostic Patterns
 
 ### Server Component Auth Pattern
@@ -387,6 +410,7 @@ export async function requireAuth(): Promise<{ userId: string }> {
 ### Middleware Pattern
 
 Regardless of provider, auth middleware should:
+
 1. Run on all routes except static assets
 2. Allow public routes (marketing, auth pages, webhooks)
 3. Redirect unauthenticated users on protected routes
@@ -417,13 +441,17 @@ export async function getTeamMembers(teamId: string) {
   });
   if (!membership) throw new AuthError("Forbidden", 403);
 
-  return db.query.teamMembers.findMany({ where: eq(teamMembers.teamId, teamId) });
+  return db.query.teamMembers.findMany({
+    where: eq(teamMembers.teamId, teamId),
+  });
 }
 
 // ❌ Route-level only — any authenticated user sees any team
 export async function getTeamMembers(teamId: string) {
   await requireAuth(); // Only checks "is logged in"
-  return db.query.teamMembers.findMany({ where: eq(teamMembers.teamId, teamId) });
+  return db.query.teamMembers.findMany({
+    where: eq(teamMembers.teamId, teamId),
+  });
 }
 ```
 
@@ -443,11 +471,11 @@ export async function getOrgProjects(orgId: string) {
 
 ### HTTP Status Codes
 
-| Status | When to use |
-|--------|-------------|
-| 401 | No valid auth credentials. User must log in. |
-| 403 | Valid credentials, insufficient permissions. User is logged in but can't access this resource. |
-| 404 | Resource doesn't exist, OR resource exists but user shouldn't know about it (security through obscurity — use sparingly). |
+| Status | When to use                                                                                                               |
+| ------ | ------------------------------------------------------------------------------------------------------------------------- |
+| 401    | No valid auth credentials. User must log in.                                                                              |
+| 403    | Valid credentials, insufficient permissions. User is logged in but can't access this resource.                            |
+| 404    | Resource doesn't exist, OR resource exists but user shouldn't know about it (security through obscurity — use sparingly). |
 
 ### Webhook Security
 
@@ -468,9 +496,11 @@ if (signature === expected) { ... }
 // ✅ Timing-safe comparison
 if (timingSafeEqual(Buffer.from(signature), Buffer.from(expected))) { ... }
 ```
+
 </provider_agnostic>
 
 <e2e_auth_testing>
+
 ## E2E Auth Testing
 
 ### API-Based Auth (Fast Path)
@@ -550,4 +580,5 @@ test.beforeEach(async ({ page }) => {
 // ✅ Fast — reuses storage state from setup
 // (No beforeEach needed — storageState in config handles auth)
 ```
+
 </e2e_auth_testing>

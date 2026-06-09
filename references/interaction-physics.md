@@ -8,14 +8,14 @@ Hard rules for animation timing, spring vs easing decisions, exit patterns, and 
 
 **User-initiated animations must not exceed 300ms.** Beyond this, the interaction feels laggy.
 
-| Interaction Type | Max Duration | Typical |
-|-----------------|-------------|---------|
-| Button press/toggle | 150ms | 100ms |
-| Hover state change | 150ms | 100-150ms |
-| Menu open/close | 200ms | 150ms |
-| Modal entrance | 250ms | 200ms |
-| Page transition | 300ms | 250ms |
-| Staggered list (total) | 500ms | 300-400ms |
+| Interaction Type       | Max Duration | Typical   |
+| ---------------------- | ------------ | --------- |
+| Button press/toggle    | 150ms        | 100ms     |
+| Hover state change     | 150ms        | 100-150ms |
+| Menu open/close        | 200ms        | 150ms     |
+| Modal entrance         | 250ms        | 200ms     |
+| Page transition        | 300ms        | 250ms     |
+| Staggered list (total) | 500ms        | 300-400ms |
 
 **Shorten duration before adjusting the curve.** If an animation feels slow, reduce the duration first. Only then tweak the easing. A fast animation with basic easing beats a slow animation with perfect easing.
 
@@ -44,12 +44,12 @@ Springs preserve velocity when interrupted. If a user flicks a card right then i
 
 **Balanced spring parameters:**
 
-| Feel | Stiffness | Damping | Use Case |
-|------|-----------|---------|----------|
-| Snappy | 400 | 25-30 | UI responses, menus |
-| Balanced | 300 | 20-25 | General purpose |
-| Gentle | 200 | 20 | Subtle movements |
-| Bouncy | 300 | 10 | Playful (use sparingly) |
+| Feel     | Stiffness | Damping | Use Case                |
+| -------- | --------- | ------- | ----------------------- |
+| Snappy   | 400       | 25-30   | UI responses, menus     |
+| Balanced | 300       | 20-25   | General purpose         |
+| Gentle   | 200       | 20      | Subtle movements        |
+| Bouncy   | 300       | 10      | Playful (use sparingly) |
 
 ### Use Easing For:
 
@@ -67,12 +67,12 @@ Springs preserve velocity when interrupted. If a user flicks a card right then i
 
 ### Direction-Specific Easing
 
-| Direction | Easing | Why |
-|-----------|--------|-----|
-| **Entering** (appearing) | `ease-out` | Arrives fast, settles gently — feels responsive |
-| **Exiting** (disappearing) | `ease-in` | Accelerates away — gets out of the way |
-| **Moving** (staying visible) | `ease-in-out` | Smooth start and end |
-| **Linear** | Only for progress bars | No physical object moves at constant speed |
+| Direction                    | Easing                 | Why                                             |
+| ---------------------------- | ---------------------- | ----------------------------------------------- |
+| **Entering** (appearing)     | `ease-out`             | Arrives fast, settles gently — feels responsive |
+| **Exiting** (disappearing)   | `ease-in`              | Accelerates away — gets out of the way          |
+| **Moving** (staying visible) | `ease-in-out`          | Smooth start and end                            |
+| **Linear**                   | Only for progress bars | No physical object moves at constant speed      |
 
 **Never use linear easing for object motion.** It looks mechanical and unnatural. The only valid use is progress indicators where the rate should appear constant.
 
@@ -95,12 +95,14 @@ Conditional elements **must** be wrapped in `<AnimatePresence>` for exit animati
       exit={{ opacity: 0 }}
     />
   )}
-</AnimatePresence>
+</AnimatePresence>;
 
 // WRONG — instantly removed, no exit animation
-{isVisible && (
-  <motion.div exit={{ opacity: 0 }} /> // exit never fires
-)}
+{
+  isVisible && (
+    <motion.div exit={{ opacity: 0 }} /> // exit never fires
+  );
+}
 ```
 
 ### Exit Must Have a Unique Key
@@ -127,9 +129,7 @@ Exits should be faster than entrances. Users have already seen the element — t
 An exiting element should not be interactive. Disable pointer events and remove from tab order during exit animations.
 
 ```tsx
-<motion.div
-  exit={{ opacity: 0, pointerEvents: "none" }}
-/>
+<motion.div exit={{ opacity: 0, pointerEvents: "none" }} />
 ```
 
 ---
@@ -142,14 +142,9 @@ An exiting element should not be interactive. Disable pointer events and remove 
 
 ```tsx
 // Outer div: receives animated dimensions
-<motion.div
-  animate={{ height: measuredHeight }}
-  style={{ overflow: "hidden" }}
->
+<motion.div animate={{ height: measuredHeight }} style={{ overflow: "hidden" }}>
   {/* Inner div: measured by ResizeObserver */}
-  <div ref={measureRef}>
-    {children}
-  </div>
+  <div ref={measureRef}>{children}</div>
 </motion.div>
 ```
 
@@ -208,11 +203,11 @@ onDragEnd={(_, info) => {
 }}
 ```
 
-| Threshold | Value | Purpose |
-|-----------|-------|---------|
-| Quick flick velocity | 500px/s | Detects intentional swipe |
-| Slow drag distance | 100px | Fallback for deliberate drags |
-| Vertical swipe-down | 300px/s or 150px | Dismiss bottom sheet |
+| Threshold            | Value            | Purpose                       |
+| -------------------- | ---------------- | ----------------------------- |
+| Quick flick velocity | 500px/s          | Detects intentional swipe     |
+| Slow drag distance   | 100px            | Fallback for deliberate drags |
+| Vertical swipe-down  | 300px/s or 150px | Dismiss bottom sheet          |
 
 **Why velocity matters:** A user who quickly flicks a card 30px clearly wants to dismiss it. A user who slowly drags 30px and releases probably doesn't. Distance alone can't distinguish intent.
 

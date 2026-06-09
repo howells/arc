@@ -2,12 +2,12 @@
 
 ## When to Use Compound Components
 
-| Scenario | Pattern |
-|----------|---------|
-| Multiple parts share state | Compound |
-| Flexible child order/presence | Compound |
-| Slots (header/body/footer) | Compound |
-| Fixed structure, 1-3 props | Simple props |
+| Scenario                      | Pattern      |
+| ----------------------------- | ------------ |
+| Multiple parts share state    | Compound     |
+| Flexible child order/presence | Compound     |
+| Slots (header/body/footer)    | Compound     |
+| Fixed structure, 1-3 props    | Simple props |
 
 ```jsx
 // Compound
@@ -33,8 +33,20 @@
 - MUST: Accept ref as a prop (React 19 — no `forwardRef`)
 
 ```tsx
-function Button({ variant = "primary", size = "md", className, ref, ...props }: ButtonProps & { ref?: React.Ref<HTMLButtonElement> }) {
-  return <button ref={ref} className={cn(variants({ variant, size }), className)} {...props} />;
+function Button({
+  variant = "primary",
+  size = "md",
+  className,
+  ref,
+  ...props
+}: ButtonProps & { ref?: React.Ref<HTMLButtonElement> }) {
+  return (
+    <button
+      ref={ref}
+      className={cn(variants({ variant, size }), className)}
+      {...props}
+    />
+  );
 }
 ```
 
@@ -58,7 +70,9 @@ function Button({ asChild, ...props }) {
 }
 
 // Usage
-<Button asChild><Link href="/page">Click</Link></Button>
+<Button asChild>
+  <Link href="/page">Click</Link>
+</Button>;
 ```
 
 ## Controlled vs Uncontrolled
@@ -119,18 +133,18 @@ components/
 
 ## Anti-Patterns
 
-| Anti-Pattern | Fix |
-|--------------|-----|
-| Prop explosion (`leftIcon`, `rightIcon`, `iconSize`...) | Use children: `<Button><Icon /> Text</Button>` |
-| Boolean variants (`primary`, `large`, `rounded`) | Explicit variants: `variant="primary" size="lg"` |
-| Duplicating an existing component with small changes | Search the codebase first. Add a variant/prop to the original. |
-| Creating without searching | Glob/Grep for similar components before writing any new one. |
-| `cloneElement` to inject props into children | Use context, render props, or explicit composition |
-| `Children.map`/`forEach`/`count`/`toArray` | Use explicit props or context — child traversal is fragile |
-| `forwardRef` wrapper | Use ref-as-prop (React 19) |
-| Class components (`extends Component`) | Convert to function component with hooks |
-| `defaultProps` on function components | Use JS default parameters |
-| `propTypes` | Use TypeScript |
+| Anti-Pattern                                            | Fix                                                            |
+| ------------------------------------------------------- | -------------------------------------------------------------- |
+| Prop explosion (`leftIcon`, `rightIcon`, `iconSize`...) | Use children: `<Button><Icon /> Text</Button>`                 |
+| Boolean variants (`primary`, `large`, `rounded`)        | Explicit variants: `variant="primary" size="lg"`               |
+| Duplicating an existing component with small changes    | Search the codebase first. Add a variant/prop to the original. |
+| Creating without searching                              | Glob/Grep for similar components before writing any new one.   |
+| `cloneElement` to inject props into children            | Use context, render props, or explicit composition             |
+| `Children.map`/`forEach`/`count`/`toArray`              | Use explicit props or context — child traversal is fragile     |
+| `forwardRef` wrapper                                    | Use ref-as-prop (React 19)                                     |
+| Class components (`extends Component`)                  | Convert to function component with hooks                       |
+| `defaultProps` on function components                   | Use JS default parameters                                      |
+| `propTypes`                                             | Use TypeScript                                                 |
 
 ## Explicit Variants (over Boolean Props)
 
@@ -154,9 +168,9 @@ For complex compound components, define a standard context shape with three part
 
 ```tsx
 interface ComposerContextValue {
-  state: ComposerState;     // What data exists (value, attachments, mentions)
+  state: ComposerState; // What data exists (value, attachments, mentions)
   actions: ComposerActions; // How to modify it (setValue, addAttachment, submit)
-  meta: ComposerMeta;       // Refs, config, readonly info (inputRef, maxLength)
+  meta: ComposerMeta; // Refs, config, readonly info (inputRef, maxLength)
 }
 ```
 

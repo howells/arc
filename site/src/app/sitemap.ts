@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+
 import { getAgents, getRules, getSkills } from "@/lib/content";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -8,28 +9,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     {
-      url: "https://usearc.dev",
-      lastModified: new Date(),
       changeFrequency: "weekly",
+      lastModified: new Date(),
       priority: 1,
+      url: "https://usearc.dev",
     },
     ...skills.map((skill) => ({
-      url: `https://usearc.dev/skills/${skill.name}`,
-      lastModified: new Date(),
       changeFrequency: "monthly" as const,
+      lastModified: new Date(),
       priority: 0.8,
+      url: `https://usearc.dev/skills/${skill.name}`,
     })),
     ...agents.map((agent) => ({
-      url: `https://usearc.dev/agents/${agent.name}`,
-      lastModified: new Date(),
       changeFrequency: "monthly" as const,
+      lastModified: new Date(),
       priority: 0.7,
+      url: `https://usearc.dev/agents/${agent.name}`,
     })),
     ...rules.map((rule) => ({
-      url: `https://usearc.dev/rules/${rule.slug}`,
-      lastModified: new Date(),
       changeFrequency: "monthly" as const,
+      lastModified: new Date(),
       priority: 0.6,
+      url: `https://usearc.dev/rules/${rule.slug}`,
     })),
   ];
 }

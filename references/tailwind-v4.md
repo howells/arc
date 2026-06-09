@@ -25,11 +25,11 @@ npm install @tailwindcss/cli
 
 ```js
 // vite.config.ts
-import tailwindcss from '@tailwindcss/vite'
+import tailwindcss from "@tailwindcss/vite";
 
 export default {
   plugins: [tailwindcss()],
-}
+};
 ```
 
 ### PostCSS Configuration
@@ -38,9 +38,9 @@ export default {
 // postcss.config.js
 export default {
   plugins: {
-    '@tailwindcss/postcss': {},
+    "@tailwindcss/postcss": {},
   },
-}
+};
 ```
 
 ### CSS Entry Point
@@ -68,9 +68,9 @@ The `!` modifier now goes at the **end** of the class:
 ```html
 <!-- v3 (old) -->
 <div class="hover:!bg-red-500">
-
-<!-- v4 (new) -->
-<div class="hover:bg-red-500!">
+  <!-- v4 (new) -->
+  <div class="hover:bg-red-500!"></div>
+</div>
 ```
 
 ### Arbitrary CSS Variables
@@ -80,16 +80,18 @@ Use parentheses instead of brackets for CSS variables:
 ```html
 <!-- v3 (old) -->
 <div class="bg-[--my-color]">
-
-<!-- v4 (new) -->
-<div class="bg-(--my-color)">
+  <!-- v4 (new) -->
+  <div class="bg-(--my-color)"></div>
+</div>
 ```
 
 Brackets are still used for arbitrary literal values:
 
 ```html
-<div class="w-[200px]">  <!-- literal value: brackets -->
-<div class="w-(--width)"> <!-- CSS variable: parentheses -->
+<div class="w-[200px]">
+  <!-- literal value: brackets -->
+  <div class="w-(--width)"><!-- CSS variable: parentheses --></div>
+</div>
 ```
 
 ### Space-Separated Arbitrary Values
@@ -98,7 +100,8 @@ Use underscores for spaces in arbitrary values:
 
 ```html
 <div class="grid-cols-[1fr_2fr_1fr]">
-<div class="font-['Open_Sans']">
+  <div class="font-['Open_Sans']"></div>
+</div>
 ```
 
 ---
@@ -107,17 +110,17 @@ Use underscores for spaces in arbitrary values:
 
 Shadow, blur, and rounded utilities shifted nomenclature:
 
-| v3 | v4 | Notes |
-|----|----|-------|
-| `shadow-sm` | `shadow-xs` | |
-| `shadow` | `shadow-sm` | |
-| `shadow-md` | `shadow` | New default |
-| `blur-sm` | `blur-xs` | |
-| `blur` | `blur-sm` | |
-| `rounded-sm` | `rounded-xs` | |
-| `rounded` | `rounded-sm` | |
-| `ring` | `ring-3` | Default width changed from 3px to 1px |
-| `outline-none` | `outline-hidden` | |
+| v3             | v4               | Notes                                 |
+| -------------- | ---------------- | ------------------------------------- |
+| `shadow-sm`    | `shadow-xs`      |                                       |
+| `shadow`       | `shadow-sm`      |                                       |
+| `shadow-md`    | `shadow`         | New default                           |
+| `blur-sm`      | `blur-xs`        |                                       |
+| `blur`         | `blur-sm`        |                                       |
+| `rounded-sm`   | `rounded-xs`     |                                       |
+| `rounded`      | `rounded-sm`     |                                       |
+| `ring`         | `ring-3`         | Default width changed from 3px to 1px |
+| `outline-none` | `outline-hidden` |                                       |
 
 ---
 
@@ -130,14 +133,17 @@ Standalone opacity utilities are removed. Use slash notation:
 ```html
 <!-- v3 (old) -->
 <div class="bg-black bg-opacity-50">
-<div class="text-blue-500 text-opacity-75">
-
-<!-- v4 (new) -->
-<div class="bg-black/50">
-<div class="text-blue-500/75">
+  <div class="text-blue-500 text-opacity-75">
+    <!-- v4 (new) -->
+    <div class="bg-black/50">
+      <div class="text-blue-500/75"></div>
+    </div>
+  </div>
+</div>
 ```
 
 This applies to:
+
 - `bg-opacity-*`
 - `text-opacity-*`
 - `border-opacity-*`
@@ -156,7 +162,8 @@ Now default to `currentColor` instead of a themed gray:
 ```html
 <!-- If you relied on the default gray, be explicit -->
 <div class="border border-gray-200">
-<div class="ring ring-gray-300">
+  <div class="ring ring-gray-300"></div>
+</div>
 ```
 
 ### Ring Width
@@ -165,11 +172,15 @@ Default ring width is now 1px (was 3px). Use `ring-3` for the old default:
 
 ```html
 <!-- v3 behavior -->
-<div class="ring">        <!-- was 3px -->
+<div class="ring">
+  <!-- was 3px -->
 
-<!-- v4 equivalent -->
-<div class="ring-3">      <!-- explicit 3px -->
-<div class="ring">        <!-- now 1px -->
+  <!-- v4 equivalent -->
+  <div class="ring-3">
+    <!-- explicit 3px -->
+    <div class="ring"><!-- now 1px --></div>
+  </div>
+</div>
 ```
 
 ### Cursor on Buttons
@@ -276,8 +287,8 @@ Reference spacing scale in custom CSS:
 
 ```css
 .custom-element {
-  padding: --spacing(4);  /* 1rem */
-  margin: --spacing(8);   /* 2rem */
+  padding: --spacing(4); /* 1rem */
+  margin: --spacing(8); /* 2rem */
 }
 ```
 
@@ -286,6 +297,7 @@ Reference spacing scale in custom CSS:
 ## Browser Support
 
 Tailwind v4 targets modern browsers:
+
 - Safari 16.4+
 - Chrome 111+
 - Firefox 128+

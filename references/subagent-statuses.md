@@ -40,12 +40,14 @@ When an agent reports `AUTH_GATE`, it MUST include:
 ```
 
 The controller:
+
 1. Presents a CHECKPOINT:ACTION with the human action
 2. Waits for user to confirm "done"
 3. Runs the verify command to confirm auth succeeded
 4. Re-dispatches the SAME task to the agent (not the next task)
 
 Common auth gates:
+
 - `vercel deploy` → `vercel login`
 - `gh pr create` → `gh auth login`
 - `neonctl` → `neonctl auth`

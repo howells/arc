@@ -9,11 +9,11 @@ description: |
   agent infrastructure.
 website:
   desc: Mastra and agent-systems reviewer
-  summary: Reviews Mastra code and agentic architecture for current APIs, tool safety, workflows, memory, retrieval, MCP, and agent-readable surfaces.
+  summary: Reviews Mastra code and agentic architecture for current APIs, implementation boundaries, tool safety, workflows, memory, retrieval, MCP, and agent-readable surfaces.
   what: |
-    The Mastra agent engineer reviews TypeScript agent systems with a Mastra-first lens. It verifies current Mastra APIs before judging code, checks whether agents, tools, workflows, memory, storage, retrieval, MCP, and model routing are used for the right jobs, and applies production agent-surface discipline: typed tool contracts, bounded execution, observable workflows, recoverable errors, auth-safe context, and testable agent behavior.
+    The Mastra agent engineer reviews TypeScript agent systems with a Mastra-first lens. It verifies current Mastra APIs before judging code, checks whether agents, tools, workflows, memory, storage, retrieval, MCP, and model routing are used for the right jobs, and applies production agent-surface discipline: narrow package boundaries, runtime-owned implementation logic, typed tool contracts, bounded execution, observable workflows, recoverable errors, auth-safe context, and testable agent behavior.
   why: |
-    Agent systems fail in ways ordinary code review misses: stale framework APIs, prompt-hidden branching, unsafe tool inputs, unbounded autonomy, opaque memory, weak evals, and surfaces that other agents cannot discover or call. This reviewer catches those issues before they become expensive debugging sessions.
+    Agent systems fail in ways ordinary code review misses: stale framework APIs, prompt-hidden branching, Mastra packages that accumulate product logic, unsafe tool inputs, unbounded autonomy, opaque memory, weak evals, and surfaces that other agents cannot discover or call. This reviewer catches those issues before they become expensive debugging sessions.
   usedBy:
     - audit
     - review
@@ -44,6 +44,12 @@ Read before reviewing when relevant:
 ## Mastra API Verification
 
 Mastra changes quickly. Do not rely on remembered APIs.
+
+This agent provides implementation review advice, not a framework API manual. Use the
+dedicated Mastra framework guide or the installed package docs/types for API lookup,
+constructor signatures, CLI behavior, model-provider syntax, and migration details.
+Keep this review focused on whether the implementation is well bounded, observable,
+safe, testable, and aligned with the project's installed Mastra version.
 
 Before reporting a Mastra API issue or recommending Mastra code:
 
@@ -95,6 +101,65 @@ When reviewing this shape, look for drift:
 - Package manifests should make the boundary obvious. Flag broad `exports` maps that expose individual agents, tools, workflows, steps, schemas, processors, scorers, storage, or runtime helpers. The normal public export is the configured singleton.
 - Cross-package imports should target the singleton package entrypoint. Flag imports that reach into agent/tool/workflow files or package subpaths to call implementation details directly.
 - In the other direction, Mastra internals may import domain capabilities from their owning packages. That dependency direction is expected: orchestration depends on functionality; functionality should not depend on Mastra.
+
+## Implementation Practice Lens
+
+Use this lens when reviewing concrete Mastra implementations. These are practical
+implementation checks, not API documentation.
+
+### Package Boundary and Singleton Discipline
+
+- The configured Mastra singleton should usually be the only public export from a Mastra package. Treat individual agents, tools, workflows, memory, storage, scorers, processors, prompt blocks, and schemas as internals unless the project has a documented non-Mastra integration boundary.
+- Package manifests should make that boundary enforceable. Broad `exports` maps and deep-import subpaths are drift signals.
+- App, API, CLI, database, schema, and runtime packages should not depend on Mastra internals. They should dispatch through the singleton, a route, a workflow API, or runtime services.
+- Avoid barrel files when they hide the configured surface. Explicit singleton imports make the runtime graph easier to inspect and test.
+- Boundary rules should be executable. Look for tests that pin public exports, block deep imports, guard directory shape, and prove expected agents, tools, workflows, storage, memory, scorers, and observability are registered.
+
+### Runtime-Owned Implementation Logic
+
+- Mastra should orchestrate and expose operations to agents. Product behavior should live in its owning runtime/domain packages: provider clients, request normalization, retries, parsing, ranking, scoring, persistence, source extraction, filesystem artifacts, auth decisions, and business rules.
+- Mastra tools should be thin adapters over runtime functions with stable tool IDs, descriptions, MCP annotations, imported input/output schemas, and direct delegation.
+- Workflow steps should orchestrate named phases, progress, branching, bounded fan-out, merges, retries, and failure states. They should call runtime services directly rather than invoking Mastra tools just to reuse implementation.
+- Avoid Mastra tool-to-tool calls as implementation details. Nested tool execution hides orchestration in traces and bypasses runtime-level tests.
+- Pure algorithms can still be domain behavior. If a ranking, normalization, validation, extraction, or scoring rule defines product semantics, prefer runtime ownership with runtime tests.
+
+### Tool Contracts and Registry Drift
+
+- An agent contract can drift across prompt prose, configured tool maps, delegated tools, capability registries, public docs, and Studio-visible configuration. Review them as one contract.
+- Prefer imported shared schemas over local, looser tool schemas. Inputs that claim source-backed truth should validate real source joins or locators at the contract boundary.
+- Avoid `outputSchema: z.unknown()` except for genuinely opaque pass-through data. Stable top-level fields should be parsed before model exposure so routing, readiness, summaries, and next actions are grounded.
+- Prefer policy-level or domain-level tool IDs over provider-specific IDs in prompts unless a specialist workflow intentionally chooses the provider.
+- Keep direct tool surfaces lean. Delegated or runtime-composed capabilities may be real, but they do not all need to be loaded directly into every routing agent.
+
+### Observability, Progress, and Background Work
+
+- Keep user-visible progress separate from trace-export timing. Product progress should come from explicit domain events, not observability flushes.
+- Bound observability volume and cardinality: sampling policy, payload serialization limits, label allowlists, prompt/completion redaction, high-volume span filtering, and environment-specific exporter batching.
+- Stage timing should expose actionable bottlenecks. Broad wrappers are less useful than phase marks plus internal stage timers when operators need to know which fetch, model call, persistence step, or assembly stage is slow.
+- For long-running user-triggered work, prefer accepted/observable async workflow starts over blocking request handlers. Configure background task backpressure, timeouts, concurrency, progress throttling, and cleanup TTLs deliberately.
+- Response headers or structured events can bridge server bottlenecks into browser-visible client logs. Preserve the split between client duration, server duration, slowest server stage, and dev/proxy overhead.
+
+### Memory, Models, and Execution Defaults
+
+- Memory should be opt-in per surface. Conversational agents may need recent messages or recall; one-shot structured calls, routers, source inspections, browser checks, and classifiers often need disabled or read-only memory.
+- Long-running conversational agents should have token limiting or equivalent prompt-growth controls.
+- Model policy should be code-owned and role-based where possible. Avoid hidden arbitrary model strings in environment variables at agent call sites unless the project has an explicit, tested override policy.
+- Verify model/provider names against the installed routing setup or current provider registry before making model-specific claims. Treat prices, availability, and quality scores as volatile.
+- Expensive LLM judges are often better as Studio/offline evals than inline production checks. Prefer deterministic scorers for live workflow completeness or coverage checks.
+
+### Browser and Field Verification
+
+- Browser agents and local QA paths should be deterministic and safe. If auth is required, prefer local-only, scoped test access over smoke checks that only prove redirect behavior.
+- Keep browser agents report-only unless mutation is explicitly required. Bound navigation, interactions, screenshots, screencast quality, and fallback behavior.
+- Browser checks should verify the actual user-facing signal when logs are not enough: client console fields, response-header interpretation, mobile overflow, sticky footer overlap, sheet scrollability, generated copy in context, and route error payloads.
+- When testing negative routes or expected failing fetches, reset the browser to a healthy route before judging residual console errors.
+
+### Verification Patterns
+
+- Match tests to ownership. Runtime tests should cover provider adapters, parsing, ranking, persistence, algorithms, retries, and injected clients. Mastra wrapper tests should prove IDs, descriptions, schemas, annotations, registration, and direct delegation.
+- Add contract tests for environment access, provider endpoints, heuristic strings, nested tool imports, `SomeTool.execute(...)` calls, direct `fetch`, filesystem reads/writes, and other sentinels that would show implementation logic leaking into Mastra wrappers.
+- Test import/startup configuration because many Mastra failures occur before a request runs.
+- After Mastra runtime changes, expect at least package-level lint, typecheck, and focused tests, then broader repo checks when consumers, routes, workflows, or runtime contracts are affected.
 
 ## Review Lens
 

@@ -11,9 +11,11 @@ metadata:
 ---
 
 <tool_restrictions>
+
 # MANDATORY Tool Restrictions
 
 ## BANNED TOOLS — calling these is a skill violation:
+
 - **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill IS the planning process. The steps below replace Claude's built-in planning entirely. You are NOT doing a task that needs plan mode — you ARE already executing a structured plan-creation process. Calling EnterPlanMode would bypass the skill and waste the user's time.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode. There is nothing to exit.
 
@@ -24,21 +26,24 @@ If you feel the urge to "plan before acting" — that urge is satisfied by follo
 This workflow requires the full Arc bundle, not a prompts-only install.
 
 Paths in this skill use these conventions:
+
 - `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
 - `./...` is local to this skill's directory.
 - `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-</arc_runtime>
+  </arc_runtime>
 
 <required_reading>
 **Read these reference files NOW:**
+
 1. references/testing-patterns.md
 2. references/task-granularity.md
 3. references/arc-paths.md
 
 **Load these only if relevant:**
+
 - references/model-strategy.md — if dispatching build agents
 - references/component-design.md — React component patterns
-</required_reading>
+  </required_reading>
 
 <hard_rules>
 **Before writing the plan file**, present a brief summary of what you intend to plan (scope, task count estimate, key decisions) and use the `AskUserQuestion` interaction pattern to confirm. Plans must not appear without user input.
@@ -49,17 +54,19 @@ Paths in this skill use these conventions:
 
 **Use Glob tool to detect in parallel:**
 
-| Check | Glob Pattern |
-|-------|-------------|
+| Check           | Glob Pattern                                                                  |
+| --------------- | ----------------------------------------------------------------------------- |
 | Test frameworks | `vitest.config.*`, `playwright.config.*`, `jest.config.*`, `cypress.config.*` |
-| Package manager | `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json` |
-| Python project | `requirements.txt`, `pyproject.toml` |
+| Package manager | `pnpm-lock.yaml`, `yarn.lock`, `package-lock.json`                            |
+| Python project  | `requirements.txt`, `pyproject.toml`                                          |
 
 **Use Grep tool on `package.json`:**
+
 - Pattern: `"next"` → Next.js
 - Pattern: `"react"` → React
 
 **Record detected stack:**
+
 - Test runner: [vitest/jest/playwright/cypress/pytest]
 - Package manager: [pnpm/yarn/npm/pip/uv]
 - Framework: [next/react/fastapi/etc]
@@ -67,6 +74,7 @@ Paths in this skill use these conventions:
 ## Step 2: Load Feature Spec
 
 **Find the feature spec:**
+
 ```
 Primary: docs/arc/specs/*-spec.md
 Fallbacks:
@@ -78,6 +86,7 @@ Fallbacks:
 Pick the most recent one (highest date prefix). Read it. This is the source of truth for what to build.
 
 **Derive implementation plan filename:** Replace `-spec.md` or legacy `-design.md` with `-implementation.md`.
+
 - Feature spec: `docs/arc/specs/2025-06-15-user-dashboard-spec.md`
 - Implementation: `docs/arc/plans/2025-06-15-user-dashboard-implementation.md`
 
@@ -94,6 +103,7 @@ If the feature spec implies multiple independent subsystems, stop and split the 
 separate plans instead of forcing everything into one implementation plan.
 
 **Extract from the feature spec:**
+
 - User stories / acceptance criteria
 - UI requirements and any external visual source
 - Data model
@@ -102,12 +112,23 @@ separate plans instead of forcing everything into one implementation plan.
 
 ## Step 2.5: Find Reusable Patterns (Parallel Agents)
 
+**Build a read-only codebase map first when available:**
+
+```bash
+python3 scripts/codebase-map.py . --format markdown
+```
+
+Use the map to orient the pattern search around the project's framework, routes, data layer, service boundaries, largest files, high fan-in/fan-out modules, and import cycles. Treat the map as navigation context only; implementation tasks must still cite exact files from direct inspection.
+
 **Spawn agents to find existing code to leverage:**
 
 ```
 Task Explore model: haiku: "Find existing patterns in this codebase that we can
 reuse for: [list components/features from spec].
 Look for: similar components, utility functions, hooks, types, test patterns.
+
+Start from this codebase map when deciding where to look:
+[paste scripts/codebase-map.py markdown output if available]
 
 Structure your findings as:
 ## Reusable Code
@@ -126,12 +147,14 @@ file organization, and architectural patterns should new code follow?"
 ```
 
 **If using unfamiliar libraries/APIs:**
+
 ```
 Task general-purpose model: haiku: "Gather documentation and best practices for
 [library name] focusing on [specific feature needed]."
 ```
 
 **When agents complete:**
+
 - List reusable code (with file paths)
 - Note conventions to follow
 - **Share Essential Files list** — these should be read before implementation
@@ -173,6 +196,7 @@ Tasks are executable prompts, not documentation. A fresh-context agent should be
 **Required elements per task:** `<name>`, `<files>`, `<read_first>`, `<action>`, `<test_code>`, `<verify>`, `<done>`, `<commit>`. See `references/task-granularity.md` for details.
 
 **Key rules for task content:**
+
 - `<action>` must contain inline values (env vars, function signatures, library choices with rationale) — never "look it up"
 - `<verify>` must be concrete commands or observable states — never "works correctly" or "looks good"
 - `<read_first>` lists files the agent must verify before acting — prevents assumptions about file state
@@ -212,6 +236,7 @@ When a task requires human judgment, use the appropriate `type` attribute:
 ```
 
 **Rules:**
+
 - Automate everything possible before a checkpoint (start servers, deploy, etc.)
 - Never ask user to run CLI commands — agent does it
 - Max 1 checkpoint per logical milestone
@@ -219,6 +244,7 @@ When a task requires human judgment, use the appropriate `type` attribute:
 - See `references/checkpoint-patterns.md`
 
 **Task ordering:**
+
 1. Data/types first (foundation)
 2. Core logic (business rules)
 3. UI components (presentation)
@@ -231,6 +257,7 @@ When a task requires human judgment, use the appropriate `type` attribute:
 **Based on detected test runner:**
 
 **vitest:**
+
 ```bash
 # Single test file
 pnpm vitest run src/path/to/file.test.tsx
@@ -243,6 +270,7 @@ pnpm vitest src/path/to/file.test.tsx
 ```
 
 **playwright:**
+
 ```bash
 # Single test file
 pnpm playwright test tests/path/to/file.spec.tsx
@@ -255,6 +283,7 @@ pnpm playwright test --ui
 ```
 
 **jest:**
+
 ```bash
 # Single test file
 pnpm jest src/path/to/file.test.tsx
@@ -262,6 +291,7 @@ pnpm jest src/path/to/file.test.tsx
 # Single test
 pnpm jest src/path/to/file.test.tsx -t "test name"
 ```
+
 </test_commands>
 
 ## Step 5: Include UI Implementation Constraints
@@ -314,6 +344,7 @@ For each UI task, embed implementation-relevant UI requirements and external vis
 ```
 
 **Allowed UI sources:**
+
 - Feature spec UI requirements
 - Existing project components and patterns
 - Chiaroscuro or other external design spec
@@ -321,6 +352,7 @@ For each UI task, embed implementation-relevant UI requirements and external vis
 - `docs/brand-system.md` if present
 
 **Not allowed:**
+
 - Creating a new brand direction
 - Choosing new typography/color/motion systems without an external source
 - Treating structural sketches as visual design authority
@@ -328,6 +360,7 @@ For each UI task, embed implementation-relevant UI requirements and external vis
 ## Step 6: Write Implementation Plan
 
 **Header:**
+
 ```markdown
 # [Feature Name] Implementation Plan
 
@@ -365,6 +398,7 @@ Plan is ready. Tell the user the plan is saved and offer next steps as plain tex
 
 <success_criteria>
 Implementation plan is complete when:
+
 - [ ] Test framework detected
 - [ ] Feature spec loaded
 - [ ] Tasks written as XML with all required elements (`<name>`, `<files>`, `<read_first>`, `<action>`, `<test_code>`, `<verify>`, `<done>`, `<commit>`)
@@ -375,7 +409,7 @@ Implementation plan is complete when:
 - [ ] UI tasks include implementation requirements and external visual source when relevant
 - [ ] Plan-document-reviewer passes all 7 validation dimensions
 - [ ] Plan committed to git
-</success_criteria>
+      </success_criteria>
 
 <tool_restrictions_reminder>
 REMINDER: You must NEVER call `EnterPlanMode` or `ExitPlanMode` at any point during this skill — not at the start, not in the middle, not at the end. The plan file you just wrote IS the deliverable. Present it to the user as a normal message.

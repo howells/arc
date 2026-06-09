@@ -1,5 +1,7 @@
 import { useMemo } from "react";
+
 import type { Agent, AgentCategory, Skill, WorkflowData } from "@/lib/types";
+
 import {
   AGENT_DOT_X,
   AGENT_LABEL_X,
@@ -81,9 +83,9 @@ function pushAgentLabel(
     agentLabels.push({
       category: dominant.category,
       count: dominant.count,
+      dotStartX: AGENT_DOT_X,
       x: AGENT_LABEL_X,
       y,
-      dotStartX: AGENT_DOT_X,
     });
   }
 }
@@ -122,12 +124,12 @@ function layoutSpine(
     layoutBranches(state, branchesForNode, skill.name, categoryMap);
 
     state.nodes.push({
+      agentCount: skill.agents?.length ?? 0,
       id: skill.name,
+      nodeType: "spine",
       skill,
       x: SPINE_X,
       y: state.currentY,
-      nodeType: "spine",
-      agentCount: skill.agents?.length ?? 0,
     });
 
     state.spinePositions.set(skill.name, state.currentY);
@@ -152,25 +154,25 @@ function layoutBranches(
 ): void {
   for (const branch of branchesForNode) {
     state.nodes.push({
+      agentCount: branch.agents?.length ?? 0,
       id: branch.name,
+      nodeType: "branch",
       skill: branch,
       x: BRANCH_X,
       y: state.currentY,
-      nodeType: "branch",
-      agentCount: branch.agents?.length ?? 0,
     });
 
     state.branchEdges.push({
-      source: branch.name,
-      target: targetName,
       bx: BRANCH_X,
       by: state.currentY,
+      source: branch.name,
       sx: SPINE_X,
       sy:
         state.currentY +
         BRANCH_MERGE_GAP +
         (branchesForNode.length - 1 - branchesForNode.indexOf(branch)) *
           BRANCH_GAP,
+      target: targetName,
     });
 
     pushAgentLabel(branch, state.currentY, categoryMap, state.agentLabels);
@@ -195,8 +197,8 @@ function layoutUtilities(
   state.currentY += SECTION_GAP;
   state.separators.push({
     label: "available anytime",
-    y: state.currentY,
     width: VIEW_WIDTH - SPINE_X * 2,
+    y: state.currentY,
   });
 
   state.currentY += SECTION_GAP * 0.6;
@@ -209,12 +211,12 @@ function layoutUtilities(
     }
 
     state.nodes.push({
+      agentCount: skill.agents?.length ?? 0,
       id: skill.name,
+      nodeType: "utility",
       skill,
       x: SPINE_X,
       y: state.currentY,
-      nodeType: "utility",
-      agentCount: skill.agents?.length ?? 0,
     });
 
     pushAgentLabel(skill, state.currentY, categoryMap, state.agentLabels);
@@ -236,8 +238,8 @@ function layoutKnowledge(
   state.currentY += SECTION_GAP;
   state.separators.push({
     label: "knowledge",
-    y: state.currentY,
     width: VIEW_WIDTH - SPINE_X * 2,
+    y: state.currentY,
   });
 
   state.currentY += SECTION_GAP * 0.6;
@@ -269,13 +271,13 @@ function computeLayout(
   const categoryMap = buildAgentCategoryMap(agents);
 
   const state: LayoutState = {
-    nodes: [],
-    branchEdges: [],
     agentLabels: [],
-    separators: [],
-    knowledgeItems: [],
-    spinePositions: new Map(),
+    branchEdges: [],
     currentY: PADDING_Y,
+    knowledgeItems: [],
+    nodes: [],
+    separators: [],
+    spinePositions: new Map(),
   };
 
   layoutSpine(state, spine, branches, categoryMap);
@@ -293,20 +295,20 @@ function computeLayout(
       : (state.spinePositions.get(spine.at(-1)?.name ?? "") ?? state.currentY);
 
   const spineLine: SpineLine = {
-    startY: firstSpineY,
     endY: lastSpineY,
+    startY: firstSpineY,
     x: SPINE_X,
   };
 
   return {
-    nodes: state.nodes,
-    branchEdges: state.branchEdges,
-    spineLine,
     agentLabels: state.agentLabels,
-    separators: state.separators,
-    knowledgeItems: state.knowledgeItems,
-    width: VIEW_WIDTH,
+    branchEdges: state.branchEdges,
     height: state.currentY + PADDING_Y,
+    knowledgeItems: state.knowledgeItems,
+    nodes: state.nodes,
+    separators: state.separators,
+    spineLine,
+    width: VIEW_WIDTH,
   };
 }
 

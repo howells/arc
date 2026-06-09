@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+
 import { getSkillByName, getSkills, sanitizeContent } from "@/lib/content";
+
 import { DocumentContent } from "../../document-content";
 
 export function generateStaticParams() {
@@ -21,14 +23,14 @@ export async function generateMetadata({
 
   const title = skill.invokable ? `/arc:${skill.name}` : skill.name;
   return {
-    title: `${title} – Arc`,
-    description: skill.desc,
     alternates: { canonical: `/skills/${name}` },
+    description: skill.desc,
     openGraph: {
-      title: `${title} – Arc`,
       description: skill.desc,
+      title: `${title} – Arc`,
       url: `/skills/${name}`,
     },
+    title: `${title} – Arc`,
   };
 }
 

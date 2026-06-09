@@ -10,13 +10,13 @@ OpenType features unlock professional typographic refinements. Use `font-feature
 
 ### Numeric Formatting
 
-| Feature | Property | Effect | Use When |
-|---------|----------|--------|----------|
-| `tnum` | `font-variant-numeric: tabular-nums` | Fixed-width digits | Data tables, prices, timers, counters |
-| `lnum` | `font-variant-numeric: lining-nums` | Uniform height digits | Tables, UI elements |
-| `onum` | `font-variant-numeric: oldstyle-nums` | Varying height digits | Running body text, editorial |
-| `frac` | `font-variant-numeric: diagonal-fractions` | Proper fractions (½) | Recipes, measurements |
-| `ordn` | `font-variant-numeric: ordinal` | Ordinal indicators (1st) | Dates, rankings |
+| Feature | Property                                   | Effect                   | Use When                              |
+| ------- | ------------------------------------------ | ------------------------ | ------------------------------------- |
+| `tnum`  | `font-variant-numeric: tabular-nums`       | Fixed-width digits       | Data tables, prices, timers, counters |
+| `lnum`  | `font-variant-numeric: lining-nums`        | Uniform height digits    | Tables, UI elements                   |
+| `onum`  | `font-variant-numeric: oldstyle-nums`      | Varying height digits    | Running body text, editorial          |
+| `frac`  | `font-variant-numeric: diagonal-fractions` | Proper fractions (½)     | Recipes, measurements                 |
+| `ordn`  | `font-variant-numeric: ordinal`            | Ordinal indicators (1st) | Dates, rankings                       |
 
 ```css
 /* Data tables — digits align vertically */
@@ -34,6 +34,7 @@ OpenType features unlock professional typographic refinements. Use `font-feature
 ```
 
 **Most important rule:** Always use `tabular-nums` for:
+
 - Prices and currency
 - Timers and countdowns
 - Table columns with numbers
@@ -44,11 +45,11 @@ Without `tabular-nums`, changing digits cause layout shift because `1` is narrow
 
 ### Ligatures
 
-| Feature | Property | Effect |
-|---------|----------|--------|
-| `liga` | `font-variant-ligatures: common-ligatures` | Standard ligatures (fi, fl) |
-| `dlig` | `font-variant-ligatures: discretionary-ligatures` | Decorative ligatures |
-| `clig` | `font-variant-ligatures: contextual` | Context-dependent connections |
+| Feature | Property                                          | Effect                        |
+| ------- | ------------------------------------------------- | ----------------------------- |
+| `liga`  | `font-variant-ligatures: common-ligatures`        | Standard ligatures (fi, fl)   |
+| `dlig`  | `font-variant-ligatures: discretionary-ligatures` | Decorative ligatures          |
+| `clig`  | `font-variant-ligatures: contextual`              | Context-dependent connections |
 
 ```css
 /* Enable standard ligatures (usually on by default) */
@@ -57,7 +58,8 @@ body {
 }
 
 /* Disable ligatures in code */
-code, pre {
+code,
+pre {
   font-variant-ligatures: none;
 }
 ```
@@ -95,17 +97,19 @@ body {
 
 ### Manual Tracking Adjustments
 
-| Context | Tracking | Why |
-|---------|----------|-----|
+| Context                    | Tracking                         | Why                                  |
+| -------------------------- | -------------------------------- | ------------------------------------ |
 | Large display text (>48px) | Tighter (`-0.02em` to `-0.04em`) | Large text has too much visual space |
-| Body text (14-18px) | Default (0) | Designed for this range |
-| Small text (<12px) | Looser (`0.01em` to `0.02em`) | Improves legibility at small sizes |
-| All caps | Looser (`0.05em` to `0.1em`) | Caps need more breathing room |
-| Buttons/labels (caps) | Looser (`0.02em` to `0.05em`) | Improves readability |
+| Body text (14-18px)        | Default (0)                      | Designed for this range              |
+| Small text (<12px)         | Looser (`0.01em` to `0.02em`)    | Improves legibility at small sizes   |
+| All caps                   | Looser (`0.05em` to `0.1em`)     | Caps need more breathing room        |
+| Buttons/labels (caps)      | Looser (`0.02em` to `0.05em`)    | Improves readability                 |
 
 ```css
 /* Headline */
-h1 { letter-spacing: -0.02em; }
+h1 {
+  letter-spacing: -0.02em;
+}
 
 /* All-caps label */
 .label {
@@ -120,15 +124,17 @@ h1 { letter-spacing: -0.02em; }
 
 ### `text-wrap` Values
 
-| Value | Use For | Effect |
-|-------|---------|--------|
+| Value     | Use For              | Effect                               |
+| --------- | -------------------- | ------------------------------------ |
 | `balance` | Headings, short text | Evenly distributes text across lines |
-| `pretty` | Body paragraphs | Avoids orphaned words on last line |
-| `stable` | Editable content | Doesn't reflow as user types |
+| `pretty`  | Body paragraphs      | Avoids orphaned words on last line   |
+| `stable`  | Editable content     | Doesn't reflow as user types         |
 
 ```css
 /* Headings: balanced wrapping */
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   text-wrap: balance;
 }
 
@@ -141,7 +147,9 @@ p {
 ```html
 <!-- Tailwind -->
 <h1 class="text-balance">A heading that wraps nicely across lines</h1>
-<p class="text-pretty">Body text that avoids leaving a single word on the last line</p>
+<p class="text-pretty">
+  Body text that avoids leaving a single word on the last line
+</p>
 ```
 
 **Performance note:** `text-wrap: balance` has a performance cost on very long text (it tries multiple layouts). Only use on headings and short text blocks, not on entire pages of prose.
@@ -158,11 +166,13 @@ p {
 ```
 
 Use hyphenation for:
+
 - Narrow sidebar text
 - Mobile layouts where words exceed container width
 - Multi-column layouts
 
 Avoid for:
+
 - Headlines (use `text-balance` instead)
 - Code or technical terms
 - Short labels
@@ -173,18 +183,18 @@ Avoid for:
 
 Line height should relate to the type scale:
 
-| Text Size | Line Height | Ratio |
-|-----------|-------------|-------|
-| 12px (xs) | 16px | 1.33 |
-| 14px (sm) | 20px | 1.43 |
-| 16px (base) | 24px | 1.5 |
-| 18px (lg) | 28px | 1.56 |
-| 20px (xl) | 28px | 1.4 |
-| 24px (2xl) | 32px | 1.33 |
-| 30px (3xl) | 36px | 1.2 |
-| 36px (4xl) | 40px | 1.11 |
-| 48px (5xl) | 48px | 1.0 |
-| 60px+ | 1.0–1.1 | Nearly solid |
+| Text Size   | Line Height | Ratio        |
+| ----------- | ----------- | ------------ |
+| 12px (xs)   | 16px        | 1.33         |
+| 14px (sm)   | 20px        | 1.43         |
+| 16px (base) | 24px        | 1.5          |
+| 18px (lg)   | 28px        | 1.56         |
+| 20px (xl)   | 28px        | 1.4          |
+| 24px (2xl)  | 32px        | 1.33         |
+| 30px (3xl)  | 36px        | 1.2          |
+| 36px (4xl)  | 40px        | 1.11         |
+| 48px (5xl)  | 48px        | 1.0          |
+| 60px+       | 1.0–1.1     | Nearly solid |
 
 **Pattern:** As text gets larger, line height ratio decreases. Large display text at 1.5 line height looks excessively spaced.
 
@@ -207,6 +217,7 @@ body {
 ```
 
 **Rules:**
+
 - Always set a minimum (`clamp` first value) — viewport units alone can make text unreadable on small screens
 - Always set a maximum — text shouldn't grow forever on large screens
 - Body text range: 14px–18px
@@ -227,11 +238,11 @@ body {
 }
 ```
 
-| `font-display` | Behavior | Use When |
-|----------------|----------|----------|
-| `swap` | Fallback immediately, swap when ready | Body text (readability > style) |
-| `optional` | Fallback if not cached, no swap | Performance-critical pages |
-| `block` | Brief invisible period, then swap | Display/brand fonts (short text) |
+| `font-display` | Behavior                              | Use When                         |
+| -------------- | ------------------------------------- | -------------------------------- |
+| `swap`         | Fallback immediately, swap when ready | Body text (readability > style)  |
+| `optional`     | Fallback if not cached, no swap       | Performance-critical pages       |
+| `block`        | Brief invisible period, then swap     | Display/brand fonts (short text) |
 
 ### Subsetting
 

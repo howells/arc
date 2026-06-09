@@ -1,6 +1,7 @@
 "use client";
 
 import type { Agent, Skill, WorkflowData } from "@/lib/types";
+
 import { BranchEdge, SectionSeparatorLine, SpineLineEdge } from "./graph-edge";
 import { AgentCategoryDots, GraphNode, KnowledgeNode } from "./graph-node";
 import { useGraphLayout } from "./use-graph-layout";

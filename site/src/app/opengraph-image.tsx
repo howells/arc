@@ -2,8 +2,8 @@ import { ImageResponse } from "next/og";
 
 export const alt = "Arc – The full arc from idea to shipped code";
 export const size = {
-  width: 1200,
   height: 630,
+  width: 1200,
 };
 export const contentType = "image/png";
 
@@ -16,22 +16,22 @@ export default async function Image() {
     <div
       style={{
         background: "#f5f5f5",
-        width: "100%",
-        height: "100%",
         display: "flex",
         flexDirection: "column",
+        height: "100%",
         justifyContent: "space-between",
         padding: "80px",
+        width: "100%",
       }}
     >
       {/* Command heading */}
       <div
         style={{
+          alignItems: "center",
           display: "flex",
           flex: 1,
-          alignItems: "center",
-          fontSize: "96px",
           fontFamily: "IBM Plex Mono",
+          fontSize: "96px",
           fontWeight: 400,
           letterSpacing: "-0.02em",
           lineHeight: 1.1,
@@ -45,10 +45,10 @@ export default async function Image() {
       {/* Bottom line */}
       <p
         style={{
-          fontSize: "22px",
-          fontFamily: "IBM Plex Mono",
-          fontWeight: 400,
           color: "#737373",
+          fontFamily: "IBM Plex Mono",
+          fontSize: "22px",
+          fontWeight: 400,
           letterSpacing: "0.08em",
           textTransform: "uppercase" as const,
         }}
@@ -60,10 +60,10 @@ export default async function Image() {
       ...size,
       fonts: [
         {
-          name: "IBM Plex Mono",
           data: ibmPlexMono,
-          weight: 400,
+          name: "IBM Plex Mono",
           style: "normal" as const,
+          weight: 400,
         },
       ],
     }

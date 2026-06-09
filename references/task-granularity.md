@@ -60,49 +60,54 @@ Tasks are **executable prompts, not documentation**. A fresh-context agent with 
 
 ### Required XML elements
 
-| Element | Required | Purpose |
-|---------|----------|---------|
-| `<name>` | Yes | Descriptive task name |
-| `<files>` | Yes | `<create>`, `<modify>`, and/or `<test>` children |
-| `<read_first>` | Yes* | Files to verify before acting. *Can be empty for pure-creation tasks |
-| `<action>` | Yes | What to do — with **inline values** (env vars, signatures, library choices) |
-| `<test_code>` | Yes** | Exact test code. **Omit only for checkpoint tasks |
-| `<verify>` | Yes | Concrete, observable acceptance criteria — commands to run, states to check |
-| `<done>` | Yes | Grep-verifiable completion marker |
-| `<commit>` | Yes | Exact commit message |
+| Element        | Required | Purpose                                                                     |
+| -------------- | -------- | --------------------------------------------------------------------------- |
+| `<name>`       | Yes      | Descriptive task name                                                       |
+| `<files>`      | Yes      | `<create>`, `<modify>`, and/or `<test>` children                            |
+| `<read_first>` | Yes\*    | Files to verify before acting. \*Can be empty for pure-creation tasks       |
+| `<action>`     | Yes      | What to do — with **inline values** (env vars, signatures, library choices) |
+| `<test_code>`  | Yes\*\*  | Exact test code. \*\*Omit only for checkpoint tasks                         |
+| `<verify>`     | Yes      | Concrete, observable acceptance criteria — commands to run, states to check |
+| `<done>`       | Yes      | Grep-verifiable completion marker                                           |
+| `<commit>`     | Yes      | Exact commit message                                                        |
 
 ### Task attributes
 
-| Attribute | Values | Purpose |
-|-----------|--------|---------|
-| `id` | Integer | Unique task identifier |
-| `depends` | Comma-separated IDs | Tasks that must complete first (empty = no dependencies) |
-| `type` | `auto`, `checkpoint:verify`, `checkpoint:decide`, `checkpoint:action` | Execution type |
+| Attribute | Values                                                                | Purpose                                                  |
+| --------- | --------------------------------------------------------------------- | -------------------------------------------------------- |
+| `id`      | Integer                                                               | Unique task identifier                                   |
+| `depends` | Comma-separated IDs                                                   | Tasks that must complete first (empty = no dependencies) |
+| `type`    | `auto`, `checkpoint:verify`, `checkpoint:decide`, `checkpoint:action` | Execution type                                           |
 
 ### Key principles for task content
 
 **`<read_first>` — verify before acting:**
+
 - List every file the agent needs to read before implementing
 - The agent MUST check these files exist and match expectations
 - If a file doesn't exist or has unexpected content → `NEEDS_CONTEXT`, don't assume
 
 **`<action>` — self-contained with inline values:**
+
 - Include exact env var names, function signatures, library choices with rationale
 - Never write "look up the config" or "check the existing implementation" — put the value inline
 - If a choice was made during design (e.g., "use jose not jsonwebtoken"), state it and why
 
 **`<verify>` — concrete and observable:**
+
 - Every criterion must be a command that produces output or a state that can be checked
 - Bad: "works correctly", "looks good", "as expected"
 - Good: `curl -X POST localhost:3000/api/auth returns 200`, `pnpm vitest run path/file.test.ts — all pass`
 
 **`<done>` — grep-verifiable:**
+
 - Should be checkable without running the code
 - Describes the observable outcome, not the process
-</task_structure>
+  </task_structure>
 
 <granularity_examples>
 **Too big (don't do this):**
+
 ```
 Task 1: Create user authentication system
 - Add login form
@@ -113,6 +118,7 @@ Task 1: Create user authentication system
 ```
 
 **Right size:**
+
 ```
 Task 1: Create User type
 Task 2: Create login form component (UI only)
@@ -138,13 +144,14 @@ Task 7: Create registration form component (UI only)
 6. **E2E tests** - Full user flows
 
 **Why this order:**
+
 - Types catch errors early
 - Utilities can be tested in isolation
 - Dumb components are easy to test
 - Smart components use tested utilities
 - Integration uses tested components
 - E2E validates the whole chain
-</ordering>
+  </ordering>
 
 <ordering_strategy>
 **Choose ordering based on feature complexity:**
@@ -152,6 +159,7 @@ Task 7: Create registration form component (UI only)
 **Bottom-up (default)** — Types → utilities → components → integration. Use for well-understood features where the data shape and boundaries are clear.
 
 **Tracer bullet (complex features)** — Implement one complete behavior through ALL layers first (type → utility → component → API → E2E test), then expand. Use when:
+
 - Feature spans 3+ layers (e.g., new form → API route → database → email)
 - Architecture is unproven (new pattern, unfamiliar library, first feature of its kind)
 - User expresses uncertainty about the right approach
@@ -161,6 +169,7 @@ Task 7: Create registration form component (UI only)
 **Example — adding a comments feature:**
 
 Bottom-up:
+
 ```
 Task 1: Create Comment type
 Task 2: Create CommentList component (UI only)
@@ -172,6 +181,7 @@ Task 7: E2E test for commenting flow
 ```
 
 Tracer bullet:
+
 ```
 Task 1: Create Comment type + API route + CommentForm + E2E test (one comment, end-to-end)
 Task 2: Add CommentList with real data
@@ -195,15 +205,17 @@ docs(scope): update documentation
 ```
 
 **Scope = feature area:**
+
 - `feat(auth): add login form`
 - `feat(cart): add quantity selector`
 - `fix(checkout): handle empty cart`
 
 **Keep messages short but descriptive:**
+
 - Good: `feat(auth): add password visibility toggle`
 - Bad: `add stuff`
 - Bad: `feat(auth): add a toggle button that allows users to see their password when they click on an eye icon in the password input field`
-</commit_messages>
+  </commit_messages>
 
 <checkpoints>
 **After every 3 tasks, pause:**
@@ -222,8 +234,9 @@ Ready for feedback?
 ```
 
 **Why checkpoints:**
+
 - Catch mistakes early
 - Get user input before going too far
 - Natural pause for questions
 - Prevents runaway implementation
-</checkpoints>
+  </checkpoints>

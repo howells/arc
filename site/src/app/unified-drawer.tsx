@@ -6,9 +6,11 @@ import type { ReactNode } from "react";
 import { useEffect } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+
 import { sanitizeContent } from "@/lib/sanitize";
 import type { Agent, Rule, Skill } from "@/lib/types";
 import { AGENT_CATEGORY_LABELS } from "@/lib/types";
+
 import { DocumentContent } from "./document-content";
 
 const remarkPlugins = [remarkGfm];
@@ -36,8 +38,6 @@ const { StacksheetProvider, useSheet } = createStacksheet<ArcSheetMap>({
   closeOnBackdrop: true,
   closeOnEscape: true,
   maxWidth: "100vw",
-  spring: "stiff",
-  width: 640,
   onCloseComplete: () => {
     if (typeof window === "undefined") {
       return;
@@ -51,6 +51,8 @@ const { StacksheetProvider, useSheet } = createStacksheet<ArcSheetMap>({
       window.history.replaceState(null, "", "/");
     }
   },
+  spring: "stiff",
+  width: 640,
 });
 
 export function ArcSheetsProvider({ children }: { children: ReactNode }) {
@@ -75,40 +77,52 @@ export function useArcSheets() {
 
 export function getContentId(content: DrawerContent): string {
   switch (content.type) {
-    case "skill":
+    case "skill": {
       return `skill:${content.data.name}`;
-    case "agent":
+    }
+    case "agent": {
       return `agent:${content.data.name}`;
-    case "rule":
+    }
+    case "rule": {
       return `rule:${content.data.slug}`;
-    default:
+    }
+    default: {
       return "detail";
+    }
   }
 }
 
 function getContentUrl(content: DrawerContent): string {
   switch (content.type) {
-    case "skill":
+    case "skill": {
       return `/skills/${content.data.name}`;
-    case "agent":
+    }
+    case "agent": {
       return `/agents/${content.data.name}`;
-    case "rule":
+    }
+    case "rule": {
       return `/rules/${content.data.slug}`;
-    default:
+    }
+    default: {
       return "/";
+    }
   }
 }
 
 function getSourceContent(content: DrawerContent): string | null {
   switch (content.type) {
-    case "skill":
+    case "skill": {
       return content.data.content;
-    case "agent":
+    }
+    case "agent": {
       return content.data.content;
-    case "rule":
+    }
+    case "rule": {
       return content.data.content;
-    default:
+    }
+    default: {
       return null;
+    }
   }
 }
 
@@ -128,7 +142,7 @@ function DetailSheet({
       return;
     }
 
-    const nextContent: DrawerContent = { type: "agent", data: agent };
+    const nextContent: DrawerContent = { data: agent, type: "agent" };
     navigate("detail", getContentId(nextContent), {
       agentsByName,
       content: nextContent,
@@ -142,7 +156,7 @@ function DetailSheet({
       return;
     }
 
-    const nextContent: DrawerContent = { type: "skill", data: skill };
+    const nextContent: DrawerContent = { data: skill, type: "skill" };
     navigate("detail", getContentId(nextContent), {
       agentsByName,
       content: nextContent,
@@ -246,7 +260,7 @@ function ContentRenderer({
   onViewSource: () => void;
 }) {
   switch (content.type) {
-    case "skill":
+    case "skill": {
       return (
         <SkillContent
           onAgentClick={onAgentClick}
@@ -254,7 +268,8 @@ function ContentRenderer({
           skill={content.data}
         />
       );
-    case "agent":
+    }
+    case "agent": {
       return (
         <AgentContent
           agent={content.data}
@@ -262,10 +277,13 @@ function ContentRenderer({
           onViewSource={onViewSource}
         />
       );
-    case "rule":
+    }
+    case "rule": {
       return <RuleContent onViewSource={onViewSource} rule={content.data} />;
-    default:
+    }
+    default: {
       return null;
+    }
   }
 }
 

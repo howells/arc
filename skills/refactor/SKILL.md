@@ -33,33 +33,38 @@ website:
 ---
 
 <tool_restrictions>
+
 # MANDATORY Tool Restrictions
 
 ## BANNED TOOLS — calling these is a skill violation:
+
 - **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured process.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
-</tool_restrictions>
+  </tool_restrictions>
 
 <arc_runtime>
 This workflow requires the full Arc bundle, not a prompts-only install.
 
 Paths in this skill use these conventions:
+
 - `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
 - `./...` is local to this skill's directory.
 - `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-</arc_runtime>
+  </arc_runtime>
 
 <required_reading>
 Before starting, read these references:
+
 1. `references/architecture-patterns.md` — import depth rules, boundary violations
 2. `references/component-design.md` — compound vs simple component patterns
 3. `references/maintainability-review.md` — strict god-file, duplication, and structural simplification bar
 4. `references/complexity-optimization.md` — safe optimization patterns and behavior-preservation checks
 
 Also read, when present in the target project:
+
 - `CONTEXT.md` or the relevant context from `CONTEXT-MAP.md`
 - `docs/adr/*.md` or area-specific ADRs
-</required_reading>
+  </required_reading>
 
 # Architectural Refactoring
 
@@ -73,7 +78,7 @@ This workflow reviews existing code with the explicit goal of creating a refacto
 - If the primary issue is broad codebase health, security, performance, or test coverage, recommend `/arc:audit`.
 - If the user wants implementation, stop at a clear plan unless they explicitly ask to start implementing.
 - Do not create external tracker issues unless the user explicitly asks.
-</boundary>
+  </boundary>
 
 ## Architecture Language
 
@@ -88,14 +93,16 @@ Use these terms consistently:
 - **Leverage** — what callers get from depth.
 - **Locality** — what maintainers get from depth: change, bugs, knowledge, and verification concentrated in one place.
 
-From John Ousterhout's *A Philosophy of Software Design*:
+From John Ousterhout's _A Philosophy of Software Design_:
 
 A **deep module** has a small interface hiding a large implementation. Deep modules are:
+
 - More testable (test at the boundary, not inside)
 - More navigable (fewer files to understand a concept)
 - More maintainable (changes stay internal)
 
 A **shallow module** has an interface nearly as complex as its implementation. Shallow modules:
+
 - Force callers to understand implementation details
 - Create coupling between files that should be independent
 - Make testing harder (you test internals, not behaviour)
@@ -125,6 +132,14 @@ python3 scripts/find-god-files.py . --max-files 40
 Use `--include-tests` only when the user asks about duplicated tests or test-suite cleanup.
 
 The scanner is heuristic. It ranks likely candidates; it does not decide. Read the highest-ranked files before proposing changes.
+
+Also run the Arc-owned read-only codebase mapper when available:
+
+```bash
+python3 scripts/codebase-map.py ${scope:-.} --format markdown
+```
+
+Use the map to orient exploration around route surfaces, services, data layer, largest files, high fan-in/fan-out modules, and import cycles. The mapper output is not a finding by itself. Read the relevant files before proposing any refactor.
 
 Classify confirmed candidates:
 
@@ -160,18 +175,18 @@ The friction you encounter IS the signal.
 
 Present a numbered list of refactoring opportunities. For each candidate:
 
-| Field | Description |
-|-------|-------------|
-| **Cluster** | Which modules/concepts are involved |
-| **Type** | shallow-module, package-extraction, god-component, god-script, god-module, duplication |
-| **Evidence** | Line count, responsibility mix, duplicated blocks, import depth, call patterns, shared types |
-| **Problem** | Why the current shape causes friction |
-| **Proposed direction** | Plain-English description of what would change |
-| **Dependency category** | See categories below |
-| **Locality / leverage** | What change gets concentrated, and what callers gain |
-| **Test impact** | What existing tests would be replaced by boundary tests, or what characterization tests are needed first |
-| **Complexity impact** | Current complexity, proposed complexity, and behavior-preservation risk when performance is part of the refactor |
-| **Severity** | How much this costs day-to-day |
+| Field                   | Description                                                                                                      |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| **Cluster**             | Which modules/concepts are involved                                                                              |
+| **Type**                | shallow-module, package-extraction, god-component, god-script, god-module, duplication                           |
+| **Evidence**            | Line count, responsibility mix, duplicated blocks, import depth, call patterns, shared types                     |
+| **Problem**             | Why the current shape causes friction                                                                            |
+| **Proposed direction**  | Plain-English description of what would change                                                                   |
+| **Dependency category** | See categories below                                                                                             |
+| **Locality / leverage** | What change gets concentrated, and what callers gain                                                             |
+| **Test impact**         | What existing tests would be replaced by boundary tests, or what characterization tests are needed first         |
+| **Complexity impact**   | Current complexity, proposed complexity, and behavior-preservation risk when performance is part of the refactor |
+| **Severity**            | How much this costs day-to-day                                                                                   |
 
 Ask the user: **"Which of these would you like to explore?"**
 
@@ -211,12 +226,12 @@ interface for the deepened module.
 Give each agent a technical brief (file paths, coupling details, dependency category, what's being
 hidden) plus a different interface constraint:
 
-| Agent | Constraint |
-|-------|-----------|
-| Agent 1 | "Minimise the interface — aim for 1-3 entry points max and maximise leverage per entry point" |
-| Agent 2 | "Maximise flexibility — support many use cases and extension" |
-| Agent 3 | "Optimise for the most common caller — make the default case trivial" |
-| Agent 4 (if applicable) | "Use ports & adapters for cross-boundary dependencies" |
+| Agent                   | Constraint                                                                                    |
+| ----------------------- | --------------------------------------------------------------------------------------------- |
+| Agent 1                 | "Minimise the interface — aim for 1-3 entry points max and maximise leverage per entry point" |
+| Agent 2                 | "Maximise flexibility — support many use cases and extension"                                 |
+| Agent 3                 | "Optimise for the most common caller — make the default case trivial"                         |
+| Agent 4 (if applicable) | "Use ports & adapters for cross-boundary dependencies"                                        |
 
 Each sub-agent outputs:
 
@@ -269,6 +284,7 @@ what integration risk exists, why this makes the codebase harder to navigate]
 ## Implementation Recommendations
 
 [Durable guidance NOT coupled to current file paths:
+
 - What the module should own (responsibilities)
 - What it should hide (implementation details)
 - What it should expose (the interface contract)
@@ -324,16 +340,16 @@ The core principle: **replace, don't layer.**
 
 From the architecture patterns reference:
 
-| Signal | What it means |
-|--------|--------------|
-| 5+ levels of `../` imports | Code is reaching across boundaries |
-| Barrel file re-exporting everything | Hiding the real dependency graph |
-| Test file longer than source file | Testing internals, not behaviour |
-| "Utils" folder with 20+ files | Shallow modules masquerading as shared code |
-| Type file imported by 10+ modules | Hidden coupling through shared types |
-| Feature spread across 8+ files | Over-decomposition, shallow modules |
-| Mock setup longer than test body | Integration seams are in the wrong place |
-| Large component mixes effects, validation, mutation, and rendering | God component |
-| Script mixes CLI parsing, I/O, transformation, and output formatting | God script |
-| Same schema/query/formatting code appears in several places | Missing shared module |
-| Same concept used from multiple apps/packages | Candidate package/module extraction |
+| Signal                                                               | What it means                               |
+| -------------------------------------------------------------------- | ------------------------------------------- |
+| 5+ levels of `../` imports                                           | Code is reaching across boundaries          |
+| Barrel file re-exporting everything                                  | Hiding the real dependency graph            |
+| Test file longer than source file                                    | Testing internals, not behaviour            |
+| "Utils" folder with 20+ files                                        | Shallow modules masquerading as shared code |
+| Type file imported by 10+ modules                                    | Hidden coupling through shared types        |
+| Feature spread across 8+ files                                       | Over-decomposition, shallow modules         |
+| Mock setup longer than test body                                     | Integration seams are in the wrong place    |
+| Large component mixes effects, validation, mutation, and rendering   | God component                               |
+| Script mixes CLI parsing, I/O, transformation, and output formatting | God script                                  |
+| Same schema/query/formatting code appears in several places          | Missing shared module                       |
+| Same concept used from multiple apps/packages                        | Candidate package/module extraction         |

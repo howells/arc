@@ -58,9 +58,9 @@ export interface Rule {
 }
 
 export const AGENT_CATEGORY_LABELS: Record<AgentCategory, string> = {
-  review: "Review Agent",
-  research: "Research Agent",
   build: "Build Agent",
+  research: "Research Agent",
+  review: "Review Agent",
   workflow: "Workflow Agent",
 };
 

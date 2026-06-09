@@ -1,8 +1,10 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+
 import matter from "gray-matter";
 import { load as yamlLoad } from "js-yaml";
+
 import type {
   Agent,
   Discipline,
@@ -14,7 +16,7 @@ import type {
 } from "./types";
 import { AGENT_CATEGORIES } from "./types";
 
-const MODULE_DIR = dirname(fileURLToPath(import.meta.url));
+const MODULE_DIR = import.meta.dirname;
 
 // Resolve repo root once from this module location instead of process.cwd().
 const ROOT = resolve(MODULE_DIR, "../../..");
@@ -168,22 +170,23 @@ export function getSkills(): Skill[] {
     try {
       const { data, content: body } = matter(raw);
       const frontmatter = data as unknown as SkillFrontmatter;
-      const website = frontmatter.website;
+      const { website } = frontmatter;
 
       if (website) {
         const name = frontmatter.name || entry.name;
         skills.push({
-          name,
-          order: website.order ?? 999,
-          invokable: invokable.has(entry.name),
-          desc: String(website.desc || ""),
-          summary: String(website.summary || ""),
-          what: String(website.what || ""),
-          why: String(website.why || ""),
+          agents: website.agents,
+          content: body.trim(),
           decisions: (website.decisions || []).map((d) =>
             typeof d === "string" ? d : JSON.stringify(d)
           ),
-          agents: website.agents,
+          desc: String(website.desc || ""),
+          invokable: invokable.has(entry.name),
+          name,
+          order: website.order ?? 999,
+          summary: String(website.summary || ""),
+          what: String(website.what || ""),
+          why: String(website.why || ""),
           workflow: website.workflow
             ? {
                 position: website.workflow
@@ -192,7 +195,6 @@ export function getSkills(): Skill[] {
                 joins: website.workflow.joins,
               }
             : undefined,
-          content: body.trim(),
         });
       }
     } catch {
@@ -200,7 +202,7 @@ export function getSkills(): Skill[] {
     }
   }
 
-  return skills.sort((a, b) => a.order - b.order);
+  return [...skills].sort((a, b) => a.order - b.order);
 }
 
 /**
@@ -239,14 +241,14 @@ export function getAgents(): Agent[] {
           const body = fmMatch ? raw.slice(fmMatch[0].length).trim() : raw;
 
           agents.push({
-            name: extracted?.name || file.replace(MD_EXTENSION_REGEX, ""),
             category,
+            content: body,
             desc: website.desc,
+            name: extracted?.name || file.replace(MD_EXTENSION_REGEX, ""),
             summary: website.summary,
+            usedBy: website.usedBy,
             what: website.what,
             why: website.why,
-            usedBy: website.usedBy,
-            content: body,
           });
         }
       } catch {
@@ -287,7 +289,7 @@ export function getRules(): Rule[] {
     const title = titleMatch?.[1] ?? slug;
     const category: RuleCategory = CORE_RULES.has(slug) ? "core" : "workflow";
 
-    rules.push({ slug, title, category, content });
+    rules.push({ category, content, slug, title });
   }
 
   // Interface rules
@@ -307,7 +309,7 @@ export function getRules(): Rule[] {
       const titleMatch = content.match(HEADING_REGEX);
       const title = titleMatch?.[1] ?? file.replace(MD_EXTENSION_REGEX, "");
 
-      rules.push({ slug, title, category: "interface", content });
+      rules.push({ category: "interface", content, slug, title });
     }
   }
 
@@ -367,7 +369,7 @@ export function getWorkflowData(skills?: Skill[]): WorkflowData {
     }
   }
 
-  return { spine, branches, utilities };
+  return { branches, spine, utilities };
 }
 
 // biome-ignore lint/performance/noBarrelFile: re-export used by page components
@@ -396,9 +398,9 @@ export function getDisciplines(): Discipline[] {
       const { data } = matter(raw);
       const slug = file.replace(MD_EXTENSION_REGEX, "");
       disciplines.push({
-        slug,
-        name: String(data.name || slug),
         description: String(data.description || ""),
+        name: String(data.name || slug),
+        slug,
       });
     } catch {
       // Skip files with parsing errors
@@ -412,11 +414,11 @@ export function getAssetCounts(): { references: number; disciplines: number } {
   const refsDir = resolve(ROOT, "references");
   const discsDir = resolve(ROOT, "disciplines");
   return {
-    references: existsSync(refsDir)
-      ? readdirSync(refsDir).filter((f) => f.endsWith(".md")).length
-      : 0,
     disciplines: existsSync(discsDir)
       ? readdirSync(discsDir).filter((f) => f.endsWith(".md")).length
+      : 0,
+    references: existsSync(refsDir)
+      ? readdirSync(refsDir).filter((f) => f.endsWith(".md")).length
       : 0,
   };
 }

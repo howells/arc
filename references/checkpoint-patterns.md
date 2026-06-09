@@ -15,17 +15,20 @@ The agent's job is to handle everything a machine can handle. Checkpoints exist 
 The agent completed automated work. The human confirms it works visually or functionally.
 
 **Use for:**
+
 - UI checks (layout, responsiveness, visual correctness)
 - Interactive flow testing (click-through, form behavior)
 - Animation smoothness and timing
 - Accessibility testing (screen reader, keyboard nav)
 
 **Rules:**
+
 - Agent sets up the verification environment BEFORE presenting the checkpoint (start dev server, deploy preview, etc.)
 - User only does what requires human judgment
 - Never ask the user to run CLI commands
 
 **Example:**
+
 ```
 Task 5: [CHECKPOINT:VERIFY] Verify dashboard layout
   After: Tasks 1-4 (agent starts dev server automatically)
@@ -43,17 +46,20 @@ Task 5: [CHECKPOINT:VERIFY] Verify dashboard layout
 The human must make a choice that affects implementation direction. The agent cannot proceed without a selection.
 
 **Use for:**
+
 - Technology selection (auth provider, database, hosting)
 - Architecture decisions (monorepo vs polyrepo, server vs client)
 - Design choices (layout approach, color scheme, animation style)
 - Feature prioritization (which scope to cut, what to defer)
 
 **Rules:**
+
 - Present structured options with pros/cons
 - Include a recommendation when the agent has enough context
 - Agent waits for selection before continuing
 
 **Example:**
+
 ```
 Task 3: [CHECKPOINT:DECIDE] Select authentication provider
   Options:
@@ -71,6 +77,7 @@ Task 3: [CHECKPOINT:DECIDE] Select authentication provider
 An action has NO CLI/API alternative and requires human-only interaction. These are rare and **always emerge dynamically during execution** — never pre-planned.
 
 **Use for:**
+
 - Email verification clicks
 - SMS 2FA codes
 - OAuth browser approval flows
@@ -79,6 +86,7 @@ An action has NO CLI/API alternative and requires human-only interaction. These 
 - **CLI tool authentication** (vercel login, gh auth login, neonctl auth, supabase login, etc.)
 
 **Rules:**
+
 - NEVER use for things the agent can automate
 - NEVER pre-plan these in the implementation plan — they're created dynamically when an agent reports `AUTH_GATE`
 - Provide exact steps for the manual action
@@ -86,6 +94,7 @@ An action has NO CLI/API alternative and requires human-only interaction. These 
 - After verification, the SAME task is re-dispatched — the task is NOT skipped
 
 **Auth Gate Flow:**
+
 ```
 Agent attempts: vercel deploy
          ↓
@@ -103,12 +112,14 @@ Controller re-dispatches: same task to agent
 ```
 
 **CRITICAL:** The difference between AUTH_GATE and BLOCKED:
+
 - `AUTH_GATE` = "the task works, a human just needs to unlock a door" → retry after auth
 - `BLOCKED` = "the task itself can't be done this way" → change the approach
 
 If an agent skips a task because of an auth error, that's a bug in the agent. Auth errors should always produce AUTH_GATE, never BLOCKED, and AUTH_GATE always retries.
 
 **Example:**
+
 ```
 Task 8: [CHECKPOINT:ACTION] Complete email verification
   I configured the DNS records and triggered the verification email.
@@ -122,21 +133,21 @@ Task 8: [CHECKPOINT:ACTION] Complete email verification
 
 ## Quick Reference: What's Automatable?
 
-| Action | Automatable? | Agent does it? |
-|--------|-------------|---------------|
-| Deploy to Vercel | Yes (vercel CLI) | YES |
-| Run tests | Yes (pnpm test) | YES |
-| Write .env file | Yes (Write tool) | YES |
-| Start dev server | Yes (pnpm dev) | YES |
-| Create DNS records | Yes (provider CLI/API) | YES |
-| Install dependencies | Yes (pnpm install) | YES |
-| Create GitHub repo | Yes (gh CLI) | YES |
-| Click email verification | No | NO -- checkpoint:action |
-| Enter SMS 2FA code | No | NO -- checkpoint:action |
-| Visual UI check | No (requires human eyes) | NO -- checkpoint:verify |
-| Animation feel check | No (subjective judgment) | NO -- checkpoint:verify |
-| Choose auth provider | N/A (decision) | NO -- checkpoint:decide |
-| Pick between design options | N/A (decision) | NO -- checkpoint:decide |
+| Action                      | Automatable?             | Agent does it?          |
+| --------------------------- | ------------------------ | ----------------------- |
+| Deploy to Vercel            | Yes (vercel CLI)         | YES                     |
+| Run tests                   | Yes (pnpm test)          | YES                     |
+| Write .env file             | Yes (Write tool)         | YES                     |
+| Start dev server            | Yes (pnpm dev)           | YES                     |
+| Create DNS records          | Yes (provider CLI/API)   | YES                     |
+| Install dependencies        | Yes (pnpm install)       | YES                     |
+| Create GitHub repo          | Yes (gh CLI)             | YES                     |
+| Click email verification    | No                       | NO -- checkpoint:action |
+| Enter SMS 2FA code          | No                       | NO -- checkpoint:action |
+| Visual UI check             | No (requires human eyes) | NO -- checkpoint:verify |
+| Animation feel check        | No (subjective judgment) | NO -- checkpoint:verify |
+| Choose auth provider        | N/A (decision)           | NO -- checkpoint:decide |
+| Pick between design options | N/A (decision)           | NO -- checkpoint:decide |
 
 ## Checkpoint Presentation Format
 
@@ -184,13 +195,13 @@ Do not checkpoint for things verifiable programmatically:
 
 ## Anti-Patterns
 
-| Anti-Pattern | Why It's Wrong | Instead |
-|-------------|---------------|---------|
-| Checkpoint before running tests | Tests are automatable | Run tests, only checkpoint if human judgment needed |
-| "Please run pnpm dev" | Agent can start the server | Agent starts server, then presents verify checkpoint |
-| Checkpoint after every file | Too granular, wastes human attention | Batch into logical milestones |
-| Checkpoint for code review | Agent has code-reviewer | Use code-reviewer agent, checkpoint only for subjective UI |
-| Pre-planning action checkpoints | Can't predict auth gates | Create action checkpoints dynamically when blocked |
-| Checkpoint without setup | Human has to set up context | Agent prepares everything, human only judges |
-| Skipping task on auth error | Task is viable, just needs auth | Report AUTH_GATE, user authenticates, retry same task |
-| Reporting BLOCKED for auth errors | BLOCKED means "change approach" | AUTH_GATE means "unlock door, then retry same thing" |
+| Anti-Pattern                      | Why It's Wrong                       | Instead                                                    |
+| --------------------------------- | ------------------------------------ | ---------------------------------------------------------- |
+| Checkpoint before running tests   | Tests are automatable                | Run tests, only checkpoint if human judgment needed        |
+| "Please run pnpm dev"             | Agent can start the server           | Agent starts server, then presents verify checkpoint       |
+| Checkpoint after every file       | Too granular, wastes human attention | Batch into logical milestones                              |
+| Checkpoint for code review        | Agent has code-reviewer              | Use code-reviewer agent, checkpoint only for subjective UI |
+| Pre-planning action checkpoints   | Can't predict auth gates             | Create action checkpoints dynamically when blocked         |
+| Checkpoint without setup          | Human has to set up context          | Agent prepares everything, human only judges               |
+| Skipping task on auth error       | Task is viable, just needs auth      | Report AUTH_GATE, user authenticates, retry same task      |
+| Reporting BLOCKED for auth errors | BLOCKED means "change approach"      | AUTH_GATE means "unlock door, then retry same thing"       |

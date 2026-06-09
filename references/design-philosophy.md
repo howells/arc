@@ -1,6 +1,6 @@
 # Design Philosophy
 
-Timeless principles for UI design, extracted from *Refactoring UI* by Adam Wathan & Steve Schoger.
+Timeless principles for UI design, extracted from _Refactoring UI_ by Adam Wathan & Steve Schoger.
 
 ---
 
@@ -11,6 +11,7 @@ Timeless principles for UI design, extracted from *Refactoring UI* by Adam Watha
 The instinct when starting a new project is to design the shell first—navigation, sidebar, footer. Resist this. You don't know what those need to contain until you've designed what matters: the actual features.
 
 Instead:
+
 - Design the core functionality first
 - Figure out where it lives later
 - The shell should serve the content, not the reverse
@@ -20,6 +21,7 @@ Instead:
 Don't obsess over pixel-perfect details in early stages. This slows you down and creates attachment to decisions you haven't validated.
 
 Work in cycles:
+
 1. **Low fidelity first**: Grayscale, no shadows, system fonts
 2. **Rough out the basics**: Get the structure right
 3. **Make it real**: Add color, images, refined typography
@@ -39,12 +41,12 @@ Design what you need to build next, not the entire system.
 
 Every design has a personality, whether intentional or not. Be deliberate:
 
-| Personality | Typography | Colors | Borders |
-|------------|-----------|--------|---------|
-| **Elegant/Classic** | Serif fonts | Muted, sophisticated | Subtle, minimal |
-| **Playful/Fun** | Rounded sans-serif | Bright, saturated | Soft, curved |
-| **Plain/Simple** | Neutral sans-serif | Minimal, monochrome | Clean, geometric |
-| **Bold/Confident** | Heavy weights | Saturated, high contrast | Strong, defined |
+| Personality         | Typography         | Colors                   | Borders          |
+| ------------------- | ------------------ | ------------------------ | ---------------- |
+| **Elegant/Classic** | Serif fonts        | Muted, sophisticated     | Subtle, minimal  |
+| **Playful/Fun**     | Rounded sans-serif | Bright, saturated        | Soft, curved     |
+| **Plain/Simple**    | Neutral sans-serif | Minimal, monochrome      | Clean, geometric |
+| **Bold/Confident**  | Heavy weights      | Saturated, high contrast | Strong, defined  |
 
 ### Limit Your Choices
 
@@ -71,6 +73,7 @@ This classification drives every visual decision.
 When everything is bold, nothing is bold. Relying too much on font size creates competition between elements.
 
 Use the full toolkit:
+
 - **Font weight**: Normal vs medium vs semibold
 - **Color**: Black, grey, lighter grey
 - **Spacing**: Grouping creates hierarchy
@@ -82,6 +85,7 @@ Two or three grays plus one primary color handles 90% of hierarchy needs.
 Sometimes the best way to highlight an element is to make everything else fade back. Instead of making a button louder, make the surrounding elements quieter.
 
 This works because:
+
 - There's a ceiling to how prominent you can make something
 - De-emphasizing has no floor
 - Subtraction often works better than addition
@@ -89,6 +93,7 @@ This works because:
 ### Labels Are a Last Resort
 
 Much data is self-explanatory:
+
 - `user@example.com` is obviously an email
 - `(555) 123-4567` is obviously a phone number
 - `$49.99` is obviously a price
@@ -106,6 +111,7 @@ An `<h2>` doesn't have to be visually prominent. A button in an `<aside>` might 
 ### Balance Weight and Contrast
 
 A bold icon next to thin text looks unbalanced. Reduce contrast on heavier elements to maintain visual equilibrium:
+
 - Soften heavy icons with grey instead of black
 - Use lighter weights for large text
 - Bold elements work better at lower contrast
@@ -137,6 +143,7 @@ Using a linear scale (10, 20, 30, 40...) leads to hard decisions between adjacen
 Just because you have space doesn't mean you need to use it. Wide monitors don't require wide content.
 
 Consider:
+
 - Max-widths for readable content (45-75 characters)
 - Fixed widths for form inputs
 - Proportional layouts only where they genuinely help
@@ -149,7 +156,7 @@ Use grids where they make sense (dashboards, galleries). Use fixed widths where 
 
 ### Avoid Ambiguous Spacing
 
-Elements must be *obviously* closer to their related content than to unrelated content. When spacing is ambiguous, users have to think.
+Elements must be _obviously_ closer to their related content than to unrelated content. When spacing is ambiguous, users have to think.
 
 ```
 Bad:  [Header]
@@ -172,6 +179,7 @@ Good: [Header]
 ### Ditch Hex for HSL
 
 HSL (Hue, Saturation, Lightness) is more intuitive than Hex:
+
 - **Hue** (0-360): Position on the color wheel
 - **Saturation** (0-100%): Color intensity
 - **Lightness** (0-100%): Light to dark
@@ -181,6 +189,7 @@ With HSL, creating variations is straightforward. Need a lighter shade? Increase
 ### You Need More Colors Than You Think
 
 A complete palette includes:
+
 - **Greys**: 8-10 shades (used most frequently)
 - **Primary**: 5-10 shades
 - **Semantic colors**: Red, yellow, green—5-10 shades each
@@ -189,6 +198,7 @@ A complete palette includes:
 ### Don't Let Lightness Kill Saturation
 
 As lightness approaches 0% or 100%, colors lose perceived saturation. To maintain vibrancy at the extremes:
+
 - Increase saturation for very light shades
 - Increase saturation for very dark shades
 
@@ -197,6 +207,7 @@ A 50% lightness blue at 80% saturation might need 95% saturation at 90% lightnes
 ### Use Perceived Brightness
 
 Different hues have different perceived brightness at the same HSL lightness value:
+
 - **Bright hues**: Yellow (60°), Cyan (180°), Magenta (300°)
 - **Dark hues**: Red (0°), Green (120°), Blue (240°)
 
@@ -216,6 +227,7 @@ Match grey temperature to your brand. A legal site wants cool; a bakery wants wa
 ### Don't Rely on Color Alone
 
 Red/green colorblind users need alternative signals:
+
 - Icons alongside color (checkmark for success, X for error)
 - Position and grouping
 - Text labels
@@ -228,6 +240,7 @@ Red/green colorblind users need alternative signals:
 ### Shadows Convey Elevation
 
 Shadow size communicates z-axis position:
+
 - **Small, tight shadows**: Slightly raised (buttons, cards)
 - **Medium shadows**: Floating (dropdowns, popovers)
 - **Large, diffuse shadows**: Modal, capturing attention
@@ -237,6 +250,7 @@ Define 3-5 elevation levels and use them consistently.
 ### Two-Part Shadows
 
 Natural shadows have two components:
+
 1. **Large, soft shadow**: Simulates direct light source
 2. **Tight, dark shadow**: Simulates blocked ambient light
 
@@ -245,6 +259,7 @@ At higher elevations, the ambient shadow becomes more subtle while the direct sh
 ### Even Flat Designs Can Have Depth
 
 Without box-shadows:
+
 - **Color**: Lighter elements feel closer, darker feel further
 - **Solid shadows**: No blur, just offset
 - **Layering**: Overlap and negative space
@@ -264,6 +279,7 @@ When overlapping images, add an invisible border (matching the background) to pr
 ### Add Color with Accent Borders
 
 A single colored border transforms plain elements:
+
 - Top of cards
 - Left side of alerts or notifications
 - Under active navigation items
@@ -272,6 +288,7 @@ A single colored border transforms plain elements:
 ### Don't Overlook Empty States
 
 Empty states deserve design attention:
+
 - Add illustrations or icons
 - Write helpful copy explaining what will appear
 - Include clear CTAs for adding content
@@ -282,6 +299,7 @@ Empty states are often the first thing users see. Make them good.
 ### Use Fewer Borders
 
 Before adding a border, try:
+
 - **Box shadows**: Outline without visual clutter
 - **Background color differences**: Subtle distinction
 - **Extra spacing**: Separation without elements
@@ -291,6 +309,7 @@ Borders add visual weight. Often the same separation is achievable with less.
 ### Think Outside the Box
 
 Challenge component assumptions:
+
 - Dropdowns don't have to be plain lists
 - Tables can have hierarchy within cells
 - Radio buttons can become selectable cards
@@ -305,6 +324,7 @@ The default implementation isn't always the best implementation.
 ### Study Decisions You Wouldn't Have Made
 
 When viewing designs you admire, note the unexpected:
+
 - Unconventional layouts
 - Surprising color choices
 - Atypical component implementations
@@ -314,6 +334,7 @@ These decisions are where skill lives. The obvious choices are easy; the surpris
 ### Rebuild Interfaces You Like
 
 Pick a design you admire and recreate it without inspecting the code:
+
 1. Screenshot or reference only
 2. Build from scratch
 3. Compare your version to the original

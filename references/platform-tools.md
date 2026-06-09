@@ -7,13 +7,13 @@ the current harness instead of assuming one toolset.
 
 Treat these as distinct capabilities, not interchangeable tools:
 
-| Capability | Preferred | Fallbacks | Notes |
-|-----------|-----------|-----------|-------|
-| Rendered browser verification | Claude Chrome MCP | `agent-browser`, Playwright, user screenshots | Use for reviewing the real UI after implementation |
-| Browser automation | `agent-browser` | Playwright | Prefer `agent-browser` outside Claude Code |
-| Design-source implementation | Figma MCP | Screenshot/manual translation | Use when a Figma design exists |
-| Low-fidelity wireframing | WireText MCP | ASCII wireframes in docs | Use for planning structure, not fidelity review |
-| Task tracking | Platform-native task/todo tool | Plain progress notes | Do not make this a hard dependency |
+| Capability                    | Preferred                      | Fallbacks                                     | Notes                                              |
+| ----------------------------- | ------------------------------ | --------------------------------------------- | -------------------------------------------------- |
+| Rendered browser verification | Claude Chrome MCP              | `agent-browser`, Playwright, user screenshots | Use for reviewing the real UI after implementation |
+| Browser automation            | `agent-browser`                | Playwright                                    | Prefer `agent-browser` outside Claude Code         |
+| Design-source implementation  | Figma MCP                      | Screenshot/manual translation                 | Use when a Figma design exists                     |
+| Low-fidelity wireframing      | WireText MCP                   | ASCII wireframes in docs                      | Use for planning structure, not fidelity review    |
+| Task tracking                 | Platform-native task/todo tool | Plain progress notes                          | Do not make this a hard dependency                 |
 
 ## Claude Code
 

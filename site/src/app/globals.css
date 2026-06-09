@@ -5,205 +5,208 @@
 @source "../../node_modules/@howells/stacksheet/dist/**/*.js";
 
 @layer base {
-	:root {
-		--font-sans: var(--font-inter), system-ui, sans-serif;
-		--font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
-		--color-accent: #5A7B7B;
-		/* Baseline grid: text-sm (14px) × leading-relaxed (1.625) = 22.75px */
-		--baseline: 22.75px;
-	}
+  :root {
+    --font-sans: var(--font-inter), system-ui, sans-serif;
+    --font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
+    --color-accent: #5a7b7b;
+    /* Baseline grid: text-sm (14px) × leading-relaxed (1.625) = 22.75px */
+    --baseline: 22.75px;
+  }
 }
 
 /* Debug: Show baseline grid overlay (add class="baseline-grid" to body) */
 @utility baseline-grid {
-	/*
+  /*
 	 * Baseline offset: where text baseline sits within the line box.
 	 * For text-sm (14px) with leading-relaxed (22.75px line-height):
 	 * Adjusted empirically to match Inter font metrics.
 	 */
-	--baseline-offset: -2px;
+  --baseline-offset: -2px;
 
-	background-image: linear-gradient(
-		to bottom,
-		transparent calc(var(--baseline) - 1px),
-		rgba(255, 0, 0, 0.2) calc(var(--baseline) - 1px),
-		rgba(255, 0, 0, 0.2) var(--baseline)
-	);
-	background-size: 100% var(--baseline);
-	background-position-y: var(--baseline-offset);
+  background-image: linear-gradient(
+    to bottom,
+    transparent calc(var(--baseline) - 1px),
+    rgba(255, 0, 0, 0.2) calc(var(--baseline) - 1px),
+    rgba(255, 0, 0, 0.2) var(--baseline)
+  );
+  background-size: 100% var(--baseline);
+  background-position-y: var(--baseline-offset);
 }
 
 @layer base {
-	html {
-		font-size: 15px;
-	}
+  html {
+    font-size: 15px;
+  }
 
-	body {
-		font-family: var(--font-sans);
-		font-feature-settings: "liga" 1, "calt" 1, "cv11" 1;
-	}
+  body {
+    font-family: var(--font-sans);
+    font-feature-settings:
+      "liga" 1,
+      "calt" 1,
+      "cv11" 1;
+  }
 }
 
 /* Inline text links with subtle underline hover */
 @layer components {
-	.prose-link {
-		@apply text-neutral-600 underline decoration-neutral-300 underline-offset-2 transition-colors;
-	}
-	.prose-link:hover {
-		@apply text-neutral-950 decoration-neutral-950;
-	}
+  .prose-link {
+    @apply text-neutral-600 underline decoration-neutral-300 underline-offset-2 transition-colors;
+  }
+  .prose-link:hover {
+    @apply text-neutral-950 decoration-neutral-950;
+  }
 }
 
 /* Custom prose styles using baseline grid */
 @layer components {
-	.prose {
-		font-family: var(--font-sans);
-		font-size: 0.875rem; /* 14px - text-sm, consistent with site body text */
-		line-height: 1.625; /* leading-relaxed */
-		color: theme(colors.neutral.600);
-	}
+  .prose {
+    font-family: var(--font-sans);
+    font-size: 0.875rem; /* 14px - text-sm, consistent with site body text */
+    line-height: 1.625; /* leading-relaxed */
+    color: theme(colors.neutral.600);
+  }
 
-	.prose p {
-		margin-bottom: var(--baseline);
-	}
+  .prose p {
+    margin-bottom: var(--baseline);
+  }
 
-	.prose p:last-child {
-		margin-bottom: 0;
-	}
+  .prose p:last-child {
+    margin-bottom: 0;
+  }
 
-	.prose a {
-		@apply text-neutral-700 underline decoration-neutral-300 underline-offset-2 transition-colors;
-	}
+  .prose a {
+    @apply text-neutral-700 underline decoration-neutral-300 underline-offset-2 transition-colors;
+  }
 
-	.prose a:hover {
-		@apply text-neutral-950 decoration-neutral-950;
-	}
+  .prose a:hover {
+    @apply text-neutral-950 decoration-neutral-950;
+  }
 
-	.prose strong {
-		@apply font-medium text-neutral-900;
-	}
+  .prose strong {
+    @apply font-medium text-neutral-900;
+  }
 
-	.prose h1,
-	.prose h2,
-	.prose h3,
-	.prose h4 {
-		@apply font-sans font-medium text-neutral-900;
-		margin-top: calc(var(--baseline) * 2);
-		margin-bottom: var(--baseline);
-	}
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4 {
+    @apply font-sans font-medium text-neutral-900;
+    margin-top: calc(var(--baseline) * 2);
+    margin-bottom: var(--baseline);
+  }
 
-	.prose h1:first-child,
-	.prose h2:first-child,
-	.prose h3:first-child,
-	.prose h4:first-child {
-		margin-top: 0;
-	}
+  .prose h1:first-child,
+  .prose h2:first-child,
+  .prose h3:first-child,
+  .prose h4:first-child {
+    margin-top: 0;
+  }
 
-	.prose ul,
-	.prose ol {
-		margin-bottom: var(--baseline);
-		padding-left: 1.5em;
-	}
+  .prose ul,
+  .prose ol {
+    margin-bottom: var(--baseline);
+    padding-left: 1.5em;
+  }
 
-	.prose ul {
-		list-style-type: disc;
-	}
+  .prose ul {
+    list-style-type: disc;
+  }
 
-	.prose ol {
-		list-style-type: decimal;
-	}
+  .prose ol {
+    list-style-type: decimal;
+  }
 
-	.prose li {
-		margin-bottom: calc(var(--baseline) * 0.5);
-	}
+  .prose li {
+    margin-bottom: calc(var(--baseline) * 0.5);
+  }
 
-	.prose li:last-child {
-		margin-bottom: 0;
-	}
+  .prose li:last-child {
+    margin-bottom: 0;
+  }
 
-	.prose blockquote {
-		@apply border-neutral-200 border-l-2 pl-4 text-neutral-600 italic;
-		margin-bottom: var(--baseline);
-	}
+  .prose blockquote {
+    @apply border-neutral-200 border-l-2 pl-4 text-neutral-600 italic;
+    margin-bottom: var(--baseline);
+  }
 
-	.prose code {
-		@apply rounded bg-neutral-100 px-1 py-0.5 font-mono text-[0.9375em];
-	}
+  .prose code {
+    @apply rounded bg-neutral-100 px-1 py-0.5 font-mono text-[0.9375em];
+  }
 
-	.prose pre {
-		@apply overflow-x-auto rounded-lg border border-neutral-200 bg-neutral-50 p-4 font-mono text-[0.875em];
-		margin-bottom: var(--baseline);
-	}
+  .prose pre {
+    @apply overflow-x-auto rounded-lg border border-neutral-200 bg-neutral-50 p-4 font-mono text-[0.875em];
+    margin-bottom: var(--baseline);
+  }
 
-	.prose pre code {
-		@apply bg-transparent p-0;
-	}
+  .prose pre code {
+    @apply bg-transparent p-0;
+  }
 
-	.prose table {
-		@apply w-full border-collapse text-left;
-		margin-bottom: var(--baseline);
-	}
+  .prose table {
+    @apply w-full border-collapse text-left;
+    margin-bottom: var(--baseline);
+  }
 
-	.prose thead {
-		@apply border-neutral-200 border-b;
-	}
+  .prose thead {
+    @apply border-neutral-200 border-b;
+  }
 
-	.prose th {
-		@apply font-medium text-neutral-900;
-		padding: calc(var(--baseline) * 0.25) calc(var(--baseline) * 0.5);
-		padding-left: 0;
-	}
+  .prose th {
+    @apply font-medium text-neutral-900;
+    padding: calc(var(--baseline) * 0.25) calc(var(--baseline) * 0.5);
+    padding-left: 0;
+  }
 
-	.prose td {
-		@apply text-neutral-600;
-		padding: calc(var(--baseline) * 0.25) calc(var(--baseline) * 0.5);
-		padding-left: 0;
-	}
+  .prose td {
+    @apply text-neutral-600;
+    padding: calc(var(--baseline) * 0.25) calc(var(--baseline) * 0.5);
+    padding-left: 0;
+  }
 
-	.prose tbody tr {
-		@apply border-neutral-100 border-b;
-	}
+  .prose tbody tr {
+    @apply border-neutral-100 border-b;
+  }
 
-	.prose tbody tr:last-child {
-		border-bottom: none;
-	}
+  .prose tbody tr:last-child {
+    border-bottom: none;
+  }
 
-	.prose hr {
-		@apply border-neutral-200;
-		margin: calc(var(--baseline) * 2) 0;
-	}
+  .prose hr {
+    @apply border-neutral-200;
+    margin: calc(var(--baseline) * 2) 0;
+  }
 }
 
 /* Workflow graph node interactions */
 @layer components {
-	.graph-node {
-		outline: none;
-	}
-	.graph-node:focus-visible {
-		outline: 2px solid var(--color-accent);
-		outline-offset: 4px;
-		border-radius: 2px;
-	}
-	.graph-node text:first-of-type {
-		transition: fill 0.15s ease;
-	}
-	.graph-node:hover text:first-of-type,
-	.graph-node:focus-visible text:first-of-type {
-		fill: var(--color-accent);
-	}
-	.graph-node-desc {
-		opacity: 0;
-		transition: opacity 0.15s ease;
-	}
-	.graph-node:hover .graph-node-desc,
-	.graph-node:focus-visible .graph-node-desc {
-		opacity: 1;
-	}
-	.graph-agent-dot {
-		transition: opacity 0.15s ease;
-	}
-	.graph-node:hover .graph-agent-dot,
-	.graph-node:focus-visible .graph-agent-dot {
-		opacity: 0.5;
-	}
+  .graph-node {
+    outline: none;
+  }
+  .graph-node:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+  .graph-node text:first-of-type {
+    transition: fill 0.15s ease;
+  }
+  .graph-node:hover text:first-of-type,
+  .graph-node:focus-visible text:first-of-type {
+    fill: var(--color-accent);
+  }
+  .graph-node-desc {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  .graph-node:hover .graph-node-desc,
+  .graph-node:focus-visible .graph-node-desc {
+    opacity: 1;
+  }
+  .graph-agent-dot {
+    transition: opacity 0.15s ease;
+  }
+  .graph-node:hover .graph-agent-dot,
+  .graph-node:focus-visible .graph-agent-dot {
+    opacity: 0.5;
+  }
 }

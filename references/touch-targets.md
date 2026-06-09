@@ -6,12 +6,12 @@ Techniques for expanding clickable areas without affecting visual layout.
 
 ## Minimum Target Sizes
 
-| Standard | Min Size | Context |
-|----------|----------|---------|
-| WCAG 2.2 AAA | 44×44px | Recommended for all interactive elements |
-| Apple HIG | 44×44pt | iOS touch targets |
-| Material Design | 48×48dp | Android touch targets |
-| WCAG 2.2 AA | 24×24px | Absolute minimum (avoid) |
+| Standard        | Min Size | Context                                  |
+| --------------- | -------- | ---------------------------------------- |
+| WCAG 2.2 AAA    | 44×44px  | Recommended for all interactive elements |
+| Apple HIG       | 44×44pt  | iOS touch targets                        |
+| Material Design | 48×48dp  | Android touch targets                    |
+| WCAG 2.2 AA     | 24×24px  | Absolute minimum (avoid)                 |
 
 **Default to 44×44px minimum.** This accommodates fingers, styluses, and motor-impaired users.
 
@@ -172,6 +172,7 @@ Fix: Either reduce expansion or add more visual spacing
 ## Mobile-Specific Patterns
 
 ### Bottom-of-screen actions
+
 Place primary actions in the thumb zone (bottom third of screen):
 
 ```
@@ -185,16 +186,17 @@ Place primary actions in the thumb zone (bottom third of screen):
 ```
 
 ### Full-width buttons on mobile
+
 ```html
-<button class="w-full py-3 md:w-auto md:py-2">
-  Save Changes
-</button>
+<button class="w-full py-3 md:w-auto md:py-2">Save Changes</button>
 ```
 
 ### Touch-friendly spacing in lists
+
 ```html
 <ul class="divide-y">
-  <li class="py-4"> <!-- 16px top + content + 16px bottom = easily tappable -->
+  <li class="py-4">
+    <!-- 16px top + content + 16px bottom = easily tappable -->
     <a href="/item" class="block">Item</a>
   </li>
 </ul>

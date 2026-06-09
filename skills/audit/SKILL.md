@@ -38,31 +38,36 @@ website:
 ---
 
 <tool_restrictions>
+
 # MANDATORY Tool Restrictions
 
 ## BANNED TOOLS — calling these is a skill violation:
+
 - **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured process. Execute the steps below directly.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
-</tool_restrictions>
+  </tool_restrictions>
 
 <arc_runtime>
 This workflow requires the full Arc bundle, not a prompts-only install.
 
 Paths in this skill use these conventions:
+
 - `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
 - `./...` is local to this skill's directory.
 - `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-</arc_runtime>
+  </arc_runtime>
 
 <platform_context>
 **Read this reference NOW:**
+
 1. `references/platform-tools.md`
 
 Adapt the workflow to the current harness instead of assuming Claude-specific tool names.
+
 - Use platform-native task tracking only when available; otherwise continue without it.
 - Use platform-native structured questions when available; otherwise ask concise plain-text questions.
 - Use the platform's subagent/delegation primitives when available; otherwise run the review steps locally.
-</platform_context>
+  </platform_context>
 
 <tasklist_context>
 **If the current platform has a native task/todo tool, use it** to check for existing tasks related to this work.
@@ -73,14 +78,16 @@ If no native task/todo tool exists, skip task tracking and continue with the aud
 
 <required_reading>
 **Read these reference files NOW:**
+
 1. `disciplines/dispatching-parallel-agents.md`
 2. `references/audit-stage-calibration.md`
 3. `references/audit-scorecard.md`
 4. `references/maintainability-review.md`
 
 **Load when relevant:**
+
 - `references/react-audit-signals.md` — React, Next.js, TanStack Query, or React Native projects. Pass the relevant sections into reviewer prompts as audit signals.
-</required_reading>
+  </required_reading>
 
 <rules_context>
 **Check for project coding rules:**
@@ -88,43 +95,45 @@ If no native task/todo tool exists, skip task tracking and continue with the aud
 **Use Glob tool:** `.ruler/*.md`
 
 **Determine rules source:**
+
 - **If `.ruler/` exists:** Read rules from `.ruler/`
 - **If `.ruler/` doesn't exist:** Read rules from `rules/`
 
 **Detect stack and read relevant rules from the rules source:**
 
-| Check | Read |
-|-------|------|
-| Always | code-style.md, stack.md |
-| `next.config.*` exists | nextjs.md |
-| `react` in package.json | react.md |
-| `tailwindcss` in package.json | tailwind.md |
-| `.ts` or `.tsx` files | typescript.md |
-| `vitest` or `jest` in package.json | testing.md |
-| `drizzle` or `prisma` in package.json | api.md |
-| `.env*` files exist | env.md |
+| Check                                 | Read                    |
+| ------------------------------------- | ----------------------- |
+| Always                                | code-style.md, stack.md |
+| `next.config.*` exists                | nextjs.md               |
+| `react` in package.json               | react.md                |
+| `tailwindcss` in package.json         | tailwind.md             |
+| `.ts` or `.tsx` files                 | typescript.md           |
+| `vitest` or `jest` in package.json    | testing.md              |
+| `drizzle` or `prisma` in package.json | api.md                  |
+| `.env*` files exist                   | env.md                  |
 
 Pass relevant rules to each reviewer agent.
 
 **For each reviewer, pass domain-specific core rules:**
 
-| Reviewer | Core Rules to Pass |
-|----------|-------------------|
-| security-engineer | api.md, env.md, integrations.md, auth.md (if Clerk/WorkOS), react-correctness.md (security section) |
-| architecture-engineer | stack.md, turborepo.md |
-| lee-nextjs-engineer | nextjs.md, api.md, react-correctness.md (Next.js-specific rules) |
-| senior-engineer | code-style.md, typescript.md, react.md, error-handling.md |
-| data-engineer | testing.md, api.md |
-| daniel-product-engineer | react.md, typescript.md, react-performance.md, react-correctness.md |
-| mastra-agent-engineer | api.md, integrations.md, typescript.md, error-handling.md |
-| performance-engineer | react-performance.md |
+| Reviewer                | Core Rules to Pass                                                                                  |
+| ----------------------- | --------------------------------------------------------------------------------------------------- |
+| security-engineer       | api.md, env.md, integrations.md, auth.md (if Clerk/WorkOS), react-correctness.md (security section) |
+| architecture-engineer   | stack.md, turborepo.md                                                                              |
+| lee-nextjs-engineer     | nextjs.md, api.md, react-correctness.md (Next.js-specific rules)                                    |
+| senior-engineer         | code-style.md, typescript.md, react.md, error-handling.md                                           |
+| data-engineer           | testing.md, api.md                                                                                  |
+| daniel-product-engineer | react.md, typescript.md, react-performance.md, react-correctness.md                                 |
+| mastra-agent-engineer   | api.md, integrations.md, typescript.md, error-handling.md                                           |
+| performance-engineer    | react-performance.md                                                                                |
 
 **For frontend implementation audits, also load code-level interface rules:**
 
-| Reviewer | Interface Rules to Pass |
-|----------|------------------------|
+| Reviewer                | Interface Rules to Pass                                                      |
+| ----------------------- | ---------------------------------------------------------------------------- |
 | daniel-product-engineer | forms.md, interactions.md, performance.md, tailwind-authoring.md, buttons.md |
-| lee-nextjs-engineer | performance.md |
+| lee-nextjs-engineer     | performance.md                                                               |
+
 Interface rules location: `rules/interface/`
 
 Pass relevant rules to each frontend reviewer in their prompt. These inform implementation and accessibility checks only. Do not score visual taste, invent a visual direction, or create redesign findings; defer visual design direction to the project's design source of truth.
@@ -132,6 +141,7 @@ Pass relevant rules to each frontend reviewer in their prompt. These inform impl
 **Frontend implementation checks — include in prompts for daniel-product-engineer and accessibility-engineer:**
 
 In addition to their domain-specific rules, frontend reviewers should verify:
+
 - No layout shift on dynamic content (hardcoded dimensions, `tabular-nums`, no font-weight changes on hover)
 - Animations have `prefers-reduced-motion` support
 - Touch targets are 44px minimum
@@ -144,12 +154,13 @@ In addition to their domain-specific rules, frontend reviewers should verify:
 - z-index uses fixed scale or `isolation: isolate`
 - No flash on refresh for interactive state (tabs, theme, toggles)
 - Destructive actions require confirmation (`AlertDialog`, not `confirm()`)
-</rules_context>
+  </rules_context>
 
 <process>
 ## Phase 1: Detect Scope & Project Type
 
 **Parse arguments:**
+
 - `$ARGUMENTS` may contain:
   - A path (e.g., `apps/web`, `packages/ui`, `src/`)
   - A plain-language focus (e.g., "security", "performance", "architecture", "accessibility")
@@ -159,19 +170,20 @@ Do not advertise audit flags or variants. If the user provides a path or focus, 
 **If no scope provided:**
 
 **Use Glob tool to detect structure:**
+
 - `apps/*`, `packages/*` → monorepo (audit both)
 - `src/*` → standard (audit src/)
 - Neither → audit current directory
 
 **Detect project type with Glob + Grep:**
 
-| Check | Tool | Pattern |
-|-------|------|---------|
-| Next.js | Grep | `"next"` in `package.json` |
-| React | Grep | `"react"` in `package.json` |
-| Python | Glob | `requirements.txt`, `pyproject.toml` |
-| Rust | Glob | `Cargo.toml` |
-| Go | Glob | `go.mod` |
+| Check   | Tool | Pattern                              |
+| ------- | ---- | ------------------------------------ |
+| Next.js | Grep | `"next"` in `package.json`           |
+| React   | Grep | `"react"` in `package.json`          |
+| Python  | Glob | `requirements.txt`, `pyproject.toml` |
+| Rust    | Glob | `Cargo.toml`                         |
+| Go      | Glob | `go.mod`                             |
 
 **Check for database/migrations:**
 
@@ -197,6 +209,7 @@ rg -n --glob '*.{ts,tsx,js,jsx}' \
 ```
 
 Store a **React audit signal manifest** with:
+
 - State/effect hotspots: `useEffect`, effect-driven data fetching, effect cleanup candidates
 - Boundary hotspots: `"use client"` files, async client components, suspicious client wrappers
 - Data-client hotspots: TanStack Query/tRPC hooks, unstable `QueryClient`, mutations/invalidation
@@ -225,6 +238,7 @@ npx -y knip --no-progress --reporter compact 2>/dev/null | head -40
 ```
 
 If knip is already a project dependency, use `npx knip` instead. Knip detects:
+
 - Unused files (not imported anywhere)
 - Unused exports (exported but never imported)
 - Unused types (exported types never referenced)
@@ -232,6 +246,7 @@ If knip is already a project dependency, use `npx knip` instead. Knip detects:
 - Duplicate exports (same thing exported multiple ways)
 
 Include dead code count in the detection summary. Pass findings to relevant reviewers:
+
 - `architecture-engineer` — unused files, exports indicating poor module boundaries
 - `senior-engineer` — general dead code cleanup
 
@@ -261,12 +276,14 @@ grep -rl --include='*.ts' --include='*.tsx' --include='*.js' --include='*.jsx' \
 ```
 
 Interpretation guidance:
+
 - Treat files **>250 lines** as audit hotspots. Treat files **>400 lines** as severe complexity hotspots, especially when they are React components, pages, layouts, or route handlers.
 - `*-client.*` and `*-wrapper.*` are explicit red flags. They often mean "I needed a client boundary, so I wrapped the real component instead of pushing interactivity down."
 - `*-content.*`, `*-shell.*`, and `*-ui.*` are weaker signals, but worth interrogating when they are also long or marked `"use client"`.
 - When a file is both **long** and suspiciously named, elevate it as a probable god-component / server-client-boundary smell.
 
 Store a **structural hotspot manifest** with:
+
 - Long files over 250 LOC
 - Severe long files over 400 LOC
 - Suspicious boundary files matching `*-client`, `*-wrapper`, `*-content`, `*-shell`, `*-ui`
@@ -285,12 +302,25 @@ rg -n --glob '*.{ts,tsx,js,jsx,py,go,rb,php,java,cs,cpp,c,swift}' \
 ```
 
 Store a **complexity signal manifest** with:
+
 - Repeated membership/search calls inside loop-like code
 - Nested lookup or pairwise comparison candidates
 - Sorting or grouping work that may repeat
 - Query/fetch/request calls near loops
 - Expensive render-path derivations in React/Next.js components
 - Shared utilities where complexity improvement would compound across callers
+
+**Build read-only codebase map (when Arc full runtime is available):**
+
+Run the Arc-owned mapper to orient reviewers around project shape, routes, services, data layer, import hotspots, and circular dependencies:
+
+```bash
+python3 scripts/codebase-map.py ${scope:-.} --format markdown
+```
+
+If it succeeds, store the output as the **codebase map manifest**. If it fails or the script is unavailable in a prompt-only install, record `Codebase map: unavailable` and continue with the existing detection passes.
+
+Treat the map as orientation, not evidence by itself. Reviewers must still inspect files before reporting findings.
 
 **Detect project scale:**
 
@@ -301,13 +331,14 @@ Use file counts to determine appropriate audit depth:
 find . -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" -o -name "*.py" -o -name "*.go" -o -name "*.rs" \) | grep -v node_modules | grep -v .git | wc -l
 ```
 
-| File Count | Scale | Audit Approach |
-|------------|-------|----------------|
-| < 20 files | Small | 2-3 reviewers max, skip architecture/simplicity |
-| 20-100 files | Medium | 3-4 reviewers, standard audit |
-| > 100 files | Large | Full reviewer suite, batched execution |
+| File Count   | Scale  | Audit Approach                                  |
+| ------------ | ------ | ----------------------------------------------- |
+| < 20 files   | Small  | 2-3 reviewers max, skip architecture/simplicity |
+| 20-100 files | Medium | 3-4 reviewers, standard audit                   |
+| > 100 files  | Large  | Full reviewer suite, batched execution          |
 
 **Scale-appropriate signals:**
+
 - Small projects: Skip `architecture-engineer` (no complex boundaries to review)
 - No tests present + small project: Don't flag missing tests as critical
 - Single developer: Skip `senior-engineer` (no code review discipline needed)
@@ -316,25 +347,25 @@ find . -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx"
 
 Infer the project stage from heuristic signals:
 
-| Signal | Tool | Indicates |
-|--------|------|-----------|
-| CI/CD config (`.github/workflows/*`, `Jenkinsfile`, `.gitlab-ci.yml`) | Glob | pre-launch+ |
-| Deployment config (`vercel.json`, `Dockerfile`, `fly.toml`, `render.yaml`, `k8s/`) | Glob | pre-launch+ |
-| Monitoring/observability (`sentry`, `datadog`, `newrelic` in deps) | Grep in package.json | production |
-| Production env references (`.env.production`, `NODE_ENV` guards) | Glob + Grep | pre-launch+ |
-| Test coverage > 0 (test files exist) | Glob (`**/*.test.*`, `**/*.spec.*`) | development+ |
-| Git history depth | `git rev-list --count HEAD` | maturity signal |
-| Custom domain / production URL in config | Grep | production |
-| Rate limiting, caching, or queue deps in package.json | Grep (`rate-limit`, `redis`, `bull`) | production |
+| Signal                                                                             | Tool                                 | Indicates       |
+| ---------------------------------------------------------------------------------- | ------------------------------------ | --------------- |
+| CI/CD config (`.github/workflows/*`, `Jenkinsfile`, `.gitlab-ci.yml`)              | Glob                                 | pre-launch+     |
+| Deployment config (`vercel.json`, `Dockerfile`, `fly.toml`, `render.yaml`, `k8s/`) | Glob                                 | pre-launch+     |
+| Monitoring/observability (`sentry`, `datadog`, `newrelic` in deps)                 | Grep in package.json                 | production      |
+| Production env references (`.env.production`, `NODE_ENV` guards)                   | Glob + Grep                          | pre-launch+     |
+| Test coverage > 0 (test files exist)                                               | Glob (`**/*.test.*`, `**/*.spec.*`)  | development+    |
+| Git history depth                                                                  | `git rev-list --count HEAD`          | maturity signal |
+| Custom domain / production URL in config                                           | Grep                                 | production      |
+| Rate limiting, caching, or queue deps in package.json                              | Grep (`rate-limit`, `redis`, `bull`) | production      |
 
 **Stage classification:**
 
-| Stage | Description | Typical Signals |
-|-------|-------------|-----------------|
-| `prototype` | Exploring ideas, validating concepts | < 30 commits, no CI, no deploy config, no tests |
-| `development` | Actively building features, not yet shipped | Has some tests, may have CI, no production deploy |
-| `pre-launch` | Feature-complete, preparing to ship | Has CI, has deploy config, has tests, no monitoring |
-| `production` | Live and serving real users | Has monitoring, production env, rate limiting, mature git history (200+ commits) |
+| Stage         | Description                                 | Typical Signals                                                                  |
+| ------------- | ------------------------------------------- | -------------------------------------------------------------------------------- |
+| `prototype`   | Exploring ideas, validating concepts        | < 30 commits, no CI, no deploy config, no tests                                  |
+| `development` | Actively building features, not yet shipped | Has some tests, may have CI, no production deploy                                |
+| `pre-launch`  | Feature-complete, preparing to ship         | Has CI, has deploy config, has tests, no monitoring                              |
+| `production`  | Live and serving real users                 | Has monitoring, production env, rate limiting, mature git history (200+ commits) |
 
 Default to `development` if signals are ambiguous. When in doubt, err toward the earlier stage — it's better to under-flag than to overwhelm with premature requirements.
 
@@ -363,6 +394,7 @@ When skipped, record `Security gate: lightweight only` in the detection summary 
 **Confirm stage with user:**
 
 After detection, briefly confirm:
+
 ```
 Detected project stage: [stage] (based on [key signals])
 ```
@@ -370,6 +402,7 @@ Detected project stage: [stage] (based on [key signals])
 If the user corrects it, use their override.
 
 **Summarize detection:**
+
 ```
 Scope: [path or "full codebase"]
 Project type: [Next.js / React / Python / etc.]
@@ -382,6 +415,7 @@ Dead code: [X unused files, Y unused exports, Z unused deps] or "N/A (not JS/TS)
 Structural hotspots: [X long files >250 LOC, Y severe >400 LOC, Z suspicious boundary files, W suspicious+long overlap]
 Complexity signals: [X repeated scans, Y sorting/grouping, Z data-access/render-path candidates] or "N/A"
 React audit signals: [X state/effect, Y boundary, Z data-client, W security/frontend/perf hotspots] or "N/A (not React)"
+Codebase map: [available / unavailable]
 Coding rules: [yes/no]
 Focus: [all / security / performance / architecture / accessibility / user-provided focus]
 ```
@@ -391,6 +425,7 @@ Focus: [all / security / performance / architecture / accessibility / user-provi
 Run these before any reviewer agents so obvious breakage gets caught cheaply.
 
 ### Tooling Detection
+
 - Detect package manager from lockfiles
 - Detect build command from `package.json`
 - Detect typechecker from `tsconfig.json`
@@ -398,6 +433,7 @@ Run these before any reviewer agents so obvious breakage gets caught cheaply.
 - Detect tests from Vitest / Jest config
 
 ### Check Order
+
 1. Build — stop immediately if it fails
 2. Typecheck — report errors and continue
 3. Lint — auto-fix first, then report remaining issues
@@ -418,46 +454,50 @@ Include the mechanical summary in reviewer context, then continue to reviewer se
 
 **Base reviewer selection by project scale:**
 
-| Scale | Core Reviewers |
-|-------|----------------|
-| Small | performance-engineer |
-| Medium | performance-engineer, architecture-engineer |
-| Large | performance-engineer, architecture-engineer, senior-engineer |
+| Scale  | Core Reviewers                                               |
+| ------ | ------------------------------------------------------------ |
+| Small  | performance-engineer                                         |
+| Medium | performance-engineer, architecture-engineer                  |
+| Large  | performance-engineer, architecture-engineer, senior-engineer |
 
 **Add framework-specific reviewers (medium/large only):**
 
-| Project Type | Additional Reviewers |
-|--------------|---------------------|
-| Next.js | lee-nextjs-engineer, daniel-product-engineer |
-| React/TypeScript | daniel-product-engineer |
-| Python/Rust/Go | (none additional) |
+| Project Type         | Additional Reviewers                         |
+| -------------------- | -------------------------------------------- |
+| Next.js              | lee-nextjs-engineer, daniel-product-engineer |
+| React/TypeScript     | daniel-product-engineer                      |
+| Mastra/agent systems | mastra-agent-engineer                        |
+| Python/Rust/Go       | (none additional)                            |
 
 **Conditional additions:**
+
 - If security gate says `full reviewer` → add `security-engineer`
 - If scope includes DB/migrations → add `data-engineer`
 - If frontend-heavy (React/Next.js, medium/large) → add `accessibility-engineer`
 - If test files detected (medium/large) → add `test-quality-engineer`
+- If `@mastra/*`, Mastra config/code, MCP servers, agent/tool/workflow definitions, memory/RAG, model routing, browser/sandbox tools, or agent-readable surfaces are detected → add `mastra-agent-engineer`
 
 **Focus guidance:**
+
 - Security focus → prioritize `security-engineer`
 - Performance focus → prioritize `performance-engineer`
 - Architecture focus → prioritize `architecture-engineer`
+- Agent systems or Mastra focus → prioritize `mastra-agent-engineer`
 - Accessibility focus → prioritize `accessibility-engineer`
-| Mastra/agent systems | mastra-agent-engineer |
 
 **Final reviewer list:**
+
 - Small projects: 2-3 reviewers
 - Medium projects: 3-4 reviewers
 - Large projects: 4+ reviewers as needed for the scope
 - Early prototype/development projects with no sensitive surface may have no security reviewer. This is intentional. The audit should preserve cadence while still surfacing concrete dangerous issues from mechanical checks.
 
-- If `@mastra/*`, Mastra config/code, MCP servers, agent/tool/workflow definitions, memory/RAG, model routing, browser/sandbox tools, or agent-readable surfaces are detected → add `mastra-agent-engineer`
 ## Phase 3: Run Audit
 
 **Read agent prompts:**
 For each selected reviewer, read:
+
 ```
-- Agent systems or Mastra focus → prioritize `mastra-agent-engineer`
 agents/review/[reviewer-name].md
 ```
 
@@ -466,6 +506,7 @@ agents/review/[reviewer-name].md
 Run reviewers in **batches of 2** to avoid resource exhaustion on large codebases. Do not ask the user to choose an execution strategy.
 
 **Example with 6 reviewers:**
+
 ```
 Batch 1: performance-engineer, architecture-engineer
   → Wait for both to complete
@@ -479,27 +520,29 @@ If the security gate skipped `security-engineer`, omit that reviewer from the ba
 
 **Model selection per reviewer:**
 
-| Reviewer | Model | Why |
-|----------|-------|-----|
-| security-engineer | sonnet | Pattern recognition + context; only when the security gate includes it |
-| performance-engineer | sonnet | Algorithmic reasoning |
-| architecture-engineer | sonnet | Structural analysis |
-| daniel-product-engineer | sonnet | Code quality judgment |
-| lee-nextjs-engineer | sonnet | Framework pattern recognition |
-| senior-engineer | sonnet | Code review reasoning |
-| data-engineer | sonnet | Data safety reasoning |
+| Reviewer                | Model  | Why                                                                    |
+| ----------------------- | ------ | ---------------------------------------------------------------------- |
+| security-engineer       | sonnet | Pattern recognition + context; only when the security gate includes it |
+| performance-engineer    | sonnet | Algorithmic reasoning                                                  |
+| architecture-engineer   | sonnet | Structural analysis                                                    |
+| daniel-product-engineer | sonnet | Code quality judgment                                                  |
+| lee-nextjs-engineer     | sonnet | Framework pattern recognition                                          |
+| mastra-agent-engineer   | sonnet | Mastra API verification and agent-system judgment                      |
+| senior-engineer         | sonnet | Code review reasoning                                                  |
+| data-engineer           | sonnet | Data safety reasoning                                                  |
 
 **Include project stage in every reviewer prompt.**
 
 Each reviewer must receive the stage context so they can calibrate their severity ratings. Read the matching stage calibration block from:
+
 ```
 references/audit-stage-calibration.md
 ```
 
 Include in every reviewer prompt:
+
 ```
 Project stage: [prototype / development / pre-launch / production]
-| mastra-agent-engineer | sonnet | Mastra API verification and agent-system judgment |
 
 SEVERITY CALIBRATION FOR THIS STAGE:
 [Paste the matching stage block from audit-stage-calibration.md]
@@ -510,6 +553,7 @@ SEVERITY CALIBRATION FOR THIS STAGE:
 Every reviewer should receive the precomputed hotspot list so they can decide whether it matters in their domain instead of rediscovering it independently.
 
 Include:
+
 ```
 Structural hotspots:
 - Long files >250 LOC: [list]
@@ -520,10 +564,30 @@ Structural hotspots:
 ```
 
 Reviewer-specific emphasis:
+
 - `lee-nextjs-engineer`: interrogate `*-client.*` and `*-wrapper.*` first. Ask whether they are "escape hatches" around App Router server-first architecture and whether the real fix is to push interactivity down to leaf client components.
 - `daniel-product-engineer`: treat suspiciously named long files as probable god components and inspect for mixed responsibilities, mode props, and unreadable frontend behavior.
 - `architecture-engineer`: use long-file and suspicious-name hotspots to find poor module boundaries and misplaced orchestration.
 - Other reviewers: use the manifest opportunistically; only report if it matters to your domain.
+
+**Include the codebase map manifest in reviewer prompts when available.**
+
+Every reviewer should receive:
+
+```markdown
+Codebase map:
+[Paste scripts/codebase-map.py markdown output]
+```
+
+Reviewer-specific emphasis:
+
+- `architecture-engineer`: inspect dependency cycles, high fan-in/fan-out files, route/data/service boundaries, and whether the map reveals misplaced ownership.
+- `performance-engineer`: use routes, services, and data-layer signals to prioritize real request paths over isolated code smells.
+- `security-engineer`: inspect detected services, routes, and data boundaries before reporting auth/input/secrets findings.
+- `mastra-agent-engineer`: inspect detected agents, workflows, tools, memory/RAG, MCP, model routing, browser/sandbox capabilities, API/CLI/docs surfaces, and whether Mastra APIs were verified against installed packages.
+- `senior-engineer` and `daniel-product-engineer`: use largest files and dependency hotspots to find maintainability concerns with file/line evidence.
+
+The map is not an automatic finding source. It is a navigation aid.
 
 **Include strict maintainability guidance in architecture, senior, and product reviewer prompts.**
 
@@ -538,6 +602,7 @@ Pass `references/complexity-optimization.md` and the complexity signal manifest 
 Read `references/react-audit-signals.md` and pass the relevant sections plus the React audit signal manifest to reviewers. The goal is to make Arc's own audit pick up React Doctor-style issues through reviewer inspection.
 
 Reviewer-specific emphasis:
+
 - `daniel-product-engineer`: state/effects, rendering correctness, TanStack Query misuse, frontend behavior completeness, legacy React APIs.
 - `lee-nextjs-engineer`: server/client boundaries, async client components, Suspense around `useSearchParams`, Server Action auth, route handler side effects, RSC payload shape, Next.js primitives.
 - `performance-engineer`: rerender hotspots, memoization defeats, hydration flicker, bundle imports, async waterfalls, DOM/CSS performance.
@@ -546,6 +611,7 @@ Reviewer-specific emphasis:
 - `architecture-engineer`: god components, boundary escape hatches, data-client placement, mutable server module state, duplicate query/mutation patterns.
 
 Include in each React reviewer prompt:
+
 ```
 React audit signals:
 [Paste relevant manifest entries]
@@ -564,6 +630,7 @@ scoring. Include the criteria table for their axis from `audit-scorecard.md` and
 at the end of their response.
 
 Example reviewer prompts:
+
 ```
 Task [security-engineer] model: sonnet: "
 Audit the following codebase for security issues.
@@ -614,26 +681,29 @@ Focus on: N+1 queries, missing indexes, memory leaks, bundle size, render perfor
 
 **Scorecard axis assignments per reviewer:**
 
-| Reviewer | Scores Axis |
-|----------|-------------|
-| security-engineer | 1. Security Posture |
-| performance-engineer | 2. Performance |
-| architecture-engineer | 3. Architecture |
-| lee-nextjs-engineer | 3. Architecture (second opinion) |
-| senior-engineer | 4. Code Quality |
-| daniel-product-engineer | 4. Code Quality (second opinion) + 6. Resilience |
-| test-quality-engineer | 5. Test Health |
-| accessibility-engineer | Bonus: Accessibility |
+| Reviewer                | Scores Axis                                                   |
+| ----------------------- | ------------------------------------------------------------- |
+| security-engineer       | 1. Security Posture                                           |
+| performance-engineer    | 2. Performance                                                |
+| architecture-engineer   | 3. Architecture                                               |
+| lee-nextjs-engineer     | 3. Architecture (second opinion)                              |
+| mastra-agent-engineer   | 3. Architecture (agent-system second opinion) + 6. Resilience |
+| senior-engineer         | 4. Code Quality                                               |
+| daniel-product-engineer | 4. Code Quality (second opinion) + 6. Resilience              |
+| test-quality-engineer   | 5. Test Health                                                |
+| accessibility-engineer  | Bonus: Accessibility                                          |
 
 When a reviewer scores two axes (`daniel-product-engineer` or `mastra-agent-engineer`), include both criteria tables and ask for both scores.
 
 If `security-engineer` was skipped by the security readiness gate, do not fabricate a full Security Posture score from absence of review. Use `--` for axis 1 and adjust the denominator, unless mechanical evidence gives a concrete security result:
+
 - Critical/high vulnerability or likely credential exposure found → add `security-engineer` before scoring.
 - Clean dependency scan and clean secret scan in a prototype/development project with no sensitive surface → mark `Security Posture: -- (lightweight gate clean; full security review deferred)`.
 
 **Wait for batch to complete before starting next batch.**
 
 Repeat for remaining batches:
+
 - Batch 2: architecture-engineer + senior-engineer
 - Batch 3: frontend reviewers (daniel-product-engineer, lee-nextjs-engineer)
 - Batch 4: remaining reviewers (senior-engineer, data-engineer)
@@ -643,20 +713,22 @@ Repeat for remaining batches:
 **Collect all agent outputs.**
 
 **Deduplicate:**
+
 - Same file:line mentioned by multiple reviewers → merge into single finding
 - Note which reviewers flagged each issue
 
 **Validate severity against project stage:**
 
 Use the severity validation table and conflict resolution rules from:
+
 ```
 references/audit-stage-calibration.md
-| mastra-agent-engineer | 3. Architecture (agent-system second opinion) + 6. Resilience |
 ```
 
 Downgrade findings that are rated higher than the stage warrants. Add note: `[Severity adjusted for [stage] stage — would be [original] in production]`
 
 **Categorize by severity (after stage adjustment):**
+
 1. **Critical** — Security vulnerabilities, data loss risks, breaking issues
 2. **High** — Performance blockers, architectural violations
 3. **Medium** — Technical debt, code quality issues
@@ -671,11 +743,13 @@ When dismissing conflicting or irrelevant findings, include them in a collapsed 
 Do NOT group by reviewer domain (security, performance, etc.). Instead, group by **what you'd work on together** — files and concerns that would be addressed as a unit.
 
 Clustering strategy:
+
 1. **By area of code** — Findings touching the same files/modules cluster together regardless of which reviewer flagged them. E.g., three findings in `src/auth/` from security-engineer, performance-engineer, and architecture-engineer become one cluster: "Auth flow hardening."
 2. **By type of work** — If multiple findings across different files require the same kind of change (e.g., "add error boundaries to 5 components"), cluster those together.
 3. **By dependency** — If fixing finding A is a prerequisite for fixing finding B, they belong in the same cluster with A first.
 
 Each cluster becomes a task group with:
+
 - A descriptive name (e.g., "Auth flow hardening", "API input validation", "Dashboard performance")
 - The findings it contains (with severity and file references)
 - A suggested order of implementation within the cluster
@@ -731,25 +805,29 @@ File: `docs/audits/YYYY-MM-DD-[scope-slug]-audit.md`
 
 [Optional short table of the top hotspots with file path, LOC, and why they were flagged]
 
+## Codebase Map
+
+[Paste the concise codebase map manifest, or `Unavailable — [reason]`.]
+
 ## Scorecard: X/21 — [Rating]
 
-| # | Axis | Score | |
-|---|------|:-----:|-|
-| 1 | Security Posture | X/3 | [one-line rationale] |
-| 2 | Performance | X/3 | [one-line rationale] |
-| 3 | Architecture | X/3 | [one-line rationale] |
-| 4 | Code Quality | X/3 | [one-line rationale] |
-| 5 | Test Health | X/3 | [one-line rationale] |
-| 6 | Resilience | X/3 | [one-line rationale] |
-| 7 | Operations | X/3 | [one-line rationale] |
-| | **Total** | **X/21** | **[Fragile / Developing / Solid / Production-grade]** |
+| #   | Axis             |  Score   |                                                       |
+| --- | ---------------- | :------: | ----------------------------------------------------- |
+| 1   | Security Posture |   X/3    | [one-line rationale]                                  |
+| 2   | Performance      |   X/3    | [one-line rationale]                                  |
+| 3   | Architecture     |   X/3    | [one-line rationale]                                  |
+| 4   | Code Quality     |   X/3    | [one-line rationale]                                  |
+| 5   | Test Health      |   X/3    | [one-line rationale]                                  |
+| 6   | Resilience       |   X/3    | [one-line rationale]                                  |
+| 7   | Operations       |   X/3    | [one-line rationale]                                  |
+|     | **Total**        | **X/21** | **[Fragile / Developing / Solid / Production-grade]** |
 
 [If bonus axes were scored:]
 
-| Bonus | Score | |
-|-------|:-----:|-|
-| Accessibility | X/3 | [rationale] |
-| **Bonus** | **+X/3** | |
+| Bonus         |  Score   |             |
+| ------------- | :------: | ----------- |
+| Accessibility |   X/3    | [rationale] |
+| **Bonus**     | **+X/3** |             |
 
 ## Executive Summary
 
@@ -765,6 +843,7 @@ File: `docs/audits/YYYY-MM-DD-[scope-slug]-audit.md`
 > Genuinely dangerous — security holes, data loss, credential exposure
 
 ### [Issue Title]
+
 **File:** `path/to/file.ts:123`
 **Flagged by:** security-engineer, architecture-engineer
 **Description:** [What's wrong and why it matters]
@@ -800,11 +879,11 @@ File: `docs/audits/YYYY-MM-DD-[scope-slug]-audit.md`
 
 **Why:** [1 sentence — what's wrong in this area and why it matters]
 
-| # | Severity | File | Issue | Flagged by |
-|---|----------|------|-------|------------|
-| 1 | Critical | `path/to/file.ts:123` | Issue description | security-engineer |
-| 2 | High | `path/to/file.ts:456` | Issue description | performance-engineer |
-| 3 | Medium | `path/to/other.ts:78` | Issue description | architecture-engineer |
+| #   | Severity | File                  | Issue             | Flagged by            |
+| --- | -------- | --------------------- | ----------------- | --------------------- |
+| 1   | Critical | `path/to/file.ts:123` | Issue description | security-engineer     |
+| 2   | High     | `path/to/file.ts:456` | Issue description | performance-engineer  |
+| 3   | Medium   | `path/to/other.ts:78` | Issue description | architecture-engineer |
 
 **Suggested approach:** [1-2 sentences on how to tackle this cluster]
 
@@ -819,11 +898,11 @@ File: `docs/audits/YYYY-MM-DD-[scope-slug]-audit.md`
 <details>
 <summary>Dismissed findings ([N] items)</summary>
 
-| Finding | Reviewer | Reason Dismissed |
-|---------|----------|-----------------|
+| Finding       | Reviewer   | Reason Dismissed                                                          |
+| ------------- | ---------- | ------------------------------------------------------------------------- |
 | [description] | [reviewer] | Conflicts with [other reviewer]'s recommendation — [resolution reasoning] |
-| [description] | [reviewer] | Contradicts project coding rules in `.ruler/` |
-| [description] | [reviewer] | Not relevant at [stage] stage |
+| [description] | [reviewer] | Contradicts project coding rules in `.ruler/`                             |
+| [description] | [reviewer] | Not relevant at [stage] stage                                             |
 
 </details>
 
@@ -842,6 +921,7 @@ You may stage it or leave it unstaged based on the user's preferences and the pl
 ## Phase 6: Present & Offer Actions
 
 **Show summary to user:**
+
 ```
 ## Audit Complete — X/21 [Rating]
 
@@ -882,6 +962,7 @@ Present these options (include all that apply):
 5. **Done for now** → End session. Report is saved, user can return to it later.
 
 **If user selects "Tackle critical cluster now":**
+
 - Identify the cluster with the most critical/high findings
 - Invoke `/arc:detail` with the cluster's files and issues as scope
 - The detail plan will be scoped to just that cluster, not the entire audit
@@ -924,12 +1005,14 @@ Create `docs/arc/plans/YYYY-MM-DD-audit-tasks.md`:
 Do not auto-commit the plan unless the user explicitly asks for a commit.
 
 **If user selects "Add to tasks":**
+
 - Use the platform's native task/todo creation flow for each critical/high cluster when available
 - Each task gets the cluster name as subject, findings as description, and present continuous activeForm
 - Lower severity clusters stay in the audit report only
 - If no native task/todo creation flow exists, offer the plan file instead
 
 **If user selects "Deep dive on a cluster":**
+
 - Ask which cluster (by number or name)
 - Show the full findings with code context (read relevant files)
 - Discuss the approach before taking action
@@ -945,6 +1028,7 @@ Entry: `/arc:audit — [scope] ([N] critical, [N] high)`
 
 <success_criteria>
 Audit is complete when:
+
 - [ ] Scope detected (path, full codebase, or focus)
 - [ ] Project type detected
 - [ ] Reviewers selected based on scope and project scale
@@ -957,4 +1041,4 @@ Audit is complete when:
 - [ ] Summary presented to user
 - [ ] Next steps offered
 - [ ] Any delegated reviewer work has completed or blockers are reported
-</success_criteria>
+      </success_criteria>

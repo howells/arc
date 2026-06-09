@@ -6,32 +6,37 @@ Design proceeds through five phases. Each phase builds on the previous. Don't sk
 **Goal:** Fully understand what the user wants to build.
 
 **Techniques:**
+
 - One question at a time
 - Multiple choice when possible (easier to answer)
 - Open-ended for exploration
 - Repeat back understanding to confirm
 
 **Good questions:**
+
 - "What problem does this solve?"
 - "Who uses this?"
 - "What's the simplest version that's useful?"
 - "What's explicitly out of scope?"
 
 **Signals you're done:**
+
 - You can explain the feature in one sentence
 - You know what's in scope and what's not
 - You understand the constraints
-</phase>
+  </phase>
 
 <phase name="exploration">
 **Goal:** Consider multiple approaches before committing.
 
 **Always propose 2-3 options:**
+
 1. Your recommended approach (lead with this)
 2. A simpler alternative (trade-off: less capability)
 3. A more complex alternative (trade-off: more effort)
 
 **For each option, explain:**
+
 - What you gain
 - What you lose
 - Why you recommend or don't recommend it
@@ -49,6 +54,7 @@ Design proceeds through five phases. Each phase builds on the previous. Don't sk
 **If user has concerns:** Address them before moving on. Don't accumulate problems.
 
 **Common sections:**
+
 - Problem statement / user story
 - High-level approach
 - Data model
@@ -56,7 +62,7 @@ Design proceeds through five phases. Each phase builds on the previous. Don't sk
 - API surface
 - Error handling
 - Testing approach
-</phase>
+  </phase>
 
 <phase name="review">
 **Goal:** Get expert perspective, but user has final say.
@@ -64,6 +70,7 @@ Design proceeds through five phases. Each phase builds on the previous. Don't sk
 **Reviewer role:** Advisors, not decision-makers.
 
 **Present findings as questions:**
+
 - "Reviewer suggests X. Keep or change?"
 - "Reviewer flags Y as unusual. Is there context?"
 
@@ -74,6 +81,7 @@ Design proceeds through five phases. Each phase builds on the previous. Don't sk
 **Goal:** Document the design and prepare for implementation.
 
 **Design doc should include:**
+
 - Summary of what we're building
 - Key decisions and reasoning
 - Reviewer feedback and user decisions

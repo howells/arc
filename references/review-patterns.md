@@ -6,11 +6,13 @@ Review is a collaborative refinement, not a critique. The same Socratic dialogue
 **Build together, then simplify together.**
 
 The design phase builds up the solution through questions:
+
 - "What if we also handled X?"
 - "Should this support Y?"
 - "Do you need Z?"
 
 The review phase simplifies through the same questioning style:
+
 - "Do we actually need X, or could we start without it?"
 - "What if we simplified Y to just handle the common case?"
 - "Is Z core to the solution, or could it be a fast-follow?"
@@ -37,16 +39,19 @@ Say: "We're creating a generic solution for one use case. What if we hardcoded i
 **Questions that encourage simplification:**
 
 Scope:
+
 - "What's the smallest version that's useful?"
 - "If we had to ship in a day, what would we keep?"
 - "Which of these is nice-to-have vs must-have?"
 
 Complexity:
+
 - "What if we started with the simple version?"
 - "Do we need this flexibility, or are we guessing?"
 - "What breaks if we remove this?"
 
 Timing:
+
 - "Does this need to be in v1?"
 - "Could this be a fast-follow once we validate the core?"
 - "What would we learn from shipping without this?"
@@ -58,11 +63,13 @@ Timing:
 **When the user wants to keep something:**
 
 If user says "I need this because X":
+
 - Acknowledge the reasoning
 - Note it in the design doc
 - Move on
 
 If user says "I'm not sure, but I think we need it":
+
 - Explore together: "What scenario requires it?"
 - If they can't articulate: "Want to try without it and see?"
 - If they can articulate: "Got it, let's keep it."
@@ -94,4 +101,4 @@ If user says "I'm not sure, but I think we need it":
 - Batch all feedback at the end (present as you go)
 - Assume reviewers are right and user is wrong
 - Override user decisions
-</anti_patterns>
+  </anti_patterns>

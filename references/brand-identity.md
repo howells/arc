@@ -29,42 +29,42 @@ These fonts signal "no one made a choice here":
 
 **Distinctive sans-serif (for brands that want modern + personality):**
 
-| Font | Character | Good for |
-|------|-----------|----------|
-| Sohne | Quiet confidence, Klim precision | Premium, understated brands |
-| Scto Grotesk | Industrial warmth | Craft, studio, honest brands |
-| Space Grotesk | Technical, geometric with quirk | Dev tools, technical products |
-| Bricolage Grotesque | Playful geometry, not childish | Creative tools, consumer products |
-| General Sans | Clean but not invisible | Brands that want clarity with presence |
-| Rethink Sans | Friendly precision | Approachable professional brands |
+| Font                | Character                        | Good for                               |
+| ------------------- | -------------------------------- | -------------------------------------- |
+| Sohne               | Quiet confidence, Klim precision | Premium, understated brands            |
+| Scto Grotesk        | Industrial warmth                | Craft, studio, honest brands           |
+| Space Grotesk       | Technical, geometric with quirk  | Dev tools, technical products          |
+| Bricolage Grotesque | Playful geometry, not childish   | Creative tools, consumer products      |
+| General Sans        | Clean but not invisible          | Brands that want clarity with presence |
+| Rethink Sans        | Friendly precision               | Approachable professional brands       |
 
 **Serif (for brands that want editorial, warmth, or authority):**
 
-| Font | Character | Good for |
-|------|-----------|----------|
-| Newsreader | Editorial authority | Publishing, journalism, serious tools |
-| Fraunces | Warmth, craft, slight quirk | Artisanal, food, creative brands |
-| Cormorant | Elegant, high contrast | Luxury, fashion, high-end products |
-| Crimson Pro | Readable authority | Long-form content, institutional brands |
-| Libre Baskerville | Classical, bookish | Academic, legal, traditional brands |
+| Font              | Character                   | Good for                                |
+| ----------------- | --------------------------- | --------------------------------------- |
+| Newsreader        | Editorial authority         | Publishing, journalism, serious tools   |
+| Fraunces          | Warmth, craft, slight quirk | Artisanal, food, creative brands        |
+| Cormorant         | Elegant, high contrast      | Luxury, fashion, high-end products      |
+| Crimson Pro       | Readable authority          | Long-form content, institutional brands |
+| Libre Baskerville | Classical, bookish          | Academic, legal, traditional brands     |
 
 **Display (for headlines and hero moments):**
 
-| Font | Character | Good for |
-|------|-----------|----------|
-| Novarese | Retro warmth, distinctive | Brands with a nostalgic or craft angle |
-| Editorial New | Dramatic, editorial | Magazine-style, bold statements |
+| Font          | Character                 | Good for                               |
+| ------------- | ------------------------- | -------------------------------------- |
+| Novarese      | Retro warmth, distinctive | Brands with a nostalgic or craft angle |
+| Editorial New | Dramatic, editorial       | Magazine-style, bold statements        |
 
 **Commercial foundries (require license, worth it for serious brand work):**
 
-| Foundry | Fonts | Character |
-|---------|-------|-----------|
-| **Klim** | Söhne, Untitled Sans, Tiempos | Refined, quiet authority |
-| **Grilli Type** | GT America, GT Walsheim, GT Sectra | Versatile, well-engineered |
-| **Commercial Type** | Graphik, Canela, Dala Floda, Austin | Editorial, distinctive |
-| **Colophon** | Apercu, Reader, Basis Grotesque | Contemporary, characterful |
-| **Dinamo** | ABC Favorit, ABC Diatype, ABC Arizona | Bold, modern |
-| **Sharp Type** | Sharp Grotesk, Sharp Sans | Precise, confident |
+| Foundry             | Fonts                                 | Character                  |
+| ------------------- | ------------------------------------- | -------------------------- |
+| **Klim**            | Söhne, Untitled Sans, Tiempos         | Refined, quiet authority   |
+| **Grilli Type**     | GT America, GT Walsheim, GT Sectra    | Versatile, well-engineered |
+| **Commercial Type** | Graphik, Canela, Dala Floda, Austin   | Editorial, distinctive     |
+| **Colophon**        | Apercu, Reader, Basis Grotesque       | Contemporary, characterful |
+| **Dinamo**          | ABC Favorit, ABC Diatype, ABC Arizona | Bold, modern               |
+| **Sharp Type**      | Sharp Grotesk, Sharp Sans             | Precise, confident         |
 
 ### Font Pairing Principles
 
@@ -81,26 +81,26 @@ These fonts signal "no one made a choice here":
 
 The usual "blue = trust, red = urgency" is too shallow. Color meaning depends on context, culture, and the specific shade:
 
-| Hue Range | Can feel | When it works | When it doesn't |
-|-----------|----------|---------------|-----------------|
-| Deep navy | Authority, depth | Finance, luxury, serious tools | Can feel cold or corporate |
-| Warm blue | Approachable expertise | Health, education, productivity | Generic if paired with white + gray |
-| Teal/cyan | Fresh, modern | Environmental, wellness, data viz | Overused in 2020-era SaaS |
-| Green | Growth, natural, money | Finance, sustainability, health | Can feel clinical or cheap |
-| Warm neutrals | Craft, honesty, warmth | Food, hospitality, lifestyle | Can feel boring without an accent |
-| Deep amber/orange | Energy, craft, warmth | Creative tools, food, community | Can overwhelm if overused |
-| Burgundy/wine | Sophistication, depth | Luxury, editorial, wine/food | Can feel dated without modern typography |
-| Black + accent | Boldness, confidence | Fashion, creative, premium | Needs a confident accent to avoid being grim |
+| Hue Range         | Can feel               | When it works                     | When it doesn't                              |
+| ----------------- | ---------------------- | --------------------------------- | -------------------------------------------- |
+| Deep navy         | Authority, depth       | Finance, luxury, serious tools    | Can feel cold or corporate                   |
+| Warm blue         | Approachable expertise | Health, education, productivity   | Generic if paired with white + gray          |
+| Teal/cyan         | Fresh, modern          | Environmental, wellness, data viz | Overused in 2020-era SaaS                    |
+| Green             | Growth, natural, money | Finance, sustainability, health   | Can feel clinical or cheap                   |
+| Warm neutrals     | Craft, honesty, warmth | Food, hospitality, lifestyle      | Can feel boring without an accent            |
+| Deep amber/orange | Energy, craft, warmth  | Creative tools, food, community   | Can overwhelm if overused                    |
+| Burgundy/wine     | Sophistication, depth  | Luxury, editorial, wine/food      | Can feel dated without modern typography     |
+| Black + accent    | Boldness, confidence   | Fashion, creative, premium        | Needs a confident accent to avoid being grim |
 
 ### Palettes That Signal "No One Chose"
 
-| Pattern | Why it's generic |
-|---------|-----------------|
-| Blue + white + gray | Every tech startup's default |
-| Purple-to-blue gradient | The AI slop gradient. Avoid entirely. |
-| Teal + coral together | 2020 SaaS template era. Either alone is fine. |
-| Indigo + pink | Dribbble trend, now everywhere |
-| All neutrals + one blue accent | Safe, forgettable, says nothing |
+| Pattern                        | Why it's generic                              |
+| ------------------------------ | --------------------------------------------- |
+| Blue + white + gray            | Every tech startup's default                  |
+| Purple-to-blue gradient        | The AI slop gradient. Avoid entirely.         |
+| Teal + coral together          | 2020 SaaS template era. Either alone is fine. |
+| Indigo + pink                  | Dribbble trend, now everywhere                |
+| All neutrals + one blue accent | Safe, forgettable, says nothing               |
 
 ### Building a Brand Palette
 
@@ -113,6 +113,7 @@ The usual "blue = trust, red = urgency" is too shallow. Color meaning depends on
 ### OKLCH for Brand Work
 
 Always define brand colors in OKLCH (perceptually uniform):
+
 - **L** (lightness): 0-1, consistent perceived brightness
 - **C** (chroma): 0-0.4, saturation intensity
 - **H** (hue): 0-360, position on the color wheel
@@ -129,20 +130,20 @@ Most AI-generated UI uses the same visual character: medium border radius, subtl
 
 Dimensions to decide:
 
-| Dimension | Spectrum | Questions to ask |
-|-----------|----------|-----------------|
-| **Corners** | Sharp ↔ Rounded | All the same, or mixed? Sharp cards + round buttons = interesting tension. |
-| **Shadows** | None ↔ Dramatic | Flat design? Subtle elevation? Dramatic layered shadows? |
-| **Borders** | None ↔ Prominent | Is structure shown through borders, spacing, or background color? |
-| **Density** | Airy ↔ Dense | Generous whitespace or information-rich? |
-| **Texture** | Flat ↔ Rich | Pure flat color? Grain? Noise? Gradients? Patterns? |
-| **Motion** | Still ↔ Expressive | Minimal transitions or choreographed animation? |
+| Dimension   | Spectrum           | Questions to ask                                                           |
+| ----------- | ------------------ | -------------------------------------------------------------------------- |
+| **Corners** | Sharp ↔ Rounded    | All the same, or mixed? Sharp cards + round buttons = interesting tension. |
+| **Shadows** | None ↔ Dramatic    | Flat design? Subtle elevation? Dramatic layered shadows?                   |
+| **Borders** | None ↔ Prominent   | Is structure shown through borders, spacing, or background color?          |
+| **Density** | Airy ↔ Dense       | Generous whitespace or information-rich?                                   |
+| **Texture** | Flat ↔ Rich        | Pure flat color? Grain? Noise? Gradients? Patterns?                        |
+| **Motion**  | Still ↔ Expressive | Minimal transitions or choreographed animation?                            |
 
 ### Visual Character Prompts
 
 Use these to push past safe defaults:
 
-- "What if only *some* things are rounded? Sharp cards with round buttons creates tension."
+- "What if only _some_ things are rounded? Sharp cards with round buttons creates tension."
 - "What if no shadows at all? Or dramatic, layered shadows instead of subtle everywhere?"
 - "What if the surface has color or texture instead of white + gray cards?"
 - "What if borders are the character — thick, thin, dotted, or absent entirely?"
@@ -154,17 +155,18 @@ Use these to push past safe defaults:
 
 Visual identity and verbal identity should align. A few key decisions:
 
-| Decision | Options |
-|----------|---------|
+| Decision           | Options                                                                                                                           |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
 | **Capitalization** | Sentence case (casual, modern) / Title Case (traditional, formal) / lowercase (tech, casual) / UPPERCASE (bold, brand marks only) |
-| **Tone** | Concise + direct / Conversational + warm / Formal + precise / Playful + witty |
-| **Terminology** | Does the brand have specific words it uses or avoids? |
+| **Tone**           | Concise + direct / Conversational + warm / Formal + precise / Playful + witty                                                     |
+| **Terminology**    | Does the brand have specific words it uses or avoids?                                                                             |
 
 ---
 
 ## What Makes a Brand Distinctive
 
 A brand is distinctive when:
+
 1. **You can describe it without seeing it.** "Warm editorial with deep amber and a serif" vs "clean and modern."
 2. **Swapping the logo doesn't make it generic.** The palette, type, and character carry the identity.
 3. **It has a tension.** Accessible + authoritative. Playful + precise. Raw + refined.

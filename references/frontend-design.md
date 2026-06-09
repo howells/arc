@@ -10,6 +10,7 @@ Frontend work requires intentional aesthetic direction. Generic "AI slop" (purpl
 
 ```markdown
 ## Aesthetic Direction
+
 - **Tone**: [chosen direction]
 - **Memorable element**: [what makes it unforgettable]
 - **Typography**: [display font] + [body font]
@@ -37,10 +38,10 @@ Frontend work requires intentional aesthetic direction. Generic "AI slop" (purpl
 
 **Recommended UI fonts:**
 
-| Category | Options |
-|----------|---------|
-| Sans | Inter, Geist, DM Sans, Instrument Sans, Outfit |
-| Mono | Geist Mono, IBM Plex Mono, JetBrains Mono, Fira Code |
+| Category | Options                                              |
+| -------- | ---------------------------------------------------- |
+| Sans     | Inter, Geist, DM Sans, Instrument Sans, Outfit       |
+| Mono     | Geist Mono, IBM Plex Mono, JetBrains Mono, Fira Code |
 
 For brand/identity typography (display, headlines, wordmarks), see `references/brand-identity.md`.
 
@@ -57,6 +58,7 @@ For brand/identity typography (display, headlines, wordmarks), see `references/b
 **Never:** Purple-to-blue gradients on white (AI cliché)
 
 **Do:**
+
 - Commit to a cohesive palette with dominant + sharp accents
 - Use CSS variables for consistency
 - Consider unexpected color combinations that reinforce the tone
@@ -66,6 +68,7 @@ For brand/identity typography (display, headlines, wordmarks), see `references/b
 See [Animation Patterns Reference](animation-patterns.md) for comprehensive guidance.
 
 **Key principles:**
+
 - Focus on high-impact moments (page load, reveals)
 - One well-orchestrated animation > scattered micro-interactions
 - Every animation must answer: "Why does this exist?"
@@ -73,6 +76,7 @@ See [Animation Patterns Reference](animation-patterns.md) for comprehensive guid
 - CSS-only when possible; `motion/react` when JS control required
 
 **Quick decisions:**
+
 - Entering screen → ease-out (200ms)
 - Interactive elements → spring ({ stiffness: 400, damping: 25 })
 - Staggered lists → staggerChildren: 0.03-0.05
@@ -87,6 +91,7 @@ See [Animation Patterns Reference](animation-patterns.md) for comprehensive guid
 ## Backgrounds and Details
 
 Create atmosphere and depth:
+
 - Gradient meshes, noise textures, geometric patterns
 - Layered transparencies, dramatic shadows
 - Custom cursors, grain overlays where appropriate
@@ -103,6 +108,7 @@ Elegance = executing the vision fully, not hedging.
 ## Anti-Patterns
 
 **Generic AI aesthetics to avoid:**
+
 - Roboto/Arial/system-ui defaults
 - Purple-to-blue gradients
 - White backgrounds with gray cards

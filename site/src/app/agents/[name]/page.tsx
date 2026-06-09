@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+
 import { getAgentByName, getAgents, sanitizeContent } from "@/lib/content";
 import { AGENT_CATEGORY_LABELS } from "@/lib/types";
+
 import { DocumentContent } from "../../document-content";
 
 export function generateStaticParams() {
@@ -21,14 +23,14 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${agent.name} – Arc`,
-    description: agent.desc,
     alternates: { canonical: `/agents/${name}` },
+    description: agent.desc,
     openGraph: {
-      title: `${agent.name} – Arc`,
       description: agent.desc,
+      title: `${agent.name} – Arc`,
       url: `/agents/${name}`,
     },
+    title: `${agent.name} – Arc`,
   };
 }
 

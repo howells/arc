@@ -1,4 +1,5 @@
 import { motion, useReducedMotion } from "motion/react";
+
 import { APPLE_EASE, EDGE_STAGGER, SPINE_X } from "./constants";
 import type {
   BranchEdge as BranchEdgeType,
@@ -16,11 +17,11 @@ export function SpineLineEdge({ line }: SpineLineProps) {
 
   return (
     <motion.path
-      animate={{ pathLength: 1, opacity: 1 }}
+      animate={{ opacity: 1, pathLength: 1 }}
       className="fill-none stroke-neutral-300"
       d={d}
       initial={
-        prefersReducedMotion ? { opacity: 1 } : { pathLength: 0, opacity: 0 }
+        prefersReducedMotion ? { opacity: 1 } : { opacity: 0, pathLength: 0 }
       }
       strokeWidth={1.5}
       transition={{
@@ -45,16 +46,16 @@ export function BranchEdge({ edge, index }: BranchEdgeProps) {
 
   return (
     <motion.path
-      animate={{ pathLength: 1, opacity: 1 }}
+      animate={{ opacity: 1, pathLength: 1 }}
       className="fill-none stroke-neutral-300"
       d={d}
       initial={
-        prefersReducedMotion ? { opacity: 1 } : { pathLength: 0, opacity: 0 }
+        prefersReducedMotion ? { opacity: 1 } : { opacity: 0, pathLength: 0 }
       }
       strokeWidth={1}
       transition={{
-        duration: 0.5,
         delay,
+        duration: 0.5,
         ease: APPLE_EASE,
       }}
     />
@@ -72,7 +73,7 @@ export function SectionSeparatorLine({ separator }: SectionSeparatorLineProps) {
     <motion.g
       animate={{ opacity: 1 }}
       initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0 }}
-      transition={{ duration: 0.4, delay: 0.6, ease: APPLE_EASE }}
+      transition={{ delay: 0.6, duration: 0.4, ease: APPLE_EASE }}
     >
       <line
         className="text-neutral-300"

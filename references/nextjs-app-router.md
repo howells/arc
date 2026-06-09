@@ -60,23 +60,31 @@ Is it user-specific or always fresh?
 // No directive needed - this is a Server Component
 export default async function Page() {
   // Direct DB access
-  const posts = await db.posts.findMany()
+  const posts = await db.posts.findMany();
 
   // Or fetch with caching
-  const data = await fetch('https://api.example.com/data', {
-    next: { revalidate: 3600 } // Cache for 1 hour
-  })
+  const data = await fetch("https://api.example.com/data", {
+    next: { revalidate: 3600 }, // Cache for 1 hour
+  });
 
-  return <div>{posts.map(p => <div key={p.id}>{p.title}</div>)}</div>
+  return (
+    <div>
+      {posts.map((p) => (
+        <div key={p.id}>{p.title}</div>
+      ))}
+    </div>
+  );
 }
 ```
 
 **Can do:**
+
 - `async/await` directly in component
 - Access database, secrets, environment variables
 - Import large dependencies (not shipped to client)
 
 **Cannot do:**
+
 - useState, useEffect, useContext
 - onClick, onChange, event handlers
 - Browser APIs (localStorage, window)
@@ -86,22 +94,19 @@ export default async function Page() {
 ## Client Components
 
 ```tsx
-'use client'
+"use client";
 
-import { useState } from 'react'
+import { useState } from "react";
 
 export function Counter() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
-  return (
-    <button onClick={() => setCount(c => c + 1)}>
-      Count: {count}
-    </button>
-  )
+  return <button onClick={() => setCount((c) => c + 1)}>Count: {count}</button>;
 }
 ```
 
 **MUST use when you need:**
+
 - React hooks (useState, useEffect, useContext)
 - Event handlers (onClick, onChange)
 - Browser APIs (localStorage, window)
@@ -112,46 +117,46 @@ export function Counter() {
 
 ```tsx
 // actions.ts
-'use server'
+"use server";
 
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function createPost(formData: FormData) {
   const post = await db.posts.create({
     data: {
-      title: formData.get('title') as string,
-      content: formData.get('content') as string,
-    }
-  })
+      title: formData.get("title") as string,
+      content: formData.get("content") as string,
+    },
+  });
 
-  revalidatePath('/posts')  // Revalidate specific path
+  revalidatePath("/posts"); // Revalidate specific path
   // OR
-  revalidateTag('posts')    // Revalidate all fetches with this tag
+  revalidateTag("posts"); // Revalidate all fetches with this tag
 
-  return post
+  return post;
 }
 ```
 
 **Usage in Client Component:**
 
 ```tsx
-'use client'
+"use client";
 
-import { useActionState } from 'react'
-import { createPost } from './actions'
+import { useActionState } from "react";
+import { createPost } from "./actions";
 
 export function PostForm() {
-  const [state, formAction, pending] = useActionState(createPost, null)
+  const [state, formAction, pending] = useActionState(createPost, null);
 
   return (
     <form action={formAction}>
       <input name="title" required />
       <textarea name="content" required />
       <button disabled={pending}>
-        {pending ? 'Creating...' : 'Create Post'}
+        {pending ? "Creating..." : "Create Post"}
       </button>
     </form>
-  )
+  );
 }
 ```
 
@@ -167,54 +172,54 @@ In Next.js 16, **nothing is cached by default**. You must explicitly opt in.
 
 ```tsx
 // No caching (default in v16)
-const res = await fetch('https://api.example.com/data')
+const res = await fetch("https://api.example.com/data");
 
 // Cache indefinitely
-const res = await fetch('https://api.example.com/data', {
-  cache: 'force-cache'
-})
+const res = await fetch("https://api.example.com/data", {
+  cache: "force-cache",
+});
 
 // Cache for 1 hour, then revalidate in background
-const res = await fetch('https://api.example.com/data', {
-  next: { revalidate: 3600 }
-})
+const res = await fetch("https://api.example.com/data", {
+  next: { revalidate: 3600 },
+});
 
 // Tag for on-demand revalidation
-const res = await fetch('https://api.example.com/posts', {
-  next: { tags: ['posts'] }
-})
+const res = await fetch("https://api.example.com/posts", {
+  next: { tags: ["posts"] },
+});
 ```
 
 ### Component-Level Caching (v16)
 
 ```tsx
-'use cache'
+"use cache";
 
 export default async function CachedPage() {
-  const data = await getExpensiveData()
-  return <div>{data}</div>
+  const data = await getExpensiveData();
+  return <div>{data}</div>;
 }
 ```
 
 ### On-Demand Revalidation
 
-| Method | Scope | Use Case |
-|--------|-------|----------|
-| `revalidatePath('/posts')` | Specific route | One page changed |
-| `revalidatePath('/posts', 'layout')` | Route + children | Section changed |
-| `revalidateTag('posts')` | All fetches with tag | Shared data changed |
+| Method                               | Scope                | Use Case            |
+| ------------------------------------ | -------------------- | ------------------- |
+| `revalidatePath('/posts')`           | Specific route       | One page changed    |
+| `revalidatePath('/posts', 'layout')` | Route + children     | Section changed     |
+| `revalidateTag('posts')`             | All fetches with tag | Shared data changed |
 
 ```tsx
-'use server'
+"use server";
 
 export async function updatePost(id: string, data: any) {
-  await db.posts.update({ where: { id }, data })
+  await db.posts.update({ where: { id }, data });
 
   // Option 1: Revalidate specific path
-  revalidatePath(`/posts/${id}`)
+  revalidatePath(`/posts/${id}`);
 
   // Option 2: Revalidate by tag (preferred for shared data)
-  revalidateTag('posts')
+  revalidateTag("posts");
 }
 ```
 
@@ -226,34 +231,34 @@ export async function updatePost(id: string, data: any) {
 
 ```tsx
 // page.tsx (Server Component)
-import { ClientModal } from './modal'
-import { ServerContent } from './content'
+import { ClientModal } from "./modal";
+import { ServerContent } from "./content";
 
 export default function Page() {
   return (
     <ClientModal>
-      <ServerContent />  {/* Server Component passed as child */}
+      <ServerContent /> {/* Server Component passed as child */}
     </ClientModal>
-  )
+  );
 }
 
 // modal.tsx (Client Component)
-'use client'
+("use client");
 
 export function ClientModal({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   return (
     <div>
       <button onClick={() => setOpen(!open)}>Toggle</button>
       {open && children}
     </div>
-  )
+  );
 }
 
 // content.tsx (Server Component)
 export async function ServerContent() {
-  const data = await db.getData()  // Fetches on server
-  return <div>{data}</div>
+  const data = await db.getData(); // Fetches on server
+  return <div>{data}</div>;
 }
 ```
 
@@ -261,9 +266,9 @@ export async function ServerContent() {
 
 ```tsx
 // WRONG: Entire layout is client-side
-'use client'
+"use client";
 export default function Layout({ children }) {
-  return <div>{children}</div>  // Ships JS for everything
+  return <div>{children}</div>; // Ships JS for everything
 }
 
 // CORRECT: Only interactive parts are client
@@ -271,9 +276,9 @@ export default function Layout({ children }) {
   return (
     <div>
       {children}
-      <InteractiveNav />  {/* Only this is 'use client' */}
+      <InteractiveNav /> {/* Only this is 'use client' */}
     </div>
-  )
+  );
 }
 ```
 
@@ -285,17 +290,17 @@ export default function Layout({ children }) {
 
 ```tsx
 // app/api/posts/route.ts
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const posts = await db.posts.findMany()
-  return NextResponse.json(posts)
+  const posts = await db.posts.findMany();
+  return NextResponse.json(posts);
 }
 
 export async function POST(request: NextRequest) {
-  const data = await request.json()
-  const post = await db.posts.create({ data })
-  return NextResponse.json(post, { status: 201 })
+  const data = await request.json();
+  const post = await db.posts.create({ data });
+  return NextResponse.json(post, { status: 201 });
 }
 ```
 
@@ -309,23 +314,23 @@ Next.js 16 renamed `middleware.ts` to `proxy.ts`.
 
 ```tsx
 // app/proxy.ts
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from "next/server";
 
 export function proxy(request: NextRequest) {
   // Auth check
-  if (request.nextUrl.pathname.startsWith('/dashboard')) {
-    const token = request.cookies.get('auth')
+  if (request.nextUrl.pathname.startsWith("/dashboard")) {
+    const token = request.cookies.get("auth");
     if (!token) {
-      return NextResponse.redirect(new URL('/login', request.url))
+      return NextResponse.redirect(new URL("/login", request.url));
     }
   }
 
-  return NextResponse.next()
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*']
-}
+  matcher: ["/dashboard/:path*"],
+};
 ```
 
 ---
@@ -336,21 +341,35 @@ export const config = {
 
 ```tsx
 // WRONG: Breaks streaming, creates waterfall
-'use client'
+"use client";
 export default function Posts() {
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    fetch('/api/posts').then(r => r.json()).then(setPosts)
-  }, [])
+    fetch("/api/posts")
+      .then((r) => r.json())
+      .then(setPosts);
+  }, []);
 
-  return <div>{posts.map(p => <div>{p.title}</div>)}</div>
+  return (
+    <div>
+      {posts.map((p) => (
+        <div>{p.title}</div>
+      ))}
+    </div>
+  );
 }
 
 // CORRECT: Use Server Component
 export default async function Posts() {
-  const posts = await db.posts.findMany()
-  return <div>{posts.map(p => <div key={p.id}>{p.title}</div>)}</div>
+  const posts = await db.posts.findMany();
+  return (
+    <div>
+      {posts.map((p) => (
+        <div key={p.id}>{p.title}</div>
+      ))}
+    </div>
+  );
 }
 ```
 
@@ -358,9 +377,13 @@ export default async function Posts() {
 
 ```tsx
 // WRONG: Ships JS for entire app
-'use client'
+"use client";
 export default function Layout({ children }) {
-  return <html><body>{children}</body></html>
+  return (
+    <html>
+      <body>{children}</body>
+    </html>
+  );
 }
 
 // CORRECT: Keep layout as Server Component
@@ -372,7 +395,7 @@ export default function Layout({ children }) {
         <ClientOnlyModal />
       </body>
     </html>
-  )
+  );
 }
 ```
 
@@ -380,17 +403,17 @@ export default function Layout({ children }) {
 
 ```tsx
 // WRONG: UI shows stale data
-'use server'
+"use server";
 export async function createPost(data: any) {
-  await db.posts.create({ data })
+  await db.posts.create({ data });
   // Missing revalidation!
 }
 
 // CORRECT
-'use server'
+("use server");
 export async function createPost(data: any) {
-  await db.posts.create({ data })
-  revalidatePath('/posts')
+  await db.posts.create({ data });
+  revalidatePath("/posts");
 }
 ```
 
@@ -398,22 +421,22 @@ export async function createPost(data: any) {
 
 ```tsx
 // WRONG: Errors during SSR
-'use client'
+"use client";
 export default function Theme() {
-  const theme = localStorage.getItem('theme')  // SSR error!
-  return <div>{theme}</div>
+  const theme = localStorage.getItem("theme"); // SSR error!
+  return <div>{theme}</div>;
 }
 
 // CORRECT: Check after mount
-'use client'
+("use client");
 export default function Theme() {
-  const [theme, setTheme] = useState('light')
+  const [theme, setTheme] = useState("light");
 
   useEffect(() => {
-    setTheme(localStorage.getItem('theme') || 'light')
-  }, [])
+    setTheme(localStorage.getItem("theme") || "light");
+  }, []);
 
-  return <div>{theme}</div>
+  return <div>{theme}</div>;
 }
 ```
 
@@ -462,14 +485,11 @@ function InteractiveToolbar() {
 
 ```tsx
 // Sequential (waterfall) - AVOID when possible
-const user = await getUser(id)
-const posts = await getPosts(user.id)  // Waits for user
+const user = await getUser(id);
+const posts = await getPosts(user.id); // Waits for user
 
 // Parallel - PREFERRED
-const [user, posts] = await Promise.all([
-  getUser(id),
-  getPosts(id)
-])
+const [user, posts] = await Promise.all([getUser(id), getPosts(id)]);
 ```
 
 ---
@@ -478,22 +498,22 @@ const [user, posts] = await Promise.all([
 
 ### File Conventions
 
-| File | Purpose |
-|------|---------|
-| `page.tsx` | Route UI |
-| `layout.tsx` | Shared layout (persists across navigations) |
-| `loading.tsx` | Loading UI (Suspense boundary) |
-| `error.tsx` | Error UI (Error boundary) |
-| `not-found.tsx` | 404 UI |
-| `route.ts` | API endpoint |
-| `proxy.ts` | Request interception (auth, redirects) |
+| File            | Purpose                                     |
+| --------------- | ------------------------------------------- |
+| `page.tsx`      | Route UI                                    |
+| `layout.tsx`    | Shared layout (persists across navigations) |
+| `loading.tsx`   | Loading UI (Suspense boundary)              |
+| `error.tsx`     | Error UI (Error boundary)                   |
+| `not-found.tsx` | 404 UI                                      |
+| `route.ts`      | API endpoint                                |
+| `proxy.ts`      | Request interception (auth, redirects)      |
 
 ### State Management Decision
 
-| Need | Solution |
-|------|----------|
-| Server data display | Server Component with fetch |
+| Need                   | Solution                       |
+| ---------------------- | ------------------------------ |
+| Server data display    | Server Component with fetch    |
 | User input/interaction | Client Component with useState |
-| Form submission | Server Action |
-| Shared client state | Context in Client Component |
-| URL state | useSearchParams |
+| Form submission        | Server Action                  |
+| Shared client state    | Context in Client Component    |
+| URL state              | useSearchParams                |

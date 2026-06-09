@@ -31,16 +31,18 @@ website:
 This workflow requires the full Arc bundle, not a prompts-only install.
 
 Paths in this skill use these conventions:
+
 - `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
 - `./...` is local to this skill's directory.
 - `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-</arc_runtime>
+  </arc_runtime>
 
 # Commit Changes
 
 Commit, push, and publish changes, intelligently splitting into separate commits when changes span multiple domains.
 
 Usage:
+
 - `/arc:commit` - Auto-analyze and commit (may create multiple commits)
 - `/arc:commit push` - Commit, push, then publish changed npm packages if present
 - `/arc:commit publish` - Alias for the push-and-publish path
@@ -50,16 +52,19 @@ $ARGUMENTS will be empty, "push", or "publish". Treat "push" and "publish" as th
 ## Current Git State
 
 **Status:**
+
 ```
 !`git status --porcelain 2>/dev/null || echo "(no changes)"`
 ```
 
 **Changes summary:**
+
 ```
 !`git diff --stat 2>/dev/null | head -20 || echo "(no diff)"`
 ```
 
 **Recent commits (for style reference):**
+
 ```
 !`git log --oneline -5 2>/dev/null || echo "(no commits)"`
 ```
@@ -73,10 +78,12 @@ Review the git state above. If you need more detail:
 ### 2. Determine Commit Strategy
 
 **Single commit** if:
+
 - All changes are in the same domain/area, OR
 - Changes are tightly coupled (e.g., feature + its tests)
 
 **Multiple commits** if changes span multiple unrelated domains:
+
 - Different packages (e.g., `packages/ui`, `packages/api`)
 - Different apps (e.g., `apps/web`, `apps/admin`)
 - Config vs source changes
@@ -85,6 +92,7 @@ Review the git state above. If you need more detail:
 ### 3. Group Files by Domain
 
 Common groupings:
+
 - `packages/<name>/**` - Package-specific changes
 - `apps/<name>/**` - App-specific changes
 - Root config files (`.eslintrc`, `turbo.json`, etc.) - Config
@@ -96,6 +104,7 @@ Common groupings:
 For each logical group:
 
 1. Stage only files for that group:
+
    ```bash
    git add [files...]
    ```
@@ -109,6 +118,7 @@ For each logical group:
    ```
 
 **Commit types:**
+
 - `feat` - New feature
 - `fix` - Bug fix
 - `refactor` - Code refactoring
@@ -120,6 +130,7 @@ For each logical group:
 - `ci` - CI/CD changes
 
 **Commit message rules:**
+
 - Use imperative mood: "add" not "added", "fix" not "fixed"
 - First line under 72 characters
 - Each commit should be atomic (single purpose)
@@ -130,6 +141,7 @@ For each logical group:
 If TypeScript or lint errors block the commit:
 
 **CRITICAL RULES:**
+
 - NEVER use `--no-verify` or skip hooks
 - NEVER use force casting (e.g., `as unknown as`, `as any`)
 - NEVER use `@ts-ignore`, `@ts-expect-error`, or eslint-disable comments
@@ -138,6 +150,7 @@ If TypeScript or lint errors block the commit:
 - Fix the ROOT CAUSE of each error
 
 **Fixing Process:**
+
 1. Read the error output carefully
 2. Identify the exact files and line numbers with issues
 3. For TypeScript errors:
@@ -158,11 +171,13 @@ If TypeScript or lint errors block the commit:
 **Skip this step** unless $ARGUMENTS starts with "push" or "publish".
 
 If pushing:
+
 ```bash
 git push
 ```
 
 If the branch has no upstream:
+
 ```bash
 git push -u origin $(git branch --show-current)
 ```
@@ -176,21 +191,26 @@ If push fails (e.g., diverged history), report the issue - do NOT force push unl
 Publish only after commits and push have succeeded.
 
 **Detect candidate packages:**
+
 - Look for changed `package.json` files and changed files under directories containing a `package.json`.
 - Ignore generated directories such as `node_modules`, `dist`, `build`, `.next`, `.turbo`, and coverage output.
 - A package is publishable only if `package.json` has a `name`, a `version`, and does not have `"private": true`.
 - Prefer packages with a `publishConfig`, `files`, `bin`, `exports`, or an explicit package-level `prepublishOnly` / `prepare` / `build` script. If package intent is unclear, ask before publishing.
 
 **Pre-publish checks for each candidate:**
+
 1. Read the package's `package.json`.
 2. Confirm the package has an npm package name and version.
 3. Check whether that exact version is already published:
+
    ```bash
    npm view <package-name>@<version> version
    ```
+
    - If the version exists, skip publishing and report it.
    - If npm returns 404/not found, continue.
    - If npm auth/network fails, stop and report the blocker.
+
 4. Run package-local verification when scripts exist, using the repo's detected package manager consistently:
    - `test` if a `test` script exists
    - `build` if a `build` script exists
@@ -202,6 +222,7 @@ Publish only after commits and push have succeeded.
    Use `npm publish --access public` for scoped public packages when `publishConfig.access` is `public` or the existing package is public.
 
 **Publishing rules:**
+
 - NEVER publish a private package.
 - NEVER publish before pushing the commit containing the package version.
 - NEVER bump a package version unless the user explicitly asked for a version bump.
@@ -212,6 +233,7 @@ Publish only after commits and push have succeeded.
 ### 8. Report Results
 
 Tell the user:
+
 - How many commits were created
 - Summary of each commit (hash, message)
 - Push status (if pushed), or remind them to push when ready
@@ -227,6 +249,7 @@ Entry: `/arc:commit — [N] commits ([summary])`
 ## Failure Scenarios
 
 If you cannot fix an error properly:
+
 - Explain why the error exists
 - Describe what the proper fix would require (e.g., architectural changes, missing types, etc.)
 - Ask for guidance

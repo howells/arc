@@ -9,8 +9,8 @@ interface RuleListProps {
 
 const categoryLabels: Record<RuleCategory, string> = {
   core: "Core",
-  workflow: "Workflow",
   interface: "Interface",
+  workflow: "Workflow",
 };
 
 const categoryOrder: RuleCategory[] = ["core", "workflow", "interface"];

@@ -34,6 +34,7 @@ Preferred fix: build a map from the lookup collection once, then perform stable 
 Complexity: `O(a*b)` to `O(a+b)`.
 
 Check:
+
 - Are duplicate keys possible?
 - Did the original choose first match, last match, or all matches?
 - Is ordering observable?
@@ -48,6 +49,7 @@ Preferred fix: convert the membership collection to a set or map once, when equa
 Complexity: `O(n*m)` to `O(n+m)`.
 
 Check:
+
 - Does equality change after conversion?
 - Are object identity, hashability, or normalization relevant?
 
@@ -60,6 +62,7 @@ Preferred fix: sort once outside the loop, maintain a heap, or use binary search
 Complexity: often `O(n^2 log n)` to `O(n log n)`, or `O(n log k)` with a heap.
 
 Check:
+
 - Is each intermediate sorted state externally observed?
 - Does the comparator depend on loop-local state?
 
@@ -68,6 +71,7 @@ Check:
 Symptom: compare every pair to find overlaps, nearest values, conflicts, or ranges.
 
 Preferred fixes:
+
 - Sort plus two pointers for pair or range matching.
 - Sweep line for interval overlaps.
 - Spatial or hash bucketing for local-neighborhood checks.
@@ -80,6 +84,7 @@ Complexity: commonly `O(n^2)` to `O(n log n)` or `O(n alpha(n))`.
 Symptom: filters, sorts, grouping, expensive transforms, unstable object props, or callbacks run on every render.
 
 Preferred fixes:
+
 - Memoize derived values with correct dependencies.
 - Move derivation to selectors, loaders, or server-side preparation.
 - Virtualize long lists.
@@ -87,6 +92,7 @@ Preferred fixes:
 - Move expensive work out of render paths.
 
 Check:
+
 - Dependency arrays include every semantic input.
 - Memoization does not hide mutation of mutable input objects.
 
@@ -95,11 +101,13 @@ Check:
 Symptom: query, fetch, or request inside a loop.
 
 Preferred fixes:
+
 - Bulk fetch by IDs and join in memory.
 - Use joins, includes, preloads, dataloaders, or batched endpoints.
 - Cache only when there is a valid invalidation strategy.
 
 Check:
+
 - Tenant, permission, soft-delete, pagination, sorting, and filtering constraints are preserved.
 - Missing-record behavior stays the same.
 - Rate-limit and retry semantics stay acceptable.

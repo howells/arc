@@ -59,18 +59,18 @@ Severity calibration:
 
 Use during consolidation to sanity-check reviewer findings:
 
-| Finding Type | Prototype | Development | Pre-launch | Production |
-|-------------|-----------|-------------|------------|------------|
-| Missing rate limiting | Drop | Low | Medium | High |
-| Missing monitoring | Drop | Drop | Medium | High |
-| Missing input validation (non-auth) | Drop | Low | High | Critical |
-| Missing error boundaries | Low | Medium | High | High |
-| Missing tests | Drop | Low | Medium | High |
-| Credential exposure | Critical | Critical | Critical | Critical |
-| SQL injection / XSS | Critical | Critical | Critical | Critical |
-| Architecture concerns | Drop | Low | Medium | High |
-| Performance optimization | Drop | Low | Medium | High |
-| Accessibility gaps | Drop | Low | Medium | High |
+| Finding Type                        | Prototype | Development | Pre-launch | Production |
+| ----------------------------------- | --------- | ----------- | ---------- | ---------- |
+| Missing rate limiting               | Drop      | Low         | Medium     | High       |
+| Missing monitoring                  | Drop      | Drop        | Medium     | High       |
+| Missing input validation (non-auth) | Drop      | Low         | High       | Critical   |
+| Missing error boundaries            | Low       | Medium      | High       | High       |
+| Missing tests                       | Drop      | Low         | Medium     | High       |
+| Credential exposure                 | Critical  | Critical    | Critical   | Critical   |
+| SQL injection / XSS                 | Critical  | Critical    | Critical   | Critical   |
+| Architecture concerns               | Drop      | Low         | Medium     | High       |
+| Performance optimization            | Drop      | Low         | Medium     | High       |
+| Accessibility gaps                  | Drop      | Low         | Medium     | High       |
 
 If a reviewer rated something higher than the stage warrants, **downgrade it** during consolidation. Add a note: `[Severity adjusted for [stage] stage — would be [original] in production]`
 
@@ -84,16 +84,17 @@ Not every project is trying to be production software. The audit must respect th
 - **YAGNI still applies.** Don't recommend infrastructure the project doesn't need yet.
 
 Language hierarchy:
+
 - **"Must fix"** — Only genuinely dangerous (security holes, data loss). Used sparingly.
 - **"Should consider"** — Real problems if the project progresses.
 - **"Worth noting"** — Suggestions. No pressure.
 
 ## Conflict Resolution
 
-| Conflict Pattern | Resolution |
-|-----------------|------------|
-| security says "add validation" vs simplicity says "remove abstraction" | Security wins at pre-launch/production. At prototype/dev, Low — user decides. |
-| performance says "cache aggressively" vs architecture says "keep stateless" | Hot path = performance wins. Rarely called = architecture wins. |
+| Conflict Pattern                                                               | Resolution                                                                      |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------- |
+| security says "add validation" vs simplicity says "remove abstraction"         | Security wins at pre-launch/production. At prototype/dev, Low — user decides.   |
+| performance says "cache aggressively" vs architecture says "keep stateless"    | Hot path = performance wins. Rarely called = architecture wins.                 |
 | lee-nextjs says "Server Component" vs daniel says "needs client interactivity" | Check for useState/onClick. If client APIs used, daniel wins. If not, lee wins. |
-| Two reviewers flag same area with different fixes | Pick simpler fix. Note alternative. |
-| Reviewer flags something .ruler/ explicitly allows | Dismiss entirely. Project rules override. |
+| Two reviewers flag same area with different fixes                              | Pick simpler fix. Note alternative.                                             |
+| Reviewer flags something .ruler/ explicitly allows                             | Dismiss entirely. Project rules override.                                       |

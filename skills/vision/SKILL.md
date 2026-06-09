@@ -28,20 +28,23 @@ website:
 ---
 
 <tool_restrictions>
+
 # MANDATORY Tool Restrictions
 
 ## REQUIRED TOOLS:
+
 - **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern for every question in this skill, including mode selection, missing context, and draft validation. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Keep context before the question to 2-3 sentences max, and do not narrate missing tools or fallbacks to the user.
-</tool_restrictions>
+  </tool_restrictions>
 
 <arc_runtime>
 This workflow requires the full Arc bundle, not a prompts-only install.
 
 Paths in this skill use these conventions:
+
 - `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
 - `./...` is local to this skill's directory.
 - `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-</arc_runtime>
+  </arc_runtime>
 
 # Vision Workflow
 
@@ -198,4 +201,4 @@ Before finishing, verify that the vision:
 - Includes non-goals or constraints.
 - Includes decision principles that can resolve tradeoffs.
 - Lists open questions when the vision depends on unresolved assumptions.
-</completion_check>
+  </completion_check>

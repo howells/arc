@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+
 import { getRuleBySlug, getRules, sanitizeContent } from "@/lib/content";
+
 import { DocumentContent } from "../../document-content";
 
 const STRIP_HEADING_REGEX = /^#\s+.+\n+/;
@@ -23,14 +25,14 @@ export async function generateMetadata({
 
   const description = `${rule.title} — coding rule for the Arc plugin.`;
   return {
-    title: `${rule.title} – Arc Rules`,
-    description,
     alternates: { canonical: `/rules/${slug.join("/")}` },
+    description,
     openGraph: {
-      title: `${rule.title} – Arc Rules`,
       description,
+      title: `${rule.title} – Arc Rules`,
       url: `/rules/${slug.join("/")}`,
     },
+    title: `${rule.title} – Arc Rules`,
   };
 }
 

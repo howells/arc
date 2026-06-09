@@ -30,6 +30,7 @@ website:
 ---
 
 <hard_gate>
+
 # STOP — Structural Constraint
 
 This skill has a LOCKED MESSAGE FORMAT during Act 1 (Understanding). You cannot override it.
@@ -62,6 +63,7 @@ The following are STRUCTURALLY BANNED until the user has answered at least 3 que
 ## Violation Detection
 
 Before sending ANY message during Act 1, run this checklist:
+
 1. Does the message contain a markdown table? → VIOLATION. Delete it.
 2. Does the message contain a code block? → VIOLATION. Delete it.
 3. Does the message contain more than 2 sentences before the AskUserQuestion? → VIOLATION. Cut it down.
@@ -77,9 +79,11 @@ Four previous versions of this skill said "ask questions first" as advice. The m
 </hard_gate>
 
 <tool_restrictions>
+
 # Tool Rules
 
 **BANNED tools** — calling these is a skill violation:
+
 - `EnterPlanMode` — BANNED. This conversation IS the design process.
 - `ExitPlanMode` — BANNED. You are never in plan mode.
 
@@ -125,12 +129,14 @@ That second example is EXACTLY the failure mode. The model thinks it's being hel
 This workflow requires the full Arc bundle, not a prompts-only install.
 
 Paths in this skill use these conventions:
+
 - `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
 - `./...` is local to this skill's directory.
 - `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-</arc_runtime>
+  </arc_runtime>
 
 <behavioral_mode>
+
 # This Is a Conversation, Not a Task
 
 You are a thinking partner. The conversation IS the work. The feature spec at the end is just a record.
@@ -160,6 +166,7 @@ Steps 2-8 each produce exactly: 0-2 sentences + AskUserQuestion. Nothing more.
 </behavioral_mode>
 
 <key_principles>
+
 # Principles
 
 - **Act 1 is structurally locked** — 0-2 sentences + AskUserQuestion, nothing else, until user approves transition to Act 2
@@ -169,7 +176,7 @@ Steps 2-8 each produce exactly: 0-2 sentences + AskUserQuestion. Nothing more.
 - **Explore alternatives** — 2-3 approaches before settling (Act 2 only). Lead with your recommendation
 - **Incremental validation** — Present design in sections, check each before continuing (Act 3 only)
 - **Be flexible** — Go back and clarify when something doesn't make sense
-</key_principles>
+  </key_principles>
 
 <process>
 # The Conversation
@@ -179,6 +186,7 @@ There are three acts: **Understand**, **Explore**, **Specify**. But they're a co
 ## Act 1: Understand the Idea
 
 **Background work (silent — do NOT share results with the user):**
+
 - Check `docs/vision.md` if it exists
 - Note the project type and obvious constraints
 - Use what you learn to ask BETTER questions — not to produce summaries
@@ -186,6 +194,7 @@ There are three acts: **Understand**, **Explore**, **Specify**. But they're a co
 **Then immediately ask your first question via AskUserQuestion.** No preamble beyond 1-2 sentences acknowledging what the user said. Do NOT summarize, restate, or "reflect back" what they told you. They know what they said.
 
 **Questions to explore (one per message, in order of priority):**
+
 1. What problem does this solve?
 2. Who is it for?
 3. What does success look like?
@@ -195,6 +204,7 @@ There are three acts: **Understand**, **Explore**, **Specify**. But they're a co
 You won't need all of these. Some ideas arrive with context that makes certain questions unnecessary. Use judgment — but when in doubt, ask.
 
 **Responding to answers:**
+
 - User says "I'm not sure" → narrow it: offer 2-3 concrete options via AskUserQuestion
 - Vague answer → get specific: "Can you give me an example?" via AskUserQuestion
 - Something contradicts → clarify via AskUserQuestion with the two interpretations as options
@@ -203,6 +213,7 @@ You won't need all of these. Some ideas arrive with context that makes certain q
 **REMINDER: Every response in Act 1 is 0-2 sentences + AskUserQuestion. Check the violation list in `<hard_gate>` before sending.**
 
 **Transition to Act 2:** After at least 3 questions answered, ask via AskUserQuestion:
+
 - "Ready for me to propose approaches, or is there more to clarify?"
 - Options: "Show me approaches" / "I want to clarify [specific thing]" / "Let me add more context first"
 
@@ -211,16 +222,19 @@ Only after the user says "show me approaches" (or equivalent) do you move to Act
 ## Act 2: Explore Approaches
 
 **Now** (not before) you can do deeper research if needed:
+
 - Spawn an Explore agent to find relevant patterns, similar features, essential files
 - Check `docs/solutions/**/*.md` for past decisions that apply
 - If extending existing code, check git history for context
 
 **Propose 2-3 approaches with trade-offs:**
+
 - Lead with your recommendation and why
 - Show what you'd lose with each alternative
 - Keep it conversational — this is still a whiteboard session
 
 **Optional review checkpoint:**
+
 ```
 AskUserQuestion:
   question: "Want a couple of expert reviewers to sanity-check this approach before we detail it?"
@@ -239,6 +253,7 @@ If yes: spawn 2-3 reviewers (architecture-engineer, senior-engineer, security-en
 **Present the spec in 200-300 word sections.** After each section, ask: "Does this look right so far?"
 
 Sections to cover (skip what's irrelevant):
+
 - Problem statement / user story
 - High-level approach
 - UI requirements — if UI involved, see `<ui_requirements>` below
@@ -249,6 +264,7 @@ Sections to cover (skip what's irrelevant):
 - Testing approach
 
 **Optional micro-reviews** for complex sections:
+
 - Data model → spawn data-engineer
 - API design → spawn architecture-engineer
 - Security-sensitive → spawn security-engineer
@@ -259,6 +275,7 @@ Present findings as questions, incorporate before moving on.
 ### Simplification Pass
 
 After the spec is mostly shaped, run parallel expert review:
+
 - Spawn 2-3 reviewers based on project type
 - Transform critiques into collaborative questions:
   - "Remove the caching layer" → "Do we need caching in v1, or add it when we see issues?"
@@ -274,23 +291,29 @@ Location: `docs/arc/specs/YYYY-MM-DD-<topic>-spec.md`
 # [Feature Name] Feature Spec
 
 ## Reference Materials
+
 - [Figma links, external docs, images shared during conversation]
 
 ## Problem Statement
+
 ...
 
 ## UI Requirements
+
 [User-visible states, interactions, and any external visual direction]
 
 ## Approach
+
 ...
 
 ## Design Decisions
+
 | Decision | Rationale |
-|----------|-----------|
-| ... | ... |
+| -------- | --------- |
+| ...      | ...       |
 
 ## Open Questions
+
 - ...
 ```
 
@@ -307,6 +330,7 @@ After writing the feature spec:
 ### What's Next
 
 Present the full arc:
+
 ```
 /arc:ideate     → Feature spec ✓ YOU ARE HERE
      ↓
@@ -314,12 +338,14 @@ Present the full arc:
 ```
 
 Options via AskUserQuestion:
+
 1. **Implement on a new feature branch** (Recommended)
 2. **Implement on current branch**
 3. **Done for now** — just the spec
-</process>
+   </process>
 
 <ui_requirements>
+
 # UI Requirements (When Applicable)
 
 Arc does not create independent visual direction, brand systems, or UI polish workflows. If the work needs visual design, use an external source of truth such as Chiaroscuro, Figma, an existing `docs/brand-system.md`, or a user-provided design brief. Arc can capture that source and translate it into implementation-relevant requirements.
@@ -332,8 +358,10 @@ Ask only what is needed for product behavior and implementation:
 - "Are there any must-preserve project patterns?"
 
 **Capture external visual direction if provided:**
+
 ```markdown
 ## UI Requirements
+
 - **Screens/states**: [screens, empty/loading/error/success states]
 - **Interactions**: [primary user actions and feedback]
 - **Existing patterns**: [components/routes to follow]
@@ -351,6 +379,7 @@ Low-fidelity structural sketches are acceptable when they clarify flow, but they
 </ui_requirements>
 
 <reference_capture>
+
 # Capturing Reference Materials
 
 When user shares links, images, Figma, or external design specs during the conversation — capture immediately. Links shared in conversation are lost when the session ends.
@@ -361,13 +390,15 @@ When user shares links, images, Figma, or external design specs during the conve
 </reference_capture>
 
 <required_reading>
+
 # Reference Files
 
 Read these when relevant (not all at once — load what the conversation needs):
+
 1. `references/review-patterns.md` — How to transform reviewer findings into questions
 2. `references/model-strategy.md` — Which models for which agents
 3. `disciplines/dispatching-parallel-agents.md` — Agent orchestration
-</required_reading>
+   </required_reading>
 
 <spec_flow_analysis>
 After the feature spec is written and committed, offer optional user flow analysis:
@@ -375,6 +406,7 @@ After the feature spec is written and committed, offer optional user flow analys
 "Would you like me to analyze this spec for missing user flows?"
 
 If the user accepts:
+
 1. Spawn the spec-flow-analyzer agent with the feature spec content
 2. Present the gaps found
 3. Offer to update the spec with any missing flows
@@ -386,6 +418,7 @@ This step is optional — skip if the user declines or wants to move straight to
 
 <success_criteria>
 Spec is complete when:
+
 - [ ] User's idea is fully understood through dialogue (not assumed)
 - [ ] 2-3 approaches were considered, trade-offs explained
 - [ ] UI requirements and external visual source are captured if UI is involved
@@ -393,4 +426,4 @@ Spec is complete when:
 - [ ] Expert review completed, findings discussed as questions
 - [ ] Feature spec written and committed
 - [ ] User chose next step
-</success_criteria>
+      </success_criteria>

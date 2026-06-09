@@ -18,20 +18,22 @@ import { cropFromBoundingBoxServer } from "../../../../../../../apps/web/feature
 
 ### What to do when you see deep imports
 
-| Depth | Assessment | Action |
-|-------|------------|--------|
-| 1-2 levels (`../`, `../../`) | Normal | Fine |
-| 3-4 levels | Suspicious | Consider if this belongs in a shared location |
-| 5+ levels | Architectural smell | Refactor — move to shared package or restructure |
+| Depth                        | Assessment          | Action                                           |
+| ---------------------------- | ------------------- | ------------------------------------------------ |
+| 1-2 levels (`../`, `../../`) | Normal              | Fine                                             |
+| 3-4 levels                   | Suspicious          | Consider if this belongs in a shared location    |
+| 5+ levels                    | Architectural smell | Refactor — move to shared package or restructure |
 
 ### Solutions
 
 1. **Move the shared code to a package**
+
    ```
    packages/
      shared/
        crop-server.ts  ← Move here
    ```
+
    ```typescript
    // Clean import from anywhere
    import { cropFromBoundingBoxServer } from "@repo/shared/crop-server";
@@ -67,17 +69,18 @@ Arrows point UP = forbidden
 
 ### Rules
 
-| From | To | Allowed? |
-|------|----|----------|
-| `apps/*` | `packages/*` | Yes |
-| `packages/*` | `apps/*` | **NO — Never** |
-| `packages/ui` | `packages/utils` | Yes (lower level) |
-| `packages/utils` | `packages/ui` | **NO — Would create cycle** |
-| `apps/web` | `apps/api` | **NO — Apps don't import from apps** |
+| From             | To               | Allowed?                             |
+| ---------------- | ---------------- | ------------------------------------ |
+| `apps/*`         | `packages/*`     | Yes                                  |
+| `packages/*`     | `apps/*`         | **NO — Never**                       |
+| `packages/ui`    | `packages/utils` | Yes (lower level)                    |
+| `packages/utils` | `packages/ui`    | **NO — Would create cycle**          |
+| `apps/web`       | `apps/api`       | **NO — Apps don't import from apps** |
 
 ### Why This Matters
 
 **Without one-way deps:**
+
 ```
 packages/ui imports packages/core
 packages/core imports packages/ui  ← Circular!
@@ -86,6 +89,7 @@ Result: Build failures, runtime errors, impossible to reason about
 ```
 
 **With one-way deps:**
+
 ```
 packages/ui imports packages/core
 packages/core imports packages/utils
@@ -99,15 +103,17 @@ Result: Clear hierarchy, predictable builds, easy to understand
 Signs of one-way dependency violations:
 
 1. **Import paths going "up" the hierarchy**
+
    ```typescript
    // In packages/utils/something.ts
-   import { Button } from "@repo/ui";  // utils importing ui = violation
+   import { Button } from "@repo/ui"; // utils importing ui = violation
    ```
 
 2. **Packages importing from apps**
+
    ```typescript
    // In packages/core/auth.ts
-   import { config } from "../../apps/web/config";  // Package → App = violation
+   import { config } from "../../apps/web/config"; // Package → App = violation
    ```
 
 3. **Circular dependency errors at build time**
@@ -135,6 +141,7 @@ packages/
 ```
 
 **Violations:**
+
 - `packages/ui` containing business logic
 - `packages/utils` importing React
 - `packages/core` making API calls directly
@@ -153,6 +160,7 @@ import { Button } from "../../../packages/ui/src/button";
 ```
 
 Configure in `tsconfig.json`:
+
 ```json
 {
   "compilerOptions": {

@@ -1,5 +1,7 @@
 import { motion, useReducedMotion } from "motion/react";
+
 import type { Skill } from "@/lib/types";
+
 import {
   AGENT_DOT_GAP,
   AGENT_DOT_RADIUS,
@@ -126,8 +128,8 @@ export function GraphNode({ node, index, onClick }: GraphNodeProps) {
       role="button"
       tabIndex={0}
       transition={{
-        duration: 0.4,
         delay,
+        duration: 0.4,
         ease: APPLE_EASE,
       }}
     >
@@ -179,7 +181,7 @@ export function KnowledgeNode({ item, index }: KnowledgeNodeProps) {
     <motion.g
       animate={{ opacity: 1 }}
       initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0 }}
-      transition={{ duration: 0.4, delay, ease: APPLE_EASE }}
+      transition={{ delay, duration: 0.4, ease: APPLE_EASE }}
     >
       {/* Diamond marker */}
       <polygon

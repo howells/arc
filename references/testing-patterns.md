@@ -5,27 +5,29 @@ Testing is mandatory, not optional. Every feature gets unit tests (vitest) and E
 <detection>
 **Detect test runner from project files:**
 
-| File | Runner |
-|------|--------|
-| `vitest.config.ts` | vitest |
-| `vitest.config.js` | vitest |
+| File                   | Runner     |
+| ---------------------- | ---------- |
+| `vitest.config.ts`     | vitest     |
+| `vitest.config.js`     | vitest     |
 | `playwright.config.ts` | playwright |
-| `jest.config.js` | jest |
-| `cypress.config.ts` | cypress |
+| `jest.config.js`       | jest       |
+| `cypress.config.ts`    | cypress    |
 
 **Detect package manager:**
 
-| File | Manager | Command prefix |
-|------|---------|----------------|
-| `pnpm-lock.yaml` | pnpm | `pnpm` |
-| `yarn.lock` | yarn | `yarn` |
-| `package-lock.json` | npm | `npm run` |
+| File                | Manager | Command prefix |
+| ------------------- | ------- | -------------- |
+| `pnpm-lock.yaml`    | pnpm    | `pnpm`         |
+| `yarn.lock`         | yarn    | `yarn`         |
+| `package-lock.json` | npm     | `npm run`      |
+
 </detection>
 
 <vitest_patterns>
 **File naming:** `[name].test.ts` or `[name].test.tsx`
 
 **Basic test structure:**
+
 ```typescript
 import { describe, it, expect } from "vitest";
 import { myFunction } from "./my-function";
@@ -44,6 +46,7 @@ describe("myFunction", () => {
 ```
 
 **React component test:**
+
 ```typescript
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
@@ -67,6 +70,7 @@ describe("MyComponent", () => {
 ```
 
 **Commands:**
+
 ```bash
 # Run all tests
 pnpm vitest run
@@ -83,9 +87,11 @@ pnpm vitest
 # With coverage
 pnpm vitest run --coverage
 ```
+
 </vitest_patterns>
 
 <vitest_gotchas>
+
 ## vi.mock() Hoisting
 
 vi.mock() is hoisted above imports. Variables declared before the mock call aren't available inside it:
@@ -121,8 +127,12 @@ it("should reject", async () => {
 ```typescript
 import { vi, beforeEach, afterEach } from "vitest";
 
-beforeEach(() => { vi.useFakeTimers(); });
-afterEach(() => { vi.useRealTimers(); });
+beforeEach(() => {
+  vi.useFakeTimers();
+});
+afterEach(() => {
+  vi.useRealTimers();
+});
 
 it("should debounce", () => {
   const fn = vi.fn();
@@ -132,12 +142,14 @@ it("should debounce", () => {
   expect(fn).toHaveBeenCalledOnce();
 });
 ```
+
 </vitest_gotchas>
 
 <playwright_patterns>
 **File naming:** `[name].spec.ts`
 
 **Basic E2E test:**
+
 ```typescript
 import { test, expect } from "@playwright/test";
 
@@ -162,6 +174,7 @@ test.describe("Feature Name", () => {
 ```
 
 **With fixtures:**
+
 ```typescript
 import { test, expect } from "@playwright/test";
 
@@ -182,6 +195,7 @@ test.describe("Dashboard", () => {
 ```
 
 **Commands:**
+
 ```bash
 # Run all tests
 pnpm playwright test
@@ -201,9 +215,11 @@ pnpm playwright test --debug
 # Generate code
 pnpm playwright codegen http://localhost:3000
 ```
+
 </playwright_patterns>
 
 <playwright_gotchas>
+
 ## Next.js Hydration
 
 In Next.js apps, the server-rendered HTML is visible before client-side JavaScript hydrates event handlers. Clicking before hydration completes causes missed interactions:
@@ -248,12 +264,14 @@ setup("authenticate", async ({ request }) => {
   await request.storageState({ path: authFile });
 });
 ```
+
 </playwright_gotchas>
 
 <tdd_cycle>
 **Red-Green-Refactor:**
 
 **1. RED - Write failing test first:**
+
 ```typescript
 it("should calculate total with tax", () => {
   const result = calculateTotal(100, 0.1);
@@ -265,9 +283,10 @@ Run: `pnpm vitest run -t "calculate total"`
 Expected: FAIL (function doesn't exist)
 
 **2. GREEN - Minimal implementation:**
+
 ```typescript
 export function calculateTotal(amount: number, taxRate: number): number {
-  return amount + (amount * taxRate);
+  return amount + amount * taxRate;
 }
 ```
 
@@ -275,6 +294,7 @@ Run: `pnpm vitest run -t "calculate total"`
 Expected: PASS
 
 **3. REFACTOR - Improve if needed:**
+
 ```typescript
 export function calculateTotal(amount: number, taxRate: number): number {
   const tax = amount * taxRate;
@@ -288,6 +308,7 @@ Expected: Still PASS
 
 <what_to_test>
 **Unit tests (vitest):**
+
 - Pure functions
 - Business logic
 - Data transformations
@@ -296,6 +317,7 @@ Expected: Still PASS
 - Components (with testing-library)
 
 **E2E tests (playwright):**
+
 - Critical user flows
 - Form submissions
 - Navigation flows
@@ -303,8 +325,9 @@ Expected: Still PASS
 - Error handling from user perspective
 
 **Don't test:**
+
 - Implementation details
 - Third-party libraries
 - Trivial getters/setters
 - Framework behavior
-</what_to_test>
+  </what_to_test>

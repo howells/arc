@@ -94,18 +94,18 @@ CSS easings require fixed duration, but movement in the real world doesn't have 
 
 **Traditional (stiffness/damping/mass):**
 
-| Parameter | Effect |
-|-----------|--------|
-| Stiffness | How tight the spring — higher = snappier |
-| Damping | How quickly oscillation stops — higher = less bounce |
-| Mass | Weight of object — higher = slower, more momentum |
+| Parameter | Effect                                               |
+| --------- | ---------------------------------------------------- |
+| Stiffness | How tight the spring — higher = snappier             |
+| Damping   | How quickly oscillation stops — higher = less bounce |
+| Mass      | Weight of object — higher = slower, more momentum    |
 
 **Apple-style (duration/bounce):**
 
-| Parameter | Effect |
-|-----------|--------|
-| Duration | Approximate length of animation |
-| Bounce | Amount of overshoot (0 = none) |
+| Parameter | Effect                          |
+| --------- | ------------------------------- |
+| Duration  | Approximate length of animation |
+| Bounce    | Amount of overshoot (0 = none)  |
 
 ### Spring Presets Library
 
@@ -129,13 +129,13 @@ CSS easings require fixed duration, but movement in the real world doesn't have 
 
 ### Spring vs Tween Decision
 
-| Use Spring When | Use Tween When |
-|-----------------|----------------|
-| Responding to user input | Fixed timing required (video sync) |
-| Drag and drop | Opacity-only changes |
-| Gestures | Very short animations (<100ms) |
-| May be interrupted | Orchestrated sequences |
-| Variable distance movements | Predictable timing needed |
+| Use Spring When             | Use Tween When                     |
+| --------------------------- | ---------------------------------- |
+| Responding to user input    | Fixed timing required (video sync) |
+| Drag and drop               | Opacity-only changes               |
+| Gestures                    | Very short animations (<100ms)     |
+| May be interrupted          | Orchestrated sequences             |
+| Variable distance movements | Predictable timing needed          |
 
 ## Orchestration Patterns
 
@@ -150,10 +150,10 @@ const container = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.03,    // Delay between each child
-      delayChildren: 0.1        // Initial delay before first child
-    }
-  }
+      staggerChildren: 0.03, // Delay between each child
+      delayChildren: 0.1, // Initial delay before first child
+    },
+  },
 };
 
 // Each child animates the same way
@@ -162,18 +162,19 @@ const item = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { type: "spring", stiffness: 300, damping: 24 }
-  }
+    transition: { type: "spring", stiffness: 300, damping: 24 },
+  },
 };
 
 <motion.ul variants={container} initial="hidden" animate="visible">
-  {items.map(item => (
+  {items.map((item) => (
     <motion.li key={item.id} variants={item} />
   ))}
-</motion.ul>
+</motion.ul>;
 ```
 
 **Stagger timing guidelines:**
+
 - Lists: `0.03–0.05s`
 - Cards/larger items: `0.05–0.08s`
 - Hero sections: `0.1–0.15s`
@@ -206,36 +207,32 @@ More polished than sequential show/hide:
 
 ```jsx
 // Stack effect: each toast scales slightly smaller
-const getScale = (index) => 1 - (index * 0.05);
+const getScale = (index) => 1 - index * 0.05;
 const getY = (index) => index * -10;
 
 <motion.div
   style={{
     scale: getScale(index),
     y: getY(index),
-    zIndex: toasts.length - index
+    zIndex: toasts.length - index,
   }}
-/>
+/>;
 ```
 
 ### AnimatePresence Modes
 
-| Mode | Behavior |
-|------|----------|
-| `sync` (default) | Entering and exiting elements animate simultaneously |
-| `wait` | Wait for exit animation to complete before entering |
-| `popLayout` | Exiting elements are popped from layout flow immediately |
+| Mode             | Behavior                                                 |
+| ---------------- | -------------------------------------------------------- |
+| `sync` (default) | Entering and exiting elements animate simultaneously     |
+| `wait`           | Wait for exit animation to complete before entering      |
+| `popLayout`      | Exiting elements are popped from layout flow immediately |
 
 Use `popLayout` when an element has an exit animation and is in a group of elements. This prevents layout jumps during exit:
 
 ```jsx
 <AnimatePresence mode="popLayout">
   {items.map((item) => (
-    <motion.div
-      key={item.id}
-      layout
-      exit={{ opacity: 0, scale: 0.95 }}
-    />
+    <motion.div key={item.id} layout exit={{ opacity: 0, scale: 0.95 }} />
   ))}
 </AnimatePresence>
 ```
@@ -393,7 +390,7 @@ function CursorFollower() {
 ```css
 /* Position */
 transform: translateX(100px);
-transform: translateY(50%);    /* Percentage = element's own size */
+transform: translateY(50%); /* Percentage = element's own size */
 transform: translate3d(x, y, z);
 
 /* Scale */
@@ -402,7 +399,7 @@ transform: scaleX(0.9);
 
 /* Rotation */
 transform: rotate(45deg);
-transform: rotateX(180deg);    /* 3D flip */
+transform: rotateX(180deg); /* 3D flip */
 transform: rotateY(180deg);
 
 /* Combine */
@@ -411,12 +408,12 @@ transform: translateY(-10px) scale(0.98);
 
 ### Transition vs Keyframe Decision
 
-| Use Transitions When | Use Keyframes When |
-|---------------------|-------------------|
-| A → B state change | Multi-step sequence |
-| Hover/focus/active | Looping animations |
-| Simple enter/exit | Complex choreography |
-| Need retargeting | Specific timing control |
+| Use Transitions When | Use Keyframes When      |
+| -------------------- | ----------------------- |
+| A → B state change   | Multi-step sequence     |
+| Hover/focus/active   | Looping animations      |
+| Simple enter/exit    | Complex choreography    |
+| Need retargeting     | Specific timing control |
 
 **Key insight:** Transitions can be retargeted mid-animation (like springs). Keyframes run to completion.
 
@@ -467,26 +464,26 @@ Animation taste is refined judgment — developed through deliberate practice, n
 
 ### CSS vs Framer Motion
 
-| Choose CSS When | Choose Framer Motion When |
-|-----------------|--------------------------|
-| Simple hover/focus states | Exit animations needed |
-| No JS required | Layout animations |
-| Bundle size critical | Gesture-driven motion |
-| Static state transitions | Orchestrated sequences |
-| Performance-critical loops | Spring physics |
-| Server components | Shared element transitions |
+| Choose CSS When            | Choose Framer Motion When  |
+| -------------------------- | -------------------------- |
+| Simple hover/focus states  | Exit animations needed     |
+| No JS required             | Layout animations          |
+| Bundle size critical       | Gesture-driven motion      |
+| Static state transitions   | Orchestrated sequences     |
+| Performance-critical loops | Spring physics             |
+| Server components          | Shared element transitions |
 
 ### Library Landscape
 
-| Library | Best For |
-|---------|----------|
-| CSS Transitions | Simple state changes |
-| CSS Keyframes | Looping, multi-step |
-| Framer Motion | React, full-featured |
-| motion/react | Lightweight Framer alternative |
-| React Spring | Complex physics |
-| GSAP | Timeline-based, legacy |
-| Web Animation API | Native, performant |
+| Library           | Best For                       |
+| ----------------- | ------------------------------ |
+| CSS Transitions   | Simple state changes           |
+| CSS Keyframes     | Looping, multi-step            |
+| Framer Motion     | React, full-featured           |
+| motion/react      | Lightweight Framer alternative |
+| React Spring      | Complex physics                |
+| GSAP              | Timeline-based, legacy         |
+| Web Animation API | Native, performant             |
 
 ## Accessibility Patterns
 
@@ -511,12 +508,12 @@ function App() {
 
 Instead of removing animation entirely, simplify:
 
-| Full Motion | Reduced Motion |
-|-------------|----------------|
-| Slide + fade | Fade only |
-| Spring bounce | Quick ease-out |
-| Parallax scroll | Static |
-| Auto-playing | User-triggered |
+| Full Motion     | Reduced Motion |
+| --------------- | -------------- |
+| Slide + fade    | Fade only      |
+| Spring bounce   | Quick ease-out |
+| Parallax scroll | Static         |
+| Auto-playing    | User-triggered |
 
 ## Quick Reference Card
 

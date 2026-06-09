@@ -8,21 +8,21 @@ When and how to use sound in interfaces. Sound is powerful but easily misused â€
 
 ### DO Use Sound For:
 
-| Context | Example | Why |
-|---------|---------|-----|
-| **Confirmations** | Payment processed, message sent | Reinforces success when user may not be looking at screen |
-| **Errors/warnings** | Form validation failure, connection lost | Alerts user to problems, especially if focused elsewhere |
-| **Notifications** | New message, timer complete | Draws attention across applications |
-| **Completion** | Upload finished, build complete | Background task done â€” user may have switched context |
+| Context             | Example                                  | Why                                                       |
+| ------------------- | ---------------------------------------- | --------------------------------------------------------- |
+| **Confirmations**   | Payment processed, message sent          | Reinforces success when user may not be looking at screen |
+| **Errors/warnings** | Form validation failure, connection lost | Alerts user to problems, especially if focused elsewhere  |
+| **Notifications**   | New message, timer complete              | Draws attention across applications                       |
+| **Completion**      | Upload finished, build complete          | Background task done â€” user may have switched context     |
 
 ### DON'T Use Sound For:
 
-| Context | Why Not |
-|---------|---------|
-| **Decorative** (hover sounds, page transitions) | Annoying after the first few times |
-| **High-frequency actions** (scrolling, typing, clicking) | Overwhelming, physically unpleasant |
-| **Punishment** (aggressive error sounds) | Creates anxiety, discourages exploration |
-| **Ambient/background** | Unexpected, intrusive in shared spaces |
+| Context                                                  | Why Not                                  |
+| -------------------------------------------------------- | ---------------------------------------- |
+| **Decorative** (hover sounds, page transitions)          | Annoying after the first few times       |
+| **High-frequency actions** (scrolling, typing, clicking) | Overwhelming, physically unpleasant      |
+| **Punishment** (aggressive error sounds)                 | Creates anxiety, discourages exploration |
+| **Ambient/background**                                   | Unexpected, intrusive in shared spaces   |
 
 **Rule:** If the user will hear this sound 50+ times per session, don't use it.
 
@@ -33,6 +33,7 @@ When and how to use sound in interfaces. Sound is powerful but easily misused â€
 ### MANDATORY
 
 1. **`prefers-reduced-motion` check** â€” respect the user's system preference
+
    ```tsx
    const prefersReducedMotion = window.matchMedia(
      "(prefers-reduced-motion: reduce)"
@@ -44,6 +45,7 @@ When and how to use sound in interfaces. Sound is powerful but easily misused â€
    ```
 
 2. **Visual equivalent** â€” every audio cue must have a visual counterpart
+
    ```tsx
    // Sound + visual toast
    playSuccessSound();
@@ -51,6 +53,7 @@ When and how to use sound in interfaces. Sound is powerful but easily misused â€
    ```
 
 3. **Volume control** â€” provide a way to adjust or mute
+
    ```tsx
    const [soundEnabled, setSoundEnabled] = useState(true);
    const [volume, setVolume] = useState(0.5);
@@ -82,12 +85,16 @@ function getAudioContext(): AudioContext {
 Browsers suspend `AudioContext` until a user gesture. Resume it on the first interaction:
 
 ```tsx
-document.addEventListener("click", () => {
-  const ctx = getAudioContext();
-  if (ctx.state === "suspended") {
-    ctx.resume();
-  }
-}, { once: true });
+document.addEventListener(
+  "click",
+  () => {
+    const ctx = getAudioContext();
+    if (ctx.state === "suspended") {
+      ctx.resume();
+    }
+  },
+  { once: true }
+);
 ```
 
 ### Clean Up Nodes
@@ -133,10 +140,10 @@ gain.gain.setValueAtTime(0.8, ctx.currentTime); // Way too loud
 
 ### Synthesized vs Sampled
 
-| Approach | Pros | Cons | Use When |
-|----------|------|------|----------|
-| **Synthesized** (Web Audio API) | Tiny footprint, infinitely customizable, no loading | Harder to make natural | Simple UI sounds (clicks, tones) |
-| **Sampled** (audio files) | Natural, rich, easy to swap | File size, loading time | Complex sounds (success chimes, notifications) |
+| Approach                        | Pros                                                | Cons                    | Use When                                       |
+| ------------------------------- | --------------------------------------------------- | ----------------------- | ---------------------------------------------- |
+| **Synthesized** (Web Audio API) | Tiny footprint, infinitely customizable, no loading | Harder to make natural  | Simple UI sounds (clicks, tones)               |
+| **Sampled** (audio files)       | Natural, rich, easy to swap                         | File size, loading time | Complex sounds (success chimes, notifications) |
 
 ### Click Sound Recipe
 

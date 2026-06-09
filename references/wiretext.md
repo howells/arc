@@ -3,11 +3,13 @@
 WireText is for low-fidelity wireframes and structural UI exploration.
 
 Use it when:
+
 - a user asks for wireframes
 - a feature needs layout exploration before implementation
 - you want to compare multiple structural directions quickly
 
 Do not use it for:
+
 - rendered-page verification
 - responsive QA
 - pixel-perfect design review
@@ -39,6 +41,7 @@ and reference them from the design doc.
 ## Hand-off Rule
 
 WireText defines structure:
+
 - page sections
 - block hierarchy
 - key interaction points

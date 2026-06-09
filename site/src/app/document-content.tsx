@@ -9,12 +9,12 @@ const remarkPlugins = [remarkGfm];
 const RFC_KEYWORD_REGEX = /^(MUST NOT|MUST|SHOULD NOT|SHOULD|NEVER|MAY):\s*/;
 
 const keywordColors: Record<string, string> = {
+  MAY: "text-neutral-500 bg-neutral-50 border-neutral-200",
   MUST: "text-[#3D6B5E] bg-[#EEF4F1] border-[#C8DCD4]",
   "MUST NOT": "text-[#8B4E55] bg-[#F5EEEF] border-[#DCC8CB]",
+  NEVER: "text-[#8B4E55] bg-[#F5EEEF] border-[#DCC8CB]",
   SHOULD: "text-[#5A6B7B] bg-[#EEF1F5] border-[#C8D0DC]",
   "SHOULD NOT": "text-[#7B6A5A] bg-[#F3F0EC] border-[#DCD4C8]",
-  NEVER: "text-[#8B4E55] bg-[#F5EEEF] border-[#DCC8CB]",
-  MAY: "text-neutral-500 bg-neutral-50 border-neutral-200",
 };
 
 function RfcListItem({ children }: { children?: ReactNode }) {

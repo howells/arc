@@ -1,28 +1,29 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+
 import { mono, sans } from "@/lib/fonts";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://usearc.dev"),
-  title: "Arc – The full arc from idea to shipped code",
   description:
     "A software development workflow for Claude Code and Codex. Commands and agents that handle vision, ideation, implementation, testing, review, refactoring, audit, launch, and commit.",
+  metadataBase: new URL("https://usearc.dev"),
   openGraph: {
-    title: "Arc – The full arc from idea to shipped code",
     description:
       "A software development workflow for Claude Code and Codex. Commands and agents that handle vision, ideation, implementation, testing, review, refactoring, audit, launch, and commit.",
-    url: "https://usearc.dev",
-    siteName: "Arc",
     locale: "en_US",
+    siteName: "Arc",
+    title: "Arc – The full arc from idea to shipped code",
     type: "website",
+    url: "https://usearc.dev",
   },
+  title: "Arc – The full arc from idea to shipped code",
   twitter: {
     card: "summary_large_image",
-    title: "Arc – The full arc from idea to shipped code",
+    creator: "@howells",
     description:
       "A software development workflow for Claude Code and Codex. Commands and agents that handle vision, ideation, implementation, testing, review, refactoring, audit, launch, and commit.",
-    creator: "@howells",
+    title: "Arc – The full arc from idea to shipped code",
   },
 };
 

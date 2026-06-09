@@ -4,27 +4,27 @@
 
 ## Quick Reference
 
-| Task Type | Model | Why |
-|-----------|-------|-----|
-| Explore codebase | haiku | Pattern matching, file finding |
-| Run TS/lint checks (fixer) | haiku | Mechanical error fixing |
-| Run test suites (test-runner) | haiku | Execute + parse output |
-| Code quality gate (code-reviewer) | haiku | Checklist pattern matching |
-| Code review (all review agents) | sonnet | Needs domain judgment |
-| Debug failing tests | sonnet | Requires reasoning |
-| Security/performance analysis | sonnet | Pattern recognition + context |
-| Spec compliance (spec-reviewer) | sonnet | Semantic comparison |
-| Implementation (implementer) | opus | Production code quality matters most |
-| E2E tests (writer + runner) | opus | Complex user flows, flaky test diagnosis |
-| Figma implementation (figma-builder) | opus | Design fidelity and UI implementation |
+| Task Type                            | Model  | Why                                      |
+| ------------------------------------ | ------ | ---------------------------------------- |
+| Explore codebase                     | haiku  | Pattern matching, file finding           |
+| Run TS/lint checks (fixer)           | haiku  | Mechanical error fixing                  |
+| Run test suites (test-runner)        | haiku  | Execute + parse output                   |
+| Code quality gate (code-reviewer)    | haiku  | Checklist pattern matching               |
+| Code review (all review agents)      | sonnet | Needs domain judgment                    |
+| Debug failing tests                  | sonnet | Requires reasoning                       |
+| Security/performance analysis        | sonnet | Pattern recognition + context            |
+| Spec compliance (spec-reviewer)      | sonnet | Semantic comparison                      |
+| Implementation (implementer)         | opus   | Production code quality matters most     |
+| E2E tests (writer + runner)          | opus   | Complex user flows, flaky test diagnosis |
+| Figma implementation (figma-builder) | opus   | Design fidelity and UI implementation    |
 
 ## Model Tiers
 
-| Model | Cost | Use Case |
-|-------|------|----------|
-| **haiku** | Cheapest | Mechanical tasks, simple checks, pattern matching |
-| **sonnet** | Balanced | Code review, debugging, moderate reasoning |
-| **opus** | Premium | Creative decisions, complex architecture, aesthetic judgment |
+| Model      | Cost     | Use Case                                                     |
+| ---------- | -------- | ------------------------------------------------------------ |
+| **haiku**  | Cheapest | Mechanical tasks, simple checks, pattern matching            |
+| **sonnet** | Balanced | Code review, debugging, moderate reasoning                   |
+| **opus**   | Premium  | Creative decisions, complex architecture, aesthetic judgment |
 
 ## Task Allocation
 
@@ -67,16 +67,19 @@ Task figma-builder model: opus: "Implement [component] from Figma..."
 ## Rationale
 
 **Why not opus everywhere?**
+
 - Cost: Opus is ~10-20x more expensive than haiku
 - Speed: Haiku responds faster for simple tasks
 - Diminishing returns: Mechanical tasks don't benefit from more intelligence
 
 **Why not haiku everywhere?**
+
 - Quality: Code review needs nuanced judgment
 - Context: Debugging requires reasoning across multiple files
 - Creativity: Design work needs aesthetic sensibility
 
 **Why sonnet is the default for reviews?**
+
 - Hits the sweet spot for code analysis
 - Understands patterns and anti-patterns well
 - Cost-effective for multiple parallel reviewers
@@ -84,5 +87,6 @@ Task figma-builder model: opus: "Implement [component] from Figma..."
 ## When to Override
 
 Use `model: inherit` when you want the agent to match the parent conversation's model. Useful when:
+
 - User is already on opus and wants consistent quality
 - Testing with a specific model

@@ -12,35 +12,35 @@ Quick reference for TanStack Table v8 performance patterns, TypeScript setup, an
 
 ```tsx
 // CORRECT: Stable references
-const columns = useMemo(() => [
-  columnHelper.accessor('firstName', { header: 'First Name' }),
-], [])
+const columns = useMemo(
+  () => [columnHelper.accessor("firstName", { header: "First Name" })],
+  []
+);
 
-const [data, setData] = useState<Person[]>(initialData)
+const [data, setData] = useState<Person[]>(initialData);
 
 // Or with transformations
-const processedData = useMemo(
-  () => rawData.filter(d => d.active),
-  [rawData]
-)
+const processedData = useMemo(() => rawData.filter((d) => d.active), [rawData]);
 
 const table = useReactTable({
   data: processedData,
   columns,
   getCoreRowModel: getCoreRowModel(),
-})
+});
 ```
 
 ```tsx
 // WRONG: New array every render = infinite loops
 function BadTable() {
-  const columns = [
-    columnHelper.accessor('name', { header: 'Name' }),
-  ] // Creates new array every render!
+  const columns = [columnHelper.accessor("name", { header: "Name" })]; // Creates new array every render!
 
-  const data = sourceData.filter(d => d.active) // Also new array!
+  const data = sourceData.filter((d) => d.active); // Also new array!
 
-  const table = useReactTable({ data, columns, getCoreRowModel: getCoreRowModel() })
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
 }
 ```
 
@@ -48,14 +48,14 @@ function BadTable() {
 
 ```tsx
 // WRONG: Missing required row model
-const table = useReactTable({ data, columns })
+const table = useReactTable({ data, columns });
 
 // CORRECT
 const table = useReactTable({
   data,
   columns,
   getCoreRowModel: getCoreRowModel(),
-})
+});
 ```
 
 ---
@@ -73,32 +73,35 @@ import {
   flexRender,
   createColumnHelper,
   type ColumnDef,
-} from '@tanstack/react-table'
+} from "@tanstack/react-table";
 ```
 
 ### Minimal Table
 
 ```tsx
 type Person = {
-  id: string
-  firstName: string
-  lastName: string
-  age: number
-}
+  id: string;
+  firstName: string;
+  lastName: string;
+  age: number;
+};
 
-const columnHelper = createColumnHelper<Person>()
+const columnHelper = createColumnHelper<Person>();
 
-const columns = useMemo(() => [
-  columnHelper.accessor('firstName', { header: 'First Name' }),
-  columnHelper.accessor('lastName', { header: 'Last Name' }),
-  columnHelper.accessor('age', { header: 'Age' }),
-], [])
+const columns = useMemo(
+  () => [
+    columnHelper.accessor("firstName", { header: "First Name" }),
+    columnHelper.accessor("lastName", { header: "Last Name" }),
+    columnHelper.accessor("age", { header: "Age" }),
+  ],
+  []
+);
 
 const table = useReactTable({
   data,
   columns,
   getCoreRowModel: getCoreRowModel(),
-})
+});
 ```
 
 ### Render Pattern
@@ -106,9 +109,9 @@ const table = useReactTable({
 ```tsx
 <table>
   <thead>
-    {table.getHeaderGroups().map(headerGroup => (
+    {table.getHeaderGroups().map((headerGroup) => (
       <tr key={headerGroup.id}>
-        {headerGroup.headers.map(header => (
+        {headerGroup.headers.map((header) => (
           <th key={header.id}>
             {flexRender(header.column.columnDef.header, header.getContext())}
           </th>
@@ -117,9 +120,9 @@ const table = useReactTable({
     ))}
   </thead>
   <tbody>
-    {table.getRowModel().rows.map(row => (
+    {table.getRowModel().rows.map((row) => (
       <tr key={row.id}>
-        {row.getVisibleCells().map(cell => (
+        {row.getVisibleCells().map((cell) => (
           <td key={cell.id}>
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </td>
@@ -140,14 +143,14 @@ Data flows through processing stages in order:
 Data → Filtered → Grouped → Sorted → Expanded → Paginated → Final Rows
 ```
 
-| Row Model | Purpose | When to Use |
-|-----------|---------|-------------|
-| `getCoreRowModel()` | Basic 1:1 mapping | Always required |
-| `getFilteredRowModel()` | Apply filters | Client-side filtering |
-| `getSortedRowModel()` | Apply sorting | Client-side sorting |
-| `getPaginationRowModel()` | Slice for pages | Client-side pagination |
-| `getExpandedRowModel()` | Show/hide sub-rows | Expandable rows |
-| `getGroupedRowModel()` | Group hierarchically | Grouping (avoid for large datasets) |
+| Row Model                 | Purpose              | When to Use                         |
+| ------------------------- | -------------------- | ----------------------------------- |
+| `getCoreRowModel()`       | Basic 1:1 mapping    | Always required                     |
+| `getFilteredRowModel()`   | Apply filters        | Client-side filtering               |
+| `getSortedRowModel()`     | Apply sorting        | Client-side sorting                 |
+| `getPaginationRowModel()` | Slice for pages      | Client-side pagination              |
+| `getExpandedRowModel()`   | Show/hide sub-rows   | Expandable rows                     |
+| `getGroupedRowModel()`    | Group hierarchically | Grouping (avoid for large datasets) |
 
 ---
 
@@ -159,17 +162,17 @@ Data → Filtered → Grouped → Sorted → Expanded → Paginated → Final Ro
 
 ```tsx
 // types/tanstack-table.d.ts
-import '@tanstack/react-table'
+import "@tanstack/react-table";
 
-declare module '@tanstack/react-table' {
+declare module "@tanstack/react-table" {
   interface TableMeta<TData extends RowData> {
-    updateData: (rowIndex: number, columnId: string, value: unknown) => void
+    updateData: (rowIndex: number, columnId: string, value: unknown) => void;
   }
 
   interface ColumnMeta<TData extends RowData, TValue> {
-    className?: string
-    align?: 'left' | 'center' | 'right'
-    editable?: boolean
+    className?: string;
+    align?: "left" | "center" | "right";
+    editable?: boolean;
   }
 }
 ```
@@ -178,14 +181,14 @@ declare module '@tanstack/react-table' {
 
 ```tsx
 const columns = [
-  columnHelper.accessor('firstName', {
-    header: 'First Name',
+  columnHelper.accessor("firstName", {
+    header: "First Name",
     meta: {
-      className: 'min-w-[150px]',
+      className: "min-w-[150px]",
       editable: true,
     },
   }),
-]
+];
 
 const table = useReactTable({
   data,
@@ -193,14 +196,14 @@ const table = useReactTable({
   getCoreRowModel: getCoreRowModel(),
   meta: {
     updateData: (rowIndex, columnId, value) => {
-      setData(old =>
+      setData((old) =>
         old.map((row, index) =>
           index === rowIndex ? { ...row, [columnId]: value } : row
         )
-      )
+      );
     },
   },
-})
+});
 ```
 
 ---
@@ -209,12 +212,12 @@ const table = useReactTable({
 
 ### Decision Matrix: Client vs Server
 
-| Factor | Client-Side | Server-Side |
-|--------|-------------|-------------|
-| Row count | < 10,000 | > 10,000 |
-| Data fetch cost | Low | High |
-| Filter complexity | Simple | Complex |
-| Memory constraints | None | Browser limited |
+| Factor             | Client-Side | Server-Side     |
+| ------------------ | ----------- | --------------- |
+| Row count          | < 10,000    | > 10,000        |
+| Data fetch cost    | Low         | High            |
+| Filter complexity  | Simple      | Complex         |
+| Memory constraints | None        | Browser limited |
 
 ### Virtualization for Large Datasets
 
@@ -225,54 +228,59 @@ npm install @tanstack/react-virtual
 ```
 
 ```tsx
-import { useVirtualizer } from '@tanstack/react-virtual'
+import { useVirtualizer } from "@tanstack/react-virtual";
 
 function VirtualizedTable({ data, columns }) {
-  const parentRef = useRef<HTMLDivElement>(null)
+  const parentRef = useRef<HTMLDivElement>(null);
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-  })
+  });
 
-  const { rows } = table.getRowModel()
+  const { rows } = table.getRowModel();
 
   const rowVirtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => 35,
     overscan: 10,
-  })
+  });
 
   return (
     <div ref={parentRef} className="h-[600px] overflow-auto">
       <table>
         <thead>{/* headers */}</thead>
-        <tbody style={{ height: `${rowVirtualizer.getTotalSize()}px`, position: 'relative' }}>
-          {rowVirtualizer.getVirtualItems().map(virtualRow => {
-            const row = rows[virtualRow.index]
+        <tbody
+          style={{
+            height: `${rowVirtualizer.getTotalSize()}px`,
+            position: "relative",
+          }}
+        >
+          {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+            const row = rows[virtualRow.index];
             return (
               <tr
                 key={row.id}
                 style={{
-                  position: 'absolute',
+                  position: "absolute",
                   transform: `translateY(${virtualRow.start}px)`,
                   height: `${virtualRow.size}px`,
                 }}
               >
-                {row.getVisibleCells().map(cell => (
+                {row.getVisibleCells().map((cell) => (
                   <td key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
               </tr>
-            )
+            );
           })}
         </tbody>
       </table>
     </div>
-  )
+  );
 }
 ```
 
@@ -285,22 +293,28 @@ function DebouncedInput({
   debounce = 500,
   ...props
 }: {
-  value: string
-  onChange: (value: string) => void
-  debounce?: number
+  value: string;
+  onChange: (value: string) => void;
+  debounce?: number;
 }) {
-  const [value, setValue] = useState(initialValue)
+  const [value, setValue] = useState(initialValue);
 
   useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
+    setValue(initialValue);
+  }, [initialValue]);
 
   useEffect(() => {
-    const timeout = setTimeout(() => onChange(value), debounce)
-    return () => clearTimeout(timeout)
-  }, [value, debounce, onChange])
+    const timeout = setTimeout(() => onChange(value), debounce);
+    return () => clearTimeout(timeout);
+  }, [value, debounce, onChange]);
 
-  return <input {...props} value={value} onChange={e => setValue(e.target.value)} />
+  return (
+    <input
+      {...props}
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+    />
+  );
 }
 ```
 
@@ -313,19 +327,21 @@ function DebouncedInput({
 ```tsx
 // WRONG
 function BadTable() {
-  const CustomCell = ({ value }) => <span>{value}</span> // Recreated every render!
-  const columns = useMemo(() => [
-    { cell: (info) => <CustomCell value={info.getValue()} /> }
-  ], [])
+  const CustomCell = ({ value }) => <span>{value}</span>; // Recreated every render!
+  const columns = useMemo(
+    () => [{ cell: (info) => <CustomCell value={info.getValue()} /> }],
+    []
+  );
 }
 
 // CORRECT: Define outside
-const CustomCell = ({ value }) => <span>{value}</span>
+const CustomCell = ({ value }) => <span>{value}</span>;
 
 function GoodTable() {
-  const columns = useMemo(() => [
-    { cell: (info) => <CustomCell value={info.getValue()} /> }
-  ], [])
+  const columns = useMemo(
+    () => [{ cell: (info) => <CustomCell value={info.getValue()} /> }],
+    []
+  );
 }
 ```
 
@@ -334,8 +350,8 @@ function GoodTable() {
 ```tsx
 // WRONG: Breaks virtualization and density toggles
 const table = useReactTable({
-  memoMode: 'cells', // Don't use this
-})
+  memoMode: "cells", // Don't use this
+});
 ```
 
 ### NEVER: Grouping on large datasets
@@ -345,32 +361,32 @@ const table = useReactTable({
 const table = useReactTable({
   data: largeDataset, // 50,000 rows
   getGroupedRowModel: getGroupedRowModel(),
-})
+});
 
 // CORRECT: Use server-side grouping
 const table = useReactTable({
   data: largeDataset,
   manualGrouping: true,
-})
+});
 ```
 
 ### NEVER: Hoist frequently-changing state
 
 ```tsx
 // WRONG: Re-renders entire tree on every mouse move during resize
-const [columnSizingInfo, setColumnSizingInfo] = useState({})
+const [columnSizingInfo, setColumnSizingInfo] = useState({});
 
 const table = useReactTable({
   state: { columnSizingInfo },
   onColumnSizingInfoChange: setColumnSizingInfo,
-})
+});
 
 // CORRECT: Only control state you actually need
 const table = useReactTable({
   enableColumnResizing: true,
-  columnResizeMode: 'onChange',
+  columnResizeMode: "onChange",
   // Don't control columnSizingInfo unless required
-})
+});
 ```
 
 ### NEVER: Forget to clean up row selection
@@ -378,15 +394,15 @@ const table = useReactTable({
 ```tsx
 // Selection persists for deleted rows in v8 (v7 auto-reset)
 useEffect(() => {
-  const validRowIds = new Set(data.map(row => row.id))
-  setRowSelection(prev => {
-    const cleaned: RowSelectionState = {}
-    Object.keys(prev).forEach(id => {
-      if (validRowIds.has(id)) cleaned[id] = true
-    })
-    return cleaned
-  })
-}, [data])
+  const validRowIds = new Set(data.map((row) => row.id));
+  setRowSelection((prev) => {
+    const cleaned: RowSelectionState = {};
+    Object.keys(prev).forEach((id) => {
+      if (validRowIds.has(id)) cleaned[id] = true;
+    });
+    return cleaned;
+  });
+}, [data]);
 ```
 
 ---
@@ -396,9 +412,12 @@ useEffect(() => {
 ### Sorting + Filtering + Pagination
 
 ```tsx
-const [sorting, setSorting] = useState<SortingState>([])
-const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 })
+const [sorting, setSorting] = useState<SortingState>([]);
+const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+const [pagination, setPagination] = useState<PaginationState>({
+  pageIndex: 0,
+  pageSize: 10,
+});
 
 const table = useReactTable({
   data,
@@ -411,7 +430,7 @@ const table = useReactTable({
   onSortingChange: setSorting,
   onColumnFiltersChange: setColumnFilters,
   onPaginationChange: setPagination,
-})
+});
 ```
 
 ### Server-Side Operations
@@ -429,12 +448,12 @@ const table = useReactTable({
   onSortingChange: setSorting,
   onColumnFiltersChange: setColumnFilters,
   onPaginationChange: setPagination,
-})
+});
 
 // Fetch when state changes
 useEffect(() => {
-  fetchData({ sorting, columnFilters, pagination })
-}, [sorting, columnFilters, pagination])
+  fetchData({ sorting, columnFilters, pagination });
+}, [sorting, columnFilters, pagination]);
 ```
 
 ### Inline Editing with Table Meta
@@ -446,24 +465,35 @@ const table = useReactTable({
   getCoreRowModel: getCoreRowModel(),
   meta: {
     updateData: (rowIndex, columnId, value) => {
-      setData(old =>
+      setData((old) =>
         old.map((row, index) =>
           index === rowIndex ? { ...row, [columnId]: value } : row
         )
-      )
+      );
     },
   },
-})
+});
 
 // In cell component
-function EditableCell({ getValue, row, column, table }: CellContext<Person, string>) {
-  const [value, setValue] = useState(getValue())
+function EditableCell({
+  getValue,
+  row,
+  column,
+  table,
+}: CellContext<Person, string>) {
+  const [value, setValue] = useState(getValue());
 
   const onBlur = () => {
-    table.options.meta?.updateData(row.index, column.id, value)
-  }
+    table.options.meta?.updateData(row.index, column.id, value);
+  };
 
-  return <input value={value} onChange={e => setValue(e.target.value)} onBlur={onBlur} />
+  return (
+    <input
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      onBlur={onBlur}
+    />
+  );
 }
 ```
 
@@ -476,22 +506,22 @@ function EditableCell({ getValue, row, column, table }: CellContext<Person, stri
 ```tsx
 // You MUST provide BOTH state.X AND onXChange for controlled state
 const table = useReactTable({
-  state: { sorting },     // Pass your state
+  state: { sorting }, // Pass your state
   onSortingChange: setSorting, // Receive updates
-})
+});
 ```
 
 ### Useful Table Methods
 
 ```tsx
-table.getState()                    // All state
-table.getRowModel().rows            // Final processed rows
-table.getSelectedRowModel().rows    // Selected rows
-table.getColumn('columnId')         // Specific column
-table.getPageCount()                // Total pages
-table.previousPage()                // Navigate
-table.nextPage()
-table.resetRowSelection()           // Clear selection
+table.getState(); // All state
+table.getRowModel().rows; // Final processed rows
+table.getSelectedRowModel().rows; // Selected rows
+table.getColumn("columnId"); // Specific column
+table.getPageCount(); // Total pages
+table.previousPage(); // Navigate
+table.nextPage();
+table.resetRowSelection(); // Clear selection
 ```
 
 ### Performance Checklist

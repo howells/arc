@@ -4,6 +4,7 @@ ASCII UI wireframes force clear thinking about layout and flow. Create them duri
 
 <box_drawing_characters>
 **Basic box:**
+
 ```
 ┌───────────┐
 │  content  │
@@ -11,6 +12,7 @@ ASCII UI wireframes force clear thinking about layout and flow. Create them duri
 ```
 
 **With header:**
+
 ```
 ┌───────────┐
 │  Header   │
@@ -20,6 +22,7 @@ ASCII UI wireframes force clear thinking about layout and flow. Create them duri
 ```
 
 **Nested boxes:**
+
 ```
 ┌─────────────────┐
 │ ┌─────┐ ┌─────┐ │
@@ -29,13 +32,15 @@ ASCII UI wireframes force clear thinking about layout and flow. Create them duri
 ```
 
 **Characters reference:**
+
 - Corners: `┌ ┐ └ ┘`
 - Lines: `─ │`
 - Intersections: `├ ┤ ┬ ┴ ┼`
-</box_drawing_characters>
+  </box_drawing_characters>
 
 <common_patterns>
 **Page layout:**
+
 ```
 ┌─────────────────────────────────────┐
 │  Logo        [Search...]    [Menu]  │
@@ -49,6 +54,7 @@ ASCII UI wireframes force clear thinking about layout and flow. Create them duri
 ```
 
 **Card grid:**
+
 ```
 ┌─────────┐  ┌─────────┐  ┌─────────┐
 │ [image] │  │ [image] │  │ [image] │
@@ -60,6 +66,7 @@ ASCII UI wireframes force clear thinking about layout and flow. Create them duri
 ```
 
 **Form:**
+
 ```
 ┌─────────────────────────────┐
 │ Create Account              │
@@ -78,6 +85,7 @@ ASCII UI wireframes force clear thinking about layout and flow. Create them duri
 ```
 
 **Modal/Dialog:**
+
 ```
 ┌─────────────────────────────┐
 │ Confirm Delete         [X]  │
@@ -94,6 +102,7 @@ ASCII UI wireframes force clear thinking about layout and flow. Create them duri
 ```
 
 **Table:**
+
 ```
 ┌──────────┬─────────┬──────────┐
 │ Name     │ Status  │ Actions  │
@@ -105,6 +114,7 @@ ASCII UI wireframes force clear thinking about layout and flow. Create them duri
 ```
 
 **Sidebar layout:**
+
 ```
 ┌────────┬────────────────────────┐
 │ Nav    │                        │
@@ -118,6 +128,7 @@ ASCII UI wireframes force clear thinking about layout and flow. Create them duri
 ```
 
 **Tabs:**
+
 ```
 ┌──────┬──────┬──────┐
 │ Tab1 │ Tab2 │ Tab3 │
@@ -127,15 +138,18 @@ ASCII UI wireframes force clear thinking about layout and flow. Create them duri
 │                                  │
 └──────────────────────────────────┘
 ```
+
 </common_patterns>
 
 <interactive_elements>
 **Buttons:**
+
 - `[Button Label]` - primary action
 - `[ Cancel ]` - secondary action (spaces for visual weight)
 - `[X]` - close button
 
 **Inputs:**
+
 - `[_____________]` - text input
 - `[v Select... v]` - dropdown
 - `[x] Checkbox` - checked
@@ -144,16 +158,18 @@ ASCII UI wireframes force clear thinking about layout and flow. Create them duri
 - `( ) Radio` - unselected
 
 **States:**
+
 - `[Button]` - default
 - `[Button*]` - loading (asterisk)
 - `[Button!]` - error state
 - `[-Button-]` - disabled
-</interactive_elements>
+  </interactive_elements>
 
 <state_variations>
 **Always design these states:**
 
 **Empty state:**
+
 ```
 ┌─────────────────────────┐
 │                         │
@@ -165,6 +181,7 @@ ASCII UI wireframes force clear thinking about layout and flow. Create them duri
 ```
 
 **Loading state:**
+
 ```
 ┌─────────────────────────┐
 │                         │
@@ -175,6 +192,7 @@ ASCII UI wireframes force clear thinking about layout and flow. Create them duri
 ```
 
 **Error state:**
+
 ```
 ┌─────────────────────────┐
 │ ⚠ Error                 │
@@ -185,12 +203,14 @@ ASCII UI wireframes force clear thinking about layout and flow. Create them duri
 │ [Try Again]  [Contact]  │
 └─────────────────────────┘
 ```
+
 </state_variations>
 
 <mobile_vs_desktop>
 **Show both when relevant:**
 
 **Desktop:**
+
 ```
 ┌────────┬────────────────────────┐
 │ Sidebar│   Main Content         │
@@ -202,6 +222,7 @@ ASCII UI wireframes force clear thinking about layout and flow. Create them duri
 ```
 
 **Mobile:**
+
 ```
 ┌──────────────────┐
 │ [☰]  Logo  [👤]  │
@@ -216,4 +237,5 @@ ASCII UI wireframes force clear thinking about layout and flow. Create them duri
 │                  │
 └──────────────────┘
 ```
+
 </mobile_vs_desktop>

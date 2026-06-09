@@ -80,11 +80,11 @@ function usePrefetchOnTrajectory(
 
 ### Hit Slop Sizing
 
-| Element Type | Slop Size | Why |
-|-------------|-----------|-----|
-| Navigation links | 30–40px | Dense layout, many targets |
-| Cards/tiles | 40–60px | Larger spacing between items |
-| CTA buttons | 50–80px | High-value targets worth aggressive prefetch |
+| Element Type     | Slop Size | Why                                          |
+| ---------------- | --------- | -------------------------------------------- |
+| Navigation links | 30–40px   | Dense layout, many targets                   |
+| Cards/tiles      | 40–60px   | Larger spacing between items                 |
+| CTA buttons      | 50–80px   | High-value targets worth aggressive prefetch |
 
 ---
 
@@ -113,15 +113,13 @@ function usePrefetchOnTrajectory(
 Trajectory prefetching is mouse-only. For keyboard users, prefetch on `focus`:
 
 ```tsx
-<Link
-  href="/dashboard"
-  onFocus={() => prefetchRoute("/dashboard")}
->
+<Link href="/dashboard" onFocus={() => prefetchRoute("/dashboard")}>
   Dashboard
 </Link>
 ```
 
 For tab-based navigation:
+
 ```tsx
 <Tab
   onFocus={() => prefetchTabContent(tabId)}
@@ -139,11 +137,11 @@ For tab-based navigation:
 
 Touch devices don't have cursor trajectory. Alternatives:
 
-| Technique | How | When |
-|-----------|-----|------|
-| `touchstart` prefetch | Start loading on finger down | Lists, navigation |
-| Viewport intersection | Prefetch when element scrolls into view | Below-fold content |
-| Idle prefetch | Load during `requestIdleCallback` | Critical next steps |
+| Technique             | How                                     | When                |
+| --------------------- | --------------------------------------- | ------------------- |
+| `touchstart` prefetch | Start loading on finger down            | Lists, navigation   |
+| Viewport intersection | Prefetch when element scrolls into view | Below-fold content  |
+| Idle prefetch         | Load during `requestIdleCallback`       | Critical next steps |
 
 ```tsx
 // touchstart gives ~200ms head start over tap

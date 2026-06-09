@@ -34,28 +34,32 @@ website:
 ---
 
 <tool_restrictions>
+
 # MANDATORY Tool Restrictions
 
 ## BANNED TOOLS — calling these is a skill violation:
+
 - **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured process. Execute the steps below directly.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
-</tool_restrictions>
+  </tool_restrictions>
 
 <arc_runtime>
 This workflow requires the full Arc bundle, not a prompts-only install.
 
 Paths in this skill use these conventions:
+
 - `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
 - `./...` is local to this skill's directory.
 - `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-</arc_runtime>
+  </arc_runtime>
 
 <required_reading>
 **Read these reference files NOW:**
+
 1. references/review-patterns.md
 2. disciplines/dispatching-parallel-agents.md
 3. disciplines/receiving-code-review.md
-</required_reading>
+   </required_reading>
 
 <rules_context>
 **Check for project coding rules:**
@@ -63,25 +67,28 @@ Paths in this skill use these conventions:
 **Use Glob tool:** `.ruler/*.md`
 
 **Determine rules source:**
+
 - **If `.ruler/` exists:** Read rules from `.ruler/`
 - **If `.ruler/` doesn't exist:** Read rules from `rules/`
 
 **Pass relevant core rules to each reviewer:**
 
-| Reviewer | Rules to Pass |
-|----------|--------------|
-| daniel-product-engineer | react.md, typescript.md, code-style.md |
-| lee-nextjs-engineer | nextjs.md, api.md |
-| senior-engineer | code-style.md, typescript.md, react.md |
-| architecture-engineer | stack.md, turborepo.md |
-| mastra-agent-engineer | api.md, integrations.md, typescript.md |
-| security-engineer | security.md, api.md, env.md |
-| data-engineer | database.md, testing.md, api.md |
-| senior-engineer | cloudflare-workers.md (if wrangler.toml exists) |
-| accessibility-engineer | (interface rules only — already in agent prompt) |
+| Reviewer                | Rules to Pass                                    |
+| ----------------------- | ------------------------------------------------ |
+| daniel-product-engineer | react.md, typescript.md, code-style.md           |
+| lee-nextjs-engineer     | nextjs.md, api.md                                |
+| senior-engineer         | code-style.md, typescript.md, react.md           |
+| architecture-engineer   | stack.md, turborepo.md                           |
+| mastra-agent-engineer   | api.md, integrations.md, typescript.md           |
+| security-engineer       | security.md, api.md, env.md                      |
+| data-engineer           | database.md, testing.md, api.md                  |
+| senior-engineer         | cloudflare-workers.md (if wrangler.toml exists)  |
+| accessibility-engineer  | (interface rules only — already in agent prompt) |
+
 </rules_context>
 
 <scope_discipline>
+
 ## Scope Discipline
 
 Reviewers must respect the plan's scope. This is non-negotiable:
@@ -90,17 +97,19 @@ Reviewers must respect the plan's scope. This is non-negotiable:
 - **Do not sneak in additional scope.** Don't suggest features, enhancements, or "while you're at it" additions beyond what the plan covers.
 - **Your job is to make this plan succeed, not to lobby for a different plan.** Once scope is agreed, optimize within it — find bugs, catch edge cases, improve the architecture — but don't re-litigate what gets built.
 - **Include this principle in every reviewer prompt:** "Respect the plan's scope. Flag scope concerns once, then commit to making the plan succeed."
-</scope_discipline>
+  </scope_discipline>
 
 <process>
 ## Phase 0: Check for Specific Reviewer
 
 **If argument provided** (e.g., `daniel-product-engineer`):
+
 - Look for `agents/review/{argument}.md`
 - If found → use only this reviewer, skip Phase 2 detection
 - If not found → list available reviewers from `agents/review/` and ask user to pick
 
 **Available reviewers:**
+
 - `daniel-product-engineer` — Type safety, UI completeness, React patterns
 - `lee-nextjs-engineer` — Next.js App Router, server-first architecture
 - `senior-engineer` — Asymmetric strictness, review discipline
@@ -113,6 +122,7 @@ Reviewers must respect the plan's scope. This is non-negotiable:
 ## Phase 1: Find the Plan
 
 **Check if plan file path provided as argument:**
+
 - If yes → read that file and proceed to Phase 2
 - If no → search for plans
 
@@ -131,7 +141,6 @@ Reviewers must respect the plan's scope. This is non-negotiable:
 
    **Use Glob tool:** `docs/arc/plans/*.md`
    **Fallback:** `docs/plans/*.md`
-
    - Sort results by modification time (newest first)
    - Show all plan/spec files (feature specs, implementation plans, etc.)
 
@@ -144,6 +153,7 @@ Reviewers must respect the plan's scope. This is non-negotiable:
    - "I couldn't find a plan to review. Can you point me to a plan file, paste the plan, or describe the approach you'd like reviewed?"
 
 **Once plan located:**
+
 - Store the plan content
 - Note the source (conversation, file path, or user-provided)
 - Proceed to Phase 2
@@ -155,37 +165,45 @@ Reviewers must respect the plan's scope. This is non-negotiable:
 **Detect project type for reviewer selection:**
 
 **Use Grep tool on `package.json`:**
+
 - Pattern: `"next"` → nextjs
 - Pattern: `"react"` → react
 
 **Use Glob tool:**
+
 - `requirements.txt`, `pyproject.toml` → python
 
 **Select reviewers based on project type:**
 
 **TypeScript/React:**
+
 - agents/review/daniel-product-engineer.md
 - agents/review/senior-engineer.md
 - agents/review/architecture-engineer.md
 
 **Next.js:**
+
 - agents/review/lee-nextjs-engineer.md
 - agents/review/daniel-product-engineer.md
 - agents/review/senior-engineer.md
 
 **Python:**
+
 - agents/review/senior-engineer.md
 - agents/review/performance-engineer.md
 - agents/review/architecture-engineer.md
 
 **General/Unknown:**
+
 - agents/review/senior-engineer.md
 - agents/review/architecture-engineer.md
 
 **Conditional addition (all UI project types):**
+
 - If plan involves UI components, forms, or user-facing features → add `agents/review/accessibility-engineer.md`
 
 **Conditional addition (all project types):**
+
 - If `package.json` includes `@mastra/*` or the plan involves agents, tools, workflows, memory, RAG, MCP, model routing, browser/sandbox capabilities, or agent-readable software surfaces → add `agents/review/mastra-agent-engineer.md`
 
 ## Phase 3: Run Expert Review
@@ -215,11 +233,13 @@ Task [conditional-reviewer] model: sonnet: "Review this plan for [specialty conc
 See `references/review-patterns.md` for approach.
 
 Instead of presenting critiques:
+
 - Turn findings into exploratory questions
 - "What if we..." not "You should..."
 - Collaborative spirit, not adversarial
 
 **Example transformations:**
+
 - Reviewer: "This is overengineered"
   → "We have three layers here. What if we started with one?"
 - Reviewer: "Missing error handling"
@@ -228,6 +248,7 @@ Instead of presenting critiques:
   → "This stores the token in localStorage. Is that acceptable for this use case?"
 
 **Present questions one at a time:**
+
 - Wait for user response
 - If user wants to keep something, they probably have context
 - Track decisions as you go
@@ -235,10 +256,12 @@ Instead of presenting critiques:
 ## Phase 5: Apply Decisions
 
 For each decision:
+
 - Note what was changed
 - Note what was kept and why
 
 If plan came from a file:
+
 - Update the file with changes
 - Leave git commit decisions to `/arc:commit` or the user.
 
@@ -251,17 +274,21 @@ If plan came from a file:
 **Reviewers:** [list]
 
 ### Changes Made
+
 - [Change 1]
 - [Change 2]
 
 ### Kept As-Is
+
 - [Decision 1]: [reason]
 
 ### Open Questions
+
 - [Any unresolved items]
 ```
 
 **Show remaining arc:**
+
 ```
 /arc:ideate     → Feature spec ✓
      ↓
@@ -273,10 +300,12 @@ If plan came from a file:
 **Offer next steps based on what was reviewed:**
 
 If reviewed a **feature spec**:
+
 - "Ready to implement?" → `/arc:implement` (which will create the plan internally)
 - "Done for now" → end
 
 If reviewed an **implementation plan**:
+
 - "Ready to implement?" → `/arc:implement`
 - "Done for now" → end
 
@@ -291,6 +320,7 @@ Entry: `/arc:review — [Plan name] reviewed`
 
 <success_criteria>
 **Plan review** is complete when:
+
 - [ ] Plan located (conversation, file, or user-provided)
 - [ ] Project type detected and reviewers selected
 - [ ] Parallel expert review completed (selected agents)
@@ -301,4 +331,4 @@ Entry: `/arc:review — [Plan name] reviewed`
 - [ ] Remaining arc shown (based on plan type)
 - [ ] User chose next step (`/arc:implement` or done)
 - [ ] Orphaned agents cleaned up
-</success_criteria>
+      </success_criteria>

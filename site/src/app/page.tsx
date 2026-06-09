@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+
 import {
   getAgents,
   getDisciplines,
@@ -7,16 +8,17 @@ import {
   getSkills,
   getVersion,
 } from "@/lib/content";
+
 import { AnimatedHero } from "./animated-hero";
 import { CopyButton } from "./copy-button";
 import { InstallTabs } from "./install-tabs";
 import { PageContent } from "./page-content";
 
 export const metadata: Metadata = {
-  title: "Arc – The full arc from idea to shipped code",
+  alternates: { canonical: "/" },
   description:
     "A software development workflow for Claude Code and Codex. Commands and agents that handle vision, ideation, implementation, testing, review, refactoring, audit, launch, and commit.",
-  alternates: { canonical: "/" },
+  title: "Arc – The full arc from idea to shipped code",
 };
 
 export default function ArcPage() {

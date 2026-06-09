@@ -1,14 +1,16 @@
 "use client";
 
 import { useMemo } from "react";
+
 import type { Agent, Discipline, Rule, Skill } from "@/lib/types";
+
 import { ContentBrowser } from "./content-browser";
 import {
   ArcSheetsProvider,
-  type DrawerContent,
   getContentId,
   useArcSheets,
 } from "./unified-drawer";
+import type { DrawerContent } from "./unified-drawer";
 
 interface PageContentProps {
   agents: Agent[];
@@ -44,15 +46,15 @@ function PageContentInner({
   };
 
   const openSkill = (skill: Skill) => {
-    openContent({ type: "skill", data: skill });
+    openContent({ data: skill, type: "skill" });
   };
 
   const openAgent = (agent: Agent) => {
-    openContent({ type: "agent", data: agent });
+    openContent({ data: agent, type: "agent" });
   };
 
   const openRule = (rule: Rule) => {
-    openContent({ type: "rule", data: rule });
+    openContent({ data: rule, type: "rule" });
   };
 
   return (

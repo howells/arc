@@ -82,7 +82,7 @@ If no issues: `Pre-Landing Diff Review: No issues found.`
 ### Performance Signals
 
 - N+1 queries: associations used in loops without eager loading
-- O(n*m) lookups in views (Array.find inside a loop instead of building an index)
+- O(n\*m) lookups in views (Array.find inside a loop instead of building an index)
 - Missing DB indexes on columns used in WHERE or JOIN clauses in new queries
 
 ---

@@ -34,30 +34,35 @@ website:
 ---
 
 <tool_restrictions>
+
 # MANDATORY Tool Restrictions
 
 ## REQUIRED TOOLS — use these when indicated:
+
 - **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Do not narrate missing tools or fallbacks to the user.
 
 ## BANNED TOOLS — calling these is a skill violation:
+
 - **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured testing workflow. Execute it directly.
 - **`ExitPlanMode`** — BANNED. You are never in plan mode.
-</tool_restrictions>
+  </tool_restrictions>
 
 <arc_runtime>
 This workflow requires the full Arc bundle, not a prompts-only install.
 
 Paths in this skill use these conventions:
+
 - `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
 - `./...` is local to this skill's directory.
 - `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-</arc_runtime>
+  </arc_runtime>
 
 # Characterization Testing Workflow
 
 Backfill focused tests around existing code before a risky change. The goal is not "more tests" in the abstract; it is a trustworthy safety net around behavior that must survive a refactor, migration, or bug fix.
 
 Use this skill when:
+
 - Existing code has little or no test coverage.
 - A refactor needs a behavior-preserving safety net first.
 - A god file, duplicated implementation, or tangled module needs characterization before decomposition.
@@ -70,6 +75,7 @@ Do not use this skill as the normal new-feature workflow. For new work, use `/ar
 
 <required_reading>
 **Read before testing:**
+
 1. `references/testing-patterns.md` — Test philosophy, vitest/playwright patterns
 2. `references/testing-anti-patterns.md` — What weak or misleading tests look like
 3. `rules/testing.md` — Arc testing conventions
@@ -77,19 +83,19 @@ Do not use this skill as the normal new-feature workflow. For new work, use `/ar
 5. `references/llm-api-testing.md` — If testing LLM integrations
 6. `references/maintainability-review.md` — If tests are being added before decomposing a god file or tangled module
 7. `references/complexity-optimization.md` — If tests are being added before optimizing algorithmic complexity, rendering churn, or N+1 behavior
-</required_reading>
+   </required_reading>
 
 ## Agents
 
 Use specialist agents only when the slice is large enough to justify delegation:
 
-| Agent | Model | Purpose | Framework |
-|-------|-------|---------|-----------|
-| `unit-test-writer` | sonnet | Characterize pure functions, hooks, or isolated components | vitest |
+| Agent                     | Model  | Purpose                                                           | Framework    |
+| ------------------------- | ------ | ----------------------------------------------------------------- | ------------ |
+| `unit-test-writer`        | sonnet | Characterize pure functions, hooks, or isolated components        | vitest       |
 | `integration-test-writer` | sonnet | Characterize API, auth, state, and component integration behavior | vitest + MSW |
-| `e2e-test-writer` | opus | Characterize critical browser journeys | Playwright |
-| `test-runner` | haiku | Run unit/integration suites and analyze failures | vitest |
-| `e2e-runner` | opus | Run Playwright, inspect screenshots/traces, iterate on failures | Playwright |
+| `e2e-test-writer`         | opus   | Characterize critical browser journeys                            | Playwright   |
+| `test-runner`             | haiku  | Run unit/integration suites and analyze failures                  | vitest       |
+| `e2e-runner`              | opus   | Run Playwright, inspect screenshots/traces, iterate on failures   | Playwright   |
 
 <rules_context>
 **Check for project testing rules:**
@@ -100,12 +106,13 @@ If it exists, read it for MUST/SHOULD/NEVER constraints.
 
 **Detect test framework:**
 
-| File | Framework |
-|------|-----------|
-| `vitest.config.*` | vitest |
-| `jest.config.*` | jest |
-| `playwright.config.*` | Playwright |
+| File                   | Framework                      |
+| ---------------------- | ------------------------------ |
+| `vitest.config.*`      | vitest                         |
+| `jest.config.*`        | jest                           |
+| `playwright.config.*`  | Playwright                     |
 | `package.json` scripts | Project-specific test commands |
+
 </rules_context>
 
 ## Process
@@ -121,6 +128,7 @@ AskUserQuestion:
 ```
 
 Then identify:
+
 - The files, routes, packages, components, or commands involved.
 - The planned change or refactor the tests must protect.
 - The public interfaces where behavior is observable.
@@ -130,6 +138,7 @@ Then identify:
 ### Step 2: Establish The Baseline
 
 Gather evidence before writing tests:
+
 - Read the target code and nearby tests.
 - Read recent commits or plans when they explain the intended behavior.
 - Run the smallest existing relevant test command.
@@ -137,6 +146,7 @@ Gather evidence before writing tests:
 - Note current failures separately from new failures.
 
 Do not silently fix production behavior during baseline work. If you discover an obvious bug, capture it as either:
+
 - A current-behavior characterization test if the change is meant to preserve it.
 - A failing desired-behavior test if the user is asking for the bug to be fixed.
 
@@ -148,25 +158,30 @@ List behavior in terms of callers or users, not internal implementation details:
 ## Safety Net: [Target]
 
 ### Planned Change
+
 - [Refactor / bug fix / migration / cleanup]
 
 ### Public Interfaces
+
 - [Function/component/API route/page/CLI command]
 
 ### Current Observable Behavior
-| Behavior | Evidence | Risk |
-|----------|----------|------|
+
+| Behavior   | Evidence                                       | Risk              |
+| ---------- | ---------------------------------------------- | ----------------- |
 | [behavior] | [code path, existing test, manual observation] | [high/medium/low] |
 
 ### Test Slices
-| Slice | Level | Why this level |
-|-------|-------|----------------|
+
+| Slice          | Level                  | Why this level         |
+| -------------- | ---------------------- | ---------------------- |
 | [one behavior] | [unit/integration/e2e] | [fastest useful proof] |
 ```
 
 ### Step 4: Add Tests One Vertical Slice At A Time
 
 For each slice:
+
 1. Choose one public behavior.
 2. Choose the smallest useful test level.
 3. Write the test.
@@ -180,6 +195,7 @@ For each slice:
 ### Step 5: Keep Test Seams Small
 
 If existing code is hard to test:
+
 - Prefer testing through an existing public interface.
 - Extract only the smallest seam needed to observe behavior.
 - Preserve behavior while extracting.
@@ -191,6 +207,7 @@ Mocks are acceptable for true boundaries: network, time, filesystem, database, a
 ### Step 6: Run Scoped Then Broader Verification
 
 Run checks in widening order:
+
 1. The single new test file or test name.
 2. The relevant package or feature test suite.
 3. The project’s normal test command.
@@ -209,12 +226,15 @@ End with a concise report:
 **Reason:** [refactor/bug fix/legacy coverage/launch risk]
 **Tests added:** [files]
 **Behavior characterized:**
+
 - [behavior]
 
 **Verification:**
+
 - [command] — [pass/fail]
 
 **Remaining risk:**
+
 - [untested behavior or reason it was deferred]
 
 **Ready for next change:** [yes/no]
@@ -222,23 +242,23 @@ End with a concise report:
 
 ## Choosing Test Level
 
-| Level | Use when | Avoid when |
-|-------|----------|------------|
-| Unit | Pure functions, deterministic formatting, isolated hooks, small state transitions | Behavior depends on routing, browser, API, auth, or multiple components |
-| Integration | Component + state, API routes, auth states, form submissions, data adapters | A single pure function is enough or only a real browser proves it |
-| E2E | Critical user journeys, auth flows, checkout/signup, routing/browser behavior | The behavior can be proven faster below the browser |
+| Level       | Use when                                                                          | Avoid when                                                              |
+| ----------- | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Unit        | Pure functions, deterministic formatting, isolated hooks, small state transitions | Behavior depends on routing, browser, API, auth, or multiple components |
+| Integration | Component + state, API routes, auth states, form submissions, data adapters       | A single pure function is enough or only a real browser proves it       |
+| E2E         | Critical user journeys, auth flows, checkout/signup, routing/browser behavior     | The behavior can be proven faster below the browser                     |
 
 ### Coverage Guidelines
 
-| Feature Type | First Useful Backfill | Notes |
-|--------------|----------------------|-------|
-| Utility functions | Unit | Cover edge cases and invariants through exported functions |
-| UI components | Integration | Prefer user-visible behavior over snapshots |
-| Forms | Integration | Add E2E only for critical end-to-end flows |
-| API routes | Integration | Exercise request/response behavior and error paths |
-| Auth flows | Integration + selective E2E | Mock provider states below browser; use real/browser flow sparingly |
-| Checkout/payment | Integration + E2E | Mock external provider below browser; keep one critical browser path |
-| LLM integrations | Unit/integration with fixtures | Avoid live calls unless explicitly required |
+| Feature Type      | First Useful Backfill          | Notes                                                                |
+| ----------------- | ------------------------------ | -------------------------------------------------------------------- |
+| Utility functions | Unit                           | Cover edge cases and invariants through exported functions           |
+| UI components     | Integration                    | Prefer user-visible behavior over snapshots                          |
+| Forms             | Integration                    | Add E2E only for critical end-to-end flows                           |
+| API routes        | Integration                    | Exercise request/response behavior and error paths                   |
+| Auth flows        | Integration + selective E2E    | Mock provider states below browser; use real/browser flow sparingly  |
+| Checkout/payment  | Integration + E2E              | Mock external provider below browser; keep one critical browser path |
+| LLM integrations  | Unit/integration with fixtures | Avoid live calls unless explicitly required                          |
 
 ## Auth Testing Quick Reference
 
@@ -247,16 +267,19 @@ Use this only when auth behavior is part of the safety net.
 ### Clerk Testing
 
 **Integration tests:**
+
 - Mock `useAuth` and `useUser` hooks.
 - Test loading, signed-in, and signed-out states.
 - Mock `getToken` for API calls.
 
 **E2E tests:**
+
 - Create `tests/auth.setup.ts` for login flow.
 - Store session in `playwright/.auth/user.json`.
 - Use `storageState` in `playwright.config.ts`.
 
 **Common issues:**
+
 - Trying to mock `ClerkProvider` instead of hooks.
 - Missing the `isLoaded: false` state.
 - Hardcoding tokens instead of using a `getToken` mock.
@@ -264,16 +287,19 @@ Use this only when auth behavior is part of the safety net.
 ### WorkOS Testing
 
 **Integration tests:**
+
 - Mock `getUser` from `@workos-inc/authkit-nextjs`.
 - Test with full user object including `organizationId`, `role`, and `permissions`.
 - Test SSO redirect behavior.
 
 **E2E tests:**
+
 - SSO flows are slow; consider a test bypass endpoint.
 - Create `/api/auth/test-login` for faster auth in test environments only.
 - Store session state after auth.
 
 **Common issues:**
+
 - Missing `organizationId` in org-level features.
 - Not testing permission checks.
 - SSO redirect timing issues without proper waits.
@@ -296,6 +322,7 @@ export async function POST(request: Request) {
 ## Fail-Fast Configuration
 
 Tests must fail fast. Never:
+
 - Use global timeouts of minutes.
 - Add many retries to mask flakiness.
 - Use arbitrary sleeps.
@@ -318,6 +345,7 @@ export default defineConfig({
 
 <success_criteria>
 The safety-net pass is complete when:
+
 - [ ] Target behavior and planned change are clear
 - [ ] Current relevant test baseline is known
 - [ ] Public interfaces are identified
@@ -325,4 +353,4 @@ The safety-net pass is complete when:
 - [ ] New characterization tests were proven sensitive
 - [ ] Scoped and relevant broader checks were run
 - [ ] Remaining untested risks are stated plainly
-</success_criteria>
+      </success_criteria>

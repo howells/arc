@@ -17,19 +17,28 @@ website:
 ---
 
 <tool_restrictions>
+
 # MANDATORY Tool Restrictions
 
 ## REQUIRED TOOLS — use these when specified in the process:
+
 - **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available.
-</tool_restrictions>
+  </tool_restrictions>
 
 <arc_runtime>
 This workflow requires the full Arc bundle, not a prompts-only install.
 
 Paths in this skill use these conventions:
+
 - `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, and `skills/<name>/...` are Arc-owned files at the plugin root.
 - `.ruler/...`, `docs/...`, `src/...`, or the user's own project paths are relative to the user's repository.
-</arc_runtime>
+  </arc_runtime>
+
+<required_reading>
+Read this reference before building the final status:
+
+1. `references/launch-scorecard.md`
+   </required_reading>
 
 # Launch Workflow
 
@@ -44,7 +53,7 @@ Launch is a passive readiness checklist unless the user explicitly asks for acti
 - Do not change DNS, environment variables, provider dashboard settings, auth callbacks, payment webhooks, robots policy, or metadata unless the user explicitly asks.
 - If a local or public URL is already provided, you may record it as evidence. If none is known, mark the public URL as `Missing` or `Needs user`.
 - If rendered verification would be useful, list it as a next action instead of doing it automatically.
-</boundary>
+  </boundary>
 
 Launch should answer:
 
@@ -110,15 +119,19 @@ Use this shape:
 ## Launch Checklist
 
 ### Public URL
+
 - [status] Item — evidence or next step
 
 ### Shareability
+
 - [status] Item — evidence or next step
 
 ### Detected Services
+
 - [status] Item — evidence or next step
 
 ### Before Sharing
+
 - [status] Item — evidence or next step
 ```
 
@@ -172,6 +185,27 @@ Do not run every specialist workflow automatically. Record whether each is done,
 - `/arc:testing`
 - `/arc:audit`
 
+## Launch Scorecard
+
+After building the checklist, score launch readiness using `references/launch-scorecard.md`.
+
+Score only what has concrete evidence from the repository, user-provided facts, or existing reports. Do not give full credit for DNS, dashboards, credentials, social preview validators, production env vars, auth callbacks, payment webhooks, or monitoring settings unless they were verified or explicitly supplied by the user.
+
+Use this shape:
+
+```markdown
+## Launch Scorecard
+
+| Axis              |  Score   | Evidence                                                         |
+| ----------------- | :------: | ---------------------------------------------------------------- |
+| Public URL        |   X/3    | [verified URL/DNS/HTTPS/access-gate evidence or gap]             |
+| Shareability      |   X/3    | [metadata, OG image, favicon, canonical, robots evidence or gap] |
+| Content Readiness |   X/3    | [placeholder/CTA/contact/error-state evidence or gap]            |
+| Detected Services |   X/3    | [auth/payment/email/db/analytics public-setting evidence or gap] |
+| Deeper Checks     |   X/3    | [`/arc:testing` and `/arc:audit` status or deferral]             |
+| **Total**         | **X/15** | **Ready / Blocked / Shareable with caveats**                     |
+```
+
 ## Output
 
 End with:
@@ -180,6 +214,7 @@ End with:
 ## Launch Status
 
 Status: Ready / Blocked / Shareable with caveats
+Readiness Score: X/15
 Public URL: [url or missing]
 Blockers: [short list]
 Deferred: [short list]
@@ -199,10 +234,11 @@ Entry: `/arc:launch — [Ready / Blocked / Shareable with caveats] ([public URL 
 
 <success_criteria>
 Launch is complete when:
+
 - [ ] Project and launch type are detected or clarified
 - [ ] Public URL/domain status is known
 - [ ] Access gates, robots/noindex blockers, share metadata, favicon, and obvious placeholders are checked
 - [ ] Detected services have public-URL settings checked
 - [ ] Deeper checks are recorded as done, missing, or deferred
 - [ ] Final launch status is presented with one next action
-</success_criteria>
+      </success_criteria>

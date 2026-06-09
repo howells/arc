@@ -34,15 +34,15 @@ export function sanitizeContent(content: string): string {
     "commentary",
   ];
   for (const tag of unwrapTags) {
-    result = result.replace(new RegExp(`<${tag}>\\s*`, "gi"), "");
-    result = result.replace(new RegExp(`\\s*</${tag}>`, "gi"), "");
+    result = result.replaceAll(new RegExp(`<${tag}>\\s*`, "gi"), "");
+    result = result.replaceAll(new RegExp(`\\s*</${tag}>`, "gi"), "");
   }
 
   // 3. Remove any remaining self-closing instruction tags
-  result = result.replace(/<[a-z_]+\s*\/>\s*/gi, "");
+  result = result.replaceAll(/<[a-z_]+\s*\/>\s*/gi, "");
 
   // 4. Collapse 3+ consecutive newlines into 2
-  result = result.replace(/\n{3,}/g, "\n\n");
+  result = result.replaceAll(/\n{3,}/g, "\n\n");
 
   return result.trim();
 }

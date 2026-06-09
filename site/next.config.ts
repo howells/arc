@@ -1,5 +1,6 @@
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+
 import type { NextConfig } from "next";
 
 const securityHeaders = [
@@ -41,12 +42,9 @@ const securityHeaders = [
   },
 ];
 
-const SITE_ROOT = dirname(fileURLToPath(import.meta.url));
+const SITE_ROOT = import.meta.dirname;
 
 const nextConfig: NextConfig = {
-  turbopack: {
-    root: resolve(SITE_ROOT, ".."),
-  },
   experimental: {
     optimizeCss: true,
   },
@@ -57,6 +55,9 @@ const nextConfig: NextConfig = {
         headers: securityHeaders,
       },
     ];
+  },
+  turbopack: {
+    root: resolve(SITE_ROOT, ".."),
   },
 };
 
