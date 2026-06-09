@@ -1,0 +1,6 @@
+interface:
+  display_name: "Arc Commit"
+  short_description: "Commit, push, and publish intentionally"
+  default_prompt: "Use $commit to create clean commits, push, and publish changed packages when requested."
+policy:
+  allow_implicit_invocation: false

@@ -4,7 +4,8 @@
     { "path": ".claude-plugin/plugin.json", "field": "version" },
     { "path": ".codex-plugin/plugin.json", "field": "version" },
     { "path": ".claude-plugin/marketplace.json", "field": "metadata.version" },
-    { "path": ".claude-plugin/marketplace.json", "field": "plugins.0.version" }
+    { "path": ".claude-plugin/marketplace.json", "field": "plugins.0.version" },
+    { "path": "plugins/arc/.codex-plugin/plugin.json", "field": "version" }
   ],
   "audit": {
     "exclude": [
@@ -16,7 +17,8 @@
       "dist",
       ".version-bump.json",
       "scripts/bump-version.sh",
-      "site"
+      "site",
+      "plugins/arc"
     ]
   }
 }
