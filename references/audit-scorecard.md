@@ -59,8 +59,8 @@ Is the codebase organized for change?
 
 | Score | Criteria                                                                                                                                        |
 | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0     | God files (>400 LOC components), circular dependencies, no module boundaries, business logic tangled with UI                                    |
-| 1     | Some structure but boundaries are leaky — mixed concerns, server/client boundary hacks (`*-wrapper`, `*-client`), deep coupling between modules |
+| 0     | God files (authored source >1000 LOC, or any file >2000 LOC), god page-clients (thin page/layout passing through to one giant `"use client"` component), circular dependencies, barrel files, cross-workspace app imports, business logic tangled with UI                                    |
+| 1     | Some structure but boundaries are leaky — mixed concerns, server/client boundary hacks (`*-wrapper`, `*-client`, client boundaries hoisted too high), files in the 600–1000 LOC band, deep coupling between modules |
 | 2     | Clear module boundaries and proper server/client split. Some areas of high coupling or unclear ownership remain                                 |
 | 3     | Clean separation of concerns, well-defined interfaces, dependency direction enforced. Adding features doesn't require touching unrelated code   |
 
@@ -71,9 +71,9 @@ Is the code readable, correct, and maintainable?
 | Score | Criteria                                                                                                                |
 | ----- | ----------------------------------------------------------------------------------------------------------------------- |
 | 0     | No type safety or `any` throughout, no linting, dead code everywhere, inconsistent patterns                             |
-| 1     | Types exist but gaps — some `any`/casts, lint warnings, inconsistent naming or patterns, dead exports                   |
-| 2     | Strong types, lint-clean, consistent patterns, minimal dead code. Some complexity hotspots (>250 LOC files)             |
-| 3     | Strict types throughout, zero lint issues, consistent patterns, no dead code, complexity under control across the board |
+| 1     | Types exist but gaps — some `any`/casts, lint warnings, direct `process.env` reads with no typed env strategy, useless barrel files, runtime `import()`, inconsistent naming, dead exports                   |
+| 2     | Strong types, lint-clean, env via a typed strategy, no useless barrels, consistent patterns, minimal dead code. Some files in the 600–1000 LOC band             |
+| 3     | Strict types throughout, zero lint issues, no file over the 600 LOC ceiling, no barrel/dynamic-import smells, consistent patterns, no dead code, complexity under control |
 
 ### 5. Test Health
 
@@ -106,7 +106,7 @@ Is this ready to run and maintain?
 | 0     | Build broken or fragile, type errors in CI, no automated checks, no deployment config                                       |
 | 1     | Build passes but with warnings. Basic CI exists. Deployment config is minimal or manual                                     |
 | 2     | Clean build, types, lint. CI runs tests. Deployment configured and repeatable. Missing monitoring or structured logging     |
-| 3     | Full pipeline — clean build, comprehensive CI, monitoring/alerting, structured logging, deployment with rollback capability |
+| 3     | Full pipeline — clean build, lint + typecheck configured and CI-enforced in every app and package, comprehensive CI, monitoring/alerting, structured logging, deployment with rollback capability |
 
 ---
 
@@ -134,10 +134,14 @@ Can everyone use this?
 
 1. **Criteria-based, not just finding-based.** Each reviewer scores their axis using the criteria table. The score reflects the _overall posture_ of that axis, not just the worst single finding. A single medium-severity issue in an otherwise strong area doesn't force a low score.
 2. **Multi-reviewer axes.** When multiple reviewers map to one axis (Architecture, Code Quality), use the **lower** score.
-3. **Mechanical overrides.** Operations (axis 7) and Test Health (axis 5) incorporate mechanical check results directly:
+3. **Mechanical overrides.** Operations (axis 7), Test Health (axis 5), Architecture (axis 3), and Code Quality (axis 4) incorporate mechanical check results directly:
    - Build broken -> Operations capped at 0
    - Type errors without build failure -> Operations capped at 1
    - No test files found -> Test Health capped at 0
    - Test failures -> Test Health capped at 1
+   - Any authored source file > 2000 LOC -> Architecture capped at 1 (strong signal / presumptive blocker). A genuine reason can be argued in the writeup, but the default verdict is "split it"; this cap does not on its own force the overall rating down.
+   - God page-client (a thin `page.tsx`/`layout.tsx` passing through to a single `"use client"` component over 1000 LOC) -> Architecture capped at 1
+   - Pervasive code-policy violations (useless barrel files, direct `process.env` reads with no typed env strategy, excessive runtime `import()`) -> Code Quality capped at 2. Isolated cases are reported as findings without a cap.
+   - Any app or package without a configured lint **and** typecheck pipeline -> Operations capped at 2 (every workspace must be checkable, not just the repo root).
 4. **Stage context is interpretation, not scoring.** A prototype scoring 10/21 is expected and healthy. A production app scoring 10/21 needs attention. The score is absolute; stage context goes in the written interpretation.
 5. **Bonus axes** are reported as `+N/M` after the core score. Not included in the /21 total to keep the core score comparable across project types.

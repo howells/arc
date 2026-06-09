@@ -6,7 +6,7 @@ Use this reference when judging whether code is becoming harder to change, harde
 
 Do not approve or normalize changes that introduce obvious maintainability debt when a cleaner structure is visible. Treat these as presumptive blockers until justified:
 
-- An authored source-code file crosses 1000 lines.
+- An authored source-code file crosses the 600-line ceiling (presumptive god file; severe past 1000 lines; an automatic failure past 2000 lines).
 - A change adds ad-hoc branches or feature checks into unrelated flows.
 - A feature leaks implementation logic into a shared or canonical layer.
 - A new abstraction hides little and forces callers to understand the same complexity.
@@ -14,7 +14,7 @@ Do not approve or normalize changes that introduce obvious maintainability debt 
 - The implementation duplicates an existing helper, component, schema, query, formatter, or package concept.
 - Orchestration becomes more sequential, less atomic, or more stateful without a clear reason.
 
-Generated, vendored, data-only, snapshot, lock, plan, and documentation files are exempt from the 1000-line source-code rule. Dense source-code files may be valid, but they must have one coherent responsibility and a strong reason to stay whole.
+Generated, vendored, data-only, snapshot, lock, plan, and documentation files are exempt from this size ladder. Dense source-code files may be valid, but they must have one coherent responsibility and a strong reason to stay whole.
 
 ## Core Questions
 
@@ -35,6 +35,7 @@ Ask these questions before accepting the current structure:
 Use `god file` as the umbrella term for oversized or tangled source files. Classify confirmed cases precisely:
 
 - `god-component` - a React component mixes rendering, data shaping, effects, mutations, validation, routing, and subview control.
+- `god-page-client` - a Next.js page or layout is a thin pass-through to one oversized `"use client"` component, hoisting the route's interactivity to the top instead of composing client leaves into a server page.
 - `god-script` - a script mixes argument parsing, configuration, I/O, domain transformation, and output formatting.
 - `god-module` - a non-UI module owns multiple unrelated responsibilities or change reasons.
 - `duplication` - repeated logic indicates a shared concept should have one implementation.

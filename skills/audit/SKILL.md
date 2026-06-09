@@ -275,20 +275,96 @@ grep -rl --include='*.ts' --include='*.tsx' --include='*.js' --include='*.jsx' \
   '^["'\"'\"']use client["'\"'\"'];\\?$' ${scope:-.} 2>/dev/null
 ```
 
-Interpretation guidance:
+Interpretation guidance — canonical file-size ladder (600-line ceiling):
 
-- Treat files **>250 lines** as audit hotspots. Treat files **>400 lines** as severe complexity hotspots, especially when they are React components, pages, layouts, or route handlers.
+- **≤ 300 LOC** — normal.
+- **300–600 LOC** — hotspot. Read it and confirm it has one coherent responsibility.
+- **600+ LOC** — **exceeds the enforced line-count ceiling.** Presumptive god file unless generated, vendored, or data-only.
+- **1000+ LOC** — severe. Near-certain god file; report as Must-Fix.
+- **2000+ LOC** — **automatic failure (strong signal).** Report as a blocker and let the scorecard cap apply. A genuine reason can be argued in the writeup, but the default verdict is "this must be split."
+
+Counting note: this ladder uses **raw `wc -l`** (blank lines included) on purpose — a giant file is giant regardless of what's on each line, so the audit is intentionally stricter than a line-count rule that skips blank and comment lines.
+
 - `*-client.*` and `*-wrapper.*` are explicit red flags. They often mean "I needed a client boundary, so I wrapped the real component instead of pushing interactivity down."
 - `*-content.*`, `*-shell.*`, and `*-ui.*` are weaker signals, but worth interrogating when they are also long or marked `"use client"`.
 - When a file is both **long** and suspiciously named, elevate it as a probable god-component / server-client-boundary smell.
 
 Store a **structural hotspot manifest** with:
 
-- Long files over 250 LOC
-- Severe long files over 400 LOC
+- Long files over 600 LOC (exceeds enforced ceiling)
+- Severe long files over 1000 LOC
+- Automatic-failure files over 2000 LOC
 - Suspicious boundary files matching `*-client`, `*-wrapper`, `*-content`, `*-shell`, `*-ui`
 - Overlap set: suspiciously named files that are also long
 - `"use client"` overlap: suspiciously named files that also opt into a client boundary
+
+**Assess page & component shape (Next.js / React projects):**
+
+The point of this pass is to confirm you can see the **shape of a page** and the **shape of a component** from the code — its composition tree — rather than one opaque god component that swallows the whole route. Client components should be composed as *leaves into* pages, not hoisted into a single massive client boundary at the top.
+
+The anti-pattern: a `page.tsx` (or `layout.tsx`) hits the "Server Components can't use hooks/state" wall and, instead of pushing interactivity *down* to leaf client components, dumps the entire route into one giant `"use client"` component — `MassivePageClient`, `GeneralLayoutShell`, `PageContent`, etc. — leaving the page a one-line pass-through that fetches and composes nothing on the server. This is not about banning client components; it is about whether the page's shape is composed and legible, or hidden inside one god client.
+
+```bash
+# Next.js pages/layouts that are a one-line pass-through to a single imported component
+rg -n -U --glob 'app/**/{page,layout}.tsx' \
+  'export default (async )?function \w+\([^)]*\)\s*\{\s*return\s*<[A-Z]\w+\s*/?>;?\s*\}' \
+  ${scope:-.} 2>/dev/null
+
+# Generically-named would-be god clients (then resolve, confirm "use client", and wc -l)
+find ${scope:-.} -type f \( -name '*.tsx' -o -name '*.jsx' \) \
+  | grep -viE 'node_modules' \
+  | grep -iE '(page-?client|layout-?shell|page-?content|.*-client|.*-shell)\.(tsx|jsx)$'
+```
+
+For each thin page/layout, resolve the single returned component, confirm it is a `"use client"` module, then judge by composition **and** the file-size ladder above:
+
+| Situation                                                                              | Verdict       |
+| -------------------------------------------------------------------------------------- | ------------- |
+| Page composes several components / fetches server-side; client parts are leaves        | Healthy — shape is visible |
+| Thin page → single client component, small                                             | Low — note it; often a legitimately interactive route |
+| Thin page → single client component **600+ LOC**                                       | **High** — route interactivity hoisted to one boundary instead of composed down |
+| Thin page → single client component **1000+ LOC**, and/or named `*Client`/`*Shell`/`*Content` | **Must-Fix** — god page-client; the server boundary was pushed to the top to dodge RSC rules |
+
+Store these as **page-shape findings** in the structural hotspot manifest. Map to `architecture-engineer` and `lee-nextjs-engineer`. The remedy is always the same: move `"use client"` down to the smallest interactive leaves and let the page fetch and compose on the server.
+
+**Run code-policy scan (JS/TS projects):**
+
+These structural rules surface as findings, framed by **intent**, not raw counts:
+
+- **Useless barrels** — re-export-only `index.{ts,tsx}` files that add an indirection layer without being a real public API surface. A package's single public entrypoint barrel is fine; a barrel per folder that just re-exports its siblings is the smell.
+- **No env typing strategy** — direct `process.env` reads scattered across app code with no typed env contract (Envy or equivalent). The finding is the *missing strategy*, not each read; if a typed env module exists and reads go through it, this is clean.
+- **Too many runtime dynamic imports** — `import()` beyond a couple of legitimate lazy-load sites. A smell when pervasive, not zero-tolerance.
+- **Generic component suffixes** — `Wrapper`/`Container`/`Manager`/`Component` component names that hide responsibility (the `*Client`/`*Shell` cases are handled by the page-shape pass above).
+- **Function-level limits** — surface functions over ~120 lines, over ~45 statements, or cyclomatic complexity over ~15.
+
+```bash
+# Candidate useless barrels: index files that are ONLY re-exports (then confirm they aren't a real public entrypoint)
+for f in $(rg -l --glob '**/index.{ts,tsx,js,jsx}' '.' ${scope:-.} 2>/dev/null); do
+  total=$(grep -cve '^\s*$' "$f"); reexp=$(grep -cE '^\s*export (\*|\{[^}]*\}) from' "$f")
+  [ "$total" -gt 0 ] && [ "$reexp" -eq "$total" ] && echo "$f"
+done
+
+# process.env reads outside an env schema/typed env module
+rg -n --glob '*.{ts,tsx,js,jsx}' 'process\.env' ${scope:-.} 2>/dev/null \
+  | grep -vE 'env/schema|env\.ts|\.d\.ts' | head -40
+
+# runtime dynamic imports
+rg -n --glob '*.{ts,tsx,js,jsx}' 'import\(' ${scope:-.} 2>/dev/null | head -40
+```
+
+Store a **code-policy manifest**: useless barrels, env-typing-strategy status, dynamic-import count, generic-suffix components, function-limit violations. Map to `architecture-engineer` and `senior-engineer`. These feed the Code Quality cap rule (pervasive → cap at 2); isolated cases are reported without a cap.
+
+**Run fail-fast determinism scan (JS/TS projects):**
+
+Hidden fallback behavior makes a codebase non-deterministic and hard to reason about. This pass surfaces fallbacks that should instead be an explicit contract, a validation error, or a deletion.
+
+```bash
+rg -n --glob '*.{ts,tsx,js,jsx}' \
+  'process\.env\.\w+\s*(\|\||\?\?)|catch\s*\([^)]*\)\s*\{\s*\}|//\s*(legacy|deprecated|backwards.?compat|fallback)' \
+  ${scope:-.} 2>/dev/null | head -60
+```
+
+Classify each candidate: `remove` (dead compat, legacy aliases, fallback branches with no live caller), `require` (missing config/input — make it a validation error or required input), `validate` (boundary input that must reject invalid states clearly), `keep` (documented product behavior, real external API compatibility, or an owned migration with a removal date). Store a **determinism manifest**: env-default fallbacks, empty/swallowing catch blocks, legacy/compat aliases, optional-dependency silent degradation. Map to `senior-engineer` and `daniel-product-engineer`; feeds Resilience and Code Quality. Report remaining fallbacks explicitly — do not leave them invisible.
 
 **Collect complexity hotspot signals (source projects only):**
 
@@ -412,7 +488,11 @@ Security gate: [full reviewer / lightweight only] ([reason])
 Has database: [yes/no]
 Has tests: [yes/no]
 Dead code: [X unused files, Y unused exports, Z unused deps] or "N/A (not JS/TS)"
-Structural hotspots: [X long files >250 LOC, Y severe >400 LOC, Z suspicious boundary files, W suspicious+long overlap]
+Structural hotspots: [X long files >600 LOC, Y severe >1000 LOC, Z auto-fail >2000 LOC, V suspicious boundary files, W suspicious+long overlap]
+Page shape: [X thin page/layout pass-throughs, Y to god clients >600 LOC, Z to god clients >1000 LOC] or "N/A (not React/Next)"
+Code policy: [X useless barrels, env-typing: yes/no, Y dynamic imports, Z generic-suffix components] or "N/A (not JS/TS)"
+Determinism: [X env-default fallbacks, Y swallowed catches, Z legacy/compat aliases] or "N/A (not JS/TS)"
+Pipeline coverage: [X/Y workspaces with lint+typecheck configured]
 Complexity signals: [X repeated scans, Y sorting/grouping, Z data-access/render-path candidates] or "N/A"
 React audit signals: [X state/effect, Y boundary, Z data-client, W security/frontend/perf hotspots] or "N/A (not React)"
 Codebase map: [available / unavailable]
@@ -431,6 +511,25 @@ Run these before any reviewer agents so obvious breakage gets caught cheaply.
 - Detect typechecker from `tsconfig.json`
 - Detect linter from Biome / ESLint config
 - Detect tests from Vitest / Jest config
+
+### Pipeline Coverage (every app & package)
+
+Linting and typechecking must be configured in **every** app and package — not just at the repo root. A monorepo where the root has lint/typecheck scripts but individual `apps/*` / `packages/*` do not is a real gap: those workspaces ship unchecked.
+
+For the root and every workspace with a `package.json`:
+
+```bash
+# Enumerate workspaces and check for lint + typecheck wiring
+for pkg in $(find . apps packages -maxdepth 3 -name package.json 2>/dev/null | grep -vE 'node_modules'); do
+  dir=$(dirname "$pkg")
+  grep -qE '"lint"\s*:' "$pkg" && lint=yes || lint=no
+  grep -qE '"(typecheck|type-check|tsc)"\s*:' "$pkg" && tc=yes || tc=no
+  test -f "$dir/tsconfig.json" && tsc=yes || tsc=no
+  echo "$dir  lint=$lint  typecheck=$tc  tsconfig=$tsc"
+done
+```
+
+Flag any app/package missing a `lint` script, a `typecheck` script, or (for TS workspaces) a `tsconfig.json`. Then confirm these actually run in CI (`.github/workflows/*`, or the Turborepo `turbo.json` pipeline) — a script that exists but is never executed in CI is a soft gap. Record per-workspace coverage in the mechanical summary and map gaps to **Operations** (see the Operations cap rule in the scorecard).
 
 ### Check Order
 
@@ -556,11 +655,13 @@ Include:
 
 ```
 Structural hotspots:
-- Long files >250 LOC: [list]
-- Severe long files >400 LOC: [list]
+- Long files >600 LOC: [list]
+- Severe long files >1000 LOC: [list]
+- Auto-fail files >2000 LOC: [list]
 - Suspicious boundary files: [list]
 - Suspicious + long overlap: [list]
 - Suspicious + "use client" overlap: [list]
+- Page-shape findings (thin page/layout → god client): [list]
 ```
 
 Reviewer-specific emphasis:
@@ -591,7 +692,7 @@ The map is not an automatic finding source. It is a navigation aid.
 
 **Include strict maintainability guidance in architecture, senior, and product reviewer prompts.**
 
-Pass `references/maintainability-review.md` to `architecture-engineer`, `senior-engineer`, and `daniel-product-engineer`. They should apply it as a demanding code-health lens: authored source-code files crossing 1000 lines are presumptive blockers unless generated, vendored, data-only, or structurally justified; god files, ad-hoc branching, weak abstractions, misplaced ownership, and avoidable duplication should be reported when evidence-backed.
+Pass `references/maintainability-review.md` to `architecture-engineer`, `senior-engineer`, and `daniel-product-engineer`. They should apply it as a demanding code-health lens: authored source-code files crossing the 600-line ceiling are presumptive god files (severe past 1000, automatic failure past 2000) unless generated, vendored, data-only, or structurally justified; god files, god page-clients, ad-hoc branching, weak abstractions, misplaced ownership, and avoidable duplication should be reported when evidence-backed.
 
 **Include complexity optimization guidance in performance reviewer prompts.**
 
@@ -798,10 +899,12 @@ File: `docs/audits/YYYY-MM-DD-[scope-slug]-audit.md`
 
 ## Structural Hotspots
 
-- **Long files >250 LOC:** [count]
-- **Severe long files >400 LOC:** [count]
+- **Long files >600 LOC:** [count]
+- **Severe long files >1000 LOC:** [count]
+- **Auto-fail files >2000 LOC:** [count]
 - **Suspicious boundary files:** [count]
 - **Suspicious + long overlap:** [count]
+- **Page-shape findings (thin page/layout → god client):** [count]
 
 [Optional short table of the top hotspots with file path, LOC, and why they were flagged]
 

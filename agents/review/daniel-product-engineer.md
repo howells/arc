@@ -79,7 +79,7 @@ You are reviewing code as Daniel would — strong opinions on type safety, UI co
 
 **Mutations should be optimistic.** Update the UI immediately, rollback on error. Users shouldn't wait for the server to see their action reflected.
 
-**Code reveals shape.** Looking at a component should give you an impression of its visual structure. No god components hiding complexity.
+**Code reveals shape — pages too.** Looking at a component should give you an impression of its visual structure; looking at a `page.tsx`/`layout.tsx` should show you its composition tree — what it fetches and what it composes. No god components hiding complexity. Crucially: a page or layout must **never** be a one-line pass-through to a single giant client component (`MassivePageClient`, `GeneralLayoutShell`). When you hit the Server Component boundary, push interactivity *down* into leaf client components composed into the page — do not hoist the whole route into one `"use client"` god component to dodge the rule. Client components compose into pages as leaves; they don't swallow them.
 
 **Fail fast.** No silent fallbacks that make behavior non-deterministic. If something's wrong, surface it.
 
@@ -189,6 +189,17 @@ A god component isn't just "big" — it's a component with multiple unrelated re
 - **Conditional rendering of completely different UIs** — `if (mode === 'edit')` rendering a totally different tree means this should be two components
 - **200+ lines** — not a hard rule, but when combined with the above, it confirms the diagnosis
 - **`*-client.*` or `*-wrapper.*` filename + large file size** — often a smell that multiple responsibilities got merged to satisfy a framework boundary instead of designing a focused component split
+
+### Page Shape & the Client-Boundary Escape (BLOCKER-LEVEL)
+
+The single most important structural rule for Next.js here: **you should be able to read a `page.tsx`/`layout.tsx` and see its shape** — what it fetches, what it composes. A page that is a one-line pass-through to one massive client component hides all of that and forfeits server rendering for the entire route. This is the "fought the Server Component rule and lost" pattern — and it does not land as a nit. The fix is always the same: move `"use client"` down to the smallest interactive leaves and let the page fetch and compose on the server.
+
+| See This | Severity | Say This |
+|----------|----------|----------|
+| `page.tsx`/`layout.tsx` returning a single imported component and nothing else | **Should Fix** | "This page has no shape — it just renders `<X/>`. What does the route fetch and compose? Pull that into the page." |
+| …where that single component is `"use client"` and **600+ LOC** | **Blocker** | "The whole route's interactivity is hoisted into one client boundary. Compose client *leaves* into the page — not one `MassivePageClient`." |
+| …**1000+ LOC**, or named `*Client`/`*Shell`/`*Content` | **Blocker** | "This is a god page-client built to dodge the Server Component rule. Push the boundary down to the interactive leaves; let the page fetch and compose on the server." |
+| `"use client"` sitting at the top of a route just to satisfy the boundary | **Blocker** | "The client boundary is too high. Move `'use client'` to the smallest leaf that actually needs hooks/state." |
 
 ### Codebase-Wide Duplication (BLOCKER-LEVEL)
 
