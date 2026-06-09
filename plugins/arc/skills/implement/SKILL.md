@@ -970,13 +970,6 @@ git branch -d feature/<feature-name>
 **Don't guess. Ask.**
 </when_to_stop>
 
-<arc_log>
-**After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
-
-Entry: `/arc:implement — [Feature name] ([X/Y] tasks complete)`
-</arc_log>
-
 <success_criteria>
 Execution is complete when:
 

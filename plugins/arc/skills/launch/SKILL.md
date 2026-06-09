@@ -225,13 +225,6 @@ If follow-up work is needed, offer to create tasks or start the highest-priority
 
 Do not end with broad reassurance such as "everything looks good" unless every required checklist item has concrete evidence. Prefer `Shareable with caveats` when some checks are inferred, unrun, or require external dashboards.
 
-<arc_log>
-**After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
-
-Entry: `/arc:launch — [Ready / Blocked / Shareable with caveats] ([public URL or missing])`
-</arc_log>
-
 <success_criteria>
 Launch is complete when:
 

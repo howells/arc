@@ -1020,12 +1020,6 @@ Do not auto-commit the plan unless the user explicitly asks for a commit.
 
 </process>
 
-<arc_log>
-**After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
-Entry: `/arc:audit — [scope] ([N] critical, [N] high)`
-</arc_log>
-
 <success_criteria>
 Audit is complete when:
 

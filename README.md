@@ -74,7 +74,13 @@ Alternatively, a clone-and-symlink installer links Arc skills into `~/.agents/sk
 
 ### Cursor
 
-Cursor 2.4+ discovers Arc's `SKILL.md` workflows from the shared skills directories it reads — `~/.agents/skills`, plus `~/.claude/skills` and `~/.codex/skills` as compatibility paths. Installing Arc for Claude Code or Codex therefore makes it available in Cursor with no extra step; invoke with `/<skill-name>`. Cursor does not load Arc's bundled `agents/`/`references/`, so full-runtime workflows run best in Claude Code or Codex.
+Arc ships a `.cursor-plugin/plugin.json` manifest (Cursor 2.5+). Install it as a local plugin so its skills and rules stay isolated from your other skills:
+
+```bash
+git clone https://github.com/howells/arc.git ~/.cursor/plugins/local/arc
+```
+
+Or, on Teams/Enterprise, import `github.com/howells/arc` as a team-marketplace plugin from the Cursor dashboard. Invoke workflows with `/<skill-name>`. Cursor reads Arc's `SKILL.md` workflows and `rules/`; the heaviest agent/reference-backed workflows run best in Claude Code or Codex.
 
 ### Prompt-Only Install
 

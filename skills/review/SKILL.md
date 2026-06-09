@@ -311,13 +311,6 @@ If reviewed an **implementation plan**:
 
 </process>
 
-<arc_log>
-**After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
-
-Entry: `/arc:review — [Plan name] reviewed`
-</arc_log>
-
 <success_criteria>
 **Plan review** is complete when:
 

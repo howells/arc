@@ -180,13 +180,6 @@ git add docs/vision.md
 git commit -m "docs: update project vision"
 ```
 
-<arc_log>
-**After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
-
-Entry: `/arc:vision — [Created / Reviewed / Revised] vision document`
-</arc_log>
-
 ## Interop
 
 - `/arc:ideate` reads vision for product and scope context.

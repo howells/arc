@@ -239,13 +239,6 @@ Tell the user:
 - Push status (if pushed), or remind them to push when ready
 - Publish status for each package (if publish was requested): published, skipped, or blocked
 
-<arc_log>
-**After completing this skill, append to the activity log.**
-See: `references/arc-log.md`
-
-Entry: `/arc:commit — [N] commits ([summary])`
-</arc_log>
-
 ## Failure Scenarios
 
 If you cannot fix an error properly:
