@@ -12,7 +12,7 @@ The full arc from idea to shipped code.
 Arc is a self-contained software development lifecycle for coding agents. It helps move work from early project clarity through ideation, implementation, review, testing, launch readiness, and clean commits.
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code): install as a plugin and run `/arc:*` commands.
-- [Codex](https://developers.openai.com/codex): install as a native plugin and invoke workflows with `$<skill-name>`.
+- [Codex](https://developers.openai.com/codex): install with the full-runtime installer and invoke workflows with `$<skill-name>`.
 - [Cursor](https://cursor.com/docs/skills): Arc's `SKILL.md` workflows are discovered from the shared skills directory; invoke with `/<skill-name>`.
 
 Arc's canonical product definition and operating boundary live in [CONTEXT.md](./CONTEXT.md). This README is the user-facing guide.
@@ -61,18 +61,15 @@ claude plugins install arc@howells
 
 This installs the full Arc plugin: skills, slash commands, agents, references, disciplines, templates, scripts, and rules.
 
-### Codex
-
-Install as a native Codex plugin (Codex CLI 0.117+):
+Full-runtime install:
 
 ```bash
-codex plugin marketplace add howells/arc
-codex plugin add arc@howells
+curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh | bash -s -- --auto-update --interval-hours 6
 ```
 
-This installs the full Arc plugin — skills, agents, references, disciplines, templates, scripts, and rules — into Codex's plugin cache. Update with `codex plugin marketplace upgrade`. Invoke workflows with `$<skill-name>`.
+This clones Arc to `~/.codex/arc` and links its skills into `~/.agents/skills` (Codex's user skills directory), with a `~/.codex/skills` mirror for older builds. It includes Arc's bundled agents, references, disciplines, templates, scripts, and rules. Invoke workflows with `$<skill-name>`; update via the scheduled job or `~/.codex/arc/.codex/update.sh`. Details: [.codex/INSTALL.md](./.codex/INSTALL.md).
 
-For older Codex builds without `codex plugin`, a legacy clone-and-symlink installer is documented in [.codex/INSTALL.md](./.codex/INSTALL.md); it links Arc skills into `~/.agents/skills` (Codex's user skills directory).
+Native `codex plugin` install is experimental. Arc ships `.claude-plugin/marketplace.json` and `.codex-plugin/plugin.json`, and `codex plugin marketplace add howells/arc` registers the source, but `codex plugin add` support for this shared marketplace format is still landing in Codex. Use the installer above until it stabilizes.
 
 ### Cursor
 

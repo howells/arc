@@ -1,41 +1,28 @@
 # Installing Arc for Codex
 
-Codex installs Arc as a native plugin from Arc's marketplace manifest
-(`.claude-plugin/marketplace.json`, the shared marketplace format Codex and Claude Code
-both read). This is the recommended path. A legacy clone-and-symlink installer remains
-available for older Codex builds.
+The supported install is the full-runtime installer below. It clones Arc and links its
+skills into the directory Codex reads user-scope skills from (`~/.agents/skills`), so
+every workflow has Arc's bundled `agents/`, `references/`, `disciplines/`, `templates/`,
+`scripts/`, and `rules/`. Native `codex plugin` install is experimental (see the end).
 
 ## Prerequisites
 
-- Codex (CLI, IDE, or app) recent enough to include `codex plugin` (Codex CLI 0.117+)
 - Git
+- Codex (CLI, IDE, or app)
+- macOS/Linux for the one-command installer below
 
-## Native Plugin Install (Recommended)
+## Quick Install (Recommended)
 
-```bash
-codex plugin marketplace add howells/arc
-codex plugin add arc@howells
-```
-
-`marketplace add` registers Arc's marketplace snapshot; `plugin add` installs the Arc
-plugin into `~/.codex/plugins/cache/...`. Because the plugin ships Arc's bundled
-`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, and `rules/`, every
-full-runtime workflow works without special-case copies.
-
-Manage and update:
-
-```bash
-codex plugin list                    # what's available / installed
-codex plugin marketplace upgrade     # refresh the marketplace snapshot
-codex plugin remove arc              # uninstall
-```
-
-Restart Codex if skills do not appear immediately.
-
-## Legacy Installer (older Codex without `codex plugin`)
+Install Arc and enable scheduled auto-updates every 6 hours:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh | bash -s -- --auto-update --interval-hours 6
+```
+
+Install once without auto-update:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh | bash
 ```
 
 What this does:
@@ -48,21 +35,29 @@ What this does:
 4. Configures scheduled updates (launchd on macOS, cron on Linux) when `--auto-update`
    is passed.
 
-Prefer the native plugin install above when your Codex build supports it.
+Because the skills are discovered from the cloned checkout, full-runtime workflows that
+load Arc-owned `agents/`, `references/`, `disciplines/`, `templates/`, and `scripts/`
+work without special-case copies.
 
 A prompts-only channel such as `npx skills add howells/arc` copies `SKILL.md` files only.
-That is fine for lightweight routing, but it omits Arc's bundled `agents/`, `references/`,
-`disciplines/`, `templates/`, `scripts/`, and `rules/`, so full-runtime workflows like
-`audit`, `review`, `implement`, `refactor`, and `testing` will not have their supporting
-material.
+That is fine for lightweight routing, but it omits Arc's bundled material, so workflows
+like `audit`, `review`, `implement`, `refactor`, and `testing` will not have their
+supporting files.
 
-## Verify
+Restart Codex if skills do not appear immediately.
+
+## Manual Install
 
 ```bash
-codex plugin list
+git clone https://github.com/howells/arc.git ~/.codex/arc
+mkdir -p ~/.agents/skills ~/.codex/skills
+for skill in ~/.codex/arc/.agents/skills/*; do
+  ln -s "$skill" ~/.agents/skills/$(basename "$skill")   # Codex user scope
+  ln -s "$skill" ~/.codex/skills/$(basename "$skill")    # compatibility mirror
+done
 ```
 
-For a legacy install, confirm the user-scope symlinks instead:
+## Verify
 
 ```bash
 ls -la ~/.agents/skills/{audit,ideate,implement}
@@ -82,19 +77,31 @@ Arc also includes a lightweight bootstrap skill, `using-arc`, the always-on cont
 plane. It keeps startup context small and routes into heavier Arc skills only when they
 clearly apply.
 
-## Uninstalling
-
-Native plugin:
+## Updating
 
 ```bash
-codex plugin remove arc
-codex plugin marketplace remove howells
+~/.codex/arc/.codex/update.sh                                  # manual
+~/.codex/arc/.codex/enable-auto-update.sh --interval-hours 6   # enable/adjust schedule
 ```
 
-Legacy installer:
+## Uninstalling
 
 ```bash
 find ~/.agents/skills -maxdepth 1 -type l -lname "$HOME/.codex/arc/.agents/skills/*" -delete
 find ~/.codex/skills  -maxdepth 1 -type l -lname "$HOME/.codex/arc/.agents/skills/*" -delete
 rm -rf ~/.codex/arc
 ```
+
+## Native Plugin Install (Experimental)
+
+Arc ships a `.claude-plugin/marketplace.json` (the marketplace format shared with Claude
+Code) and a `.codex-plugin/plugin.json` manifest. On current Codex builds:
+
+```bash
+codex plugin marketplace add howells/arc
+```
+
+registers the source, but `codex plugin add arc@howells` does not yet resolve the plugin,
+because Codex's native marketplace discovery currently expects an `.agents/plugins/`
+layout rather than the shared `.claude-plugin/marketplace.json`. Until that path
+stabilizes, use the full-runtime installer above.
