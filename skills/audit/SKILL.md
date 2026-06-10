@@ -300,9 +300,9 @@ Store a **structural hotspot manifest** with:
 
 **Assess page & component shape (Next.js / React projects):**
 
-The point of this pass is to confirm you can see the **shape of a page** and the **shape of a component** from the code — its composition tree — rather than one opaque god component that swallows the whole route. Client components should be composed as *leaves into* pages, not hoisted into a single massive client boundary at the top.
+The point of this pass is to confirm you can see the **shape of a page** and the **shape of a component** from the code — its composition tree — rather than one opaque god component that swallows the whole route. Client components should be composed as _leaves into_ pages, not hoisted into a single massive client boundary at the top.
 
-The anti-pattern: a `page.tsx` (or `layout.tsx`) hits the "Server Components can't use hooks/state" wall and, instead of pushing interactivity *down* to leaf client components, dumps the entire route into one giant `"use client"` component — `MassivePageClient`, `GeneralLayoutShell`, `PageContent`, etc. — leaving the page a one-line pass-through that fetches and composes nothing on the server. This is not about banning client components; it is about whether the page's shape is composed and legible, or hidden inside one god client.
+The anti-pattern: a `page.tsx` (or `layout.tsx`) hits the "Server Components can't use hooks/state" wall and, instead of pushing interactivity _down_ to leaf client components, dumps the entire route into one giant `"use client"` component — `MassivePageClient`, `GeneralLayoutShell`, `PageContent`, etc. — leaving the page a one-line pass-through that fetches and composes nothing on the server. This is not about banning client components; it is about whether the page's shape is composed and legible, or hidden inside one god client.
 
 ```bash
 # Next.js pages/layouts that are a one-line pass-through to a single imported component
@@ -318,11 +318,11 @@ find ${scope:-.} -type f \( -name '*.tsx' -o -name '*.jsx' \) \
 
 For each thin page/layout, resolve the single returned component, confirm it is a `"use client"` module, then judge by composition **and** the file-size ladder above:
 
-| Situation                                                                              | Verdict       |
-| -------------------------------------------------------------------------------------- | ------------- |
-| Page composes several components / fetches server-side; client parts are leaves        | Healthy — shape is visible |
-| Thin page → single client component, small                                             | Low — note it; often a legitimately interactive route |
-| Thin page → single client component **600+ LOC**                                       | **High** — route interactivity hoisted to one boundary instead of composed down |
+| Situation                                                                                     | Verdict                                                                                      |
+| --------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Page composes several components / fetches server-side; client parts are leaves               | Healthy — shape is visible                                                                   |
+| Thin page → single client component, small                                                    | Low — note it; often a legitimately interactive route                                        |
+| Thin page → single client component **600+ LOC**                                              | **High** — route interactivity hoisted to one boundary instead of composed down              |
 | Thin page → single client component **1000+ LOC**, and/or named `*Client`/`*Shell`/`*Content` | **Must-Fix** — god page-client; the server boundary was pushed to the top to dodge RSC rules |
 
 Store these as **page-shape findings** in the structural hotspot manifest. Map to `architecture-engineer` and `lee-nextjs-engineer`. The remedy is always the same: move `"use client"` down to the smallest interactive leaves and let the page fetch and compose on the server.
@@ -332,7 +332,7 @@ Store these as **page-shape findings** in the structural hotspot manifest. Map t
 These structural rules surface as findings, framed by **intent**, not raw counts:
 
 - **Useless barrels** — re-export-only `index.{ts,tsx}` files that add an indirection layer without being a real public API surface. A package's single public entrypoint barrel is fine; a barrel per folder that just re-exports its siblings is the smell.
-- **No env typing strategy** — direct `process.env` reads scattered across app code with no typed env contract (Envy or equivalent). The finding is the *missing strategy*, not each read; if a typed env module exists and reads go through it, this is clean.
+- **No env typing strategy** — direct `process.env` reads scattered across app code with no typed env contract (Envy or equivalent). The finding is the _missing strategy_, not each read; if a typed env module exists and reads go through it, this is clean.
 - **Too many runtime dynamic imports** — `import()` beyond a couple of legitimate lazy-load sites. A smell when pervasive, not zero-tolerance.
 - **Generic component suffixes** — `Wrapper`/`Container`/`Manager`/`Component` component names that hide responsibility (the `*Client`/`*Shell` cases are handled by the page-shape pass above).
 - **Function-level limits** — surface functions over ~120 lines, over ~45 statements, or cyclomatic complexity over ~15.

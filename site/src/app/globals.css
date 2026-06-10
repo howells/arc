@@ -2,7 +2,7 @@
 
 /* Tailwind v4 source scanning */
 @source "../**/*.{ts,tsx,mdx}";
-@source "../../node_modules/@howells/stacksheet/dist/**/*.js";
+@source "../../node_modules/@patternmode/stacksheet/dist/**/*.js";
 
 @layer base {
   :root {

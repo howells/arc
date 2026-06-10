@@ -1,6 +1,6 @@
 "use client";
 
-import { createStacksheet, useSheetPanel } from "@howells/stacksheet";
+import { createStacksheet, useSheetPanel } from "@patternmode/stacksheet";
 import { ArrowRight, ChevronLeft, X } from "lucide-react";
 import type { ReactNode } from "react";
 import { useEffect } from "react";
