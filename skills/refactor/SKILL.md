@@ -109,6 +109,15 @@ A **shallow module** has an interface nearly as complex as its implementation. S
 
 Apply the **deletion test** to suspected shallow modules: if deleting the module makes complexity vanish, it was pass-through indirection; if deleting it spreads complexity across callers, it was earning its keep.
 
+## Restraint
+
+This workflow adds structure — extracting, deepening, creating packages. Its native failure mode is proposing structure for its own sake. Every candidate and every interface option must clear these gates before you propose it:
+
+- **Does the new structure earn its name?** Extracting a helper or module only pays off if it gives a concept a name a reader will reach for. An extraction that just relocates code without making either side easier to understand is churn — drop it.
+- **Fewer files and fewer lines are not the goal; faster comprehension is.** If a proposed split would be harder to follow than the original, or would scatter one concept across more files, it is over-decomposition. Reject it the same way you'd reject a god file.
+- **Verify intent before proposing removal or consolidation (Chesterton's Fence).** If a candidate hinges on deleting or merging existing code, check why it exists first — `git blame`, the originating ADR, or the test that pins it. If you can't establish the original intent, mark the candidate low-confidence rather than guessing.
+- **Never refactor away a safety boundary.** Input validation at trust boundaries, error handling that prevents data loss, authorization/escaping/sanitization, and accessibility affordances are not "duplication" or "shallow indirection" to be consolidated away. Preserve them even when a restructuring would otherwise be cleaner.
+
 ## Process
 
 ### Step 1 — Load domain and decision context
@@ -164,6 +173,8 @@ Do NOT follow rigid heuristics. Explore organically and note where you experienc
 - Where is a coherent concern spread across an app and ready to become a discrete package/module?
 - Where are god components, god scripts, oversized modules, or mixed responsibilities making changes risky?
 - Where is duplication a sign that a shared concept needs one implementation?
+- Where does code reimplement something that already exists — an existing util, a shared helper, or a language/runtime primitive — instead of calling it?
+- Where does a single unit mix levels of abstraction, interleaving high-level orchestration with low-level detail so the reader has to shift altitude mid-read?
 - Where do repeated scans, nested lookups, sorting inside loops, rendering churn, or N+1 calls indicate a better data structure or boundary?
 - Where are there deep relative imports (5+ levels) indicating boundary violations?
 - Which parts of the codebase are untested, or hard to test?
@@ -187,6 +198,9 @@ Present a numbered list of refactoring opportunities. For each candidate:
 | **Test impact**         | What existing tests would be replaced by boundary tests, or what characterization tests are needed first         |
 | **Complexity impact**   | Current complexity, proposed complexity, and behavior-preservation risk when performance is part of the refactor |
 | **Severity**            | How much this costs day-to-day                                                                                   |
+| **Confidence**          | How sure you are the friction is real and the direction is right — lower it when intent is unverified (see Restraint) |
+
+Before listing a candidate, run it through the **Restraint** gates above. Drop candidates that add structure without improving comprehension; mark candidates whose intent you couldn't verify as low confidence rather than omitting the caveat.
 
 Ask the user: **"Which of these would you like to explore?"**
 
@@ -202,6 +216,7 @@ Use a grilling loop before writing the RFC. Ask one question at a time, with you
 - Whether this is one package/module or several.
 - Whether the seam is real: do we need multiple adapters, or would one adapter be fake indirection?
 - Which behavior must be characterized before splitting.
+- Why any code slated for removal or consolidation exists today — confirm intent via `git blame`, the originating ADR, or the test that pins it before the RFC assumes it's safe to drop.
 - Which tests become redundant once the new interface is tested.
 - Whether `CONTEXT.md` should gain or sharpen a term.
 - Whether an ADR should record a rejected or surprising direction.
@@ -243,6 +258,10 @@ Each sub-agent outputs:
 
 Present all options, then compare them in prose. **Give your own recommendation** — which option is
 strongest and why. If elements from different options combine well, propose a hybrid. Be opinionated.
+
+Apply the **Restraint** gates when judging the options: prefer the one that buys the most comprehension
+for the least added structure. Reject any option whose interface is more elaborate than the friction it
+removes, even if it scores well on flexibility.
 
 ### Step 8 — User picks an interface
 
@@ -353,3 +372,5 @@ From the architecture patterns reference:
 | Script mixes CLI parsing, I/O, transformation, and output formatting | God script                                  |
 | Same schema/query/formatting code appears in several places          | Missing shared module                       |
 | Same concept used from multiple apps/packages                        | Candidate package/module extraction         |
+| Hand-rolled logic an existing util or stdlib/runtime primitive provides | Reimplementation instead of reuse           |
+| One function interleaves orchestration with low-level detail         | Altitude mismatch — inconsistent abstraction level |

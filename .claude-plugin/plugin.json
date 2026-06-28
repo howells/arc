@@ -1,6 +1,6 @@
 {
   "name": "arc",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "The full arc from idea to shipped code. Lifecycle workflows for vision, ideation, implementation, review, testing, audit, launch, and commits.",
   "skills": "./skills/",
   "commands": "./commands/",
