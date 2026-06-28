@@ -1,84 +1,36 @@
-# Arc Plugin
+# Arc Plugin - Agent Instructions
 
-The full arc from idea to shipped code. Arc's canonical product definition, domain language, and operating boundary live in `CONTEXT.md`. Treat this file as contributor guidance, not a competing definition.
+## Communication Expectations
+- State which Arc workflow or artifact you are changing before editing.
+- Keep workflow explanations precise; Arc is lifecycle machinery, not generic project documentation.
+- When changing command behavior, mention the matching skill, command stub, agents, references, and tests affected.
 
-## Structure
+## How To Work In This Codebase
+- Read `CONTEXT.md` for product boundary and language before changing workflow behavior.
+- Slash commands in `commands/` route to skills in `skills/`; do not fork behavior between them.
+- Runtime support files live in `agents/`, `disciplines/`, `references/`, `rules/`, `templates/`, `scripts/`, and `tests/`.
+- Site work is isolated under `site/` and uses its own Next.js scripts.
 
-```
-arc/
-├── .claude-plugin/
-│   └── plugin.json         # Plugin metadata
-├── .agents/                # Codex skill symlinks
-├── commands/               # Slash command routers (invoke skills)
-├── skills/                  # Each skill = one /arc:* command
-│   ├── using-arc/SKILL.md  # Bootstrap control plane
-│   ├── vision/SKILL.md     # 2. Foundation: project goals
-│   ├── ideate/SKILL.md     # 3. Spec: idea → validated feature spec
-│   ├── detail/SKILL.md     # 4. Plan (internal, invoked by implement)
-│   ├── review/SKILL.md     # 5. Review: validate before execution
-│   ├── implement/SKILL.md  # 6. Execute: plan + TDD implementation
-│   ├── testing/SKILL.md    # 7. Test: safety-net backfill
-│   ├── launch/SKILL.md     # 8. Launch: go-live checklist
-│   ├── refactor/SKILL.md   # Cross-cutting: structural refactor planning
-│   ├── audit/SKILL.md      # Cross-cutting: codebase audit
-│   └── commit/SKILL.md     # Cross-cutting: smart commits
-├── agents/                  # Specialized subagents
-│   ├── build/
-│   ├── review/
-│   ├── research/
-│   └── workflow/
-├── disciplines/             # Implementation methodologies
-├── references/              # Domain knowledge
-├── templates/               # Output templates
-├── AGENTS.md                # This file
-├── README.md                # Documentation
-└── LICENSE                  # MIT
-```
+## Editing Constraints
+- Keep Arc self-contained. Do not make core workflows depend on optional external plugins or skills.
+- Do not copy project-local rules into Arc unless they are general Arc runtime rules.
+- When adding a required reference to a skill, make sure the referenced file exists and the skill tells agents when to read it.
+- Keep generated plugin packaging files consistent with `.codex`, command stubs, and skill paths.
 
-## Command Workflow
+## Search Preferences
+- Search `skills/<workflow>/SKILL.md` before changing command docs.
+- Search `references/` and `disciplines/` before creating new methodology text.
+- For path questions, use `references/arc-paths.md` as the canonical artifact-location reference.
 
-All commands use the `/arc:` namespace prefix. The typical workflow:
+## Commands
+- `pnpm test` - run skill tests.
+- `pnpm lint` / `pnpm lint:fix` / `pnpm format` - shared lint and format lanes.
+- `pnpm build:codex` - build Codex plugin package.
+- `pnpm dev` - run the documentation site from `site/`.
+- `pnpm --dir site typecheck` - site TypeScript check.
 
-```
-1. FOUNDATION /arc:vision     → Define project goals (one-time setup)
-2. SPEC       /arc:ideate     → Turn idea into validated feature spec
-3. REVIEW     /arc:review     → Expert validation before execution
-4. EXECUTE    /arc:implement  → Plan + TDD implementation
-5. TEST       /arc:testing    → Backfill safety-net tests for existing code
-6. SHIP       /arc:launch     → Go-live checklist
-
-CROSS-CUTTING (available anytime):
-              /arc:audit      → Comprehensive codebase audit
-              /arc:commit     → Smart commits, push, and package publishing
-              /arc:refactor   → Discover friction, propose structural refactors
-```
-
-## Development
-
-To test changes locally:
-1. Edit the skill in `skills/<command>/SKILL.md`
-2. Run the corresponding command (e.g., `/arc:ideate`)
-3. Iterate based on results
-
-## Key Principles
-
-See `CONTEXT.md` for Arc's canonical principles. In contributor work, preserve the same boundary: Arc is self-contained, lifecycle-focused, and uses `using-arc` as a small control plane.
-
-## Optional External Plugins
-
-External plugins can provide useful extra checks, but they are not part of Arc's product definition and Arc should not depend on them for core behavior.
-
-- **[agent-skills](https://github.com/vercel-labs/agent-skills)** — `vercel-react-best-practices`, `vercel-composition-patterns`, `vercel-react-native-skills`
-
-When an external plugin is available, use it only as an optional enhancement. Keep Arc workflows understandable and usable without it.
-
-## Browser Tools
-
-- In Codex, prefer `mcp__claude-in-chrome__*` for rendered-page verification.
-- Outside Codex, prefer `agent-browser` for browser automation before dropping to Playwright.
-
-## Publishing
-
-1. Bump version in `.claude-plugin/plugin.json`
-2. Commit and push to GitHub
-3. Users update via their plugin manager
+## Repo-Specific Rules
+- Canonical Arc flow: vision, ideate, review, implement, testing, launch, with audit, refactor, and commit as cross-cutting workflows.
+- Small workflow edits still need verification against command routing and tests.
+- Prefer concise operational instructions over broad coaching prose.
+- Mastra may be reviewed by Arc agents, but Arc itself should not become a Mastra runtime.
