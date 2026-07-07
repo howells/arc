@@ -8,9 +8,10 @@ export const size = {
 export const contentType = "image/png";
 
 export default async function Image() {
-  const ibmPlexMono = await fetch(
+  const fontResponse = await fetch(
     "https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n5ig.ttf"
-  ).then((res) => res.arrayBuffer());
+  );
+  const ibmPlexMono = await fontResponse.arrayBuffer();
 
   return new ImageResponse(
     <div

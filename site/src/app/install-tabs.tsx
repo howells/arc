@@ -1,6 +1,6 @@
 "use client";
 
-// biome-ignore lint/performance/noNamespaceImport: Radix UI requires namespace import
+// oxlint-disable-next-line import/no-namespace -- Radix UI requires namespace import
 import * as Tabs from "@radix-ui/react-tabs";
 import Link from "next/link";
 

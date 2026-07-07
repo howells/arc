@@ -1,5 +1,4 @@
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import path from "node:path";
 
 import type { NextConfig } from "next";
 
@@ -57,7 +56,7 @@ const nextConfig: NextConfig = {
     ];
   },
   turbopack: {
-    root: resolve(SITE_ROOT, ".."),
+    root: path.resolve(SITE_ROOT, ".."),
   },
 };
 

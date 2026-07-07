@@ -9,7 +9,7 @@ export function GET() {
   const lines = [
     "# Arc",
     "",
-    `> The full arc from idea to shipped code. For Claude Code and Codex, with ${skills.length} skills, ${agents.length} agents, and ${rules.length} rules.${version ? ` v${version}.` : ""}`,
+    `> The full arc from idea to shipped code. For Claude Code and Codex, with ${skills.length} skills, ${agents.length} agents, and ${rules.length} rules.${version !== null && version !== "" ? ` v${version}.` : ""}`,
     "",
     "## Skills",
     "",

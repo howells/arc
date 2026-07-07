@@ -1,5 +1,6 @@
 packages:
   - '.'
+  - 'site'
 
 catalog:
   "@howells/lint": "^0.5.0"
@@ -15,3 +16,6 @@ catalog:
   "react-dom": "^19.2.7"
   "tailwindcss": "^4.3.0"
   "typescript": "^6.0.3"
+
+allowBuilds:
+  sharp: true

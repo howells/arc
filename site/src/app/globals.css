@@ -176,37 +176,3 @@
     margin: calc(var(--baseline) * 2) 0;
   }
 }
-
-/* Workflow graph node interactions */
-@layer components {
-  .graph-node {
-    outline: none;
-  }
-  .graph-node:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 4px;
-    border-radius: 2px;
-  }
-  .graph-node text:first-of-type {
-    transition: fill 0.15s ease;
-  }
-  .graph-node:hover text:first-of-type,
-  .graph-node:focus-visible text:first-of-type {
-    fill: var(--color-accent);
-  }
-  .graph-node-desc {
-    opacity: 0;
-    transition: opacity 0.15s ease;
-  }
-  .graph-node:hover .graph-node-desc,
-  .graph-node:focus-visible .graph-node-desc {
-    opacity: 1;
-  }
-  .graph-agent-dot {
-    transition: opacity 0.15s ease;
-  }
-  .graph-node:hover .graph-agent-dot,
-  .graph-node:focus-visible .graph-agent-dot {
-    opacity: 0.5;
-  }
-}

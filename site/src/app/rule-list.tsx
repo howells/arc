@@ -16,12 +16,12 @@ const categoryLabels: Record<RuleCategory, string> = {
 const categoryOrder: RuleCategory[] = ["core", "workflow", "interface"];
 
 export function RuleList({ rules, onRuleClick }: RuleListProps) {
-  const grouped = categoryOrder.reduce(
+  const grouped = categoryOrder.reduce<Record<RuleCategory, Rule[]>>(
     (acc, category) => {
       acc[category] = rules.filter((r) => r.category === category);
       return acc;
     },
-    {} as Record<RuleCategory, Rule[]>
+    { core: [], interface: [], workflow: [] }
   );
 
   return (
@@ -42,7 +42,9 @@ export function RuleList({ rules, onRuleClick }: RuleListProps) {
                 <button
                   className="group rounded-lg border border-neutral-200 px-4 py-3 text-left transition-all duration-200 hover:border-[var(--color-accent)]/40 hover:bg-[var(--color-accent)]/8"
                   key={rule.slug}
-                  onClick={() => onRuleClick(rule)}
+                  onClick={() => {
+                    onRuleClick(rule);
+                  }}
                   type="button"
                 >
                   <span className="block font-mono text-neutral-800 text-sm transition-colors group-hover:text-[var(--color-accent)]">

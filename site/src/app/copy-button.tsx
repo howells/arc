@@ -9,25 +9,50 @@ interface CopyButtonProps {
 
 export function CopyButton({ text, light }: CopyButtonProps) {
   const [copied, setCopied] = useState(false);
+  const [failed, setFailed] = useState(false);
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    } catch {
+      setFailed(true);
+      setTimeout(() => {
+        setFailed(false);
+      }, 2000);
+    }
   };
 
-  const baseClasses = light
-    ? "text-neutral-500 hover:text-neutral-300"
-    : "text-neutral-400 hover:text-neutral-600";
+  const baseClasses =
+    light === true
+      ? "text-neutral-500 hover:text-neutral-300"
+      : "text-neutral-400 hover:text-neutral-600";
+
+  let stateClasses = baseClasses;
+  if (copied) {
+    stateClasses = "text-[var(--color-accent)]";
+  } else if (failed) {
+    stateClasses = "text-red-500";
+  }
+
+  let ariaLabel = "Copy to clipboard";
+  if (copied) {
+    ariaLabel = "Copied";
+  } else if (failed) {
+    ariaLabel = "Copy failed";
+  }
 
   return (
     <>
       <button
-        aria-label={copied ? "Copied" : "Copy to clipboard"}
-        className={`transition-colors ${
-          copied ? "text-[var(--color-accent)]" : baseClasses
-        }`}
-        onClick={handleCopy}
+        aria-label={ariaLabel}
+        className={`transition-colors ${stateClasses}`}
+        onClick={() => {
+          void handleCopy();
+        }}
         type="button"
       >
         {copied ? (
@@ -64,7 +89,8 @@ export function CopyButton({ text, light }: CopyButtonProps) {
         )}
       </button>
       <output aria-live="polite" className="sr-only">
-        {copied ? "Copied to clipboard" : ""}
+        {copied && "Copied to clipboard"}
+        {failed && "Copy failed"}
       </output>
     </>
   );

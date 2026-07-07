@@ -95,7 +95,7 @@ export default async function SkillPage({
             </p>
           </section>
 
-          {skill.decisions && skill.decisions.length > 0 && (
+          {skill.decisions.length > 0 && (
             <section>
               <h3 className="mb-[calc(var(--baseline)*0.5)] flex items-center gap-3 text-sm">
                 <span className="text-[var(--color-accent)]">—</span>

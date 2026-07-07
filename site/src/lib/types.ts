@@ -30,12 +30,6 @@ export interface Skill {
   workflow?: SkillWorkflow;
 }
 
-export interface WorkflowData {
-  branches: Record<string, Skill[]>; // spine skill name → branch skills
-  spine: Skill[]; // Ordered left-to-right
-  utilities: Skill[]; // Unconnected skills
-}
-
 export interface Agent {
   category: AgentCategory;
   content: string;

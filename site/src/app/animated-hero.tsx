@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 
 interface AnimatedHeroProps {
@@ -10,20 +10,22 @@ interface AnimatedHeroProps {
 export function AnimatedHero({ commandNames }: AnimatedHeroProps) {
   const [index, setIndex] = useState(0);
 
-  const prefersReducedMotion =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    if (prefersReducedMotion) {
-      return;
-    }
-    const interval = setInterval(() => {
-      if (document.visibilityState === "visible") {
-        setIndex((prev) => (prev + 1) % commandNames.length);
+    const interval =
+      prefersReducedMotion === true
+        ? undefined
+        : setInterval(() => {
+            if (document.visibilityState === "visible") {
+              setIndex((prev) => (prev + 1) % commandNames.length);
+            }
+          }, 2000);
+    return () => {
+      if (interval !== undefined) {
+        clearInterval(interval);
       }
-    }, 2000);
-    return () => clearInterval(interval);
+    };
   }, [commandNames.length, prefersReducedMotion]);
 
   return (
@@ -33,13 +35,17 @@ export function AnimatedHero({ commandNames }: AnimatedHeroProps) {
       <span className="relative inline-block min-w-[180px] md:min-w-[240px]">
         <AnimatePresence mode="wait">
           <motion.span
-            animate={{ opacity: 1, y: prefersReducedMotion ? 0 : 0 }}
+            animate={{ opacity: 1, y: 0 }}
             className="inline-block text-[var(--color-accent)]"
             exit={
-              prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -10 }
+              prefersReducedMotion === true
+                ? { opacity: 0 }
+                : { opacity: 0, y: -10 }
             }
             initial={
-              prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 10 }
+              prefersReducedMotion === true
+                ? { opacity: 0 }
+                : { opacity: 0, y: 10 }
             }
             key={commandNames[index]}
             transition={{ duration: 0.3, ease: "easeInOut" }}

@@ -16,12 +16,12 @@ const categoryOrder: Agent["category"][] = [
 ];
 
 export function AgentList({ agents, onAgentClick }: AgentListProps) {
-  const grouped = categoryOrder.reduce(
+  const grouped = categoryOrder.reduce<Record<Agent["category"], Agent[]>>(
     (acc, category) => {
       acc[category] = agents.filter((a) => a.category === category);
       return acc;
     },
-    {} as Record<Agent["category"], Agent[]>
+    { build: [], research: [], review: [], workflow: [] }
   );
 
   return (
@@ -42,7 +42,9 @@ export function AgentList({ agents, onAgentClick }: AgentListProps) {
                 <button
                   className="group rounded-lg border border-neutral-200 p-4 text-left transition-all duration-200 hover:border-[var(--color-accent)]/40 hover:bg-[var(--color-accent)]/8"
                   key={agent.name}
-                  onClick={() => onAgentClick(agent)}
+                  onClick={() => {
+                    onAgentClick(agent);
+                  }}
                   type="button"
                 >
                   <span className="block font-mono text-neutral-800 text-sm transition-colors group-hover:text-[var(--color-accent)]">

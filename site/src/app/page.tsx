@@ -32,7 +32,7 @@ export default function ArcPage() {
     <main className="min-h-screen p-[calc(var(--baseline)*1)] md:p-[calc(var(--baseline)*2)] lg:p-[calc(var(--baseline)*3)]">
       <div className="mx-auto max-w-3xl">
         <nav className="flex items-center justify-end gap-2">
-          {version && (
+          {version !== null && version !== "" && (
             <span className="font-mono text-neutral-400 text-xs">
               v{version}
             </span>

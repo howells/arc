@@ -137,10 +137,10 @@ function DetailSheet({
   const contentUrl = getContentUrl(content);
 
   const openAgentByName = (name: string) => {
-    const agent = agentsByName[name];
-    if (!agent) {
+    if (!Object.hasOwn(agentsByName, name)) {
       return;
     }
+    const agent = agentsByName[name];
 
     const nextContent: DrawerContent = { data: agent, type: "agent" };
     navigate("detail", getContentId(nextContent), {
@@ -151,10 +151,10 @@ function DetailSheet({
   };
 
   const openSkillByName = (name: string) => {
-    const skill = skillsByName[name];
-    if (!skill) {
+    if (!Object.hasOwn(skillsByName, name)) {
       return;
     }
+    const skill = skillsByName[name];
 
     const nextContent: DrawerContent = { data: skill, type: "skill" };
     navigate("detail", getContentId(nextContent), {
@@ -166,7 +166,7 @@ function DetailSheet({
 
   const openSource = () => {
     const rawSource = getSourceContent(content);
-    if (!rawSource) {
+    if (rawSource === null || rawSource === "") {
       return;
     }
 
@@ -353,7 +353,7 @@ function SkillContent({
           </p>
         </section>
 
-        {skill.decisions && skill.decisions.length > 0 && (
+        {skill.decisions.length > 0 && (
           <section>
             <h3 className="mb-[calc(var(--baseline)*0.5)] flex items-center gap-3 text-sm">
               <span className="text-[var(--color-accent)]">-</span>

@@ -14,7 +14,9 @@ export function SkillList({ skills, onSkillClick }: SkillListProps) {
         <button
           className="group rounded-lg border border-neutral-200 p-4 text-left transition-all duration-200 hover:border-[var(--color-accent)]/40 hover:bg-[var(--color-accent)]/8"
           key={skill.name}
-          onClick={() => onSkillClick(skill)}
+          onClick={() => {
+            onSkillClick(skill);
+          }}
           type="button"
         >
           <span className="flex items-center gap-2">

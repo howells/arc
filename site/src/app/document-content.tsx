@@ -6,7 +6,8 @@ import remarkGfm from "remark-gfm";
 
 const remarkPlugins = [remarkGfm];
 
-const RFC_KEYWORD_REGEX = /^(MUST NOT|MUST|SHOULD NOT|SHOULD|NEVER|MAY):\s*/;
+const RFC_KEYWORD_REGEX =
+  /^(?<keyword>MUST NOT|MUST|SHOULD NOT|SHOULD|NEVER|MAY):\s*/;
 
 const keywordColors: Record<string, string> = {
   MAY: "text-neutral-500 bg-neutral-50 border-neutral-200",
@@ -21,12 +22,12 @@ function RfcListItem({ children }: { children?: ReactNode }) {
   // Children is typically [string | ReactNode[]]
   // We need to check if the first text node starts with an RFC keyword
   const childArray = Array.isArray(children) ? children : [children];
-  const first = childArray[0];
+  const first: unknown = childArray[0];
 
   if (typeof first === "string") {
-    const match = first.match(RFC_KEYWORD_REGEX);
+    const match = RFC_KEYWORD_REGEX.exec(first);
     if (match) {
-      const keyword = match[1];
+      const keyword = match.groups?.keyword ?? "";
       const rest = first.slice(match[0].length);
       const colors = keywordColors[keyword] ?? keywordColors.MAY;
       return (
