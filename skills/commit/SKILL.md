@@ -37,6 +37,13 @@ Paths in this skill use these conventions:
 - `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
   </arc_runtime>
 
+<rules_context>
+**Load before committing:**
+
+- `rules/git.md` — commit-message, husky, and lint-staged conventions this skill must respect.
+- `references/diff-review-checklist.md` — apply during the pre-commit review step (step 1).
+  </rules_context>
+
 # Commit Changes
 
 Commit, push, and publish changes, intelligently splitting into separate commits when changes span multiple domains.
@@ -47,33 +54,27 @@ Usage:
 - `/arc:commit push` - Commit, push, then publish changed npm packages if present
 - `/arc:commit publish` - Alias for the push-and-publish path
 
-$ARGUMENTS will be empty, "push", or "publish". Treat "push" and "publish" as the same push-and-publish path.
+Commit owns commits, push, and simple publishing of an already-versioned package. Version bumps, changelogs, and multi-package/coordinated releases belong to `/arc:release` — route there instead of bumping versions here.
 
-## Current Git State
+Read the user's invocation: no argument means commit only; "push" or "publish" both mean the push-and-publish path.
 
-**Status:**
+## Inspect Current Git State
 
-```
-!`git status --porcelain 2>/dev/null || echo "(no changes)"`
-```
+Run these commands first and read the output before deciding on a commit strategy:
 
-**Changes summary:**
-
-```
-!`git diff --stat 2>/dev/null | head -20 || echo "(no diff)"`
+```bash
+git status --porcelain 2>/dev/null || echo "(no changes)"
+git diff --stat 2>/dev/null | head -20 || echo "(no diff)"
+git log --oneline -5 2>/dev/null || echo "(no commits)"   # style reference
 ```
 
-**Recent commits (for style reference):**
-
-```
-!`git log --oneline -5 2>/dev/null || echo "(no commits)"`
-```
+If there are no changes, tell the user and stop.
 
 ## Instructions
 
 ### 1. Analyze Changes
 
-Review the git state above. If you need more detail:
+Review the git state above. If you need more detail on what changed, inspect the working tree — e.g. `git diff` for unstaged changes, `git diff --staged` for staged changes, or `git diff <path>` to focus on a file. Apply `references/diff-review-checklist.md` as you read the diff so obvious issues (debug logs, secrets, stray files) are caught before they land in a commit.
 
 ### 2. Determine Commit Strategy
 
@@ -168,7 +169,7 @@ If TypeScript or lint errors block the commit:
 
 ### 6. Push Changes (only if `push` or `publish` argument provided)
 
-**Skip this step** unless $ARGUMENTS starts with "push" or "publish".
+**Skip this step** unless the user asked to "push" or "publish".
 
 If pushing:
 
@@ -186,7 +187,7 @@ If push fails (e.g., diverged history), report the issue - do NOT force push unl
 
 ### 7. Publish npm Packages (only if `push` or `publish` argument provided)
 
-**Skip this step** unless $ARGUMENTS starts with "push" or "publish".
+**Skip this step** unless the user asked to "push" or "publish".
 
 Publish only after commits and push have succeeded.
 

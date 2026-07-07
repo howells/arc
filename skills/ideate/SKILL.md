@@ -67,7 +67,7 @@ Before sending ANY message during Act 1, run this checklist:
 1. Does the message contain a markdown table? → VIOLATION. Delete it.
 2. Does the message contain a code block? → VIOLATION. Delete it.
 3. Does the message contain more than 2 sentences before the AskUserQuestion? → VIOLATION. Cut it down.
-4. Does the message contain a "?" outside of AskUserQuestion? → VIOLATION. Move it into the tool.
+4. On a platform that has AskUserQuestion: does the message contain a "?" outside of AskUserQuestion? → VIOLATION. Move it into the tool. (On platforms without a structured question tool, such as Codex, the single plain-text question is expected — this check does not apply there.)
 5. Does the message propose any solution, approach, or design? → VIOLATION. Replace with a question about the user's intent.
 6. Is the message longer than 4 lines of text (excluding the tool call)? → VIOLATION. Shorten it.
 
@@ -172,6 +172,8 @@ Steps 2-8 each produce exactly: 0-2 sentences + AskUserQuestion. Nothing more.
 - **Act 1 is structurally locked** — 0-2 sentences + AskUserQuestion, nothing else, until user approves transition to Act 2
 - **One AskUserQuestion per message** — if you need 3 things, that's 3 turns
 - **Multiple choice preferred** — 2-4 concrete options. Open-ended only when choices can't be reduced
+- **Look it up, don't ask it** — if a fact can be found in the codebase, find it rather than asking. Decisions belong to the user; facts belong to you
+- **Every question carries a recommendation** — mark the option you'd pick as recommended (the AskUserQuestion recommended-option convention) so the user can accept a default fast
 - **YAGNI ruthlessly** — "Do we need this in v1?"
 - **Explore alternatives** — 2-3 approaches before settling (Act 2 only). Lead with your recommendation
 - **Incremental validation** — Present design in sections, check each before continuing (Act 3 only)
@@ -187,7 +189,7 @@ There are three acts: **Understand**, **Explore**, **Specify**. But they're a co
 
 **Background work (silent — do NOT share results with the user):**
 
-- Check `docs/vision.md` if it exists
+- Check root `CONTEXT.md` if it exists
 - Note the project type and obvious constraints
 - Use what you learn to ask BETTER questions — not to produce summaries
 
@@ -224,7 +226,7 @@ Only after the user says "show me approaches" (or equivalent) do you move to Act
 **Now** (not before) you can do deeper research if needed:
 
 - Spawn an Explore agent to find relevant patterns, similar features, essential files
-- Check `docs/solutions/**/*.md` for past decisions that apply
+- Check `docs/arc/specs/` and `docs/arc/plans/` for related prior work, and `docs/adr/` for past decisions that apply
 - If extending existing code, check git history for context
 
 **Propose 2-3 approaches with trade-offs:**
@@ -317,7 +319,7 @@ Location: `docs/arc/specs/YYYY-MM-DD-<topic>-spec.md`
 - ...
 ```
 
-Commit: `git add docs/arc/specs/ && git commit -m "docs: add <topic> feature spec"`
+Do not commit the spec silently. Offer the commit with one question — e.g. AskUserQuestion "Spec saved. Commit it now?" with options "Commit spec" / "Leave uncommitted". If the user agrees: `git add docs/arc/specs/ && git commit -m "docs: add <topic> feature spec"`
 
 ### Spec Review Loop
 
@@ -334,6 +336,8 @@ Present the full arc:
 ```
 /arc:ideate     → Feature spec ✓ YOU ARE HERE
      ↓
+/arc:review     → Expert validation (optional)
+     ↓
 /arc:implement  → Plan + Execute
 ```
 
@@ -341,7 +345,8 @@ Options via AskUserQuestion:
 
 1. **Implement on a new feature branch** (Recommended)
 2. **Implement on current branch**
-3. **Done for now** — just the spec
+3. **Review the spec first** — run `/arc:review` before implementing
+4. **Done for now** — just the spec
    </process>
 
 <ui_requirements>

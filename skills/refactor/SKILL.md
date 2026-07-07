@@ -13,7 +13,7 @@ license: MIT
 metadata:
   author: howells
 website:
-  order: 14
+  order: 15
   desc: Architectural refactoring
   summary: Explore for shallow modules, package/module extraction, god files, duplication, and create a project-local refactor RFC.
   what: |
@@ -130,6 +130,8 @@ Read the project context before judging architecture:
 
 Use the project's domain vocabulary when naming candidate modules. If a better module name uses a concept not in `CONTEXT.md`, note that the context should be updated during the grilling loop.
 
+**Pre-refactor archaeology.** Before proposing structural change to established code, dispatch `agents/research/git-history-analyzer.md` on the target area to understand why the code looks the way it does — when the current shape was introduced, what churned it, and which decisions or constraints shaped it. This is the Chesterton's Fence check applied up front: know the intent before proposing to move or delete it.
+
 ### Step 2 — Scan for decomposition candidates
 
 For JavaScript/TypeScript projects, run the Arc-owned god-file and duplication scanner when available:
@@ -186,18 +188,18 @@ The friction you encounter IS the signal.
 
 Present a numbered list of refactoring opportunities. For each candidate:
 
-| Field                   | Description                                                                                                      |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| **Cluster**             | Which modules/concepts are involved                                                                              |
-| **Type**                | shallow-module, package-extraction, god-component, god-script, god-module, duplication                           |
-| **Evidence**            | Line count, responsibility mix, duplicated blocks, import depth, call patterns, shared types                     |
-| **Problem**             | Why the current shape causes friction                                                                            |
-| **Proposed direction**  | Plain-English description of what would change                                                                   |
-| **Dependency category** | See categories below                                                                                             |
-| **Locality / leverage** | What change gets concentrated, and what callers gain                                                             |
-| **Test impact**         | What existing tests would be replaced by boundary tests, or what characterization tests are needed first         |
-| **Complexity impact**   | Current complexity, proposed complexity, and behavior-preservation risk when performance is part of the refactor |
-| **Severity**            | How much this costs day-to-day                                                                                   |
+| Field                   | Description                                                                                                           |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| **Cluster**             | Which modules/concepts are involved                                                                                   |
+| **Type**                | shallow-module, package-extraction, god-component, god-script, god-module, duplication                                |
+| **Evidence**            | Line count, responsibility mix, duplicated blocks, import depth, call patterns, shared types                          |
+| **Problem**             | Why the current shape causes friction                                                                                 |
+| **Proposed direction**  | Plain-English description of what would change                                                                        |
+| **Dependency category** | See categories below                                                                                                  |
+| **Locality / leverage** | What change gets concentrated, and what callers gain                                                                  |
+| **Test impact**         | What existing tests would be replaced by boundary tests, or what characterization tests are needed first              |
+| **Complexity impact**   | Current complexity, proposed complexity, and behavior-preservation risk when performance is part of the refactor      |
+| **Severity**            | How much this costs day-to-day                                                                                        |
 | **Confidence**          | How sure you are the friction is real and the direction is right — lower it when intent is unverified (see Restraint) |
 
 Before listing a candidate, run it through the **Restraint** gates above. Drop candidates that add structure without improving comprehension; mark candidates whose intent you couldn't verify as low confidence rather than omitting the caveat.
@@ -359,18 +361,18 @@ The core principle: **replace, don't layer.**
 
 From the architecture patterns reference:
 
-| Signal                                                               | What it means                               |
-| -------------------------------------------------------------------- | ------------------------------------------- |
-| 5+ levels of `../` imports                                           | Code is reaching across boundaries          |
-| Barrel file re-exporting everything                                  | Hiding the real dependency graph            |
-| Test file longer than source file                                    | Testing internals, not behaviour            |
-| "Utils" folder with 20+ files                                        | Shallow modules masquerading as shared code |
-| Type file imported by 10+ modules                                    | Hidden coupling through shared types        |
-| Feature spread across 8+ files                                       | Over-decomposition, shallow modules         |
-| Mock setup longer than test body                                     | Integration seams are in the wrong place    |
-| Large component mixes effects, validation, mutation, and rendering   | God component                               |
-| Script mixes CLI parsing, I/O, transformation, and output formatting | God script                                  |
-| Same schema/query/formatting code appears in several places          | Missing shared module                       |
-| Same concept used from multiple apps/packages                        | Candidate package/module extraction         |
-| Hand-rolled logic an existing util or stdlib/runtime primitive provides | Reimplementation instead of reuse           |
-| One function interleaves orchestration with low-level detail         | Altitude mismatch — inconsistent abstraction level |
+| Signal                                                                  | What it means                                      |
+| ----------------------------------------------------------------------- | -------------------------------------------------- |
+| 5+ levels of `../` imports                                              | Code is reaching across boundaries                 |
+| Barrel file re-exporting everything                                     | Hiding the real dependency graph                   |
+| Test file longer than source file                                       | Testing internals, not behaviour                   |
+| "Utils" folder with 20+ files                                           | Shallow modules masquerading as shared code        |
+| Type file imported by 10+ modules                                       | Hidden coupling through shared types               |
+| Feature spread across 8+ files                                          | Over-decomposition, shallow modules                |
+| Mock setup longer than test body                                        | Integration seams are in the wrong place           |
+| Large component mixes effects, validation, mutation, and rendering      | God component                                      |
+| Script mixes CLI parsing, I/O, transformation, and output formatting    | God script                                         |
+| Same schema/query/formatting code appears in several places             | Missing shared module                              |
+| Same concept used from multiple apps/packages                           | Candidate package/module extraction                |
+| Hand-rolled logic an existing util or stdlib/runtime primitive provides | Reimplementation instead of reuse                  |
+| One function interleaves orchestration with low-level detail            | Altitude mismatch — inconsistent abstraction level |

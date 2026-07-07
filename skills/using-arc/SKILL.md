@@ -103,6 +103,8 @@ Use these defaults:
 - Architecture or quality review -> `review` or `audit`
 - Testing work -> `testing`
 - Go-live/shareability readiness -> `launch`
+- Commit, push, or simple publish -> `commit` (cross-cutting)
+- Version bumps, changelogs, or coordinated multi-package releases -> `release` (cross-cutting)
 - Unsure what to do -> ask one focused question, then route to the smallest matching workflow
 
 When a task needs a specialist lens, keep the routing Arc-native:
@@ -113,12 +115,19 @@ When a task needs a specialist lens, keep the routing Arc-native:
 - Architecture boundaries or oversized modules -> `review`, `audit`, or `implement`
 - Rendered UX, browser behavior, and responsive issues -> `implement` when tied to Arc UI work, otherwise external rendered-app QA skills
 
+**Library track:** For a single-package repo (a library or CLI rather than a deployed app), the common lifecycle is `ideate` (light) -> `implement` -> `release`. Vision and launch carry explicitly optional weight here — a library has no go-live URL, so reach for them only when they genuinely help.
+
 ## Artifact Locations
 
 Arc-owned artifacts live under:
 
 - `docs/arc/specs/`
 - `docs/arc/plans/`
+- `docs/arc/audits/`
 - `docs/arc/archive/`
+
+The vision artifact is the repository's root `CONTEXT.md` (plus `CONTEXT-MAP.md` for multi-context monorepos), not a `docs/` file.
+
+Architectural decisions live in `docs/adr/` — that is the canonical location. Do not create or route to `docs/arc/decisions/`. If a repo already has both `docs/adr/` and a legacy `docs/arc/decisions/`, treat `docs/adr/` as canonical and migrate decisions out of `docs/arc/decisions/`.
 
 If a workflow references legacy `docs/plans/`, treat it as a compatibility fallback while the repo migrates.

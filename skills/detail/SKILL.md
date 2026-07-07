@@ -146,7 +146,7 @@ Task Explore model: haiku: "Analyze coding conventions in this project. What nam
 file organization, and architectural patterns should new code follow?"
 ```
 
-**If using unfamiliar libraries/APIs:**
+**If using unfamiliar libraries/APIs:** dispatch `agents/research/docs-researcher.md` to gather official docs, version constraints, and best practices — it writes findings to a Markdown file with per-claim citations you can cite in task `<action>` blocks.
 
 ```
 Task general-purpose model: haiku: "Gather documentation and best practices for
@@ -364,7 +364,7 @@ For each UI task, embed implementation-relevant UI requirements and external vis
 ```markdown
 # [Feature Name] Implementation Plan
 
-> **For Arc:** Use /arc:implement to execute this plan. Subagents should report DONE, DONE_WITH_CONCERNS, NEEDS_CONTEXT, or BLOCKED.
+> **For Arc:** Use /arc:implement to execute this plan. Subagents should report DONE, DONE_WITH_CONCERNS, NEEDS_CONTEXT, BLOCKED, or AUTH_GATE.
 
 **Feature spec:** `docs/arc/specs/YYYY-MM-DD-<topic>-spec.md` (or legacy fallback path)
 **Goal:** [One sentence from feature spec's problem statement]
@@ -386,7 +386,22 @@ After writing the plan:
 2. Fix issues in the plan
 3. Re-review until approved or after 5 loops escalate to the user
 
-## Step 7: Commit and Offer Next Steps
+## Step 7: Offer Commit and Next Steps
+
+Do not commit the plan silently. Offer the commit with a single question and let the user decide:
+
+```
+AskUserQuestion:
+  question: "Plan saved. Commit it now?"
+  header: "Commit"
+  options:
+    - label: "Commit plan"
+      description: "git add docs/arc/plans/ && commit the implementation plan"
+    - label: "Leave uncommitted"
+      description: "Keep the plan unstaged so you can review or bundle it with other work"
+```
+
+If the user chooses to commit:
 
 ```bash
 git add docs/arc/plans/
@@ -408,7 +423,7 @@ Implementation plan is complete when:
 - [ ] Each `<read_first>` lists files the agent must check before acting
 - [ ] UI tasks include implementation requirements and external visual source when relevant
 - [ ] Plan-document-reviewer passes all 7 validation dimensions
-- [ ] Plan committed to git
+- [ ] Commit offered via one question (never committed silently)
       </success_criteria>
 
 <tool_restrictions_reminder>

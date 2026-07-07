@@ -87,7 +87,7 @@ Database: Prisma, Drizzle, Supabase, Neon, PlanetScale
 Analytics/monitoring: PostHog, Plausible, GA, Sentry
 Share assets: metadata, OG images, favicon, app icons, manifest
 Content: TODOs, lorem ipsum, placeholder URLs, example copy, support/contact links
-Legal/compliance: privacy policy, terms, cookie notice only when the project collects data, tracks visitors, or takes payments
+Legal/compliance: privacy policy, terms, cookie notice only when the project collects data, tracks visitors, or takes payments (Arc ships fill-in templates under `templates/` for any that are missing)
 ```
 
 Report what was found in 5-10 bullets. Keep it factual. Do not start the app to gather these facts unless the user explicitly asked you to run or inspect the app.
@@ -174,9 +174,26 @@ Only include sections for services the project actually uses:
 - Auth: production callback URLs, cookie/session domain, provider dashboard URLs.
 - Payments: live keys, webhook URL, signing secret, test purchase plan.
 - Email: sending domain, SPF/DKIM/DMARC, verified From address.
-- Database: production connection string, migrations applied, backup posture noted.
+- Database: production connection string, migrations applied. Backup posture verified — PITR or a scheduled dump — and a migration journal exists (see `references/database-lifecycle.md`).
 - Analytics/monitoring: provider key, environment separation, basic event/error capture.
-- Legal/support: privacy policy, terms, cookie notice, refund/support links only when the detected services or launch type require them.
+- Legal/support: privacy policy, terms, cookie notice, refund/support links only when the detected services or launch type require them. When one is missing but required, offer to generate it from Arc's ready-made templates — `templates/privacy-policy.md`, `templates/terms-of-service.md`, `templates/cookie-policy.md` — filling the placeholders from detected facts (product name, company, contact email, data collected, payment/analytics providers) and asking only for the facts that cannot be discovered.
+
+### Operations Readiness
+
+Include only when the project has a pipeline or scheduled work. Check against `references/operations-playbook.md`:
+
+- CI exists and runs the repo's check gate (e.g. `pnpm check` / `check:affected`).
+- Gates are enforced (husky pre-push, fail-on-red, boundary checks).
+- Env is validated (an `env:check` / Envy schema, not scattered `process.env` reads).
+- Scheduled/cron jobs have failure alerting.
+- The data-readiness gate passes (migrations applied, seed/reference data present).
+
+### Agent & Bundle Surfaces
+
+Include only when the project exposes an agent-facing surface or ships published bundles:
+
+- Is the agent-facing surface (API / MCP / `llms.txt`) current with shipped behavior?
+- Have published component bundles been verified post-build (the built artifact, not just source)?
 
 ### Deeper Checks
 

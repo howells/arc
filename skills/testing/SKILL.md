@@ -17,7 +17,7 @@ website:
   why: |
     New feature work already belongs in /arc:implement and its TDD loop. This skill brings something different: it makes existing behavior observable before refactoring or changing fragile code, so you know whether later edits preserved behavior or intentionally changed it.
   decisions:
-    - This is not the default path for new feature TDD. Use /arc:implement, $tdd, or superpowers:test-driven-development for that.
+    - This is not the default path for new feature TDD. Use /arc:implement for that.
     - Characterize through public interfaces first. Tests should protect behavior users or callers can observe.
     - Add tests in vertical slices. Avoid broad horizontal plans that write every test outline before proving any one behavior.
     - Use the smallest useful test level. Prefer unit or integration tests unless only an E2E flow proves the risk.
@@ -125,6 +125,15 @@ Ask one question only if the target is unclear:
 AskUserQuestion:
   question: "What existing code or behavior needs a safety net before we change it?"
   header: "Test Target"
+  options:
+    - label: "A specific file/module"
+      description: "Point me at the file, component, or module you're about to change"
+    - label: "A route or API surface"
+      description: "An endpoint, page, or public interface whose behavior must survive the change"
+    - label: "A user flow"
+      description: "An end-to-end journey (auth, checkout, signup) that needs pinning before a refactor"
+    - label: "Something else"
+      description: "Describe the behavior or blast radius you want protected"
 ```
 
 Then identify:
@@ -239,6 +248,10 @@ End with a concise report:
 
 **Ready for next change:** [yes/no]
 ```
+
+## Mastra Agent Surfaces
+
+If a Mastra agent surface is detected (`packages/mastra`, or `@mastra/*` in `package.json`), the useful safety net is often an eval/golden-set, not a conventional characterization test. Offer to load `references/agent-evals.md` and backfill an eval/golden-set that pins current agent behavior (expected outputs, tool-call shape, scorers) before the agent is changed.
 
 ## Choosing Test Level
 

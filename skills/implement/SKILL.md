@@ -10,7 +10,7 @@ license: MIT
 metadata:
   author: howells
 website:
-  order: 5
+  order: 6
   desc: Plan + execute
   summary: Scope-aware planning plus execution with TDD. Small changes get a lightweight inline plan; larger changes get the full implementation workflow.
   what: |
@@ -83,7 +83,6 @@ Paths in this skill use these conventions:
 | `unit-test-writer`         | sonnet | Unit tests (vitest) — pure functions, components                       |
 | `integration-test-writer`  | sonnet | Integration tests (vitest + MSW) — API, auth                           |
 | `e2e-test-writer`          | opus   | E2E tests (Playwright) — user journeys                                 |
-| `figma-builder`            | opus   | Build UI directly from Figma URL                                       |
 | `test-runner`              | haiku  | Run vitest, analyze failures                                           |
 | `e2e-runner`               | opus   | Playwright tests — iterate until green or report blockers              |
 | `spec-reviewer`            | sonnet | Spec compliance check — nothing missing, nothing extra                 |
@@ -109,21 +108,24 @@ Task [agent-name] model: [model]: "[task description with context]"
 
 **Use Glob tool:** `.ruler/*.md`
 
-**If `.ruler/` exists, detect stack and read relevant rules:**
+**If `.ruler/` exists, detect stack and read relevant rules.** Bare names resolve from `.ruler/`; Arc-owned paths (`references/...`, `rules/...`) load regardless of `.ruler/`:
 
-| Check                                                           | Read from `.ruler/`   |
-| --------------------------------------------------------------- | --------------------- |
-| Always                                                          | code-style.md         |
-| `next.config.*` exists                                          | nextjs.md             |
-| `react` in package.json                                         | react.md              |
-| `tailwindcss` in package.json                                   | tailwind.md           |
-| `.ts` or `.tsx` files                                           | typescript.md         |
-| `vitest` or `jest` in package.json                              | testing.md            |
-| Always                                                          | error-handling.md     |
-| Always                                                          | security.md           |
-| `drizzle` or `prisma` in package.json                           | database.md           |
-| `wrangler.toml` exists                                          | cloudflare-workers.md |
-| `@clerk/nextjs` or `@workos-inc/authkit-nextjs` in package.json | auth.md               |
+| Check                                                           | Read                             |
+| --------------------------------------------------------------- | -------------------------------- |
+| Always                                                          | code-style.md                    |
+| `next.config.*` exists                                          | nextjs.md                        |
+| `react` in package.json                                         | react.md                         |
+| `tailwindcss` in package.json                                   | tailwind.md                      |
+| `.ts` or `.tsx` files                                           | typescript.md                    |
+| `vitest` or `jest` in package.json                              | testing.md                       |
+| Always                                                          | error-handling.md                |
+| Always                                                          | security.md                      |
+| `drizzle` or `prisma` in package.json                           | database.md                      |
+| Schema/migration files in scope                                 | references/database-lifecycle.md |
+| `wrangler.toml` exists                                          | cloudflare-workers.md            |
+| `@clerk/nextjs` or `@workos-inc/authkit-nextjs` in package.json | auth.md                          |
+| `.vercel/` or `vercel.json` present                             | rules/vercel.md                  |
+| CLI/binary project detected (`bin` in package.json)             | rules/cli.md                     |
 
 These rules define MUST/SHOULD/NEVER constraints. Follow them during implementation.
 
@@ -137,14 +139,21 @@ Project-local rules are optional. Do not copy Arc's rule bundle into the project
 
 **For UI/frontend work, also load interface rules:**
 
-| Check                     | Read from `rules/interface/`                                                                 |
-| ------------------------- | -------------------------------------------------------------------------------------------- |
-| Building components/pages | design.md, colors.md, spacing.md, layout.md, tailwind-authoring.md, surfaces.md, sections.md |
-| Typography changes        | typography.md                                                                                |
-| Adding animations         | animation.md, performance.md                                                                 |
-| Form work                 | forms.md, interactions.md, buttons.md                                                        |
-| Interactive elements      | interactions.md, buttons.md                                                                  |
-| Marketing pages           | marketing.md                                                                                 |
+Bare names resolve from `rules/interface/`; `references/...` and other `rules/...` paths are full Arc paths.
+
+| Check                       | Read                                                                                         |
+| --------------------------- | -------------------------------------------------------------------------------------------- |
+| Building components/pages   | design.md, colors.md, spacing.md, layout.md, tailwind-authoring.md, surfaces.md, sections.md |
+| App UI (in-product screens) | rules/interface/app-ui.md, references/frontend-design.md, references/design-philosophy.md    |
+| Responsive/breakpoint work  | rules/interface/responsive.md                                                                |
+| Tailwind v4 project         | references/tailwind-v4.md                                                                    |
+| Typography changes          | typography.md                                                                                |
+| Typography-heavy work       | references/typography-opentype.md                                                            |
+| Adding animations           | animation.md, performance.md, references/interaction-physics.md                              |
+| Form work                   | forms.md, interactions.md, buttons.md, references/touch-targets.md                           |
+| Interactive elements        | interactions.md, buttons.md, references/ux-laws.md                                           |
+| Navigation/data prefetch    | references/prefetch-patterns.md                                                              |
+| Marketing pages             | marketing.md                                                                                 |
 
 **Additional references (load as needed):**
 
@@ -162,9 +171,9 @@ Project-local rules are optional. Do not copy Arc's rule bundle into the project
 ```
 /arc:ideate     → Feature spec ✓
      ↓
-/arc:implement  → Plan + Execute ← YOU ARE HERE
+   (review)     → cross-cutting: optional, can run anytime
      ↓
-/arc:review     → Review (optional, can run anytime)
+/arc:implement  → Plan + Execute ← YOU ARE HERE
 ```
 
 ## Phase 0: Scope Detection
@@ -448,7 +457,6 @@ Determine which build agent(s) may be needed:
 | Write integration tests | integration-test-writer | API mocking, auth states                                                  |
 | Write E2E tests         | e2e-test-writer         | User journeys, Playwright                                                 |
 | Build UI from spec      | implementer             | UI components with feature-spec requirements or an external visual source |
-| Build UI from Figma     | figma-builder           | Figma URL provided                                                        |
 | Visual direction needed | external design skill   | Arc does not create visual direction                                      |
 | Fix TS/lint errors      | fixer                   | Mechanical cleanup                                                        |
 | Debug failing tests     | debugger                | Test failures                                                             |
@@ -458,11 +466,10 @@ Determine which build agent(s) may be needed:
 **Agent selection flow:**
 
 1. Is this general code (no UI)? → implementer
-2. Is this UI with Figma? → figma-builder
-3. Is this UI with feature-spec UI requirements or an external visual source? → implementer
-4. Is this UI with no visual source and no existing pattern? → ask whether to pause for external design input or match existing patterns
-5. Did something break? → debugger or fixer
-6. Task complete? → spec-reviewer to verify
+2. Is this UI with feature-spec UI requirements or an external visual source? → implementer
+3. Is this UI with no visual source and no existing pattern? → ask whether to pause for external design input or match existing patterns
+4. Did something break? → debugger or fixer
+5. Task complete? → spec-reviewer to verify
 
 ### Step 3: Write Tests First (TDD)
 
@@ -649,7 +656,7 @@ Wait for user confirmation or adjustments.
 
 ### Step 8b: Handle Checkpoint Tasks
 
-If the current task is a checkpoint type (`[CHECKPOINT:VERIFY]`, `[CHECKPOINT:DECIDE]`, `[CHECKPOINT:ACTION]`):
+If the current task is a checkpoint type (`type="checkpoint:verify"`, `type="checkpoint:decide"`, `type="checkpoint:action"`):
 
 **For VERIFY:**
 
@@ -731,14 +738,7 @@ Read: agents/build/implementer.md
 
 **If no visual source exists** (empty states, undefined visuals) — do not invent visual direction inside Arc. Ask for a design spec from Chiaroscuro or another external design source, or limit the task to behavior-preserving implementation against existing project patterns.
 
-**If Figma URL provided** — spawn figma-builder:
-
-```
-Read: agents/build/figma-builder.md
-Task [figma-builder] model: opus: "Implement from Figma: [URL]"
-```
-
-\*\*For UI implementation from a spec or external visual source, spawn:
+**For UI implementation from a spec or external visual source, spawn:**
 
 ```
 Task [implementer] model: opus: "Build UI components for [feature].
@@ -769,10 +769,14 @@ mcp__figma__get_screenshot: fileKey, nodeId
 
 **When implementing unfamiliar library APIs:**
 
+If context7 MCP is available:
+
 ```
 mcp__context7__resolve-library-id: "[library name]"
 mcp__context7__get-library-docs: "[library ID]" topic: "[specific feature]"
 ```
+
+Otherwise, dispatch `agents/research/docs-researcher.md` — it investigates primary sources and writes findings to a Markdown file with per-claim citations. Read that file before implementing.
 
 Use current documentation to ensure correct API usage.
 
@@ -886,12 +890,13 @@ See agents/review/architecture-engineer.md"
 
 **Add a conditional third reviewer based on what was built:**
 
-| If the implementation includes...                                                                    | Also spawn            |
-| ---------------------------------------------------------------------------------------------------- | --------------------- |
-| Auth, sessions, API keys, user data                                                                  | security-engineer     |
-| Significant UI (components, pages)                                                                   | senior-engineer       |
-| Database migrations, data models                                                                     | data-engineer         |
-| Mastra, agents, workflows, tools, memory/RAG, MCP, model routing, browser/sandbox agent capabilities | mastra-agent-engineer |
+| If the implementation includes...                                                                    | Also spawn              |
+| ---------------------------------------------------------------------------------------------------- | ----------------------- |
+| Auth, sessions, API keys, user data                                                                  | security-engineer       |
+| Significant UI (components, pages)                                                                   | daniel-product-engineer |
+| Database migrations, data models                                                                     | data-engineer           |
+| Mastra, agents, workflows, tools, memory/RAG, MCP, model routing, browser/sandbox agent capabilities | mastra-agent-engineer   |
+| Touches `packages/mastra` or `@mastra/*`                                                             | mastra-agent-engineer   |
 
 Present findings as Socratic questions (see `references/review-patterns.md`).
 Blockers → fix → re-verify (max 2 cycles). Should-fix → fix if quick, otherwise note as follow-up.
@@ -915,7 +920,22 @@ pnpm test
 pnpm lint
 ```
 
-**Create PR:**
+**Ask the user how they want to ship** (Arc pushes only when requested — see CONTEXT.md):
+
+```
+AskUserQuestion:
+  question: "Work is complete and tests pass. How do you want to ship it?"
+  header: "Ship Posture"
+  options:
+    - label: "Push + open PR"
+      description: "Push the branch and open a pull request"
+    - label: "Commit only"
+      description: "Keep commits local; don't push or open a PR"
+    - label: "Done here"
+      description: "Stop now; I'll handle shipping myself"
+```
+
+**If "Push + open PR":**
 
 ```bash
 git push -u origin feature/<feature-name>
@@ -942,9 +962,11 @@ EOF
 )"
 ```
 
+**If "Commit only" or "Done here":** stop after the local commits. Do not push or open a PR.
+
 **Report to user:**
 
-- PR URL
+- PR URL (if a PR was opened)
 - Summary of what was built
 - Any follow-up items
 
@@ -977,9 +999,9 @@ Execution is complete when:
 - [ ] All tests passing
 - [ ] Linting passes
 - [ ] Plan completion verification passed when the full-plan path was used
-- [ ] PR created
+- [ ] User chose a ship posture (push + PR, commit only, or done here)
 - [ ] User informed of completion
-- [ ] Orphaned agents cleaned up
+- [ ] All delegated agents have reported back
       </success_criteria>
 
 <tool_restrictions_reminder>
