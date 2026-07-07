@@ -20,7 +20,7 @@ Arc's canonical product definition and operating boundary live in [CONTEXT.md](.
 ## Workflow
 
 ```
-WHY     /arc:vision     - Define the project's purpose, audience, and non-goals
+WHY     /arc:vision     - Define goals, boundary, and domain language in CONTEXT.md
           ↓
 WHAT    /arc:ideate     - Turn an idea into a validated feature spec
           ↓
@@ -32,7 +32,8 @@ REVIEW  /arc:review     - Review a plan, spec, or implementation approach
         /arc:audit      - Verify and audit current codebase health
         /arc:refactor   - Find structural friction and propose refactors
 
-TOOLS   /arc:commit     - Create clean commits, optionally push and publish
+TOOLS   /arc:commit     - Create clean commits, optionally push
+        /arc:release    - Version, changelog, verify, and publish packages
 ```
 
 `using-arc` and `detail` are supporting skills. They keep startup context small and create implementation plans, but they are not normally invoked directly.
@@ -56,6 +57,7 @@ Arc deliberately does not own every adjacent specialist practice. Brand identity
 ### Claude Code
 
 ```bash
+claude plugin marketplace add howells/arc
 claude plugins install arc@howells
 ```
 
@@ -124,6 +126,7 @@ Common Codex entry points:
 - `$testing`
 - `$launch`
 - `$commit`
+- `$release`
 
 If you open this repo itself in Codex, `.agents/skills/*` symlinks let Codex discover the local skills without a global install.
 
@@ -131,15 +134,16 @@ If you open this repo itself in Codex, `.agents/skills/*` symlinks let Codex dis
 
 | Command          | Use when                                                                                   | Output                           |
 | ---------------- | ------------------------------------------------------------------------------------------ | -------------------------------- |
-| `/arc:vision`    | A project needs a concise north star                                                       | `docs/vision.md`                 |
+| `/arc:vision`    | A project needs a concise north star and shared domain language                            | `CONTEXT.md`                     |
 | `/arc:ideate`    | An idea needs to become a concrete feature spec                                            | `docs/arc/specs/...`             |
 | `/arc:review`    | A plan, spec, or implementation approach needs expert challenge                            | Prioritized review findings      |
 | `/arc:implement` | You are ready to build or continue implementation                                          | Code changes with TDD and checks |
 | `/arc:testing`   | Existing code needs characterization tests before change                                   | Safety-net tests and risk notes  |
 | `/arc:launch`    | A project needs to be ready for a public URL                                               | Launch readiness checklist       |
-| `/arc:audit`     | You need a verified current-state codebase health report                                   | `docs/audits/...`                |
+| `/arc:audit`     | You need a verified current-state codebase health report                                   | `docs/arc/audits/...`            |
 | `/arc:refactor`  | Code feels tangled, shallow, duplicated, oversized, or ready for package/module extraction | Refactor plan/RFC                |
 | `/arc:commit`    | You are ready to commit, push, or publish changed npm packages                             | Atomic git commits               |
+| `/arc:release`   | Packages need a versioned release: semver, changelog, verified tarballs, publish           | Versioned, verified npm release  |
 
 ## Typical Flows
 
@@ -199,7 +203,7 @@ Arc includes specialist agents for work that benefits from focused review or del
 | **Research** | docs-researcher, git-history-analyzer                                                                                                                                                                              |
 | **Review**   | accessibility-engineer, architecture-engineer, daniel-product-engineer, data-engineer, lee-nextjs-engineer, mastra-agent-engineer, performance-engineer, security-engineer, senior-engineer, test-quality-engineer |
 | **Build**    | implementer, fixer, debugger, unit-test-writer, integration-test-writer, e2e-test-writer, test-runner, e2e-runner, spec-reviewer, code-reviewer, plan-completion-reviewer                                          |
-| **Workflow** | spec-flow-analyzer, spec-document-reviewer, plan-document-reviewer, e2e-test-runner                                                                                                                                |
+| **Workflow** | spec-flow-analyzer, spec-document-reviewer, plan-document-reviewer                                                                                                                                                 |
 
 Agents are support machinery. Arc workflows decide when they are useful; users normally start with a command or skill.
 

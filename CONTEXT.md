@@ -2,7 +2,7 @@
 
 This is the canonical source for Arc's product definition, domain language, and operating boundary. README, agent instructions, website copy, and individual skills may summarize Arc, but they should not introduce competing definitions.
 
-Arc is a self-contained software development lifecycle for coding agents. It helps move work from idea to shipped code through explicit workflows for vision, ideation, implementation, review, testing, launch readiness, commit hygiene, and package publishing when a change includes a publishable package.
+Arc is a self-contained software development lifecycle for coding agents. It helps move work from idea to shipped code through explicit workflows for vision, ideation, implementation, review, testing, launch readiness, commit hygiene, and versioned package releases when a change includes a publishable package.
 
 Arc should stay focused on the development cycle. It is not a general-purpose catalogue of every useful agent skill, and it should not require external personal skill collections to make its core workflows understandable or usable.
 
@@ -18,6 +18,7 @@ Arc should stay focused on the development cycle. It is not a general-purpose ca
 - **Audit**: A verification and assessment workflow that combines mechanical checks with specialist review to report current codebase health.
 - **God file**: A memorable shorthand for an oversized or tangled source file whose responsibilities need interrogation. Arc uses specific classifications when reporting them: `god-component`, `god-script`, `god-module`, or `duplication`.
 - **Publish**: Releasing a changed package to its registry after the corresponding commit has been pushed and the package version is confirmed unpublished.
+- **Release**: The versioned-publish workflow: semver decisions per package, changesets/changelogs, migration notes for breaking changes, pre-publish tarball verification, and gated publish. Commit owns commits and push; release owns versions and registries.
 - **Specialist lens**: A focused way of inspecting lifecycle work, such as reuse, API documentation, architecture boundaries, test quality, security, or performance.
 - **Self-contained**: Arc workflows may absorb useful patterns from adjacent tools, but they should explain and execute those patterns in Arc's own language.
 - **Full-runtime**: An install that includes Arc-owned agents, references, disciplines, templates, scripts, rules, and skills.
@@ -46,7 +47,7 @@ Arc owns the software development cycle:
 3. Implement with tests and verification.
 4. Review the plan, code, and rendered experience.
 5. Prepare the project to ship.
-6. Commit cleanly, push when requested, and publish changed packages when requested.
+6. Commit cleanly, push when requested, and release changed packages when requested — including semver, changelogs, and pre-publish verification.
 
 Launch readiness means the project is visitable, shareable, and ready for a first real audience. It covers go-live basics such as deployment, domain, HTTPS, environment variables, access gates, metadata, social previews, favicons, obvious placeholders, accidental robots/noindex blockers, and production settings for detected services. It should not expand into responsive, testing, security, code-health, or deep search-optimization work; those belong outside launch or Arc.
 
@@ -88,7 +89,8 @@ Arc should not expose external skill dependencies for those checks. If a special
 - Apply YAGNI when the proposed scope exceeds the user's goal.
 - Use TDD and verification for implementation work.
 - Keep quality continuous. Run relevant type, lint, build, and test checks during the work rather than only at the end.
-- Let knowledge compound through durable artifacts: vision, specs, plans, audits, and launch checklists.
+- Let knowledge compound through durable artifacts: CONTEXT.md (goals, boundary, domain language), specs, plans, audits, and launch checklists.
+- Never commit silently. Workflows that produce artifacts offer the commit through one question; the user decides.
 - Treat frontend implementation as part of software delivery, while deferring independent visual direction to the appropriate design source.
 - Prefer routing to the smallest relevant Arc workflow over preloading broad context.
 - Treat reviewers and audits as advisory. The user decides.
