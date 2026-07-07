@@ -20,12 +20,13 @@
 
 ## Proxy (replaces Middleware in Next.js 16+)
 - MUST: New projects use `proxy.ts` instead of `middleware.ts`
+- MUST: Place `proxy.ts` at the project root or `src/` — beside `app/`, never inside `app/`
 - MUST: Export function named `proxy`, not `middleware`
 - NOTE: Runs on Node.js only (Edge runtime not supported)
 - SHOULD: Migrate existing middleware.ts using codemod
 
 ```tsx
-// src/proxy.ts (Next.js 16+)
+// proxy.ts (project root, or src/proxy.ts — beside app/) — Next.js 16+
 import { NextRequest, NextResponse } from "next/server";
 
 export function proxy(request: NextRequest) {

@@ -1,6 +1,7 @@
 # Versions
 
-Mandatory version requirements for all new projects.
+Mandatory version requirements for all new projects. These are floors (hard minimums), not
+targets — prefer the current active LTS / latest stable within each major line.
 
 ## Minimum Versions
 
@@ -9,18 +10,18 @@ Mandatory version requirements for all new projects.
 - MUST: TypeScript 5.8.0+
 - MUST: Tailwind CSS 4.0.0+ — config-free, CSS-first. See [tailwind.md](tailwind.md).
 - MUST: Zod 4.0.0+ — breaking inference changes from v3.
-- MUST: Node.js 20.9.0+
-- MUST: pnpm as package manager (not npm or yarn).
+- MUST: Node.js 24.0.0+ — track the active LTS line.
+- MUST: pnpm 11+ as package manager (not npm or yarn).
 - MUST: @biomejs/biome 2.0.0+ (not ESLint/Prettier).
 
 ## Package.json
 
-- MUST: Specify `engines.node` >= 20.9.0.
-- SHOULD: Specify `packageManager` field.
+- MUST: Specify `engines.node` >= 24.0.0.
+- SHOULD: Specify `packageManager` field, pinned to the pnpm version in use.
 
 ```json
 {
-  "engines": { "node": ">=20.9.0" },
-  "packageManager": "pnpm@10.11.0"
+  "engines": { "node": ">=24.0.0" },
+  "packageManager": "pnpm@11.5.2"
 }
 ```

@@ -43,7 +43,7 @@ Frontend work requires intentional aesthetic direction. Generic "AI slop" (purpl
 | Sans     | Inter, Geist, DM Sans, Instrument Sans, Outfit       |
 | Mono     | Geist Mono, IBM Plex Mono, JetBrains Mono, Fira Code |
 
-For brand/identity typography (display, headlines, wordmarks), see `references/brand-identity.md`.
+**For brand/identity typography** (display, headlines, wordmarks), pick a font with personality — a UI font disappears, a brand font expresses. Avoid the default AI-serif/template tier: Instrument Serif, Playfair Display, Poppins, Montserrat, Roboto, Arial. Reach instead for distinctive families (e.g. Söhne, Space Grotesk, Bricolage Grotesque, Fraunces, Newsreader) and pair by contrast, not conflict.
 
 **If user has a fonts folder**, check it for available licensed fonts before selecting.
 

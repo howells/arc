@@ -24,14 +24,16 @@
 
 ### Vitest Gotchas
 
-- MUST: Always `await` or `return` promises in tests. Forgetting causes tests to exit before assertions run (silent false pass).
-- MUST: Use `vi.hoisted()` for variables referenced inside `vi.mock()` — mock calls are hoisted above imports, so normal `const` declarations aren't available yet.
-- MUST: Use `vi.mocked(fn)` to access mock methods with full TypeScript types instead of casting.
-- SHOULD: Use `happy-dom` over `jsdom` for component tests — significantly faster, sufficient for most cases.
-- SHOULD: Use `vi.useFakeTimers()` for time-dependent code (debounce, throttle, setTimeout). Call `vi.useRealTimers()` in `afterEach`.
-- SHOULD: Use `expect.assertions(N)` in async tests to catch cases where assertions never execute.
-- SHOULD: Use `// @vitest-environment jsdom` comment to override environment per file when most tests use `node`.
-- SHOULD: Use `--shard=1/N` in CI to distribute tests across parallel runners.
+> Code examples for these live in [testing-patterns.md](../references/testing-patterns.md) `<vitest_gotchas>` — the single source. Keep this list to the one-line rules.
+
+- MUST: Always `await`/`return` promises in tests (forgetting = silent false pass).
+- MUST: Use `vi.hoisted()` for variables referenced inside `vi.mock()`.
+- MUST: Use `vi.mocked(fn)` for typed access to mock methods instead of casting.
+- SHOULD: Prefer `happy-dom` over `jsdom` for component tests (faster).
+- SHOULD: Use `vi.useFakeTimers()` for time-dependent code; restore with `vi.useRealTimers()` in `afterEach`.
+- SHOULD: Use `expect.assertions(N)` in async tests to catch skipped assertions.
+- SHOULD: Use `// @vitest-environment jsdom` to override environment per file.
+- SHOULD: Use `--shard=1/N` in CI to distribute tests across runners.
 
 ## Playwright
 
@@ -43,15 +45,19 @@
 
 ### Playwright Gotchas
 
-- MUST: Wait for hydration before interacting in Next.js apps. Clicking before hydration completes causes missed event handlers. Use `page.waitForFunction(() => document.readyState === 'complete')` or wait for a known interactive element.
-- MUST: Use `--trace on` in CI for failed test debugging. Trace viewer shows timeline, screenshots, DOM snapshots, and network — essential for diagnosing CI-only failures.
-- SHOULD: Authenticate via API calls in `globalSetup`, not UI login flows. API auth takes ~100ms vs 2-5s for UI login per worker.
-- SHOULD: Store auth state with `storageState` and load it per worker for parallel test isolation.
+> Code examples live in [testing-patterns.md](../references/testing-patterns.md) `<playwright_gotchas>` — the single source. Keep this list to the one-line rules.
+
+- MUST: Wait for hydration before interacting in Next.js apps.
+- MUST: Use `--trace on` (or `on-first-retry`) in CI for failed-test debugging.
+- SHOULD: Authenticate via API in `globalSetup`, not UI login (~100ms vs 2-5s per worker).
+- SHOULD: Store auth with `storageState` and load per worker for parallel isolation.
 - SHOULD: Use `--shard=1/N` to distribute E2E tests across CI machines.
-- SHOULD: Block unnecessary requests (analytics, tracking pixels, images) with `page.route()` + `route.abort()` to speed up tests.
-- SHOULD: Use `expect.soft()` for non-blocking assertions when you want to collect multiple failures in one run.
+- SHOULD: Block unnecessary requests (analytics, images) with `page.route()` + `route.abort()`.
+- SHOULD: Use `expect.soft()` for non-blocking assertions to collect multiple failures.
 
 ## E2E with External APIs
+
+Scope note: this section covers real-API E2E for critical flows. Unit and integration tests mock these same boundaries instead — see [Mocking Boundaries](#mocking-boundaries) below.
 
 Tests that hit real external APIs MUST run — don't skip them because "no live API". Use fail-fast patterns to control cost:
 
@@ -67,6 +73,8 @@ Tests that hit real external APIs MUST run — don't skip them because "no live 
 - SHOULD: Use MSW for API mocking in integration tests, not manual fetch stubs.
 
 ## Mocking Boundaries
+
+Scope note: this section covers unit/integration tests. Critical E2E flows deliberately hit real external APIs instead of mocking them — see [E2E with External APIs](#e2e-with-external-apis) above.
 
 Mock at system boundaries. Never mock your own code.
 

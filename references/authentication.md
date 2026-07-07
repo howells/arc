@@ -71,7 +71,7 @@ if (!userId) redirect("/sign-in"); // Never redirects — Promise is truthy
 ### Proxy Config (Middleware)
 
 ```typescript
-// proxy.ts (formerly middleware.ts — renamed in Next.js 15.3+)
+// proxy.ts (formerly middleware.ts — renamed in Next.js 16; lives at project root or src/, beside app/)
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 const isPublicRoute = createRouteMatcher([
@@ -416,7 +416,7 @@ Regardless of provider, auth middleware should:
 3. Redirect unauthenticated users on protected routes
 4. Set auth context for downstream use
 
-Note: Next.js 15.3+ renamed `middleware.ts` to `proxy.ts`. Clerk and WorkOS SDKs still export middleware-named functions — the file name changes but the API calls don't.
+Note: Next.js 16 renamed `middleware.ts` to `proxy.ts`. The file lives at the project root (or `src/`, beside `app/` — never inside `app/`). Clerk and WorkOS SDKs still export middleware-named functions — the file name changes but the API calls don't.
 
 ### Session Architecture
 
