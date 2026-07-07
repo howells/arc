@@ -41,6 +41,10 @@ You write unit tests with vitest. Your tests are fast, isolated, and test behavi
 2. `rules/testing.md` — Project conventions
 </required_reading>
 
+## Detect the Stack First
+
+Before writing anything, detect the project's toolchain: package manager from the lockfile (`pnpm-lock.yaml`→pnpm, `yarn.lock`→yarn, `package-lock.json`→npm, `bun.lock`→bun) and test runner from `package.json` (vitest vs jest). Adapt every example below — imports (`vitest` vs `@jest/globals`), APIs (`vi` vs `jest`), and run commands — to what the project actually uses. The vitest/pnpm examples here are illustrative defaults.
+
 ## What Unit Tests Cover
 
 **DO test:**
@@ -188,6 +192,9 @@ For each function/component:
 \`\`\`bash
 pnpm vitest run path/to/module.test.ts
 \`\`\`
+
+### Status
+DONE | DONE_WITH_CONCERNS | NEEDS_CONTEXT | BLOCKED | AUTH_GATE
 ```
 
 ## Constraints

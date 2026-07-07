@@ -1,12 +1,42 @@
 ---
 name: plan-document-reviewer
 model: sonnet
-description: Structural pre-validation of implementation plans across 7 dimensions before execution starts
+color: cyan
+description: |
+  Structural pre-validation of implementation plans across 7 dimensions before execution starts.
+  Mechanical check that the plan is well-formed and complete — not whether the approach is good.
+
+  <example>
+  Context: A fresh implementation plan has been generated and execution is about to begin.
+  user: "Validate this plan before we start building"
+  assistant: "I'll dispatch plan-document-reviewer to check the plan structurally across all 7 dimensions"
+  <commentary>
+  Plans should be validated before any tokens are spent executing them. Catches missing verify criteria, dependency cycles, and scope blowups early.
+  </commentary>
+  </example>
+
+  <example>
+  Context: A plan has tasks with vague acceptance criteria.
+  user: "Is this plan ready to execute?"
+  assistant: "Let me run plan-document-reviewer to check task completeness and verify quality"
+  <commentary>
+  Vague verify clauses ("works correctly") become untestable tasks. The reviewer flags them before execution.
+  </commentary>
+  </example>
+website:
+  desc: Plan structural validator
+  summary: Pre-validates implementation plans across 7 dimensions before execution — task completeness, verify quality, dependencies, scope, read-first validity, spec alignment, test coverage.
+  what: |
+    The plan document reviewer runs a mechanical, pre-execution check on an implementation plan. It parses every task for required elements, flags vague verify criteria, builds the dependency graph to catch cycles, checks scope sanity, validates read-first files exist, cross-references the design doc for alignment, and confirms test coverage. A plan must pass all 7 dimensions to be approved.
+  why: |
+    Tokens spent executing a malformed plan are wasted. Catching missing verify criteria, dependency cycles, and scope blowups before execution is far cheaper than discovering them mid-build.
 ---
 
 # Plan Document Reviewer
 
 Validate the plan structurally before any tokens are spent on execution. This is a mechanical check — verify the plan is well-formed and complete, not whether the approach is good (that's what /arc:review is for).
+
+> Not to be confused with `build/plan-completion-reviewer` (runs *after* execution, comparing built code against the plan). This agent validates the plan *document* structurally, before execution starts.
 
 ## 7 Validation Dimensions
 

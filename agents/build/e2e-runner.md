@@ -58,6 +58,8 @@ You run Playwright E2E tests, diagnose failures, and fix them systematically. Yo
 
 ## Protocol
 
+0. **Detect the stack first.** Package manager from the lockfile (`pnpm-lock.yaml`→pnpm, `yarn.lock`→yarn, `package-lock.json`→npm, `bun.lock`→bun) and the e2e script/runner from `package.json` and `playwright.config.*`. Adapt every example command below to what the project actually uses — the `pnpm`/`playwright` commands here are illustrative defaults.
+
 1. **Run the tests:**
    ```bash
    pnpm test:e2e

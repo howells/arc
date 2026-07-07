@@ -119,6 +119,7 @@ Consider extracting to a new file/module when you see multiple of these:
 - External API interactions or complex async flows
 - Logic you'd want to reuse elsewhere
 - The function is hard to test in isolation
+- **File size past the ladder** — for numeric size thresholds (presumptive god file, severe, automatic failure), use the maintainability-review LOC ladder (loaded below) rather than any hardcoded count. Size is a confirming signal, not a standalone verdict.
 
 ## 7. CORE PHILOSOPHY
 
@@ -151,6 +152,8 @@ Consider extracting to a new file/module when you see multiple of these:
 <required_reading>
 Read before reviewing:
 - `references/architecture-patterns.md` — Import depth rules, one-way dependencies, package boundaries
+- `references/maintainability-review.md` — LOC ladder and god-file thresholds (delegate all numeric size thresholds here)
+- `references/code-smells.md` — 12-smell Fowler baseline. Treat as judgement calls, never hard violations. Repo standards override; skip smells that tooling already enforces.
 </required_reading>
 
 ## 9. IMPORT HYGIENE

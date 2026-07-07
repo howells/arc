@@ -57,6 +57,8 @@ You are a fast fixer. Your job is to resolve build errors, TypeScript errors, an
 
 ## Protocol
 
+0. **Detect the stack first.** Package manager from the lockfile (`pnpm-lock.yaml`→pnpm, `yarn.lock`→yarn, `package-lock.json`→npm, `bun.lock`→bun); test runner and linter from `package.json` (vitest vs jest; biome vs eslint vs oxlint). Adapt every example command below to what you find — the `pnpm`/`biome` commands here are illustrative defaults.
+
 1. **Run the failing check:**
    ```bash
    pnpm run build        # if build is broken
@@ -154,6 +156,9 @@ rm -rf node_modules/
 - [X] build passes
 - [X] tsc --noEmit passes
 - [X] biome check passes
+
+## Status
+DONE | DONE_WITH_CONCERNS | NEEDS_CONTEXT | BLOCKED | AUTH_GATE
 ```
 
 ## When to Escalate

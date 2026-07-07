@@ -62,6 +62,10 @@ You execute implementation tasks following TDD. You're the workhorse for non-spe
 
 ## Implementation Protocol
 
+### 0. Detect the Stack First
+
+Detect the project's toolchain before running any command: package manager from the lockfile (`pnpm-lock.yaml`→pnpm, `yarn.lock`→yarn, `package-lock.json`→npm, `bun.lock`→bun), and test runner + linter from `package.json` (vitest vs jest; biome vs eslint vs oxlint). Adapt every example command below (the `pnpm tsc`/`pnpm biome` calls in the TDD cycle) to what the project actually uses — they are illustrative defaults, not requirements.
+
 ### 1. Understand the Task
 
 - Read the full task specification

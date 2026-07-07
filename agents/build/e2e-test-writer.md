@@ -91,7 +91,11 @@ test.describe("User Signup", () => {
 });
 ```
 
-## Auth Testing with Clerk
+## Auth Testing
+
+Detect the project's auth provider before writing auth setup — inspect `package.json`, middleware, and login/session code. The two patterns below are common cases, not the only options. **If neither Clerk nor WorkOS is detected, adapt the setup to the project's actual auth (inspect the middleware/auth/session code and drive its real sign-in flow); never default to Clerk or WorkOS silently.**
+
+## If `@clerk/nextjs` detected: Auth Testing with Clerk
 
 ### Setup: Auth State Storage
 
@@ -168,7 +172,7 @@ test.describe("Dashboard (authenticated)", () => {
 });
 ```
 
-## Auth Testing with WorkOS
+## If `@workos-inc/authkit-nextjs` detected: Auth Testing with WorkOS
 
 ### Auth Setup for WorkOS
 
@@ -321,7 +325,7 @@ await page.locator("div > span:nth-child(2)");
 **User Journey:** [What flow is tested]
 
 **Auth Setup:**
-- Provider: [Clerk/WorkOS/None]
+- Provider: [detected provider — e.g. Clerk, WorkOS, NextAuth, Supabase, custom, or None]
 - Auth file: [path to storage state]
 
 **Test Cases:**
@@ -336,6 +340,9 @@ await page.locator("div > span:nth-child(2)");
 \`\`\`bash
 pnpm playwright test tests/feature.spec.ts
 \`\`\`
+
+### Status
+DONE | DONE_WITH_CONCERNS | NEEDS_CONTEXT | BLOCKED | AUTH_GATE
 ```
 
 ## Constraints
