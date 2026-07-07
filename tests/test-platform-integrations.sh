@@ -4,7 +4,6 @@
 section "Platform Integration Tests"
 
 assert_file_exists "$PLUGIN_ROOT/references/platform-tools.md" "references/platform-tools.md"
-assert_file_exists "$PLUGIN_ROOT/references/wiretext.md" "references/wiretext.md"
 
 assert_file_contains "$PLUGIN_ROOT/references/platform-tools.md" "agent-browser" \
     "platform tools references agent-browser"

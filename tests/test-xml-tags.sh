@@ -19,10 +19,11 @@ for tag in "${RETIRED_TAGS[@]}"; do
     if [ -z "$files_with_retired" ]; then
         pass "No files use retired tag <${tag}>"
     else
-        for f in $files_with_retired; do
+        while IFS= read -r f; do
+            [ -n "$f" ] || continue
             rel_path="${f#$PLUGIN_ROOT/}"
             fail "$rel_path uses retired tag <${tag}>"
-        done
+        done <<< "$files_with_retired"
     fi
 done
 

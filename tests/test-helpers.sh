@@ -129,10 +129,16 @@ assert_file_not_contains() {
     fi
 }
 
-# Extract frontmatter from a skill file (returns YAML between ---)
+# Extract frontmatter from a skill file (returns YAML between the leading --- pair).
+# Uses an awk state machine that stops at the FIRST closing --- so standalone
+# --- lines later in the body don't re-arm the range (mirrors body_without_frontmatter).
 get_frontmatter() {
     local file="$1"
-    sed -n '/^---$/,/^---$/p' "$file" | sed '1d;$d'
+    awk '
+        NR == 1 && $0 == "---" { in_frontmatter = 1; next }
+        in_frontmatter && $0 == "---" { exit }
+        in_frontmatter { print }
+    ' "$file"
 }
 
 # Check if frontmatter contains a key
@@ -166,6 +172,28 @@ assert_frontmatter_value() {
         fail "$name" "Expected $key: $expected"
         return 1
     fi
+}
+
+# --- Temp directory management -----------------------------------------------
+# Every test-*.sh is sourced into ONE shell, so a per-file `trap ... EXIT` would
+# clobber any previously registered trap (bash traps don't stack). Register temp
+# dirs here instead and let a single shared EXIT trap clean them all up.
+_TEST_TMPDIRS=()
+
+_test_cleanup_tmpdirs() {
+    local dir
+    for dir in "${_TEST_TMPDIRS[@]}"; do
+        [ -n "$dir" ] && rm -rf "$dir"
+    done
+}
+trap _test_cleanup_tmpdirs EXIT
+
+# Create a temp dir that is auto-removed by the shared EXIT trap. Echoes the path.
+make_test_tmpdir() {
+    local dir
+    dir="$(mktemp -d)"
+    _TEST_TMPDIRS+=("$dir")
+    printf '%s\n' "$dir"
 }
 
 # Print section header

@@ -32,22 +32,22 @@ BUILD_AGENTS=(
     "debugger"
     "e2e-runner"
     "e2e-test-writer"
-    "figma-builder"
     "fixer"
     "implementer"
     "integration-test-writer"
+    "plan-completion-reviewer"
     "spec-reviewer"
     "test-runner"
     "unit-test-writer"
 )
 
 WORKFLOW_AGENTS=(
-    "e2e-test-runner"
     "plan-document-reviewer"
     "spec-document-reviewer"
     "spec-flow-analyzer"
 )
-# Note: flow-discoverer removed (flow skill deleted)
+# Note: flow-discoverer removed (flow skill deleted).
+# Note: figma-builder (build) and e2e-test-runner (workflow) removed this wave.
 
 find_arc_root_refs() {
     # Flag any `${ARC_ROOT}/...` references — anti-pattern since no platform
@@ -282,6 +282,6 @@ for agent_file in "$PLUGIN_ROOT"/agents/*/*.md; do
         fi
     done
     if [ "$found" = false ]; then
-        echo -e "${YELLOW}⚠${NC} Unexpected agent: $agent_name (not in expected list)"
+        fail "Unexpected agent: $agent_name (not in expected list)"
     fi
 done

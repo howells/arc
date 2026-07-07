@@ -15,7 +15,11 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-OUT="$ROOT/plugins/arc"
+
+# Output tree defaults to the committed mirror. Set ARC_CODEX_OUT to build into a
+# throwaway directory (e.g. the mirror-freshness test) without touching the
+# committed plugins/arc or rewriting the repo-level marketplace manifest.
+OUT="${ARC_CODEX_OUT:-$ROOT/plugins/arc}"
 
 # Payload the Codex plugin needs: the plugin manifest, the workflows, and the
 # Arc-owned files those workflows load at runtime.
@@ -41,9 +45,12 @@ done
 # Drop build cruft that may live under scripts/.
 rm -rf "$OUT/scripts/__pycache__"
 
-# Codex marketplace manifest (shares the repo with the Claude plugin).
-mkdir -p "$ROOT/.agents/plugins"
-cat >"$ROOT/.agents/plugins/marketplace.json" <<'JSON'
+# Codex marketplace manifest (shares the repo with the Claude plugin). Only
+# written for a real build — a redirected build (ARC_CODEX_OUT set) must not
+# mutate the committed repo-level manifest.
+if [ -z "${ARC_CODEX_OUT:-}" ]; then
+  mkdir -p "$ROOT/.agents/plugins"
+  cat >"$ROOT/.agents/plugins/marketplace.json" <<'JSON'
 {
   "name": "howells",
   "interface": {
@@ -65,5 +72,6 @@ cat >"$ROOT/.agents/plugins/marketplace.json" <<'JSON'
   ]
 }
 JSON
+fi
 
-echo "Done. plugins/arc payload: ${PAYLOAD[*]} + ${FILES[*]}"
+echo "Done. Codex plugin payload at $OUT: ${PAYLOAD[*]} + ${FILES[*]}"

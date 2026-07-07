@@ -9,6 +9,8 @@ section "Script Existence & Permissions Tests"
 
 FUNCTIONAL_SCRIPTS=(
     ".husky/validate-plugin.sh"
+    "scripts/bump-version.sh"
+    "scripts/build-codex-plugin.sh"
 )
 
 for script in "${FUNCTIONAL_SCRIPTS[@]}"; do
@@ -59,3 +61,15 @@ assert_file_contains "$VALIDATE" "plugin.json" \
 # Must check for required frontmatter in skills
 assert_file_contains "$VALIDATE" "frontmatter" \
     "validate-plugin.sh validates frontmatter"
+
+section "Version Bump Script Tests"
+
+BUMP="$PLUGIN_ROOT/scripts/bump-version.sh"
+
+# --check reports current versions and exits 0 when declared files are in sync.
+if (cd "$PLUGIN_ROOT" && bash "$BUMP" --check) >/dev/null 2>&1; then
+    pass "bump-version.sh --check exits 0 (versions in sync)"
+else
+    fail "bump-version.sh --check exited non-zero" \
+        "Declared version files should be in sync (drift detected)"
+fi

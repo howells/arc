@@ -17,6 +17,7 @@ EXPECTED_SKILLS=(
     "implement"
     "launch"
     "refactor"
+    "release"
     "review"
     "testing"
     "using-arc"
@@ -96,6 +97,6 @@ for dir in "$PLUGIN_ROOT/skills"/*/; do
         fi
     done
     if [ "$found" = false ]; then
-        echo -e "${YELLOW}⚠${NC} Unexpected skill: $skill_name (not in expected list)"
+        fail "Unexpected skill: $skill_name (not in expected list)"
     fi
 done

@@ -14,10 +14,9 @@ if [ -f "$MAPPER" ]; then
     fi
 fi
 
-tmpdir="$(mktemp -d)"
-trap 'rm -rf "$tmpdir"' EXIT
+tmpdir="$(make_test_tmpdir)"
 
-mkdir -p "$tmpdir/src/api" "$tmpdir/src/lib" "$tmpdir/prisma"
+mkdir -p "$tmpdir/src/api" "$tmpdir/src/lib" "$tmpdir/prisma" "$tmpdir/app/api/foo"
 cat >"$tmpdir/package.json" <<'JSON'
 {
   "dependencies": {
@@ -52,6 +51,10 @@ cat >"$tmpdir/src/lib/b.ts" <<'TS'
 import { helper } from "./a";
 export function b() { return helper; }
 TS
+cat >"$tmpdir/app/api/foo/route.ts" <<'TS'
+export async function GET() { return new Response("ok"); }
+export async function POST() { return new Response("created"); }
+TS
 cat >"$tmpdir/prisma/schema.prisma" <<'PRISMA'
 datasource db {
   provider = "postgresql"
@@ -84,6 +87,12 @@ else
     fail "codebase-map.py did not detect sample route"
 fi
 
+if echo "$json_output" | grep -q '"path": "/api/foo"'; then
+    pass "codebase-map.py detects app-router route"
+else
+    fail "codebase-map.py did not detect app-router route /api/foo"
+fi
+
 if echo "$json_output" | grep -q '"name": "Stripe"'; then
     pass "codebase-map.py detects services"
 else
@@ -110,7 +119,7 @@ else
     fail "codebase-map.py markdown missing routes"
 fi
 
-nested_tmpdir="$(mktemp -d)"
+nested_tmpdir="$(make_test_tmpdir)"
 mkdir -p "$nested_tmpdir/site"
 cat >"$nested_tmpdir/package.json" <<'JSON'
 { "name": "root-only" }
@@ -129,4 +138,12 @@ if echo "$nested_output" | grep -q '"framework": "Next.js"'; then
     pass "codebase-map.py detects nested package framework"
 else
     fail "codebase-map.py did not detect nested Next.js package"
+fi
+
+# Missing path with --format markdown should emit a markdown error, not JSON.
+missing_md="$(python3 "$MAPPER" "$tmpdir/does-not-exist" --format markdown 2>/dev/null)"
+if echo "$missing_md" | grep -q "^## Codebase Map" && echo "$missing_md" | grep -qi "path not found"; then
+    pass "codebase-map.py emits markdown error for missing path"
+else
+    fail "codebase-map.py did not emit markdown error for missing path" "$missing_md"
 fi
