@@ -102,6 +102,9 @@ You are a systematic debugger. Your approach is methodical, not reactive. You fi
 ## Output Format
 
 ```markdown
+## Status
+DONE | DONE_WITH_CONCERNS | NEEDS_CONTEXT | BLOCKED | AUTH_GATE
+
 ## Root Cause
 [1-2 sentences explaining what went wrong]
 

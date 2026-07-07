@@ -92,7 +92,7 @@ Use the project's existing shape first, but recognize a healthy production Mastr
 When reviewing this shape, look for drift:
 
 - New agents are implemented as internal agent files, registered only through the singleton, given stable IDs/names, bounded `maxSteps`, memory when justified, and explicit tool/agent/workflow access.
-- New tools are implemented as internal tool files with verb_noun IDs, purpose-led descriptions, schemas, output schemas, background settings when long-running, and tests that pin IDs/descriptions. Their `execute` functions should be thin adapters over code owned elsewhere, not places where domain functionality accumulates.
+- New tools are implemented as internal tool files with consistent verb-noun IDs matching the project's convention (Mastra docs favor kebab-case), purpose-led descriptions, schemas, output schemas, background settings when long-running, and tests that pin IDs/descriptions. Their `execute` functions should be thin adapters over code owned elsewhere, not places where domain functionality accumulates.
 - New workflows are implemented as internal workflow files with committed step chains, typed input/output contracts, atomic named steps, bounded `parallel` and `foreach` concurrency, trace/event mapping, and tests that prove the step sequence and registration. Steps should coordinate, validate, branch, fan out, merge, and call external functionality; they should not contain heavy business logic.
 - Shared schemas/contracts can live inside the Mastra package so tools, workflows, and runtime adapters parse the same shapes instead of duplicating validation. They should not become public package exports by default; external callers should use the singleton-facing API, server route, or a separate non-Mastra contracts package if a truly shared contract is needed.
 - Prompt/instruction blocks are versionable data, not ad hoc strings buried across agents. Stored agent references should stay aligned with runtime config when Studio or storage-backed prompt management is used.
@@ -172,6 +172,10 @@ Verify the implementation uses the right Mastra primitive:
 - **Tool** for external facts, mutations, retrieval, API calls, database access, file access, browser/sandbox actions, or deterministic computation.
 - **Memory** only for durable cross-turn recall, durable entity state, or retrieval over durable data.
 - **Storage** when persistence, traces, threads, workflow state, or memory require a real backend.
+- **Durable agents** for resumable long-running work that must survive restarts and pick up where it left off, rather than a plain agent call that loses state on failure.
+- **Background tasks / schedules / signals** for non-blocking tool execution — long-running or deferred tool work that should return an accepted/observable status and resume via signal instead of blocking the request.
+- **Scheduled workflows** for recurring or time-triggered runs (cron-like schedules) rather than ad hoc external triggers.
+- **Observational memory** for passive capture of interactions/state for recall and analysis, distinct from working memory used mid-conversation.
 
 Flag prompt-hidden branching that should be a workflow, tool, or typed guardrail.
 
@@ -179,7 +183,7 @@ Flag prompt-hidden branching that should be a workflow, tool, or typed guardrail
 
 Check every tool for:
 
-- Specific input and output schemas, preferably Zod-backed.
+- Specific input and output schemas, defined with Zod or another Standard-JSON-Schema library (Valibot, ArkType).
 - Tool descriptions that tell the model when to use the tool and what not to use it for.
 - No user-controlled `userId`, `teamId`, auth token, tenant ID, role, or scope parameters when identity should come from server-side request context.
 - Least-privilege access to external APIs, databases, filesystem, browser, sandbox, and production services.

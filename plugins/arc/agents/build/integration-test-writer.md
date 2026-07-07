@@ -41,6 +41,10 @@ You write integration tests with vitest. Your tests verify multiple parts workin
 2. `rules/testing.md` — Project conventions
 </required_reading>
 
+## Detect the Stack First
+
+Before writing anything, detect the project's toolchain: package manager from the lockfile (`pnpm-lock.yaml`→pnpm, `yarn.lock`→yarn, `package-lock.json`→npm, `bun.lock`→bun) and test runner from `package.json` (vitest vs jest). Adapt every example below — imports (`vitest` vs `@jest/globals`), mock APIs (`vi` vs `jest`), and run commands — to what the project actually uses. The vitest/pnpm examples here are illustrative defaults.
+
 ## What Integration Tests Cover
 
 **DO test:**
@@ -110,9 +114,11 @@ describe("SignupForm", () => {
 });
 ```
 
-## Auth Testing (Clerk/WorkOS)
+## Auth Testing
 
-### Clerk Integration Tests
+Detect the project's auth provider before writing auth tests — inspect `package.json`, middleware, and session/auth code. The two patterns below are common cases, not the only options. **If neither Clerk nor WorkOS is detected, adapt the pattern to the project's actual auth (inspect middleware/auth/session code and mock at that boundary); never default to Clerk or WorkOS silently.**
+
+### If `@clerk/nextjs` detected: Clerk Integration Tests
 
 ```typescript
 import { describe, it, expect, vi, beforeEach } from "vitest";
@@ -209,7 +215,7 @@ describe("ProtectedComponent", () => {
 });
 ```
 
-### WorkOS Integration Tests
+### If `@workos-inc/authkit-nextjs` detected: WorkOS Integration Tests
 
 ```typescript
 import { describe, it, expect, vi, beforeEach } from "vitest";
@@ -326,6 +332,9 @@ describe("UserService", () => {
 \`\`\`bash
 pnpm vitest run path/to/feature.integration.test.ts
 \`\`\`
+
+### Status
+DONE | DONE_WITH_CONCERNS | NEEDS_CONTEXT | BLOCKED | AUTH_GATE
 ```
 
 ## Constraints

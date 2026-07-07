@@ -29,16 +29,17 @@ The agent completed automated work. The human confirms it works visually or func
 
 **Example:**
 
-```
-Task 5: [CHECKPOINT:VERIFY] Verify dashboard layout
-  After: Tasks 1-4 (agent starts dev server automatically)
-
-  Verify at http://localhost:3000/dashboard:
-  1. Desktop (>1024px): Sidebar visible, content fills remaining space
-  2. Tablet (768px): Sidebar collapses to hamburger menu
-  3. Mobile (375px): Single column layout, bottom nav visible
-
-  -> "approved" or describe issues
+```xml
+<task id="5" depends="1,2,3,4" type="checkpoint:verify">
+  <name>Verify dashboard layout</name>
+  <verify>
+    Agent starts dev server automatically, then verify at http://localhost:3000/dashboard:
+    1. Desktop (>1024px): Sidebar visible, content fills remaining space
+    2. Tablet (768px): Sidebar collapses to hamburger menu
+    3. Mobile (375px): Single column layout, bottom nav visible
+  </verify>
+  <done>User responds "approved" or describes issues</done>
+</task>
 ```
 
 ### 2. `checkpoint:decide` (~9% of checkpoints)
@@ -60,16 +61,17 @@ The human must make a choice that affects implementation direction. The agent ca
 
 **Example:**
 
-```
-Task 3: [CHECKPOINT:DECIDE] Select authentication provider
-  Options:
-  1. Clerk -- Best DX, pre-built UI, paid after 10k MAU
-  2. NextAuth -- Free, self-hosted, maximum control
-  3. Supabase Auth -- Built-in if already using Supabase DB
-
-  Recommendation: Clerk (fastest to ship, handles edge cases)
-
-  -> Select: clerk, nextauth, or supabase
+```xml
+<task id="3" depends="" type="checkpoint:decide">
+  <name>Select authentication provider</name>
+  <options>
+    1. Clerk -- Best DX, pre-built UI, paid after 10k MAU
+    2. NextAuth -- Free, self-hosted, maximum control
+    3. Supabase Auth -- Built-in if already using Supabase DB
+  </options>
+  <recommendation>Clerk (fastest to ship, handles edge cases)</recommendation>
+  <done>User selects: clerk, nextauth, or supabase</done>
+</task>
 ```
 
 ### 3. `checkpoint:action` (~1% of checkpoints)
@@ -102,7 +104,7 @@ Agent receives: "Error: not authenticated"
          ↓
 Agent reports: AUTH_GATE (not BLOCKED)
          ↓
-Controller creates: dynamic CHECKPOINT:ACTION
+Controller creates: dynamic task with type="checkpoint:action"
          ↓
 User runs: vercel login
          ↓
@@ -120,15 +122,17 @@ If an agent skips a task because of an auth error, that's a bug in the agent. Au
 
 **Example:**
 
-```
-Task 8: [CHECKPOINT:ACTION] Complete email verification
-  I configured the DNS records and triggered the verification email.
-
-  Steps:
-  1. Check inbox for verify@example.com
-  2. Click the verification link
-
-  -> "done" when complete (I'll verify the domain status)
+```xml
+<task id="8" depends="" type="checkpoint:action">
+  <name>Complete email verification</name>
+  <action>
+    I configured the DNS records and triggered the verification email.
+    Steps:
+    1. Check inbox for verify@example.com
+    2. Click the verification link
+  </action>
+  <done>User responds "done" (I'll verify the domain status)</done>
+</task>
 ```
 
 ## Quick Reference: What's Automatable?

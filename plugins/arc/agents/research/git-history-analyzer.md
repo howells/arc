@@ -7,6 +7,24 @@ description: |
   trace the origins of specific code patterns, identify key contributors and their expertise areas,
   or analyze patterns in commit history. This agent excels at archaeological analysis of git
   repositories to provide insights about code evolution and development patterns.
+
+  <example>
+  Context: A module has confusing defensive code and nobody remembers why.
+  user: "Why is this payment handler wrapped in so many try/catch blocks?"
+  assistant: "I'll dispatch git-history-analyzer to trace the commits that introduced them"
+  <commentary>
+  The 'why' lives in git history. The analyzer traces blame and commit messages to recover the original context.
+  </commentary>
+  </example>
+
+  <example>
+  Context: Onboarding to an unfamiliar subsystem and needing a domain expert.
+  user: "Who knows the billing module best and how has it evolved?"
+  assistant: "Let me have git-history-analyzer map contributors and the module's change history"
+  <commentary>
+  git shortlog and per-file history reveal who owns a subsystem and how it reached its current shape.
+  </commentary>
+  </example>
 website:
   desc: Git archaeology expert
   summary: Traces code evolution, identifies contributors, and uncovers why code patterns exist.

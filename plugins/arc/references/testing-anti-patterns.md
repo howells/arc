@@ -79,10 +79,7 @@ vi.mock('./email-service', () => ({
 test('registers user and sends welcome email', async () => {
 await registerUser({ email: 'alice@test.com' });
 
-expect(sendEmail).toHaveBeenCalledWith(
-'alice@test.com',
-'Welcome!'
-);
+expect(sendEmail).toHaveBeenCalledWith('alice@test.com', 'Welcome!');
 });
 
 ````

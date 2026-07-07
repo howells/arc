@@ -118,6 +118,7 @@ Reviewers must respect the plan's scope. This is non-negotiable:
 - `security-engineer` — Vulnerabilities, OWASP
 - `data-engineer` — Migrations, transactions
 - `mastra-agent-engineer` — Mastra, agents, workflows, tools, memory/RAG, MCP, agent-readable surfaces
+- `accessibility-engineer` — WCAG conformance, keyboard navigation, screen-reader support (UI-facing plans)
 
 ## Phase 1: Find the Plan
 
@@ -228,6 +229,10 @@ Task [conditional-reviewer] model: sonnet: "Review this plan for [specialty conc
 
 ## Phase 4: Consolidate and Present
 
+**Keep the two finding axes separate:**
+
+Spec-compliance findings (does the approach do what it was supposed to?) and code-quality findings (is it well-shaped regardless of spec?) stay under separate headings. Never merge them into one list or rerank one axis against the other — a sound approach does not offset quality problems, and vice versa.
+
 **Transform findings into Socratic questions:**
 
 See `references/review-patterns.md` for approach.
@@ -290,12 +295,12 @@ If plan came from a file:
 **Show remaining arc:**
 
 ```
-/arc:ideate     → Feature spec ✓
-     ↓
-/arc:review     → Review ✓ YOU ARE HERE
-     ↓
-/arc:implement  → Plan + Execute task-by-task
+/arc:ideate  →  (/arc:review)  →  /arc:implement
+                 cross-cutting,
+                 optional ✓ YOU ARE HERE
 ```
+
+Review is cross-cutting: it can run between ideate and implement, or against any plan/spec/approach at any time. It is not a required lifecycle stage.
 
 **Offer next steps based on what was reviewed:**
 
@@ -323,5 +328,5 @@ If reviewed an **implementation plan**:
 - [ ] Summary presented
 - [ ] Remaining arc shown (based on plan type)
 - [ ] User chose next step (`/arc:implement` or done)
-- [ ] Orphaned agents cleaned up
+- [ ] All delegated agents have reported back
       </success_criteria>

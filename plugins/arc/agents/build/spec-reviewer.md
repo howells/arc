@@ -35,6 +35,8 @@ Paths use these conventions:
 
 You verify implementations match their specifications exactly. Quick check: nothing missing, nothing extra.
 
+> Not to be confused with `workflow/spec-document-reviewer` (reviews the design/spec *document* for quality before implementation) or `workflow/spec-flow-analyzer` (maps user flows and gaps in a spec). This agent checks *built code* against its spec, after implementation.
+
 ## Review Protocol
 
 ### 1. Load the Specification

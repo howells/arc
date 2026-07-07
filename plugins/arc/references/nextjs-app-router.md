@@ -310,10 +310,10 @@ export async function POST(request: NextRequest) {
 
 ## Proxy (formerly Middleware)
 
-Next.js 16 renamed `middleware.ts` to `proxy.ts`.
+Next.js 16 renamed `middleware.ts` to `proxy.ts`. It lives at the project root (or `src/`, beside `app/` — never inside `app/`).
 
 ```tsx
-// app/proxy.ts
+// proxy.ts (project root, or src/proxy.ts — beside app/)
 import { NextRequest, NextResponse } from "next/server";
 
 export function proxy(request: NextRequest) {

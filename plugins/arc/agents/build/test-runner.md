@@ -37,6 +37,10 @@ You run vitest test suites, analyze failures, and provide clear summaries. Fast,
 
 ## Execution Protocol
 
+### 0. Detect the Stack First
+
+Package manager from the lockfile (`pnpm-lock.yaml`→pnpm, `yarn.lock`→yarn, `package-lock.json`→npm, `bun.lock`→bun) and test runner from `package.json` (vitest vs jest). Adapt every command below — runner name and flags — to what the project actually uses. The vitest/pnpm examples here are illustrative defaults.
+
 ### 1. Run Tests
 
 **Full suite:**

@@ -128,7 +128,7 @@ def detect_project(root: Path) -> dict:
     }
 
 
-def detect_routes(root: Path, files: list[Path]) -> list[dict]:
+def detect_routes(root: Path, files: list[Path], texts: dict[Path, str]) -> list[dict]:
     routes: list[dict] = []
     app_route = re.compile(
         r"\b(?:app|router|server|fastify)\.(get|post|put|delete|patch|all)\s*\(\s*['\"]([^'\"]+)['\"]",
@@ -138,10 +138,9 @@ def detect_routes(root: Path, files: list[Path]) -> list[dict]:
     for path in files:
         if path.suffix not in JS_EXTS:
             continue
-        text = safe_read(path)
-        lines_before = text[:]
+        text = texts[path]
         for match in app_route.finditer(text):
-            line = lines_before[: match.start()].count("\n") + 1
+            line = text[: match.start()].count("\n") + 1
             routes.append(
                 {
                     "method": match.group(1).upper(),
@@ -156,7 +155,6 @@ def detect_routes(root: Path, files: list[Path]) -> list[dict]:
             methods = re.findall(r"export\s+(?:async\s+)?function\s+(GET|POST|PUT|DELETE|PATCH)", text)
             app_index = parts.index("app")
             route_path = "/" + "/".join(parts[app_index + 1 : -1])
-            route_path = route_path.replace("/api", "/api", 1)
             for method in methods:
                 routes.append({"method": method, "path": route_path, "file": rel(root, path), "line": 1})
 
@@ -187,12 +185,12 @@ def detect_schema(root: Path) -> dict:
     return {"orm": "none", "database": "none", "tables": []}
 
 
-def detect_services(root: Path, files: list[Path]) -> list[dict]:
+def detect_services(root: Path, files: list[Path], texts: dict[Path, str]) -> list[dict]:
     found: dict[str, set[str]] = defaultdict(set)
     for path in files:
         if path.suffix not in JS_EXTS:
             continue
-        text = safe_read(path)
+        text = texts[path]
         for name, pattern in SERVICE_PATTERNS:
             if pattern.search(text):
                 found[name].add(rel(root, path))
@@ -230,7 +228,7 @@ def resolve_import(root: Path, from_file: Path, specifier: str) -> str | None:
     return None
 
 
-def import_graph(root: Path, files: list[Path]) -> dict:
+def import_graph(root: Path, files: list[Path], texts: dict[Path, str]) -> dict:
     graph: dict[str, list[str]] = {}
     imports = re.compile(r"(?:import\s+.*?\s+from\s+|require\()\s*['\"]([^'\"]+)['\"]", re.S)
     for path in files:
@@ -238,7 +236,7 @@ def import_graph(root: Path, files: list[Path]) -> dict:
             continue
         key = rel(root, path)
         graph[key] = []
-        for specifier in imports.findall(safe_read(path)):
+        for specifier in imports.findall(texts[path]):
             target = resolve_import(root, path, specifier)
             if target:
                 graph[key].append(target)
@@ -248,25 +246,39 @@ def import_graph(root: Path, files: list[Path]) -> dict:
 def find_cycles(graph: dict[str, list[str]], max_cycles: int = 20) -> list[list[str]]:
     cycles: list[list[str]] = []
     seen: set[tuple[str, ...]] = set()
+    # Nodes proven acyclic (no path back to any ancestor). A node in a cycle is
+    # always active during its own subtree walk, so it can never land here —
+    # which makes skipping `safe` nodes sound while pruning repeated DFS work.
+    safe: set[str] = set()
 
-    def visit(node: str, stack: list[str], active: set[str]) -> None:
+    def visit(node: str, stack: list[str], active: set[str]) -> bool:
+        # Returns True when this subtree is cycle-entangled (reached an active
+        # ancestor), meaning the node must not be memoized as safe.
         if len(cycles) >= max_cycles:
-            return
+            return True
+        if node in safe:
+            return False
         if node in active:
             cycle = stack[stack.index(node) :] + [node]
             canonical = tuple(sorted(cycle[:-1]))
             if canonical not in seen:
                 seen.add(canonical)
                 cycles.append(cycle)
-            return
+            return True
         if node not in graph:
-            return
+            safe.add(node)
+            return False
         active.add(node)
         stack.append(node)
+        entangled = False
         for target in graph[node]:
-            visit(target, stack, active)
+            if visit(target, stack, active):
+                entangled = True
         stack.pop()
         active.remove(node)
+        if not entangled:
+            safe.add(node)
+        return entangled
 
     for node in graph:
         visit(node, [], set())
@@ -284,11 +296,11 @@ def summarize_imports(graph: dict[str, list[str]]) -> dict:
     }
 
 
-def source_summary(root: Path, files: list[Path]) -> dict:
+def source_summary(root: Path, files: list[Path], texts: dict[Path, str]) -> dict:
     by_ext = Counter(path.suffix or "<none>" for path in files)
     largest = []
     for path in files:
-        text = safe_read(path)
+        text = texts[path]
         if not text:
             continue
         largest.append({"file": rel(root, path), "lines": text.count("\n") + 1})
@@ -299,14 +311,16 @@ def source_summary(root: Path, files: list[Path]) -> dict:
 def build_map(root: Path) -> dict:
     root = root.resolve()
     files = walk_code(root)
-    graph = import_graph(root, files)
+    # Read each source file exactly once and share the text across passes.
+    texts = {path: safe_read(path) for path in files}
+    graph = import_graph(root, files, texts)
     return {
         "root": str(root),
         "project": detect_project(root),
-        "source": source_summary(root, files),
-        "routes": detect_routes(root, files),
+        "source": source_summary(root, files, texts),
+        "routes": detect_routes(root, files, texts),
         "data": detect_schema(root),
-        "services": detect_services(root, files),
+        "services": detect_services(root, files, texts),
         "dependencies": {
             **summarize_imports(graph),
             "cycles": find_cycles(graph),
@@ -367,7 +381,10 @@ def main() -> int:
 
     root = Path(args.path)
     if not root.exists():
-        print(json.dumps({"error": f"Path not found: {root}", "success": False}, indent=2))
+        if args.format == "markdown":
+            print(f"## Codebase Map\n\nError: path not found: {root}")
+        else:
+            print(json.dumps({"error": f"Path not found: {root}", "success": False}, indent=2))
         return 1
 
     data = build_map(root)

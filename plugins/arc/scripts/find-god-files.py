@@ -213,10 +213,33 @@ def file_metrics(path: Path, root: Path) -> FileMetrics:
     )
 
 
+# A `/` in expression position opens a regex literal, not division or a comment.
+# `//` is always a line comment in JS (an empty regex must be written `/(?:)/`),
+# so the comment check runs first and never mis-opens a regex.
+_REGEX_PRECEDER_CHARS = set("=(,[{:;!&|?+-<>~^")
+_REGEX_PRECEDER_WORDS = {
+    "return", "typeof", "instanceof", "in", "of", "new", "void", "delete",
+    "do", "else", "yield", "await", "case",
+}
+_TRAILING_WORD_RE = re.compile(r"([A-Za-z_$][\w$]*)$")
+
+
+def _regex_position(prefix: str) -> bool:
+    """True when a `/` following ``prefix`` opens a regex literal."""
+    stripped = prefix.rstrip()
+    if not stripped:
+        return True
+    if stripped[-1] in _REGEX_PRECEDER_CHARS:
+        return True
+    match = _TRAILING_WORD_RE.search(stripped)
+    return bool(match and match.group(1) in _REGEX_PRECEDER_WORDS)
+
+
 def strip_line_comment(line: str) -> str:
     in_string = False
     quote = ""
     escaped = False
+    in_regex = False
     for index, char in enumerate(line):
         next_char = line[index + 1] if index + 1 < len(line) else ""
         if in_string:
@@ -227,12 +250,26 @@ def strip_line_comment(line: str) -> str:
             elif char == quote:
                 in_string = False
             continue
+        if in_regex:
+            # `//` and quotes inside a regex literal are data, not code — only an
+            # unescaped `/` closes it.
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == "/":
+                in_regex = False
+            continue
         if char in {"'", '"', "`"}:
             in_string = True
             quote = char
             continue
-        if char == "/" and next_char == "/":
-            return line[:index].rstrip()
+        if char == "/":
+            if next_char == "/":
+                return line[:index].rstrip()
+            if _regex_position(line[:index]):
+                in_regex = True
+            continue
     return line
 
 

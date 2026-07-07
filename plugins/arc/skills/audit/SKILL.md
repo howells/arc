@@ -109,7 +109,7 @@ If no native task/todo tool exists, skip task tracking and continue with the aud
 | `tailwindcss` in package.json         | tailwind.md             |
 | `.ts` or `.tsx` files                 | typescript.md           |
 | `vitest` or `jest` in package.json    | testing.md              |
-| `drizzle` or `prisma` in package.json | api.md                  |
+| `drizzle` or `prisma` in package.json | database.md             |
 | `.env*` files exist                   | env.md                  |
 
 Pass relevant rules to each reviewer agent.
@@ -122,7 +122,7 @@ Pass relevant rules to each reviewer agent.
 | architecture-engineer   | stack.md, turborepo.md                                                                              |
 | lee-nextjs-engineer     | nextjs.md, api.md, react-correctness.md (Next.js-specific rules)                                    |
 | senior-engineer         | code-style.md, typescript.md, react.md, error-handling.md                                           |
-| data-engineer           | testing.md, api.md                                                                                  |
+| data-engineer           | database.md, testing.md, api.md                                                                     |
 | daniel-product-engineer | react.md, typescript.md, react-performance.md, react-correctness.md                                 |
 | mastra-agent-engineer   | api.md, integrations.md, typescript.md, error-handling.md                                           |
 | performance-engineer    | react-performance.md                                                                                |
@@ -300,9 +300,9 @@ Store a **structural hotspot manifest** with:
 
 **Assess page & component shape (Next.js / React projects):**
 
-The point of this pass is to confirm you can see the **shape of a page** and the **shape of a component** from the code — its composition tree — rather than one opaque god component that swallows the whole route. Client components should be composed as *leaves into* pages, not hoisted into a single massive client boundary at the top.
+The point of this pass is to confirm you can see the **shape of a page** and the **shape of a component** from the code — its composition tree — rather than one opaque god component that swallows the whole route. Client components should be composed as _leaves into_ pages, not hoisted into a single massive client boundary at the top.
 
-The anti-pattern: a `page.tsx` (or `layout.tsx`) hits the "Server Components can't use hooks/state" wall and, instead of pushing interactivity *down* to leaf client components, dumps the entire route into one giant `"use client"` component — `MassivePageClient`, `GeneralLayoutShell`, `PageContent`, etc. — leaving the page a one-line pass-through that fetches and composes nothing on the server. This is not about banning client components; it is about whether the page's shape is composed and legible, or hidden inside one god client.
+The anti-pattern: a `page.tsx` (or `layout.tsx`) hits the "Server Components can't use hooks/state" wall and, instead of pushing interactivity _down_ to leaf client components, dumps the entire route into one giant `"use client"` component — `MassivePageClient`, `GeneralLayoutShell`, `PageContent`, etc. — leaving the page a one-line pass-through that fetches and composes nothing on the server. This is not about banning client components; it is about whether the page's shape is composed and legible, or hidden inside one god client.
 
 ```bash
 # Next.js pages/layouts that are a one-line pass-through to a single imported component
@@ -318,11 +318,11 @@ find ${scope:-.} -type f \( -name '*.tsx' -o -name '*.jsx' \) \
 
 For each thin page/layout, resolve the single returned component, confirm it is a `"use client"` module, then judge by composition **and** the file-size ladder above:
 
-| Situation                                                                              | Verdict       |
-| -------------------------------------------------------------------------------------- | ------------- |
-| Page composes several components / fetches server-side; client parts are leaves        | Healthy — shape is visible |
-| Thin page → single client component, small                                             | Low — note it; often a legitimately interactive route |
-| Thin page → single client component **600+ LOC**                                       | **High** — route interactivity hoisted to one boundary instead of composed down |
+| Situation                                                                                     | Verdict                                                                                      |
+| --------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Page composes several components / fetches server-side; client parts are leaves               | Healthy — shape is visible                                                                   |
+| Thin page → single client component, small                                                    | Low — note it; often a legitimately interactive route                                        |
+| Thin page → single client component **600+ LOC**                                              | **High** — route interactivity hoisted to one boundary instead of composed down              |
 | Thin page → single client component **1000+ LOC**, and/or named `*Client`/`*Shell`/`*Content` | **Must-Fix** — god page-client; the server boundary was pushed to the top to dodge RSC rules |
 
 Store these as **page-shape findings** in the structural hotspot manifest. Map to `architecture-engineer` and `lee-nextjs-engineer`. The remedy is always the same: move `"use client"` down to the smallest interactive leaves and let the page fetch and compose on the server.
@@ -332,7 +332,7 @@ Store these as **page-shape findings** in the structural hotspot manifest. Map t
 These structural rules surface as findings, framed by **intent**, not raw counts:
 
 - **Useless barrels** — re-export-only `index.{ts,tsx}` files that add an indirection layer without being a real public API surface. A package's single public entrypoint barrel is fine; a barrel per folder that just re-exports its siblings is the smell.
-- **No env typing strategy** — direct `process.env` reads scattered across app code with no typed env contract (Envy or equivalent). The finding is the *missing strategy*, not each read; if a typed env module exists and reads go through it, this is clean.
+- **No env typing strategy** — direct `process.env` reads scattered across app code with no typed env contract (Envy or equivalent). The finding is the _missing strategy_, not each read; if a typed env module exists and reads go through it, this is clean.
 - **Too many runtime dynamic imports** — `import()` beyond a couple of legitimate lazy-load sites. A smell when pervasive, not zero-tolerance.
 - **Generic component suffixes** — `Wrapper`/`Container`/`Manager`/`Component` component names that hide responsibility (the `*Client`/`*Shell` cases are handled by the page-shape pass above).
 - **Function-level limits** — surface functions over ~120 lines, over ~45 statements, or cyclomatic complexity over ~15.
@@ -543,6 +543,13 @@ Flag any app/package missing a `lint` script, a `typecheck` script, or (for TS w
 
 Include the mechanical summary in reviewer context, then continue to reviewer selection.
 
+### External-Surface Checks
+
+When the project exposes an agent-facing surface or ships published bundles, add these one-line checks to the mechanical summary:
+
+- Is the agent-facing surface (API / MCP / `llms.txt`) current with shipped behavior?
+- Have published component bundles been verified post-build (the built artifact, not just source)?
+
 ## Phase 2: Select Reviewers
 
 **Apply security readiness gate first:**
@@ -723,6 +730,14 @@ React signal guidance:
 Important: These are inspection prompts, not automatic findings. Report only concrete, reproducible issues with file/line evidence.
 ```
 
+**Include database lifecycle guidance in data-engineer prompts (projects with a database).**
+
+Pass `references/database-lifecycle.md` to `data-engineer`. Beyond migration safety, flag `db:push`-only schema management (schema pushed directly with no committed migration files), a missing migration journal, and absent backup/PITR posture as concrete findings when the evidence is present.
+
+**Include agent-drift guidance in mastra-agent-engineer prompts (Mastra projects).**
+
+When Mastra is detected, pass `references/agent-evals.md` to `mastra-agent-engineer` and have it check for agents-outside-Mastra drift — application agents running outside the registered Mastra instance — plus eval/golden-set coverage for the registered agents.
+
 **For each batch, dispatch 2 reviewer subagents in parallel when the platform supports delegation.**
 If the platform does not support subagents, run the same reviewer prompts locally one reviewer at a time and continue with consolidation.
 
@@ -801,13 +816,7 @@ If `security-engineer` was skipped by the security readiness gate, do not fabric
 - Critical/high vulnerability or likely credential exposure found → add `security-engineer` before scoring.
 - Clean dependency scan and clean secret scan in a prototype/development project with no sensitive surface → mark `Security Posture: -- (lightweight gate clean; full security review deferred)`.
 
-**Wait for batch to complete before starting next batch.**
-
-Repeat for remaining batches:
-
-- Batch 2: architecture-engineer + senior-engineer
-- Batch 3: frontend reviewers (daniel-product-engineer, lee-nextjs-engineer)
-- Batch 4: remaining reviewers (senior-engineer, data-engineer)
+**Wait for batch to complete before starting next batch.** Continue dispatching the remaining selected reviewers two at a time, waiting between batches, until all have run.
 
 ## Phase 4: Consolidate Findings
 
@@ -817,6 +826,10 @@ Repeat for remaining batches:
 
 - Same file:line mentioned by multiple reviewers → merge into single finding
 - Note which reviewers flagged each issue
+
+**Keep the two finding axes separate:**
+
+Spec-compliance findings (does the code do what it was supposed to do?) and code-quality findings (is it well-built regardless of spec?) are reported under separate headings. Never merge them into one list or rerank one axis against the other — a clean spec-compliance result does not offset code-quality problems, and vice versa.
 
 **Validate severity against project stage:**
 
@@ -881,10 +894,10 @@ If a core axis had no reviewer (e.g., small project skipped architecture-enginee
 **Create audit report:**
 
 ```bash
-mkdir -p docs/audits
+mkdir -p docs/arc/audits
 ```
 
-File: `docs/audits/YYYY-MM-DD-[scope-slug]-audit.md`
+File: `docs/arc/audits/YYYY-MM-DD-[scope-slug]-audit.md`
 
 ```markdown
 # Audit Report: [scope]
@@ -1031,7 +1044,7 @@ You may stage it or leave it unstaged based on the user's preferences and the pl
 Reviewed: [scope]
 Reviewers: [count] agents
 Project stage: [stage]
-Report: docs/audits/YYYY-MM-DD-[scope]-audit.md
+Report: docs/arc/audits/YYYY-MM-DD-[scope]-audit.md
 
 ### Scorecard
 Security: X | Perf: X | Arch: X | Quality: X | Tests: X | Resilience: X | Ops: X
@@ -1054,21 +1067,27 @@ Otherwise ask a concise plain-text question with the same options:
 
 Present these options (include all that apply):
 
-1. **Tackle critical cluster now** → Jump straight into fixing the highest-priority cluster. Invoke `/arc:detail` scoped to the files and issues in that cluster.
+1. **Tackle critical cluster now** → Jump straight into fixing the highest-priority cluster. Invoke `/arc:implement` scoped to the files and issues in that cluster.
 
 2. **Write full task plan** → Write all clusters as a structured plan to `docs/arc/plans/YYYY-MM-DD-audit-tasks.md` for systematic implementation. Each cluster becomes a section with its findings, suggested approach, and a checkbox list.
 
-3. **Add to tasks** → Use **TaskCreate** to create tasks for critical/high clusters. Each cluster becomes a task with findings in the description. Lower severity clusters are omitted — they're in the audit report if needed later.
+3. **Add to tasks** → Use the platform's native task/todo flow to create tasks for critical/high clusters. Each cluster becomes a task with findings in the description. Lower severity clusters are omitted — they're in the audit report if needed later.
 
-4. **Deep dive on a cluster** → User picks a cluster to explore in detail. Show full findings, relevant code snippets, and discuss approach before committing to action.
+4. **Remediate operations now** → Only when the report has Operations findings. Load `references/operations-playbook.md` and generate the actual files rather than describing them.
 
-5. **Done for now** → End session. Report is saved, user can return to it later.
+5. **Deep dive on a cluster** → User picks a cluster to explore in detail. Show full findings, relevant code snippets, and discuss approach before committing to action.
+
+6. **Done for now** → End session. Report is saved, user can return to it later.
 
 **If user selects "Tackle critical cluster now":**
 
 - Identify the cluster with the most critical/high findings
-- Invoke `/arc:detail` with the cluster's files and issues as scope
-- The detail plan will be scoped to just that cluster, not the entire audit
+- Invoke `/arc:implement` with the cluster's files and issues as scope — implement owns scope detection and can inline-plan the cluster
+- The work stays scoped to just that cluster, not the entire audit
+
+**If user selects "Remediate operations now":**
+
+- Load `references/operations-playbook.md` and generate the concrete files the Operations findings call for: a CI workflow wiring the repo's existing `pnpm check` / `check:affected` gate, gate enforcement, an env-doctor check, and cron/scheduled-job failure alerting. Match the project's existing package manager and scripts rather than inventing new ones, and offer the files as changes for the user to review before committing.
 
 **If user selects "Write full task plan":**
 
@@ -1077,7 +1096,7 @@ Create `docs/arc/plans/YYYY-MM-DD-audit-tasks.md`:
 ```markdown
 # Audit Task Plan
 
-**Source:** docs/audits/YYYY-MM-DD-[scope]-audit.md
+**Source:** docs/arc/audits/YYYY-MM-DD-[scope]-audit.md
 **Date:** YYYY-MM-DD
 **Project Stage:** [stage]
 **Total clusters:** X | **Total findings:** X
@@ -1133,7 +1152,7 @@ Audit is complete when:
 - [ ] All reviewers completed
 - [ ] Findings consolidated and deduplicated
 - [ ] Scorecard derived (7 core axes + bonus if applicable)
-- [ ] Report generated in `docs/audits/` with scorecard
+- [ ] Report generated in `docs/arc/audits/` with scorecard
 - [ ] Report saved and optionally staged
 - [ ] Summary presented to user
 - [ ] Next steps offered

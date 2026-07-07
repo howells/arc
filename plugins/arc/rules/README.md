@@ -16,6 +16,8 @@ All rule docs use RFC 2119 terms (MUST/SHOULD/NEVER). Files are lowercase/kebab-
 | [code-style.md](code-style.md) | Formatting, syntax, naming |
 | [typescript.md](typescript.md) | Type definitions and safety |
 | [react.md](react.md) | Component patterns and hooks |
+| [react-correctness.md](react-correctness.md) | Hook rules, effects, state correctness |
+| [react-performance.md](react-performance.md) | Memoization, re-render, bundle discipline |
 | [nextjs.md](nextjs.md) | App Router, assets, structure, and server-owned route shape (`page.tsx`/`layout.tsx`) |
 | [tailwind.md](tailwind.md) | Tailwind v4 configuration |
 
@@ -34,7 +36,7 @@ All rule docs use RFC 2119 terms (MUST/SHOULD/NEVER). Files are lowercase/kebab-
 | [api.md](api.md) | API design, tRPC, error formats |
 | [cloudflare-workers.md](cloudflare-workers.md) | Workers runtime, KV, R2, wrangler |
 | [cli.md](cli.md) | CLI patterns, dual-mode, agent friendliness |
-| [plan-mode.md](plan-mode.md) | Constraints for Claude's plan mode |
+| [tooling.md](tooling.md) | Issue tracking, Linear, MCP integrations |
 
 ### Interface Guidelines
 | File | Purpose |
@@ -44,7 +46,13 @@ All rule docs use RFC 2119 terms (MUST/SHOULD/NEVER). Files are lowercase/kebab-
 | [interface/colors.md](interface/colors.md) | Color palettes and methodology |
 | [interface/spacing.md](interface/spacing.md) | Spacing system and layout |
 | [interface/typography.md](interface/typography.md) | Type hierarchy and rendering |
+| [interface/tailwind-authoring.md](interface/tailwind-authoring.md) | Tailwind class-level authoring discipline |
 | [interface/layout.md](interface/layout.md) | Alignment, responsive, safe areas |
+| [interface/responsive.md](interface/responsive.md) | Responsive design, input detection, safe areas |
+| [interface/buttons.md](interface/buttons.md) | Button sizing, hierarchy, focus, touch targets |
+| [interface/surfaces.md](interface/surfaces.md) | Surface hierarchy, cards, dividers |
+| [interface/sections.md](interface/sections.md) | Section composition and consistency |
+| [interface/app-ui.md](interface/app-ui.md) | App UI (dashboards, SaaS, data tools) |
 | [interface/forms.md](interface/forms.md) | Form behavior and validation |
 | [interface/interactions.md](interface/interactions.md) | Keyboard, touch, navigation |
 | [interface/animation.md](interface/animation.md) | Motion and transitions |

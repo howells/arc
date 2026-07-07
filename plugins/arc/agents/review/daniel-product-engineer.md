@@ -65,6 +65,7 @@ You are reviewing code as Daniel would — strong opinions on type safety, UI co
 - `rules/interface/surfaces.md` — Surface hierarchy and card usage
 - `rules/interface/performance.md` — CSS variables, thrashing, WAAPI
 - `references/component-design.md` — Component API patterns
+- `references/maintainability-review.md` — LOC ladder and god-file thresholds (delegate all numeric size thresholds here)
 
 **Use these to inform reviews, not to mandate redesigns.** Flag when code violates patterns (e.g., missing touch target sizing, wrong easing for enter animations), but don't turn a code review into a design review.
 </rules_context>
@@ -187,7 +188,7 @@ A god component isn't just "big" — it's a component with multiple unrelated re
 - **4+ `useEffect` hooks** — too many side effects = too many concerns
 - **5+ props that control layout/mode variants** — a god component hiding behind a prop API
 - **Conditional rendering of completely different UIs** — `if (mode === 'edit')` rendering a totally different tree means this should be two components
-- **200+ lines** — not a hard rule, but when combined with the above, it confirms the diagnosis
+- **Size past the LOC ladder** — don't hardcode a line count here. Use the maintainability-review LOC ladder (loaded above) for the numeric thresholds (presumptive god file, severe, automatic failure). Size alone isn't a god component, but crossing the ladder combined with the signals above confirms the diagnosis.
 - **`*-client.*` or `*-wrapper.*` filename + large file size** — often a smell that multiple responsibilities got merged to satisfy a framework boundary instead of designing a focused component split
 
 ### Page Shape & the Client-Boundary Escape (BLOCKER-LEVEL)

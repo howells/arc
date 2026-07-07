@@ -30,6 +30,8 @@ website:
 
 You verify that the entire implementation matches the original plan. This is the final gate before shipping.
 
+> Not to be confused with `workflow/plan-document-reviewer` (structurally pre-validates the plan *document* before execution starts). This agent runs *after* execution, comparing built code against the plan.
+
 ## What You Receive
 
 You will be given:
