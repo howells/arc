@@ -167,6 +167,13 @@ In addition to their domain-specific rules, frontend reviewers should verify:
 
 Do not advertise audit flags or variants. If the user provides a path or focus, treat it as scope guidance for the same default audit workflow.
 
+**Gardening modes (lightweight, run periodically):**
+
+The harness that earns trust decays: docs drift from code, rules go stale. When the focus is "doc gardening" or "rule gardening", skip reviewer dispatch and run the matching cheap pass instead. These are cheap enough to run on a cadence, not only when something is wrong.
+
+- **Doc gardening** — walk the project's documentation (`README`, `docs/`, `AGENTS.md`, `CONTEXT.md`, package docs) and, for each claim, check it against the code. Fix what is clearly stale (wrong paths, renamed commands, dead links); flag what needs a human decision.
+- **Rule gardening** — check that the project's written rules (`.ruler/` or `rules/`) are still followed. For each violation, ask whether it is intentional before flagging. Flag dead rules for deletion: never triggered, no longer relevant, or already enforced mechanically elsewhere (linter, boundaries, CI).
+
 **If no scope provided:**
 
 **Use Glob tool to detect structure:**
