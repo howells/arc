@@ -88,7 +88,7 @@ Use these terms consistently:
 - **Interface** — everything a caller must know to use the module correctly: types, invariants, ordering, error modes, config, and performance characteristics.
 - **Implementation** — the code inside a module.
 - **Depth** — leverage at the interface. A deep module gives callers a lot of behavior through a small interface; a shallow module exposes nearly as much complexity as it hides.
-- **Seam** — where an interface lives; a place behavior can be altered without editing in place.
+- **Seam** — where an interface lives; a place behavior can be altered without editing in place. A module can carry **internal seams** — private to its implementation, exercised by its own tests — as well as the **external seam** its interface exposes. Never promote an internal seam into the public interface merely because a test wants to reach it; keep it behind the interface and test through the boundary instead.
 - **Adapter** — a concrete thing satisfying an interface at a seam.
 - **Leverage** — what callers get from depth.
 - **Locality** — what maintainers get from depth: change, bugs, knowledge, and verification concentrated in one place.
@@ -202,7 +202,7 @@ Present a numbered list of refactoring opportunities. For each candidate:
 | **Severity**            | How much this costs day-to-day                                                                                        |
 | **Confidence**          | How sure you are the friction is real and the direction is right — lower it when intent is unverified (see Restraint) |
 
-Before listing a candidate, run it through the **Restraint** gates above. Drop candidates that add structure without improving comprehension; mark candidates whose intent you couldn't verify as low confidence rather than omitting the caveat.
+Before listing a candidate, run it through the **Restraint** gates above. Drop candidates that add structure without improving comprehension; mark candidates whose intent you couldn't verify as low confidence rather than omitting the caveat. A candidate a prior ADR already rejected stays off the list unless observed friction justifies proposing to reopen that ADR — and when you do surface it, its row must say so explicitly (which ADR it contradicts, and why the friction warrants revisiting it).
 
 Ask the user: **"Which of these would you like to explore?"**
 
@@ -210,7 +210,7 @@ Do NOT propose final interfaces yet. The point is to choose which candidate dese
 
 ### Step 5 — Grill the chosen candidate
 
-Use a grilling loop before writing the RFC. Ask one question at a time, with your recommended answer included. Resolve:
+Use a grilling loop before writing the RFC. Before starting it, read `references/question-loops.md`. Its core rule holds here: facts are looked up in the codebase, not asked — decisions are what belong to the user. Ask one question at a time, with your recommended answer included. Resolve:
 
 - What concept should the new module/package own?
 - What should stay behind the interface?
@@ -221,7 +221,7 @@ Use a grilling loop before writing the RFC. Ask one question at a time, with you
 - Why any code slated for removal or consolidation exists today — confirm intent via `git blame`, the originating ADR, or the test that pins it before the RFC assumes it's safe to drop.
 - Which tests become redundant once the new interface is tested.
 - Whether `CONTEXT.md` should gain or sharpen a term.
-- Whether an ADR should record a rejected or surprising direction.
+- Whether an ADR should record a rejected or surprising direction. Record load-bearing rejections — the ones a future refactor pass would otherwise re-suggest — so the same candidate doesn't resurface every time someone explores this area.
 
 Update project context inline only for durable domain language, not temporary implementation details.
 
@@ -279,7 +279,10 @@ what integration risk exists, why this makes the codebase harder to navigate]
 
 ## Proposed Interface
 
-[The chosen interface option — signature, usage example, what it hides]
+[The chosen interface option — signature, usage example, what it hides.
+A small ASCII before/after sketch is optional — include one only when it
+lends support the prose can't carry on its own. If the explanation reads
+clearly without it, leave it out.]
 
 ## Package / Module Extraction
 
@@ -301,6 +304,10 @@ what integration risk exists, why this makes the codebase harder to navigate]
 1. [First safe extraction]
 2. [Second safe extraction]
 3. [Import migration / cleanup]
+
+[For a wide mechanical change — one whose blast radius fans across many call
+sites at once — sequence it as expand → migrate in batches → contract instead
+of a single edit. See Safe Split Order.]
 
 ## Implementation Recommendations
 
@@ -356,6 +363,8 @@ The core principle: **replace, don't layer.**
 - Extract I/O adapters away from domain logic in scripts.
 - Keep public imports stable until tests pass, then clean up barrels/exports.
 - Move grouped concerns into a package/module only after the interface and callers are clear.
+
+When a change is mechanical but its blast radius is large — one edit breaks call sites across the whole codebase at once, so no single step lands green — don't force it into one commit. Sequence it as **expand → migrate → contract**: introduce the new form beside the old so nothing breaks, migrate call sites in batches sized by blast radius (per package, per directory), then remove the old form once no caller remains. The old form staying in place is what keeps the build and tests green between batches.
 
 ## Signals That Indicate Deepening Opportunities
 

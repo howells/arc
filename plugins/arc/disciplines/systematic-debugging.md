@@ -63,6 +63,23 @@ You MUST complete each phase before proceeding to the next.
    - Does it happen every time?
    - If not reproducible → gather more data, don't guess
 
+   **Build the tightest loop that can show the failure.** A repeatable command that goes red on THIS bug is worth more than any amount of staring at code. Reach for the strongest option the situation allows, in this order — earlier is better, later is last resort:
+
+   1. **Failing test** at whatever seam reaches the bug (unit, integration, e2e)
+   2. **Curl / CLI invocation** against a running server or binary with a fixture input
+   3. **Snapshot comparison** — diff output against a known-good capture
+   4. **Headless browser script** (Playwright/Puppeteer) asserting on DOM, console, or network
+   5. **Replay / trace** — save a real request, payload, or event log and replay it through the path in isolation
+   6. **Throwaway harness** — a minimal subset of the system that hits the bug path in one call
+   7. **Property / fuzz loop** — for "sometimes wrong output", run many random inputs to surface the failure
+   8. **Bisection harness** — if the bug appeared between two known states, automate "boot at state X, check, repeat"
+   9. **Differential run** — same input through old vs. new (or two configs), diff the outputs
+   10. **Human-in-the-loop script** (last resort) — if a human must click, drive them with a structured script so captured output still feeds back
+
+   **Tighten the loop.** Once you have any loop, make it faster, sharper, and more deterministic — a 2-second deterministic loop beats a 30-second flaky one. Narrow the scope, assert on the specific symptom (not "didn't crash"), pin time, seed RNG, isolate the filesystem.
+
+   **For non-deterministic bugs**, don't chase a perfectly clean repro — raise the reproduction *rate* instead. Loop the trigger, parallelise, add stress, narrow timing windows. A 50%-flake bug is debuggable; 1% is not.
+
 3. **Check Recent Changes**
    - What changed that could cause this?
    - Git diff, recent commits
@@ -144,21 +161,26 @@ You MUST complete each phase before proceeding to the next.
 
 ### Phase 3: Hypothesis and Testing
 
+**Precondition — a command that can show the failure has already been run:**
+
+Before forming ANY hypothesis, you MUST have run at least once a command that can go red on THIS bug (see Phase 1.2). Paste the exact invocation and its output into your investigation notes. If you catch yourself reading code to build a theory before that command exists, STOP — jumping to a hypothesis without a red-capable loop is the exact failure this discipline prevents. No captured invocation and output, no Phase 3.
+
 **Scientific method:**
 
-1. **Form Single Hypothesis**
-   - State clearly: "I think X is the root cause because Y"
-   - Write it down
-   - Be specific, not vague
+1. **Enumerate and Rank Hypotheses**
+   - List 3-5 candidate root causes BEFORE testing any of them — a single hypothesis anchors you on the first plausible idea
+   - Each must be **falsifiable**: state the observation that would disprove it ("if X is the cause, then changing Y makes the bug disappear")
+   - If you can't state what would disprove it, it's a vibe — sharpen or discard it
+   - Rank them most- to least-likely; you will test strictly ONE at a time, starting from the top
 
 2. **Test Minimally**
-   - Make the SMALLEST possible change to test hypothesis
+   - Take the top candidate and make the SMALLEST possible change to test it
    - One variable at a time
    - Don't fix multiple things at once
 
 3. **Verify Before Continuing**
    - Did it work? Yes → Phase 4
-   - Didn't work? Form NEW hypothesis
+   - Didn't work? Move to the NEXT candidate on the ranked list (re-rank if the result taught you something)
    - DON'T add more fixes on top
 
 4. **When You Don't Know**
@@ -177,6 +199,8 @@ You MUST complete each phase before proceeding to the next.
    - One-off test script if no framework
    - MUST have before fixing
    - Follow the test-driven-development discipline for writing proper failing tests
+   - Write the test only where a **correct seam** exists — one that exercises the real bug pattern as it occurs at the call site. A test forced through the wrong interface (too shallow to replicate the chain that triggered the bug) gives false confidence.
+   - **If no correct seam exists, that is itself a finding.** The architecture is preventing the bug from being locked down. Don't force a test through the wrong interface — note it and route to `/arc:refactor` to open the seam first.
 
 2. **Implement Single Fix**
    - Address the root cause identified

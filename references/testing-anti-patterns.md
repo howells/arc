@@ -218,3 +218,30 @@ test('displays user metrics after loading', async () => {
 
 Tests specific, observable behavior. These tests fail when real functionality breaks, not when CSS changes.
 </Good>
+
+## 7. Tautological Test
+
+The expected value is recomputed with the same logic under test, so the assertion can never disagree with the code.
+
+<Bad>
+```typescript
+test('adds two numbers', () => {
+  const a = 2;
+  const b = 3;
+
+  expect(add(a, b)).toBe(a + b);
+});
+````
+
+The expected value is computed with the same arithmetic as `add`. Any implementation — including a broken one that mirrors this exact math — passes.
+</Bad>
+
+<Good>
+```typescript
+test('adds two numbers', () => {
+  expect(add(2, 3)).toBe(5);
+});
+````
+
+The expected value is a literal from an independent source of truth. A broken `add` can't accidentally satisfy it.
+</Good>

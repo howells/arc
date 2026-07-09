@@ -254,6 +254,8 @@ Instead of presenting critiques:
 
 **Present questions one at a time:**
 
+Before starting this question loop, see `references/question-loops.md` for the shared one-question-at-a-time rules.
+
 - Wait for user response
 - If user wants to keep something, they probably have context
 - Track decisions as you go

@@ -356,7 +356,7 @@ Can't check all boxes? You skipped TDD. Start over.
 
 ### Testable Design
 
-If code is hard to test, the code is telling you something. Fix the design, not the test.
+If code is hard to test, the code is telling you something. Fix the design, not the test. Confirm the boundary you're testing at with your human partner before writing a test against it — the seam you pick determines what the test can and can't prove.
 
 **Dependency injection** — Accept collaborators as parameters instead of importing them directly.
 

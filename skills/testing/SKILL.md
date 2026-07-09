@@ -203,6 +203,8 @@ For each slice:
 
 ### Step 5: Keep Test Seams Small
 
+Confirm the chosen seam with the user before writing any test against it. Agreeing the boundary up front keeps testing effort on the target the user actually cares about.
+
 If existing code is hard to test:
 
 - Prefer testing through an existing public interface.

@@ -172,7 +172,7 @@ Steps 2-8 each produce exactly: 0-2 sentences + AskUserQuestion. Nothing more.
 - **Act 1 is structurally locked** — 0-2 sentences + AskUserQuestion, nothing else, until user approves transition to Act 2
 - **One AskUserQuestion per message** — if you need 3 things, that's 3 turns
 - **Multiple choice preferred** — 2-4 concrete options. Open-ended only when choices can't be reduced
-- **Look it up, don't ask it** — if a fact can be found in the codebase, find it rather than asking. Decisions belong to the user; facts belong to you
+- **Look it up, don't ask it** — if a fact can be found in the codebase, find it rather than asking. Decisions belong to the user; facts belong to you. Before starting the question loop, read `references/question-loops.md` — the shared rules for one-question-at-a-time interviews
 - **Every question carries a recommendation** — mark the option you'd pick as recommended (the AskUserQuestion recommended-option convention) so the user can accept a default fast
 - **YAGNI ruthlessly** — "Do we need this in v1?"
 - **Explore alternatives** — 2-3 approaches before settling (Act 2 only). Lead with your recommendation
