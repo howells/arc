@@ -209,3 +209,18 @@ Do not checkpoint for things verifiable programmatically:
 | Checkpoint without setup          | Human has to set up context          | Agent prepares everything, human only judges               |
 | Skipping task on auth error       | Task is viable, just needs auth      | Report AUTH_GATE, user authenticates, retry same task      |
 | Reporting BLOCKED for auth errors | BLOCKED means "change approach"      | AUTH_GATE means "unlock door, then retry same thing"       |
+
+## Session Resumption: Clear, Don't Compact
+
+A context that compacts into a summary drifts from peak performance with each compaction — detail is lost and the agent re-reasons from a lossy digest. When the context runs long, clear it and resume from the plan file instead.
+
+Checkpoint discipline is what makes clearing cheap: atomic commits hold the code, and the plan file holds live per-task status plus the decision log (see the implement skill, Step 7). Together they let a fresh session pick up where the last one stopped without re-exploring.
+
+**When the context runs long:**
+
+1. Finish the current task — do not clear mid-task.
+2. Commit the work.
+3. Write status back into the plan file: mark the task done, record deviations and non-obvious decisions in the decision log.
+4. Start a fresh session and resume from the plan file.
+
+Do NOT compact and push on. Compaction trades context quality for a longer run; a clean resume from committed code and an up-to-date plan keeps every task at full capability.

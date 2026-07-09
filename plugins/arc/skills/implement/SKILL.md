@@ -637,6 +637,13 @@ git commit -m "feat(scope): [description from plan]"
 
 Update TodoWrite to mark task completed.
 
+**Then write status back into the plan file.** TodoWrite is session-local; the plan file is the save point a fresh session resumes from. On each task completion you MUST:
+
+- Mark the task done in the plan (e.g. check its box or set its status).
+- Append to a decision log in the plan: deviations from the planned approach and any non-obvious decisions, with a one-line reason each.
+
+Skip the log entry only when the task ran exactly as planned with no decisions worth recording.
+
 ### Step 8: Checkpoint after batch
 
 After every 3 tasks:

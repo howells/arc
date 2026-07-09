@@ -39,7 +39,8 @@ jobs:
   ```
 
 - **Fail-on-red discipline:** the gate is a hard boundary. No `--no-verify`, no "fix in a follow-up." A red gate blocks merge.
-- **Boundaries:** where architecture boundaries are configured (`boundaries`/`fenceline`), include the boundaries check in the gate so illegal imports fail the build, not review.
+- **Keep the gate fast and minimal:** an agent idling on CI stalls the whole loop. Prefer local test runs in the agent loop for iteration, with CI as the final backstop. When the gate grows slow, treat that as an operations defect worth fixing.
+- **Boundaries:** for JS/TS workspaces, the gate SHOULD include an architecture-boundary check so illegal imports fail the build, not review. Where boundaries are configured (`boundaries`/`fenceline`), wire that check into the gate. Where none is configured, recommend initializing one (`boundaries init --dry-run` from `@howells/boundaries`, reviewed before applying).
 
 ## (c) Env convention (one canonical shape)
 

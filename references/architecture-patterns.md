@@ -182,3 +182,5 @@ When reviewing code for architectural health:
 - [ ] All cross-package imports use aliases, not relative paths
 - [ ] Each package has a single, clear responsibility
 - [ ] No circular dependencies (check build output)
+
+Wire these checks into the mechanical gate via the `boundaries` tool (`@howells/boundaries`) so a linter catches violations before review; see `references/operations-playbook.md`. Reserve review attention for what the linter can't catch.
