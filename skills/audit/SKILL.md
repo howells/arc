@@ -83,6 +83,7 @@ If no native task/todo tool exists, skip task tracking and continue with the aud
 2. `references/audit-stage-calibration.md`
 3. `references/audit-scorecard.md`
 4. `references/maintainability-review.md`
+5. `references/finding-vetting.md` — the vet pass applied in Phase 4
 
 **Load when relevant:**
 
@@ -771,15 +772,19 @@ Return findings in this format:
 ## Findings
 ### Critical
 - [file:line] Issue description
+  Excerpt: [the exact source line(s) you saw]
 
 ### High
 - [file:line] Issue description
+  Excerpt: [the exact source line(s) you saw]
 
 ### Medium
 - [file:line] Issue description
 
 ### Low
 - [file:line] Issue description
+
+Critical and High findings without an Excerpt line cannot be vetted and will be downgraded.
 
 ## Summary
 [1-2 sentences]
@@ -833,6 +838,19 @@ If `security-engineer` was skipped by the security readiness gate, do not fabric
 
 - Same file:line mentioned by multiple reviewers → merge into single finding
 - Note which reviewers flagged each issue
+
+**Vet before presenting** — apply `references/finding-vetting.md`:
+
+- Re-open the cited `file:line` for every Critical and High finding and confirm it against
+  the current code, using the finding's `Excerpt:` line. Reviewers over-report; an unvetted
+  citation is a lead, not a fact.
+- Hunt the three failure classes from the reference: by-design behavior (including tradeoffs
+  recorded in `docs/adr/` or `CONTEXT.md` — settled, not findings, though code drifted from a
+  stale ADR IS a finding), mis-attributed evidence (re-locate and correct, or dismiss if
+  unlocatable), and cross-session duplicates (already tracked in `docs/arc/plans/INDEX.md`
+  or its rejected ledger). The same-run dedup above is separate and stays as is.
+- Route corrections and dismissals to the report's Dismissed section with a one-line reason.
+- The report must state the vet scope: Medium/Low findings are unverified citations.
 
 **Keep the two finding axes separate:**
 
@@ -1076,7 +1094,7 @@ Present these options (include all that apply):
 
 1. **Tackle critical cluster now** → Jump straight into fixing the highest-priority cluster. Invoke `/arc:implement` scoped to the files and issues in that cluster.
 
-2. **Write full task plan** → Write all clusters as a structured plan to `docs/arc/plans/YYYY-MM-DD-audit-tasks.md` for systematic implementation. Each cluster becomes a section with its findings, suggested approach, and a checkbox list.
+2. **Build an improvement backlog** → Invoke `/arc:improve` with this audit report as intake. Improve vets the findings, prioritizes by leverage, writes selected ones as executable implementation plans via the detail skill, and tracks them in `docs/arc/plans/INDEX.md`.
 
 3. **Add to tasks** → Use the platform's native task/todo flow to create tasks for critical/high clusters. Each cluster becomes a task with findings in the description. Lower severity clusters are omitted — they're in the audit report if needed later.
 
@@ -1096,49 +1114,20 @@ Present these options (include all that apply):
 
 - Load `references/operations-playbook.md` and generate the concrete files the Operations findings call for: a CI workflow wiring the repo's existing `pnpm check` / `check:affected` gate, gate enforcement, an env-doctor check, and cron/scheduled-job failure alerting. Match the project's existing package manager and scripts rather than inventing new ones, and offer the files as changes for the user to review before committing.
 
-**If user selects "Write full task plan":**
+**If user selects "Build an improvement backlog":**
 
-Create `docs/arc/plans/YYYY-MM-DD-audit-tasks.md`:
-
-```markdown
-# Audit Task Plan
-
-**Source:** docs/arc/audits/YYYY-MM-DD-[scope]-audit.md
-**Date:** YYYY-MM-DD
-**Project Stage:** [stage]
-**Total clusters:** X | **Total findings:** X
-
----
-
-## Cluster 1: [Name] `[priority: critical/high/medium]`
-
-**Why this matters:** [1 sentence]
-
-- [ ] [Finding 1 — file:line — description]
-- [ ] [Finding 2 — file:line — description]
-- [ ] [Finding 3 — file:line — description]
-
-**Approach:** [1-2 sentences]
-
----
-
-## Cluster 2: [Name] `[priority]`
-
-[Same format]
-
----
-
-[Repeat for all clusters]
-```
-
-Do not auto-commit the plan unless the user explicitly asks for a commit.
+- Invoke the improve skill (`skills/improve/SKILL.md`) with this session's audit report as
+  its intake source — the findings are already vetted (Phase 4), so improve can skip
+  straight to prioritization and selection.
+- Improve owns everything from there: leverage ordering, plan writing via detail, and the
+  index. Do not also write a separate task plan from this skill.
 
 **If user selects "Add to tasks":**
 
 - Use the platform's native task/todo creation flow for each critical/high cluster when available
 - Each task gets the cluster name as subject, findings as description, and present continuous activeForm
 - Lower severity clusters stay in the audit report only
-- If no native task/todo creation flow exists, offer the plan file instead
+- If no native task/todo creation flow exists, offer the improvement backlog route instead
 
 **If user selects "Deep dive on a cluster":**
 
@@ -1158,6 +1147,7 @@ Audit is complete when:
 - [ ] Reviewers run in batches of 2
 - [ ] All reviewers completed
 - [ ] Findings consolidated and deduplicated
+- [ ] Critical/High findings vetted against the cited code (`references/finding-vetting.md`)
 - [ ] Scorecard derived (7 core axes + bonus if applicable)
 - [ ] Report generated in `docs/arc/audits/` with scorecard
 - [ ] Report saved and optionally staged

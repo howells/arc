@@ -26,6 +26,7 @@ arc/
 │   ├── launch/SKILL.md     # Launch: go-live checklist
 │   ├── refactor/SKILL.md   # Cross-cutting: structural refactor planning
 │   ├── audit/SKILL.md      # Cross-cutting: codebase audit
+│   ├── improve/SKILL.md    # Cross-cutting: findings → plan backlog + reconcile
 │   ├── commit/SKILL.md     # Cross-cutting: smart commits
 │   └── release/SKILL.md    # Cross-cutting: versioned package releases
 ├── agents/                 # Specialized subagents
@@ -62,6 +63,7 @@ SHIP       /arc:launch     → Go-live checklist
 
 CROSS-CUTTING (available anytime):
            /arc:audit      → Comprehensive codebase audit
+           /arc:improve    → Findings → vetted plan backlog; reconcile across sessions
            /arc:commit     → Smart commits and push
            /arc:release    → Version, changelog, verify, publish packages
            /arc:refactor   → Discover friction, propose structural refactors

@@ -31,6 +31,7 @@ DO      /arc:implement  - Plan and build with TDD and verification
 REVIEW  /arc:review     - Review a plan, spec, or implementation approach
         /arc:audit      - Verify and audit current codebase health
         /arc:refactor   - Find structural friction and propose refactors
+        /arc:improve    - Turn findings into a vetted plan backlog, keep it reconciled
 
 TOOLS   /arc:commit     - Create clean commits, optionally push
         /arc:release    - Version, changelog, verify, and publish packages
@@ -142,6 +143,7 @@ If you open this repo itself in Codex, `.agents/skills/*` symlinks let Codex dis
 | `/arc:launch`    | A project needs to be ready for a public URL                                               | Launch readiness checklist       |
 | `/arc:audit`     | You need a verified current-state codebase health report                                   | `docs/arc/audits/...`            |
 | `/arc:refactor`  | Code feels tangled, shallow, duplicated, oversized, or ready for package/module extraction | Refactor plan/RFC                |
+| `/arc:improve`   | Findings need to become a prioritized, executable plan backlog — or the backlog needs reconciling | Plans + `docs/arc/plans/INDEX.md` |
 | `/arc:commit`    | You are ready to commit, push, or publish changed npm packages                             | Atomic git commits               |
 | `/arc:release`   | Packages need a versioned release: semver, changelog, verified tarballs, publish           | Versioned, verified npm release  |
 
