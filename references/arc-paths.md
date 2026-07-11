@@ -9,6 +9,7 @@ the repo root by convention.
 - Vision: root `CONTEXT.md` (single context) + `CONTEXT-MAP.md` for multi-context monorepos
 - Specs: `docs/arc/specs/`
 - Plans: `docs/arc/plans/`
+- Plan index: `docs/arc/plans/INDEX.md` (schema and write rules in `references/plan-lifecycle.md`)
 - Audits: `docs/arc/audits/`
 - Archive: `docs/arc/archive/`
 - Decisions (ADRs): `docs/adr/`

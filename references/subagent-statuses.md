@@ -20,6 +20,18 @@ Build agents should report one of these statuses so the controller can react con
 
 Never ignore `BLOCKED`, `NEEDS_CONTEXT`, or `AUTH_GATE`. Change something before retrying.
 
+## Plan-Level Rollup
+
+Task statuses above are per-task. When a whole plan's status is written to the plan index
+(`docs/arc/plans/INDEX.md` — see `references/plan-lifecycle.md`), collapse the plan's task
+statuses with this rollup:
+
+- All tasks `DONE` → plan `DONE`
+- Mix of `DONE` and `DONE_WITH_CONCERNS` → plan `DONE`, with a one-line note on the concerns
+- Any unresolved `BLOCKED`, `AUTH_GATE`, or `NEEDS_CONTEXT` → plan `BLOCKED`, with the reason
+
+`implement` writes this rollup; `improve`'s reconcile reads it. Neither invents its own.
+
 ## AUTH_GATE Protocol
 
 `AUTH_GATE` is NOT `BLOCKED`. The distinction matters:
