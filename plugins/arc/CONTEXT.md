@@ -34,7 +34,7 @@ Arc's public workflow surface is organized around the lifecycle:
 - **Review**: inspect plans, code, architecture, implementation approach, and launch readiness.
 - **Ship**: prepare the project for release and commit work cleanly.
 
-Cross-cutting workflows can run at any point, but they should still serve the lifecycle rather than becoming unrelated utilities.
+Cross-cutting workflows can run at any point, but they should still serve the lifecycle rather than becoming unrelated utilities. Improve is cross-cutting: it turns vetted findings (from audits, refactor RFCs, or its own light scans) into a prioritized backlog of executable implementation plans and keeps that backlog reconciled across sessions.
 
 `detail` and `using-arc` are supporting skills, not workflows. They should be documented as internal planning or bootstrap mechanisms rather than as public lifecycle stages.
 
@@ -65,9 +65,9 @@ Project-wide rule installation is outside Arc's core lifecycle because copied ru
 
 Machine process cleanup is outside Arc's core lifecycle. Arc workflows may finish cleanly and report spawned work, but they should not expose commands that kill local Claude, shell, editor, or background processes.
 
-Plan cleanup is outside Arc's public workflow surface. Arc may create and reference plans during implementation, but it should not expose a separate command for deleting, archiving, or housekeeping old planning files.
+Plan cleanup is outside Arc's public workflow surface. Arc may create and reference plans during implementation, but it should not expose a separate command for deleting, archiving, or housekeeping old planning files. Backlog reconciliation is different and is inside Arc: the improve workflow may verify, refresh, and retire plan index entries so they stay executable and truthful — because a stale plan is a correctness problem, not a tidiness problem — but it never deletes or archives the files themselves.
 
-Next-work suggestion, generic session routing, and command-catalog helpers are outside Arc's public workflow surface. Users should invoke the workflow they want directly and use README/docs for the command catalog.
+Next-work suggestion, generic session routing, and command-catalog helpers are outside Arc's public workflow surface. Users should invoke the workflow they want directly and use README/docs for the command catalog. Evidence-grounded direction findings inside audit and improve are different and are inside Arc: they are discovery over the codebase itself — every candidate cites repo evidence and passes vetting — whereas generic "what should I work on" routing has no evidence standard and stays outside.
 
 Dependency and package maintenance are outside Arc's public workflow surface because Monogrove owns that space. Arc may notice dependency risk as part of broader audits, but it should not expose dependency update, CVE remediation, alternative discovery, or batch-upgrade workflows.
 

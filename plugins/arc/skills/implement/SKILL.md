@@ -61,6 +61,7 @@ Paths in this skill use these conventions:
 3. references/checkpoint-patterns.md
 4. references/subagent-statuses.md
 5. references/arc-paths.md
+6. references/plan-lifecycle.md — plan index contract and drift-check procedure
 
 **Load these only when relevant:**
 
@@ -205,7 +206,16 @@ Assess what is being asked before choosing the heavier workflow.
 
 ## Phase 0.5: Planning
 
-**Check for existing implementation plan:**
+**Check the plan index first.** If `docs/arc/plans/INDEX.md` exists (see
+`references/plan-lifecycle.md` for the schema), select from it instead of globbing:
+
+1. Read the index. Candidate plans are `TODO` rows whose `Depends on` plans are all `DONE`.
+2. Offer the highest-priority candidate (index order breaks ties). If the user named a plan,
+   use that row instead.
+3. Verify the row's plan file actually exists before proceeding — a user may have deleted or
+   renamed it. If missing, note it in the row's Notes column and fall back to the glob below.
+
+**No index? Check for an existing implementation plan directly:**
 
 ```bash
 ls docs/arc/plans/*-implementation.md docs/plans/*-implementation.md 2>/dev/null | tail -1
@@ -320,6 +330,19 @@ If tests fail before you start → stop and ask user.
 
 **Read implementation plan** (created in Phase 0 or pre-existing):
 `docs/arc/plans/YYYY-MM-DD-<topic>-implementation.md` (fallback: `docs/plans/...`)
+
+**Drift check.** If the plan header carries `Planned at: <SHA>`, run the drift-check
+procedure from `references/plan-lifecycle.md` against the plan's `<files>` and `<read_first>`
+paths before dispatching anything. On drift: re-verify the current state of the drifted
+files (the `<read_first>` discipline), note the drift in the plan's `## Decision log`
+section (create it at the end of the plan if absent), and never
+silently update the `Planned at:` SHA. If the SHA cannot be resolved, say "cannot verify
+drift" and proceed with extra care — an erroring diff is not a clean result.
+
+**Mark the plan in progress.** If the plan has a row in `docs/arc/plans/INDEX.md`, set its
+Status to `IN PROGRESS` and update `Last touched` now — per-row write only (re-read the
+index immediately before writing, touch only this plan's row). Without this write,
+reconcile's stale-plan detection has nothing to work with.
 
 **Parse XML tasks:**
 The plan contains `<task>` elements with structured fields. For each task:
@@ -639,8 +662,8 @@ Update TodoWrite to mark task completed.
 
 **Then write status back into the plan file.** TodoWrite is session-local; the plan file is the save point a fresh session resumes from. On each task completion you MUST:
 
-- Mark the task done in the plan (e.g. check its box or set its status).
-- Append to a decision log in the plan: deviations from the planned approach and any non-obvious decisions, with a one-line reason each.
+- Mark the task done in the plan by setting the `status` attribute on its `<task>` element (`status="done"`, or `status="blocked"` for a task you had to abandon) — this is the canonical per-task marker defined in `references/plan-lifecycle.md`.
+- Append to the plan's `## Decision log` section (create it at the end of the plan on first write): deviations from the planned approach and any non-obvious decisions, with a one-line reason each.
 
 Skip the log entry only when the task ran exactly as planned with no decisions worth recording.
 
@@ -852,6 +875,13 @@ See agents/build/plan-completion-reviewer.md"
 - Re-run plan-completion-reviewer after fixes
 
 **Do NOT proceed to Phase 6 until plan-completion-reviewer passes.**
+
+**Then update the plan's index row.** If the plan has a row in `docs/arc/plans/INDEX.md`,
+write its final status using the plan-level rollup in `references/subagent-statuses.md`
+(all tasks done → `DONE`; any unresolved blocked/auth-gate/needs-context task → `BLOCKED`
+with a one-line reason in Notes) and update `Last touched`. Per-row write only. For plans
+without an index row, skip this — the status written into the plan file itself remains the
+record.
 
 ## Phase 5b: E2E Tests (If Created)
 

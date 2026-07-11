@@ -105,6 +105,7 @@ Use these defaults:
 - Go-live/shareability readiness -> `launch`
 - Commit, push, or simple publish -> `commit` (cross-cutting)
 - Version bumps, changelogs, or coordinated multi-package releases -> `release` (cross-cutting)
+- Turn findings into an executable backlog, or reconcile existing plans -> `improve` (cross-cutting)
 - Unsure what to do -> ask one focused question, then route to the smallest matching workflow
 
 When a task needs a specialist lens, keep the routing Arc-native:
