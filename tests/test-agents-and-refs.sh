@@ -142,6 +142,22 @@ for agent_file in "$PLUGIN_ROOT"/agents/*/*.md; do
     fi
 done
 
+# Verify all agents require the subagent-safety reference
+section "Subagent Safety Tests"
+
+echo "Verifying all agents require subagent-safety..."
+echo ""
+
+for agent_file in "$PLUGIN_ROOT"/agents/*/*.md; do
+    agent_name=$(basename "$agent_file" .md)
+    category=$(basename "$(dirname "$agent_file")")
+    if grep -q 'references/subagent-safety.md' "$agent_file"; then
+        pass "$category/$agent_name requires subagent-safety"
+    else
+        fail "$category/$agent_name missing references/subagent-safety.md in required reading"
+    fi
+done
+
 # Verify skills reference existing files
 section "Skill Reference Tests"
 
