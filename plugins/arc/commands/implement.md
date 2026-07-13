@@ -1,4 +1,5 @@
 ---
+name: implement
 description: Scope-aware planning and implementation with TDD.
 ---
 

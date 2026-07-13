@@ -1,4 +1,5 @@
 ---
+name: launch
 description: Go-live and shareability checklist.
 ---
 

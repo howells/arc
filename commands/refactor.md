@@ -1,4 +1,5 @@
 ---
+name: refactor
 description: Find structural friction and propose refactoring plans.
 ---
 

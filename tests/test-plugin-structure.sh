@@ -35,6 +35,18 @@ assert_file_exists "$CODEX_PLUGIN_JSON" "Codex plugin.json"
 assert_file_contains "$CODEX_PLUGIN_JSON" '"skills"' \
     "Codex plugin.json references skills"
 
+# Cursor plugin.json should exist and declare the full Cursor surface
+CURSOR_PLUGIN_JSON="$PLUGIN_ROOT/.cursor-plugin/plugin.json"
+assert_file_exists "$CURSOR_PLUGIN_JSON" "Cursor plugin.json"
+assert_file_contains "$CURSOR_PLUGIN_JSON" '"skills"' \
+    "Cursor plugin.json references skills"
+assert_file_contains "$CURSOR_PLUGIN_JSON" '"agents"' \
+    "Cursor plugin.json references agents"
+assert_file_contains "$CURSOR_PLUGIN_JSON" '"commands"' \
+    "Cursor plugin.json references commands"
+assert_file_exists "$PLUGIN_ROOT/.cursor-plugin/marketplace.json" \
+    "Cursor marketplace.json"
+
 # Version should be present
 echo ""
 echo "Checking version..."
@@ -43,4 +55,11 @@ if [ -n "$version" ]; then
     pass "plugin.json has version: $version"
 else
     fail "Could not extract version from plugin.json"
+fi
+
+cursor_version=$(jq -r '.version // empty' "$CURSOR_PLUGIN_JSON" 2>/dev/null)
+if [ -n "$cursor_version" ] && [ "$cursor_version" = "$version" ]; then
+    pass "Cursor plugin.json version matches Claude ($cursor_version)"
+else
+    fail "Cursor plugin.json version mismatch" "claude=$version cursor=$cursor_version"
 fi

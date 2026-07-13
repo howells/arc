@@ -1,4 +1,5 @@
 ---
+name: commit
 description: Smart commit, push, and npm publish with auto-splitting across domains.
 ---
 

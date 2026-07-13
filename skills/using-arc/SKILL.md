@@ -64,18 +64,19 @@ Arc skills may mention Claude Code tool names. For platform mappings and equival
 
 When a skill says `AskUserQuestion`, preserve the behavior rather than the literal tool name.
 In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode.
+In Cursor, ask one concise question at a time (structured prompts when the harness supports them; otherwise plain text).
 Do not narrate tool fallbacks or tell the user that a question tool is unavailable.
 
 ## Arc Runtime
 
 Arc supports two install classes:
 
-- **Full-runtime installs**: Claude plugin and Codex installer. These include Arc-owned `agents/`, `references/`, `disciplines/`, `templates/`, and `scripts/`.
+- **Full-runtime installs**: Claude plugin, Codex plugin (or Codex installer), and Cursor plugin. These include Arc-owned `agents/`, `references/`, `disciplines/`, `templates/`, and `scripts/`.
 - **Prompt-only installs**: `skills.sh` and similar prompt distributors. These copy `SKILL.md` files only.
 
 When a workflow needs Arc-owned files, resolve the Arc plugin root by walking up from the loaded skill's filesystem location (it's the directory containing `agents/` and `skills/`). Skills reference Arc-owned files using bare relative paths from that root: `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...`. Project-local paths such as `.ruler/`, `docs/`, `src/`, or the user's own `rules/` stay scoped to the user's repository.
 
-If the requested workflow depends on Arc-owned files and the environment only has prompt-only skills, stop early and tell the user to upgrade to the full Claude plugin or Codex installer.
+If the requested workflow depends on Arc-owned files and the environment only has prompt-only skills, stop early and tell the user to upgrade to the full Claude, Codex, or Cursor plugin install.
 
 For UI work, keep these roles separate:
 

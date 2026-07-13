@@ -13,7 +13,7 @@ Arc is a self-contained software development lifecycle for coding agents. It hel
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code): install as a plugin and run `/arc:*` commands.
 - [Codex](https://developers.openai.com/codex): install as a native plugin and invoke workflows with `$<skill-name>`.
-- [Cursor](https://cursor.com/docs/skills): Arc's `SKILL.md` workflows are discovered from the shared skills directory; invoke with `/<skill-name>`.
+- [Cursor](https://cursor.com/docs/plugins): first-class plugin via `.cursor-plugin/`; install locally or from a team marketplace, then invoke with `/<skill-name>`.
 
 Arc's canonical product definition and operating boundary live in [CONTEXT.md](./CONTEXT.md). This README is the user-facing guide.
 
@@ -77,13 +77,17 @@ Alternatively, a clone-and-symlink installer links Arc skills into `~/.agents/sk
 
 ### Cursor
 
-Arc ships a `.cursor-plugin/plugin.json` manifest (Cursor 2.5+). Install it as a local plugin so its skills and rules stay isolated from your other skills:
+Arc is a first-class Cursor plugin (Cursor 2.5+). Local and team installs use the full repo, so skills, commands, agents, references, disciplines, templates, and scripts stay available — the same full-runtime model as Claude Code and Codex. Arc's internal `rules/` corpus is not injected as always-on Cursor rules.
 
 ```bash
+# from a checkout
+bash .cursor/install.sh
+
+# or clone straight into Cursor's local plugin dir
 git clone https://github.com/howells/arc.git ~/.cursor/plugins/local/arc
 ```
 
-Or, on Teams/Enterprise, import `github.com/howells/arc` as a team-marketplace plugin from the Cursor dashboard. Invoke workflows with `/<skill-name>`. Cursor reads Arc's `SKILL.md` workflows and `rules/`; the heaviest agent/reference-backed workflows run best in Claude Code or Codex.
+Reload Cursor (**Developer: Reload Window**), then invoke `/ideate`, `/implement`, `/audit`, etc. On Teams/Enterprise, import `github.com/howells/arc` as a team marketplace from the Cursor dashboard. Details: [.cursor/INSTALL.md](./.cursor/INSTALL.md).
 
 ### Prompt-Only Install
 
@@ -91,7 +95,7 @@ Or, on Teams/Enterprise, import `github.com/howells/arc` as a team-marketplace p
 npx skills add howells/arc
 ```
 
-This copies `SKILL.md` prompts to supported agents. It is useful for lightweight guidance, but it does not include Arc's bundled agents, references, disciplines, templates, scripts, or rules. Workflows such as `audit`, `review`, `implement`, `refactor`, and `testing` work best with the Claude plugin or native Codex plugin.
+This copies `SKILL.md` prompts to supported agents. It is useful for lightweight guidance, but it does not include Arc's bundled agents, references, disciplines, templates, scripts, or rules. Workflows such as `audit`, `review`, `implement`, `refactor`, and `testing` work best with the Claude plugin, native Codex plugin, or Cursor plugin.
 
 ## Invoking Arc
 
@@ -130,6 +134,17 @@ Common Codex entry points:
 - `$release`
 
 If you open this repo itself in Codex, `.agents/skills/*` symlinks let Codex discover the local skills without a global install.
+
+### Cursor
+
+Use slash commands (no `/arc:` prefix):
+
+```text
+/ideate add magic-link login
+/implement
+/audit
+/commit push
+```
 
 ## Commands
 

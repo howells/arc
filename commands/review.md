@@ -1,4 +1,5 @@
 ---
+name: review
 description: Run expert review on a plan, spec, or implementation approach.
 ---
 

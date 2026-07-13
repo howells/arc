@@ -16,6 +16,7 @@
       "author": {
         "name": "Daniel Howells"
       },
+      "homepage": "https://usearc.dev",
       "repository": "https://github.com/howells/arc",
       "license": "MIT",
       "keywords": [
@@ -30,6 +31,14 @@
         "development",
         "lifecycle",
         "git"
+      ],
+      "category": "developer-tools",
+      "tags": [
+        "lifecycle",
+        "tdd",
+        "planning",
+        "review",
+        "audit"
       ]
     }
   ]

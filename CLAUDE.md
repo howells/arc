@@ -11,7 +11,8 @@ arc/
 │   └── marketplace.json    # Claude Code marketplace manifest
 ├── .codex/                 # Codex clone-and-symlink installer scripts
 ├── .codex-plugin/          # Codex plugin manifest
-├── .cursor-plugin/         # Cursor plugin manifest
+├── .cursor-plugin/         # Cursor plugin + marketplace manifests
+├── .cursor/                # Cursor install docs + local installer
 ├── .agents/                # Codex skill symlinks
 ├── .husky/                 # Git hooks (validate-plugin, version bump)
 ├── commands/               # Slash command routers (invoke skills)
@@ -98,7 +99,7 @@ When an external plugin is available, use it only as an optional enhancement. Ke
 
 ## Publishing
 
-1. Bump the version: `bash scripts/bump-version.sh <new-version>` — it updates all seven version fields (`package.json`, `.claude-plugin/plugin.json` + `marketplace.json`, `.codex-plugin/`, `.cursor-plugin/`, and the generated `plugins/arc/.codex-plugin/`). Verify with `bash scripts/bump-version.sh --check`.
+1. Bump the version: `bash scripts/bump-version.sh <new-version>` — it updates all version fields across `package.json`, `.claude-plugin/`, `.codex-plugin/`, `.cursor-plugin/` (plugin + marketplace), and the generated `plugins/arc/.codex-plugin/`. Verify with `bash scripts/bump-version.sh --check`.
 2. Regenerate the Codex payload: `pnpm build:codex` (rebuilds `plugins/arc/` and `.agents/plugins/marketplace.json`). Required after ANY change to skills, agents, references, rules, disciplines, templates, or scripts — the pre-commit hook and `tests/test-codex-mirror.sh` will fail if the mirror is stale.
 3. Commit and push to GitHub.
-4. Users update via `claude plugins update` (Claude Code) or `codex plugin marketplace upgrade` (Codex).
+4. Users update via `claude plugins update` (Claude Code), `codex plugin marketplace upgrade` (Codex), or `git -C ~/.cursor/plugins/local/arc pull` / team marketplace refresh (Cursor).

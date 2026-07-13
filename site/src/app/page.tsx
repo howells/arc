@@ -17,7 +17,7 @@ import { PageContent } from "./page-content";
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
   description:
-    "A software development workflow for Claude Code and Codex. Commands and agents that handle vision, ideation, implementation, testing, review, refactoring, audit, launch, and commit.",
+    "A software development workflow for Claude Code, Codex, and Cursor. Commands and agents that handle vision, ideation, implementation, testing, review, refactoring, audit, launch, and commit.",
   title: "Arc – The full arc from idea to shipped code",
 };
 
@@ -71,7 +71,25 @@ export default function ArcPage() {
             >
               Claude Code
             </Link>
-            , Codex, and{" "}
+            ,{" "}
+            <Link
+              className="prose-link"
+              href="https://developers.openai.com/codex"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Codex
+            </Link>
+            ,{" "}
+            <Link
+              className="prose-link"
+              href="https://cursor.com/docs/plugins"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Cursor
+            </Link>
+            , and{" "}
             <Link
               className="prose-link"
               href="https://github.com/vercel-labs/skills#supported-agents"
@@ -117,7 +135,11 @@ export default function ArcPage() {
           </div>
           <p className="mt-[calc(var(--baseline)*1)] max-w-lg text-pretty text-neutral-600 text-sm leading-relaxed">
             Start with the workflow you need. For a new feature, turn the idea
-            into a concrete spec first.
+            into a concrete spec first. Claude Code uses{" "}
+            <span className="font-mono text-neutral-800">/arc:</span>; Cursor
+            uses <span className="font-mono text-neutral-800">/</span>
+            without the prefix; Codex uses{" "}
+            <span className="font-mono text-neutral-800">$</span>.
           </p>
         </section>
 
@@ -128,15 +150,14 @@ export default function ArcPage() {
           </h2>
           <div className="max-w-lg space-y-[calc(var(--baseline)*1)] text-neutral-600 text-sm leading-relaxed">
             <p>
-              Open your project in Claude Code or Codex and run a command.
-              Commands chain together:{" "}
+              Open your project in Claude Code, Codex, or Cursor and run a
+              workflow. Commands chain together:{" "}
               <span className="font-mono text-neutral-800">/arc:ideate</span>{" "}
-              creates a feature spec, then asks if you want to continue to{" "}
-              <span className="font-mono text-neutral-800">/arc:implement</span>
-              . You can enter at any point — already have a feature spec? Start
-              at{" "}
-              <span className="font-mono text-neutral-800">/arc:implement</span>
-              .
+              (Claude) or{" "}
+              <span className="font-mono text-neutral-800">/ideate</span>{" "}
+              (Cursor) creates a feature spec, then asks if you want to continue
+              to implement. You can enter at any point — already have a feature
+              spec? Start at implement.
             </p>
           </div>
           <div className="mt-[calc(var(--baseline)*1)] max-w-lg space-y-[calc(var(--baseline)*0.75)]">

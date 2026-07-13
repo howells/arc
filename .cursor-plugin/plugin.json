@@ -1,11 +1,39 @@
 {
   "name": "arc",
-  "version": "2.7.0",
+  "displayName": "Arc",
+  "version": "2.7.1",
   "description": "The full arc from idea to shipped code. Lifecycle workflows for vision, ideation, implementation, review, testing, audit, launch, and commits.",
   "author": {
-    "name": "Daniel Howells",
-    "url": "https://github.com/howells"
+    "name": "Daniel Howells"
   },
+  "publisher": "howells",
+  "homepage": "https://usearc.dev",
+  "repository": "https://github.com/howells/arc",
+  "license": "MIT",
+  "logo": "assets/logo-light.svg",
+  "keywords": [
+    "planning",
+    "tdd",
+    "implementation",
+    "review",
+    "testing",
+    "audit",
+    "launch",
+    "workflow",
+    "development",
+    "lifecycle",
+    "git"
+  ],
+  "category": "developer-tools",
+  "tags": [
+    "lifecycle",
+    "tdd",
+    "planning",
+    "review",
+    "audit"
+  ],
   "skills": "./skills/",
-  "rules": "./rules/"
+  "agents": "./agents/**/*.md",
+  "commands": "./commands/",
+  "rules": []
 }

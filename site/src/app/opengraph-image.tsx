@@ -54,7 +54,8 @@ export default async function Image() {
           textTransform: "uppercase" as const,
         }}
       >
-        The full arc from idea to shipped code. For Claude Code and Codex.
+        The full arc from idea to shipped code. For Claude Code, Codex, and
+        Cursor.
       </p>
     </div>,
     {

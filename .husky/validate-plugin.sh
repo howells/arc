@@ -47,6 +47,43 @@ else
   ok "plugin.json valid"
 fi
 
+# ─── 1b. Cursor plugin.json ───────────────────────────────────────────────────
+echo "Checking Cursor plugin.json..."
+if [ ! -f .cursor-plugin/plugin.json ]; then
+  error ".cursor-plugin/plugin.json not found"
+elif ! jq . .cursor-plugin/plugin.json > /dev/null 2>&1; then
+  error "Cursor plugin.json is not valid JSON"
+else
+  if ! jq -e '.name' .cursor-plugin/plugin.json > /dev/null 2>&1; then
+    error "Cursor plugin.json missing required 'name' field"
+  fi
+  if ! jq -e '.skills and .agents and .commands' .cursor-plugin/plugin.json > /dev/null 2>&1; then
+    error "Cursor plugin.json must declare skills, agents, and commands"
+  fi
+  # Product boundary: Arc rules/ are internal, not Cursor always-on rules.
+  if [ "$(jq -c '.rules // empty' .cursor-plugin/plugin.json)" != "[]" ]; then
+    error "Cursor plugin.json must set rules to [] so Arc rules/ are not injected"
+  fi
+  if jq -e '.author.url' .cursor-plugin/plugin.json > /dev/null 2>&1; then
+    error "Cursor plugin.json author.url is invalid (Cursor schema forbids it)"
+  fi
+  ok "Cursor plugin.json valid"
+fi
+
+if [ -f .cursor-plugin/marketplace.json ]; then
+  if ! jq . .cursor-plugin/marketplace.json > /dev/null 2>&1; then
+    error "Cursor marketplace.json is not valid JSON"
+  else
+    cursor_plugin_version=$(jq -r '.version // empty' .cursor-plugin/plugin.json 2>/dev/null)
+    cursor_mp_version=$(jq -r '.metadata.version // empty' .cursor-plugin/marketplace.json 2>/dev/null)
+    if [ -n "$cursor_plugin_version" ] && [ -n "$cursor_mp_version" ] && [ "$cursor_plugin_version" != "$cursor_mp_version" ]; then
+      error "Cursor version mismatch: plugin.json=$cursor_plugin_version marketplace.json=$cursor_mp_version"
+    else
+      ok "Cursor marketplace.json valid"
+    fi
+  fi
+fi
+
 # ─── 2. marketplace.json ──────────────────────────────────────────────────────
 if [ -f .claude-plugin/marketplace.json ]; then
   echo "Checking marketplace.json..."
@@ -166,9 +203,13 @@ if [ -d commands ]; then
       continue
     fi
 
-    # Commands require description
+    # Commands require description + name (Cursor marketplace checklist; Claude uses description)
     if ! head -"$frontmatter_end" "$f" | grep -q "^description:"; then
       error "$f missing 'description:' in frontmatter"
+    fi
+    expected_name=$(basename "$f" .md)
+    if ! head -"$frontmatter_end" "$f" | grep -q "^name: ${expected_name}$"; then
+      error "$f missing 'name: ${expected_name}' in frontmatter"
     fi
   done
 fi
@@ -220,7 +261,7 @@ ok "YAML frontmatter safe"
 
 # ─── 10. Hardcoded paths ──────────────────────────────────────────────────────
 echo "Checking for hardcoded paths..."
-hardcoded=$(grep -r "/Users/\|/home/" skills/ commands/ agents/ .claude-plugin/ 2>/dev/null | grep -v ".git" | head -5 || true)
+hardcoded=$(grep -r "/Users/\|/home/" skills/ commands/ agents/ .claude-plugin/ .cursor-plugin/ .cursor/ 2>/dev/null | grep -v ".git" | head -5 || true)
 if [ -n "$hardcoded" ]; then
   echo "$hardcoded"
   error "Found hardcoded paths (use relative paths or \${CLAUDE_PLUGIN_ROOT})"

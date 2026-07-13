@@ -36,6 +36,16 @@ Treat these as distinct capabilities, not interchangeable tools:
 - Use Playwright when browser automation must be scripted directly
 - Use WireText MCP for low-fidelity wireframes when available; otherwise write ASCII wireframes inline
 
+## Cursor
+
+- Full-runtime install is the Cursor plugin (`.cursor-plugin/`); local path `~/.cursor/plugins/local/arc` or a team marketplace import of `github.com/howells/arc`
+- Invoke public workflows with `/<skill-name>` (no `/arc:` prefix): `/ideate`, `/implement`, `/audit`, `/commit`
+- Skills and commands ship from the plugin; nested Arc agents are available for Task/subagent dispatch
+- Arc's `rules/` corpus stays internal to workflows — it is not injected as always-on Cursor rules
+- Treat `AskUserQuestion` as one concise question at a time; use structured prompts when available, otherwise plain text
+- Prefer `agent-browser` or Playwright for browser automation; use Cursor browser MCP tools when they are the active harness
+- Use WireText MCP for low-fidelity wireframes when available; otherwise write ASCII wireframes inline
+
 ## General Guidance
 
 - Prefer the platform's native tool when a skill names an equivalent Claude tool

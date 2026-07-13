@@ -1,4 +1,5 @@
 ---
+name: release
 description: Versioned npm releases — semver bumps, changelogs, and multi-package releases with changesets.
 ---
 

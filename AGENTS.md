@@ -15,7 +15,7 @@
 - Keep Arc self-contained. Do not make core workflows depend on optional external plugins or skills.
 - Do not copy project-local rules into Arc unless they are general Arc runtime rules.
 - When adding a required reference to a skill, make sure the referenced file exists and the skill tells agents when to read it.
-- Keep generated plugin packaging files consistent with `.codex`, command stubs, and skill paths.
+- Keep generated plugin packaging files consistent with `.codex`, `.cursor-plugin`, command stubs, and skill paths.
 
 ## Search Preferences
 - Search `skills/<workflow>/SKILL.md` before changing command docs.

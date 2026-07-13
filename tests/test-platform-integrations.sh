@@ -11,6 +11,10 @@ assert_file_contains "$PLUGIN_ROOT/references/platform-tools.md" "WireText MCP" 
     "platform tools references WireText"
 assert_file_contains "$PLUGIN_ROOT/references/platform-tools.md" "Claude Chrome MCP" \
     "platform tools keeps Chrome as preferred Claude path"
+assert_file_contains "$PLUGIN_ROOT/references/platform-tools.md" "## Cursor" \
+    "platform tools includes Cursor section"
+assert_file_contains "$PLUGIN_ROOT/references/platform-tools.md" "/ideate" \
+    "platform tools documents Cursor slash invocation"
 
 assert_file_not_contains "$PLUGIN_ROOT/README.md" "figma-implement" \
     "README has no stale figma-implement reference"

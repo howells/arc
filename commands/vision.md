@@ -1,4 +1,5 @@
 ---
+name: vision
 description: Create or review a high-level vision document for your project.
 ---
 

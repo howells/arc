@@ -45,6 +45,9 @@ export function InstallTabs() {
         <Tabs.Trigger className={TAB_TRIGGER_CLASSES} value="codex">
           Codex
         </Tabs.Trigger>
+        <Tabs.Trigger className={TAB_TRIGGER_CLASSES} value="cursor">
+          Cursor
+        </Tabs.Trigger>
         <Tabs.Trigger className={TAB_TRIGGER_CLASSES} value="any">
           Any Agent
         </Tabs.Trigger>
@@ -79,7 +82,6 @@ export function InstallTabs() {
             <CodeBlock command="claude plugins update arc@howells" />
             <p className="mt-[calc(var(--baseline)*0.5)] text-pretty text-neutral-500 text-xs leading-relaxed">
               Claude Code auto-updates plugins, but you can trigger it manually.
-              In Cursor, use this command — it doesn&apos;t auto-update.
             </p>
           </div>
         </div>
@@ -90,36 +92,86 @@ export function InstallTabs() {
         <div className="max-w-lg space-y-[calc(var(--baseline)*1)]">
           <div>
             <h3 className="mb-[calc(var(--baseline)*0.5)] font-mono text-neutral-500 text-xs uppercase tracking-wider">
-              Install with auto-update
+              Native plugin (recommended)
             </h3>
-            <CodeBlock command="curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh | bash -s -- --auto-update --interval-hours 6" />
+            <CodeBlock command="codex plugin marketplace add howells/arc && codex plugin add arc@howells" />
             <p className="mt-[calc(var(--baseline)*0.5)] text-pretty text-neutral-500 text-xs leading-relaxed">
-              Installs to{" "}
-              <code className="rounded bg-neutral-100 px-1 py-0.5 font-mono text-[0.9375em]">
-                ~/.agents/skills
-              </code>{" "}
-              with auto-update every 6 hours. This is the full Codex install, so
-              Arc workflows that depend on bundled agents, references,
-              disciplines, templates, and scripts work out of the box.
+              Full-runtime install into Codex&apos;s isolated plugin cache.
+              Requires Codex CLI 0.117+.
             </p>
           </div>
           <div>
             <h3 className="mb-[calc(var(--baseline)*0.5)] font-mono text-neutral-500 text-xs uppercase tracking-wider">
-              Install once (no auto-update)
+              Clone-and-symlink fallback
             </h3>
-            <CodeBlock command="curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh | bash" />
+            <CodeBlock command="curl -fsSL https://raw.githubusercontent.com/howells/arc/main/.codex/install.sh | bash -s -- --auto-update --interval-hours 6" />
+            <p className="mt-[calc(var(--baseline)*0.5)] text-pretty text-neutral-500 text-xs leading-relaxed">
+              For older Codex builds. Symlinks skills into{" "}
+              <code className="rounded bg-neutral-100 px-1 py-0.5 font-mono text-[0.9375em]">
+                ~/.agents/skills
+              </code>
+              .
+            </p>
+          </div>
+        </div>
+      </Tabs.Content>
+
+      {/* Cursor */}
+      <Tabs.Content value="cursor">
+        <div className="max-w-lg space-y-[calc(var(--baseline)*1)]">
+          <div>
+            <h3 className="mb-[calc(var(--baseline)*0.5)] font-mono text-neutral-500 text-xs uppercase tracking-wider">
+              Local plugin
+            </h3>
+            <CodeBlock command="git clone https://github.com/howells/arc.git ~/.cursor/plugins/local/arc" />
+            <p className="mt-[calc(var(--baseline)*0.5)] text-pretty text-neutral-500 text-xs leading-relaxed">
+              Full-runtime Cursor plugin (Cursor 2.5+): skills, commands,
+              agents, and bundled references. Reload Cursor (
+              <span className="font-mono">Developer: Reload Window</span>
+              ), then invoke{" "}
+              <code className="rounded bg-neutral-100 px-1 py-0.5 font-mono text-[0.9375em]">
+                /ideate
+              </code>
+              ,{" "}
+              <code className="rounded bg-neutral-100 px-1 py-0.5 font-mono text-[0.9375em]">
+                /implement
+              </code>
+              ,{" "}
+              <code className="rounded bg-neutral-100 px-1 py-0.5 font-mono text-[0.9375em]">
+                /audit
+              </code>{" "}
+              — no{" "}
+              <code className="rounded bg-neutral-100 px-1 py-0.5 font-mono text-[0.9375em]">
+                /arc:
+              </code>{" "}
+              prefix. On Teams/Enterprise, import{" "}
+              <code className="rounded bg-neutral-100 px-1 py-0.5 font-mono text-[0.9375em]">
+                github.com/howells/arc
+              </code>{" "}
+              from the Cursor dashboard.
+            </p>
           </div>
           <div>
             <h3 className="mb-[calc(var(--baseline)*0.5)] font-mono text-neutral-500 text-xs uppercase tracking-wider">
-              Manual update
+              From a checkout
             </h3>
-            <CodeBlock command="~/.codex/arc/.codex/update.sh" />
+            <CodeBlock command="bash .cursor/install.sh" />
             <p className="mt-[calc(var(--baseline)*0.5)] text-pretty text-neutral-500 text-xs leading-relaxed">
-              If you installed with{" "}
+              Symlinks the current repo into{" "}
               <code className="rounded bg-neutral-100 px-1 py-0.5 font-mono text-[0.9375em]">
-                --auto-update
+                ~/.cursor/plugins/local/arc
               </code>
-              , this runs automatically on a schedule.
+              .
+            </p>
+          </div>
+          <div>
+            <h3 className="mb-[calc(var(--baseline)*0.5)] font-mono text-neutral-500 text-xs uppercase tracking-wider">
+              Update
+            </h3>
+            <CodeBlock command="git -C ~/.cursor/plugins/local/arc pull" />
+            <p className="mt-[calc(var(--baseline)*0.5)] text-pretty text-neutral-500 text-xs leading-relaxed">
+              Symlink installs update when you pull the linked checkout. Then
+              reload Cursor.
             </p>
           </div>
         </div>
@@ -152,7 +204,7 @@ export function InstallTabs() {
               agents or orchestration. Best for lightweight prompt-only usage.
               Full-runtime workflows that load Arc-owned `agents/`,
               `references/`, `disciplines/`, `templates/`, or `scripts/` require
-              the Claude plugin or Codex installer tabs above.
+              the Claude, Codex, or Cursor plugin tabs above.
             </p>
           </div>
         </div>
