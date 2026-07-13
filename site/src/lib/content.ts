@@ -1,5 +1,6 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import matter from "gray-matter";
 import { load as yamlLoad } from "js-yaml";
@@ -14,10 +15,55 @@ import type {
 } from "./types";
 import { AGENT_CATEGORIES, WORKFLOW_POSITIONS } from "./types";
 
-const MODULE_DIR = import.meta.dirname;
+/**
+ * Turbopack SSR bundles can leave `import.meta.dirname` undefined. Prefer it when
+ * present, then `import.meta.url`, then cwd heuristics for Vercel (`site/` root).
+ */
+function resolveRepoRoot(): string {
+  const moduleDirs: string[] = [];
+  if (
+    typeof import.meta.dirname === "string" &&
+    import.meta.dirname.length > 0
+  ) {
+    moduleDirs.push(import.meta.dirname);
+  }
+  if (typeof import.meta.url === "string" && import.meta.url.length > 0) {
+    try {
+      // Turbopack can leave import.meta.dirname undefined in SSR chunks; recover
+      // from import.meta.url instead of relying on dirname alone.
+      // oxlint-disable-next-line unicorn/prefer-import-meta-properties -- intentional fallback when dirname is missing
+      moduleDirs.push(path.dirname(fileURLToPath(import.meta.url)));
+    } catch {
+      // ignore invalid import.meta.url in odd runtimes
+    }
+  }
 
-// Resolve repo root once from this module location instead of process.cwd().
-const ROOT = path.resolve(MODULE_DIR, "../../..");
+  const candidates: string[] = [];
+  for (const moduleDir of moduleDirs) {
+    // site/src/lib -> repo root
+    candidates.push(path.resolve(moduleDir, "../../.."));
+  }
+  // Vercel project rootDirectory is `site/`
+  candidates.push(path.resolve(process.cwd(), ".."));
+  // Local runs from the monorepo root
+  candidates.push(process.cwd());
+
+  for (const candidate of candidates) {
+    if (
+      existsSync(path.join(candidate, "skills")) &&
+      existsSync(path.join(candidate, "rules")) &&
+      existsSync(path.join(candidate, "agents"))
+    ) {
+      return candidate;
+    }
+  }
+
+  throw new Error(
+    `Could not resolve Arc repo root (cwd=${process.cwd()}, moduleDirs=${moduleDirs.join(",") || "none"})`
+  );
+}
+
+const ROOT = resolveRepoRoot();
 
 // Regex patterns for custom YAML extraction (avoids issues with complex description fields)
 const FRONTMATTER_REGEX = /^---\n(?<body>[\s\S]*?)\n---/;
