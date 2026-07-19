@@ -219,7 +219,7 @@ Arc includes specialist agents for work that benefits from focused review or del
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Research** | docs-researcher, git-history-analyzer                                                                                                                                                                              |
 | **Review**   | accessibility-engineer, architecture-engineer, daniel-product-engineer, data-engineer, lee-nextjs-engineer, mastra-agent-engineer, performance-engineer, security-engineer, senior-engineer, test-quality-engineer |
-| **Build**    | implementer, fixer, debugger, unit-test-writer, integration-test-writer, e2e-test-writer, test-runner, e2e-runner, spec-reviewer, code-reviewer, plan-completion-reviewer                                          |
+| **Build**    | implementer, fixer, debugger, unit-test-writer, integration-test-writer, e2e-test-writer, test-runner, e2e-runner, spec-reviewer, code-reviewer                                                                    |
 | **Workflow** | spec-flow-analyzer, spec-document-reviewer, plan-document-reviewer                                                                                                                                                 |
 
 Agents are support machinery. Arc workflows decide when they are useful; users normally start with a command or skill.
@@ -228,11 +228,11 @@ Agents are support machinery. Arc workflows decide when they are useful; users n
 
 Arc's implementation workflows draw on:
 
-- **test-driven-development** — red-green-refactor implementation.
+- **test-driven-development** — seam-level red-green technique when the work kind calls for it.
 - **systematic-debugging** — methodical bug investigation.
 - **verification-before-completion** — prove work before claiming completion.
 - **finishing-a-development-branch** — cleanup and integration checks.
-- **subagent-driven-development** — parallel execution for independent tasks.
+- **subagent-driven-development** — coherent slice ownership with conditional specialist support.
 - **dispatching-parallel-agents** — efficient multi-agent coordination.
 - **receiving-code-review** — evaluating and applying review feedback.
 - **change-impact-testing** — selecting tests from change blast radius.

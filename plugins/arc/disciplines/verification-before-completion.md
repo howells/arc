@@ -9,17 +9,19 @@ description: Use when about to claim work is complete, fixed, or passing, before
 
 Claiming work is complete without verification is dishonesty, not efficiency.
 
-**Core principle:** Evidence before claims, always.
+**Core principle:** Evidence before claims, always. A valid unchanged session-local
+verification receipt is evidence; an agent summary is not.
 
 **Violating the letter of this rule is violating the spirit of this rule.**
 
 ## The Iron Law
 
 ```
-NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
+NO COMPLETION CLAIMS WITHOUT FRESH OR VALID UNCHANGED VERIFICATION EVIDENCE
 ```
 
-If you haven't run the verification command in this message, you cannot claim it passes.
+If you have neither a fresh run nor a valid unchanged receipt from this uninterrupted session,
+you cannot claim the command passes.
 
 ## The Gate Function
 
@@ -27,21 +29,28 @@ If you haven't run the verification command in this message, you cannot claim it
 BEFORE claiming any status or expressing satisfaction:
 
 1. IDENTIFY: What command proves this claim?
-2. RUN: Execute the FULL command (fresh, complete)
-3. READ: Full output, check exit code, count failures
+2. RUN: Execute the full command, or load a verification receipt minted by this controller
+   in the same uninterrupted session.
+3. VALIDATE: For a receipt, confirm exact command/cwd, HEAD, config identity, and target
+   fingerprint are unchanged. Otherwise read the fresh full output and exit code.
 4. VERIFY: Does output confirm the claim?
    - If NO: State actual status with evidence
    - If YES: State claim WITH evidence
 5. ONLY THEN: Make the claim
 
-Skip any step = lying, not verifying
+Skip any step = claiming without evidence
 ```
+
+Receipt identity and invalidation are defined in `references/implementation-assurance.md`.
+Restarts, merges, rebases, edits, command/config changes, or target changes require a fresh
+run. Completion's planned repository gate is always fresh after final review fixes; receipt
+reuse prevents only immediate duplicate reruns on that unchanged target.
 
 ## Common Failures
 
 | Claim | Requires | Not Sufficient |
 |-------|----------|----------------|
-| Tests pass | Test command output: 0 failures | Previous run, "should pass" |
+| Tests pass | Fresh output or valid unchanged verification receipt: 0 failures | Previous session, agent summary, "should pass" |
 | Linter clean | Linter output: 0 errors | Partial check, extrapolation |
 | Build succeeds | Build command: exit 0 | Linter passing, logs look good |
 | Bug fixed | Test original symptom: passes | Code changed, assumed fixed |
@@ -145,6 +154,6 @@ From 24 failure memories:
 
 **No shortcuts for verification.**
 
-Run the command. Read the output. THEN claim the result.
+Run the command and read its output, or validate the unchanged receipt. THEN claim the result.
 
 This is non-negotiable.

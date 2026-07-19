@@ -1,97 +1,119 @@
 # Plan Lifecycle
 
-The shared contracts for plans that live beyond a single session. This file is the single
-source of truth for the plan index schema and the drift-check procedure. `detail` (writes
-plan headers), `implement` (selects and executes plans), and `improve` (builds and reconciles
-the backlog) all cite this file — none of them redefines these rules locally.
+This reference owns durable plan/task state, implementation baselines, resumption, the plan
+index, and drift checks. Agent result mapping lives in `references/subagent-statuses.md`.
 
-## The plan index: `docs/arc/plans/INDEX.md`
+## Plan index
 
-The index tracks executable implementation plans across sessions. Only `*-implementation.md`
-files get rows — refactor RFCs (`*-refactor-rfc.md`) and other documents in `docs/arc/plans/`
-are never indexed; an RFC becomes indexable only after it passes through `detail` into an
-implementation plan.
+`docs/arc/plans/INDEX.md` tracks only `*-implementation.md` plans.
 
-### Status table
+| Column       | Content                                                  |
+| ------------ | -------------------------------------------------------- |
+| Plan         | Filename relative to `docs/arc/plans/`                   |
+| Title        | Short imperative title                                   |
+| Priority     | P1 / P2 / P3                                             |
+| Effort       | S / M / L                                                |
+| Depends on   | Plan filenames or `—`                                    |
+| Status       | `TODO` / `IN PROGRESS` / `DONE` / `BLOCKED` / `REJECTED` |
+| Last touched | Date of the latest status write                          |
+| Notes        | One-line block, drift, verification, or concern context  |
 
-| Column | Content |
-| ------------ | ------------------------------------------------------------------ |
-| Plan | Filename (relative to `docs/arc/plans/`) |
-| Title | Short imperative title |
-| Priority | P1 / P2 / P3 |
-| Effort | S / M / L |
-| Depends on | Plan filenames, or `—` |
-| Status | `TODO` \| `IN PROGRESS` \| `DONE` \| `BLOCKED` \| `REJECTED` |
-| Last touched | YYYY-MM-DD of the most recent status write |
-| Notes | One line of status context: block reason, rejection rationale, drift flag, verification stamp, spot-check result, or rollup concerns |
+`BLOCKED` and `REJECTED` require a reason. Other index sections may record recommended order,
+dependency notes, rejected findings, and deferred findings.
 
-Statuses are **plan-level**. They are not the per-task build-agent statuses (`DONE`,
-`DONE_WITH_CONCERNS`, `NEEDS_CONTEXT`, `BLOCKED`, `AUTH_GATE`) — the rollup from task
-statuses to a plan status is defined in `references/subagent-statuses.md`.
+### Multi-writer discipline
 
-- `BLOCKED` and `REJECTED` rows always carry a one-line reason in Notes.
-- `REJECTED` covers both "approach abandoned" and "fixed independently".
-
-### Other index sections
-
-- **Recommended order** — execution order when dependencies allow a choice.
-- **Dependency notes** — why plan B needs plan A, one line each.
-- **Considered and rejected** — the rejected-findings ledger: findings judged not worth
-  doing, one line of reasoning each, so they are not re-surfaced by future runs.
-- **Deferred findings** — vetted findings the user chose not to plan yet: title, evidence
-  `file:line`, and vet date. Future intake starts here instead of re-deriving and re-vetting
-  them from scratch; a deferred finding graduates to a plan row or moves to the rejected
-  ledger on a later run.
-
-### Per-task status markers (inside a plan file)
-
-Plan-level status lives in the index; per-task status lives in the plan itself. When
-`implement` completes or blocks a task, it sets a `status` attribute on that task's XML
-element — `<task id="2" ... status="done">` or `status="blocked"` — and an absent attribute
-means the task has not run. This attribute is what improve's first-run adoption and
-reconcile's stale-`IN PROGRESS` check read; nothing else in a plan is a status marker.
-
-### Write discipline
-
-The index is multi-writer (improve creates and reconciles it; implement updates rows as it
-executes). To avoid lost updates:
-
-- **Per-row writes only.** Re-read `INDEX.md` immediately before writing, and change only the
-  row for the plan you own. Never rewrite the whole table from an earlier in-session read.
+- Re-read the index immediately before a write.
+- Change only the row the current workflow owns.
 - Update `Last touched` on every status write.
-- Reconcile (in `improve`) is the self-healing backstop for lost updates — not a substitute
-  for this rule.
-- **Never delete the index or plan files** as part of status maintenance. Rows are corrected
-  or marked `REJECTED`; files stay as the record.
+- Never delete the index or plan files during status maintenance.
+- Verify an indexed plan file exists before selecting it.
 
-Before executing a plan selected from the index, verify the plan file exists — a user may
-have deleted or renamed it by hand. If it is missing, flag the row and fall back to normal
-plan discovery.
+## Durable task state
+
+Absent status is the legacy spelling of pending.
+
+```text
+absent/pending -> status="in_progress" -> status="done"
+                                      \-> status="blocked"
+```
+
+Set `status="in_progress"` before dispatch. `AUTH_GATE` and `NEEDS_CONTEXT` leave it in
+progress; only an irrecoverable blocker becomes `blocked`. The exact agent-result mapping and
+plan rollup live in `references/subagent-statuses.md`.
+
+## Implementation baseline
+
+Before changing files, capture and persist an **Implementation baseline** in the plan's
+`## Implementation state` block:
+
+- starting HEAD;
+- declared task paths;
+- pre-existing dirty paths and their initial fingerprints;
+- current plan/index metadata paths, which are never implementation evidence.
+
+For a saved plan, write this block before the first task becomes `in_progress`:
+
+```markdown
+## Implementation state
+
+**Execution base:** <full starting HEAD>
+**Declared scope:** <exact pathspecs for the selected tasks>
+**Pre-existing dirty paths:**
+
+- <path> — <initial content fingerprint>
+
+**Excluded metadata:** <plan path and docs/arc/plans/INDEX.md>
+**Commit posture:** authorized per-slice | uncommitted
+**Last coherent commit:** <SHA or none>
+**Closeout:** pending
+```
+
+Use `none` explicitly when there are no dirty paths or commits. During execution, update only
+`Last coherent commit` and `Closeout`. After the fresh gate succeeds, set closeout to `passed`
+with the date, attributable target fingerprint, and exact gate commands. This is a durable audit
+marker, not a reusable verification receipt. An inline plan records the same block in controller
+context; if it must survive outside that task/thread record, save it before editing.
+
+Whole-implementation review compares the implementation base through current HEAD plus
+attributable working-tree changes. `Planned at` is not the implementation base; it remains
+the drift baseline.
+
+Unchanged pre-existing dirty paths are excluded from review and verification receipts. If a
+slice overlaps a pre-existing dirty path, report `NEEDS_CONTEXT` rather than overwrite,
+discard, or guess which edits belong to whom.
+
+## Interrupted-slice resumption
+
+For `status="in_progress"`, read the task, declared paths, implementation baseline, last
+coherent commit, current attributable diff, and decision log. Re-run focused evidence before
+continuing. Never assume completion and never discard or overwrite an interrupted diff.
+Slice-boundary recovery is the durable unit; Arc does not persist every red/green micro-step.
+
+If a legacy interrupted plan has no implementation-state block, do not reconstruct ownership
+from the current dirty tree. Report `NEEDS_CONTEXT` and ask the user to identify pre-existing
+work before creating the missing baseline.
+
+## Decision log
+
+Every plan ends with `## Decision log`. Record drift, assurance escalation, legacy-kind
+normalization, deviations, dirty-path overlap decisions, superseded legacy commit directives,
+and non-obvious implementation choices. Do not log a task that ran exactly as planned.
 
 ## Drift check
 
-Plans are written against a moment in the repo's history. The header field:
+The plan header field `Planned at: <short SHA>` records the planning commit.
 
-```
-Planned at: <short SHA>
-```
+1. Resolve it with `git cat-file -e <sha>^{commit}`. If this fails, report **cannot verify drift**
+   and proceed with extra care; an erroring diff is never a clean result.
+2. Check `git merge-base --is-ancestor <sha> HEAD`. Warn on divergent ancestry.
+3. Run `git diff --stat <sha>..HEAD -- <in-scope paths>` against task files and read-first
+   paths.
+4. On drift, re-read current files and record the drift. Flag, **never re-baseline**:
+   never silently update `Planned at`. It changes only with a human-visible plan refresh.
 
-records that moment (`git rev-parse --short HEAD` at plan-writing time). Anyone consuming
-the plan later — implement before execution, improve during reconcile — runs this procedure
-against the plan's in-scope paths (its `<files>` and `<read_first>` lists):
+## Verification receipts
 
-1. **Resolve the SHA**: `git cat-file -e <sha>^{commit}`. If it fails (shallow clone, rebased
-   or garbage-collected history), report **"cannot verify drift"** and proceed with extra
-   care. Never treat an erroring diff as "no drift" — an empty stdout from a failed command
-   is not a clean result.
-2. **Check ancestry**: `git merge-base --is-ancestor <sha> HEAD`. If the planned-at commit is
-   not an ancestor of HEAD, the diff spans divergent branches and will include unrelated
-   changes — warn instead of trusting the numbers.
-3. **Diff the scope**: `git diff --stat <sha>..HEAD -- <in-scope paths>`. No output means no
-   drift in scope.
-4. **On drift: flag, never re-baseline.** Re-verify the current state of the drifted files
-   (the plan's `<read_first>` discipline) before acting, and record the drift where the
-   consumer keeps its log (implement's decision log; improve's index Notes). Do **not**
-   silently update `Planned at:` to the current HEAD — that hides the drift from the next
-   check. The SHA is only updated when a human-visible refresh of the plan's content happens
-   with it.
+Receipt semantics live in `references/implementation-assurance.md`. Receipts are session-local
+execution evidence, not durable plan state. Plan/index status writes never invalidate an
+otherwise unchanged implementation receipt.

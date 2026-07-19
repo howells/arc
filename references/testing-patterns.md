@@ -1,6 +1,40 @@
 <overview>
-Testing is mandatory, not optional. Every feature gets unit tests (vitest) and E2E tests (playwright) where applicable.
+Evidence is mandatory; its form follows the task's work kind. Behavior and bug fixes use
+test-first evidence at an agreed seam. Refactors, artifacts, deployments, and documentation
+use the evidence that can actually prove their outcome without manufacturing a synthetic red
+test. Framework patterns below remain available when automated tests are the right evidence.
 </overview>
+
+<seams>
+## Agreed observable seams
+
+A seam is the observable boundary through which evidence proves behavior. It may be an
+existing internal interface, API, UI flow, command, or integration contract; it does not need
+to become a newly exported public API.
+
+A seam is agreed when it is named in an approved spec/plan, declared before implementation
+against an existing observable interface, or confirmed by the user when it introduces a new
+public or architectural boundary. New plans register seams using the XML contract in
+`references/task-granularity.md`.
+</seams>
+
+<evidence_by_kind>
+
+## Evidence by work kind
+
+| Kind            | Required evidence                                                                                                                                                                                                                |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `behavior`      | Write an assertion at an agreed seam, watch it fail for the missing behavior, implement, then watch it pass.                                                                                                                     |
+| `bugfix`        | Reproduce the defect at the seam, verify the expected failure, fix it, then keep the regression green.                                                                                                                           |
+| `integration`   | Use observable contract/integration evidence at a named seam. Require red only when local behavior changes and a meaningful pre-change failure can be demonstrated. Otherwise record the baseline and targeted passing evidence. |
+| `refactor`      | Run affected tests before and after. Add characterization coverage only where behavior lacks a safety net.                                                                                                                       |
+| `artifact`      | Use build, package, generation, schema, or mechanical verification.                                                                                                                                                              |
+| `deployment`    | Use authorized read-only smoke evidence. External mutation still requires authority.                                                                                                                                             |
+| `documentation` | Use content and link validation where applicable.                                                                                                                                                                                |
+
+Legacy auto tasks without `kind` use their existing verify/test guidance. Do not manufacture
+a seam or red run solely because a legacy task lacks classification.
+</evidence_by_kind>
 
 <detection>
 **Detect test runner from project files:**

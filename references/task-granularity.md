@@ -1,242 +1,140 @@
-<overview>
-Each task is one TDD cycle: 2-5 minutes of focused work. Small enough to complete confidently, large enough to be meaningful.
+# Task Granularity and Plan XML
 
-Tasks are **executable prompts, not documentation**. A fresh-context agent with zero prior knowledge should be able to execute a task from its XML alone.
-</overview>
+Tasks are executable prompts. A task is one coherent implementation slice with one owner,
+one observable outcome, and one commit boundary. It may contain several small evidence and
+implementation cycles at the same seam. Fifteen to forty-five minutes is a planning heuristic,
+not a validator or assurance signal.
 
-<task_structure>
-**Every task uses this XML structure:**
+## Schema version
+
+New saved and inline plans declare `Plan schema: 2` in their header. Schema 2 enforces `kind`
+and the modern seam/evidence fields for automatic tasks. An absent schema header, or explicit
+schema 1, is legacy and follows the compatibility path; a newly written schema-2 task may not
+omit `kind` and claim legacy treatment.
+
+## Plan-level seams
+
+A seam is an observable boundary through which evidence can prove behavior. It may be an
+internal interface; it does not need to become a newly exported public API.
 
 ```xml
-<task id="1" depends="" type="auto">
-  <name>Create user authentication types</name>
+<seams>
+  <seam id="provider">
+    <interface>MaterialProvider observable methods</interface>
+    <behavior>Maps SDK responses into MaterialDesk domain values</behavior>
+    <test>packages/materials/src/mg-client.test.ts</test>
+  </seam>
+</seams>
+```
+
+Seam agreement and availability are owned by `references/testing-patterns.md`. This reference
+owns only the XML registry and reference shape.
+
+## New automatic tasks
+
+```xml
+<task id="2" depends="1" type="auto" kind="behavior">
+  <name>Map catalogue reads to the SDK</name>
   <files>
-    <create>src/types/auth.ts</create>
-    <test>src/types/auth.test.ts</test>
+    <modify>packages/materials/src/mg-client.ts</modify>
+    <test>packages/materials/src/mg-client.test.ts</test>
   </files>
   <read_first>
-    src/lib/db.ts
-    src/types/user.ts
+    packages/materials/src/material-provider.ts
+    packages/materials/src/mg-client.ts
   </read_first>
   <action>
-    Define LoginCredentials, AuthSession, and AuthError types.
-    LoginCredentials: { email: string; password: string }
-    AuthSession: { userId: string; token: string; expiresAt: Date }
-    AuthError: { code: "INVALID_CREDENTIALS" | "EXPIRED_SESSION" | "RATE_LIMITED"; message: string }
-
-    Export all types. Use zod schemas for runtime validation.
-    Import User type from src/types/user.ts.
+    Preserve the MaterialProvider contract while mapping catalogue reads to the SDK.
+    Reuse existing domain-value constructors and error handling.
   </action>
-  <test_code>
-    import { describe, it, expect } from "vitest";
-    import { LoginCredentialsSchema } from "./auth";
-
-    describe("LoginCredentialsSchema", () => {
-      it("validates correct credentials", () => {
-        const result = LoginCredentialsSchema.safeParse({
-          email: "test@example.com",
-          password: "securepass123",
-        });
-        expect(result.success).toBe(true);
-      });
-
-      it("rejects invalid email", () => {
-        const result = LoginCredentialsSchema.safeParse({
-          email: "not-an-email",
-          password: "securepass123",
-        });
-        expect(result.success).toBe(false);
-      });
-    });
-  </test_code>
+  <seams>
+    <seam ref="provider" />
+  </seams>
+  <behavior>
+    Search, material lookup, siblings, pairings, colour, and taxonomy return the same
+    MaterialProvider domain values through SDK-backed reads.
+  </behavior>
+  <examples>
+    A known catalogue request produces independently specified domain values.
+    An SDK error preserves the provider's existing error contract.
+  </examples>
   <verify>
-    pnpm vitest run src/types/auth.test.ts — all pass
-    pnpm tsc --noEmit — no type errors
+    pnpm vitest run packages/materials/src/mg-client.test.ts — all pass
+    pnpm --filter materials typecheck — no errors
   </verify>
-  <done>Auth types exported, zod schemas validate at runtime, tests pass</done>
-  <commit>feat(auth): add authentication types with zod validation</commit>
+  <done>Catalogue reads use the SDK and preserve the provider contract</done>
+  <commit>feat(materials): map catalogue reads to sdk</commit>
 </task>
 ```
 
-### Required XML elements
+### Attributes and elements
 
-| Element        | Required | Purpose                                                                     |
-| -------------- | -------- | --------------------------------------------------------------------------- |
-| `<name>`       | Yes      | Descriptive task name                                                       |
-| `<files>`      | Yes      | `<create>`, `<modify>`, and/or `<test>` children                            |
-| `<read_first>` | Yes\*    | Files to verify before acting. \*Can be empty for pure-creation tasks       |
-| `<action>`     | Yes      | What to do — with **inline values** (env vars, signatures, library choices) |
-| `<test_code>`  | Yes\*\*  | Exact test code. \*\*Omit only for checkpoint tasks                         |
-| `<verify>`     | Yes      | Concrete, observable acceptance criteria — commands to run, states to check |
-| `<done>`       | Yes      | Grep-verifiable completion marker                                           |
-| `<commit>`     | Yes      | Exact commit message                                                        |
+| Field                                 | Requirement                                                                                                                    |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `id`                                  | Required unique integer.                                                                                                       |
+| `depends`                             | Required; comma-separated task IDs or empty.                                                                                   |
+| `type`                                | Required: `auto`, `checkpoint:verify`, `checkpoint:decide`, or dynamically created `checkpoint:action`.                        |
+| `kind`                                | Required for new `type="auto"`: `behavior`, `bugfix`, `integration`, `refactor`, `artifact`, `deployment`, or `documentation`. |
+| `<name>`                              | Required descriptive slice name.                                                                                               |
+| `<files>`                             | Required; checkpoint tasks may use explicit `none`.                                                                            |
+| `<read_first>`                        | Required; may be empty for pure creation or explicit `none` for checkpoints.                                                   |
+| `<action>`                            | Required self-contained implementation direction.                                                                              |
+| `<seams>`, `<behavior>`, `<examples>` | Required for behavior, bugfix, and integration; optional for other auto kinds.                                                 |
+| `<verify>`                            | Required concrete commands or observable states.                                                                               |
+| `<done>`                              | Required observable completion statement.                                                                                      |
+| `<commit>`                            | Required proposed commit message; checkpoints may use explicit `none`; execution still needs commit authority.                 |
 
-### Task attributes
+Exact source in `<test_code>` is not part of the new schema. Planning specifies behavior and
+independent examples; the implementation owner writes exact evidence during execution.
 
-| Attribute | Values                                                                | Purpose                                                  |
-| --------- | --------------------------------------------------------------------- | -------------------------------------------------------- |
-| `id`      | Integer                                                               | Unique task identifier                                   |
-| `depends` | Comma-separated IDs                                                   | Tasks that must complete first (empty = no dependencies) |
-| `type`    | `auto`, `checkpoint:verify`, `checkpoint:decide`, `checkpoint:action` | Execution type                                           |
+## Checkpoint tasks
 
-### Key principles for task content
+New schema-2 checkpoint tasks keep `type="checkpoint:verify"`, `type="checkpoint:decide"`, or
+the dynamic `type="checkpoint:action"`. They retain the common task fields, but have no `kind`,
+seam, behavior, examples, or evidence-kind requirement. Use `none` for files, read-first paths,
+or a proposed commit when the checkpoint creates none. Existing checkpoint tasks remain
+compatible without adding fields. See `references/checkpoint-patterns.md`.
 
-**`<read_first>` — verify before acting:**
-
-- List every file the agent needs to read before implementing
-- The agent MUST check these files exist and match expectations
-- If a file doesn't exist or has unexpected content → `NEEDS_CONTEXT`, don't assume
-
-**`<action>` — self-contained with inline values:**
-
-- Include exact env var names, function signatures, library choices with rationale
-- Never write "look up the config" or "check the existing implementation" — put the value inline
-- If a choice was made during design (e.g., "use jose not jsonwebtoken"), state it and why
-
-**`<verify>` — concrete and observable:**
-
-- Every criterion must be a command that produces output or a state that can be checked
-- Bad: "works correctly", "looks good", "as expected"
-- Good: `curl -X POST localhost:3000/api/auth returns 200`, `pnpm vitest run path/file.test.ts — all pass`
-
-**`<done>` — grep-verifiable:**
-
-- Should be checkable without running the code
-- Describes the observable outcome, not the process
-  </task_structure>
-
-<granularity_examples>
-**Too big (don't do this):**
-
-```
-Task 1: Create user authentication system
-- Add login form
-- Add registration form
-- Add password reset
-- Add session management
-- Add tests
+```xml
+<task id="5" depends="1,2" type="checkpoint:verify">
+  <name>Verify dashboard layout</name>
+  <files>none — reviews the UI produced by tasks 1 and 2</files>
+  <read_first>none — execution context comes from dependencies</read_first>
+  <action>Start the dev server and present the implemented responsive states.</action>
+  <verify>User approves the named desktop, tablet, and mobile states or describes issues.</verify>
+  <done>User judgment recorded</done>
+  <commit>none — checkpoint creates no commit</commit>
+</task>
 ```
 
-**Right size:**
+## Legacy auto tasks
 
-```
-Task 1: Create User type
-Task 2: Create login form component (UI only)
-Task 3: Add login form validation
-Task 4: Add login API call
-Task 5: Add login success redirect
-Task 6: Add login error handling
-Task 7: Create registration form component (UI only)
-... etc
-```
+Plans without `kind` use the legacy evidence path. Their existing `<verify>` and optional
+`<test_code>` are advisory execution context. Do not manufacture a seam or red test merely
+because `kind` is absent. Infer and persist a modern kind only when intent is unambiguous.
+Legacy adjacent tasks may share one owner while every task ID and durable status remains intact.
 
-**Each task = one thing that can fail.**
-</granularity_examples>
+## Slice cohesion
 
-<ordering>
-**Build from foundation up:**
+A coherent slice:
 
-1. **Types/Interfaces** - Define the shape of data
-2. **Utilities** - Pure functions for business logic
-3. **Components (dumb)** - UI without logic
-4. **Components (smart)** - UI with state/effects
-5. **Integration** - Wire components together
-6. **E2E tests** - Full user flows
+- delivers one behavior or milestone through one primary seam;
+- can be owned and reviewed as one unit;
+- has concrete focused verification;
+- creates a coherent commit when commits are authorized;
+- does not mix independent subsystems merely to reduce task count.
 
-**Why this order:**
+File count alone never forces a split or raises assurance. Split when responsibilities,
+seams, owners, or independently shippable outcomes diverge.
 
-- Types catch errors early
-- Utilities can be tested in isolation
-- Dumb components are easy to test
-- Smart components use tested utilities
-- Integration uses tested components
-- E2E validates the whole chain
-  </ordering>
+## Ordering
 
-<ordering_strategy>
-**Choose ordering based on feature complexity:**
+Use dependencies, not a universal horizontal order. Prefer vertical tracer slices when a
+feature crosses layers or uses an unfamiliar boundary. Use foundation-first ordering when
+the architecture is already proven and later slices genuinely depend on shared types or utilities.
 
-**Bottom-up (default)** — Types → utilities → components → integration. Use for well-understood features where the data shape and boundaries are clear.
+## Status
 
-**Tracer bullet (complex features)** — Implement one complete behavior through ALL layers first (type → utility → component → API → E2E test), then expand. Use when:
-
-- Feature spans 3+ layers (e.g., new form → API route → database → email)
-- Architecture is unproven (new pattern, unfamiliar library, first feature of its kind)
-- User expresses uncertainty about the right approach
-
-**Why tracer bullet works:** It proves the architecture early. If the database schema is wrong or the API shape doesn't fit the UI, you discover it on task 1 — not task 15. The first vertical slice is the hardest; every subsequent slice is faster because the pattern is proven.
-
-**Example — adding a comments feature:**
-
-Bottom-up:
-
-```
-Task 1: Create Comment type
-Task 2: Create CommentList component (UI only)
-Task 3: Create CommentForm component (UI only)
-Task 4: Create comments API route
-Task 5: Wire CommentForm to API
-Task 6: Wire CommentList to API
-Task 7: E2E test for commenting flow
-```
-
-Tracer bullet:
-
-```
-Task 1: Create Comment type + API route + CommentForm + E2E test (one comment, end-to-end)
-Task 2: Add CommentList with real data
-Task 3: Add validation and error handling
-Task 4: Add editing and deletion
-Task 5: Add pagination
-```
-
-When suggesting tracer bullet, explain the tradeoff: "The first task is bigger, but it proves the whole architecture works before we invest in details."
-</ordering_strategy>
-
-<commit_messages>
-**Use conventional commits:**
-
-```
-feat(scope): add new feature
-fix(scope): fix specific bug
-refactor(scope): improve code without changing behavior
-test(scope): add or update tests
-docs(scope): update documentation
-```
-
-**Scope = feature area:**
-
-- `feat(auth): add login form`
-- `feat(cart): add quantity selector`
-- `fix(checkout): handle empty cart`
-
-**Keep messages short but descriptive:**
-
-- Good: `feat(auth): add password visibility toggle`
-- Bad: `add stuff`
-- Bad: `feat(auth): add a toggle button that allows users to see their password when they click on an eye icon in the password input field`
-  </commit_messages>
-
-<checkpoints>
-**After every 3 tasks, pause:**
-
-```
-Completed:
-- Task 1: Create User type ✓
-- Task 2: Create login form UI ✓
-- Task 3: Add form validation ✓
-
-Tests passing: 3/3
-TypeScript: clean
-Lint: clean
-
-Ready for feedback?
-```
-
-**Why checkpoints:**
-
-- Catch mistakes early
-- Get user input before going too far
-- Natural pause for questions
-- Prevents runaway implementation
-  </checkpoints>
+Durable task status is absent/pending, `status="in_progress"`, `status="done"`, or
+`status="blocked"`. The state machine lives in `references/plan-lifecycle.md`; build-agent
+result mapping lives in `references/subagent-statuses.md`.

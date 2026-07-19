@@ -1,6 +1,6 @@
 ---
 name: implement
-description: Scope-aware planning and implementation with TDD.
+description: Risk-proportional planning and implementation with work-kind evidence.
 ---
 
 Invoke the implement skill with any arguments provided.

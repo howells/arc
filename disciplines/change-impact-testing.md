@@ -1,25 +1,29 @@
 ---
 name: change-impact-testing
-description: Use after making any code change to identify, run, and if needed create tests whose surface area is touched by the change
+description: Use after a change to identify its blast radius and run the evidence required by its work kind
 ---
 
 # Change Impact Testing
 
 ## Overview
 
-Every code change has a blast radius. Find the tests that cover it and run them.
+Every change has a blast radius. Find the existing evidence that covers it and run the
+work-kind evidence defined in `references/testing-patterns.md`.
 
-**Core principle:** If you changed code, find every test that touches it. Run them. If none exist, write them.
+**Core principle:** Run affected evidence. Add behavior tests when behavior lacks a safety
+net; use mechanical, package, deployment, or content validation when those prove the change.
 
 **Violating the letter of this rule is violating the spirit of this rule.**
 
 ## The Iron Law
 
 ```
-NO CHANGE WITHOUT RUNNING AFFECTED TESTS
+NO CHANGE WITHOUT RUNNING AFFECTED EVIDENCE
 ```
 
-Changed a function? Run its unit tests. Changed a query? Run integration tests that use it. Changed a user flow? Run the E2E tests that cover it. No tests exist? Create them before moving on.
+Changed a function? Run its unit tests. Changed a query? Run integration evidence. Changed a
+user flow? Run the E2E tests that cover it. Changed generated metadata or documentation? Run
+the generator/package or content checks that can fail for the intended defect.
 
 ## When to Apply
 
@@ -86,7 +90,7 @@ pnpm vitest run -t "feature name"
 
 ### 4. Assess Coverage Gaps
 
-If the blast radius includes behavior with no tests, you have a gap.
+If the blast radius includes behavior with no tests, you have a behavior coverage gap.
 
 | Change Type | Missing Test Type | Action |
 |-------------|-------------------|--------|
@@ -96,9 +100,10 @@ If the blast radius includes behavior with no tests, you have a gap.
 | User-facing flow | E2E test | Write E2E test covering the flow |
 | Error handling path | Unit or integration | Write test triggering the error case |
 
-### 5. Create Missing Tests
+### 5. Fill behavior coverage gaps
 
-Follow TDD discipline even for gap-filling:
+For behavior already changed before the gap was noticed, prove the characterization is
+connected to the change:
 
 1. Write the test asserting expected behavior
 2. Run it — it should **pass** (behavior already exists from your change)
@@ -129,7 +134,7 @@ Database changes deserve special attention because their blast radius is often w
 |---------|---------|
 | Only running the test you wrote | Other tests may cover the same code |
 | Skipping E2E because unit tests pass | Unit tests don't prove the user flow works |
-| Assuming no tests = no problem | No tests = unknown risk. Write them. |
+| Assuming no evidence = no problem | Use the evidence required by the work kind. |
 | Running all tests instead of targeted | Slow, hides signal in noise. Run affected first. |
 | Trusting "nothing else uses this" | Search the codebase. You're probably wrong. |
 | Ignoring test failures as "flaky" | Investigate. Flaky tests hide real regressions. |
@@ -160,7 +165,7 @@ When adding `data-testid` to components for a new test, that's part of the chang
 - Changed code without checking for affected tests
 - Tests failed and you moved on
 - Assumed the change was "too small to break anything"
-- Found no tests and didn't create any
+- Changed behavior with no safety net and didn't add one
 - Only ran the test file you edited, not other affected tests
 - Changed a database query without running integration tests
 - Changed shared code without checking all consumers
@@ -173,6 +178,6 @@ Before considering the change complete:
 - [ ] Found all existing tests covering the blast radius
 - [ ] Ran all affected tests — all pass
 - [ ] Identified coverage gaps
-- [ ] Created tests for uncovered behavior
+- [ ] Added coverage for uncovered behavior, or recorded the applicable non-test evidence
 - [ ] Verified new tests are meaningfully connected to the change (red-green)
 - [ ] No test failures remaining

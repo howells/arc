@@ -195,7 +195,7 @@ Wait for the selection. Do not write plans nobody asked for.
 For each selected **defect** finding, invoke the detail skill in its finding mode:
 
 ```
-Read: skills/detail/SKILL.md — use Mode B (vetted finding as scope input)
+Read: skills/detail/SKILL.md — pass the vetted finding as the scope input
 ```
 
 Pass the finding whole: title, evidence (`file:line` + excerpts), impact, fix sketch, and
@@ -218,10 +218,15 @@ Create or update `docs/arc/plans/INDEX.md` per the schema and write discipline i
   findings section (title, evidence `file:line`, vet date) — not silently dropped. The next
   run's intake starts from them instead of re-deriving and re-vetting.
 - **First-run adoption:** existing `docs/arc/plans/*-implementation.md` files without index
-  rows are adopted as rows (status from their per-task `status` attributes per
-  `references/plan-lifecycle.md` — all `status="done"` → `DONE`, any markers → `IN PROGRESS`
-  judgment, none → `TODO`), never rewritten. Only `*-implementation.md` files get rows —
-  RFCs and other documents in the directory are never indexed.
+  rows are adopted without rewriting them. Roll status up exactly as
+  `references/plan-lifecycle.md` defines it: all task statuses absent → `TODO`; any
+  `status="in_progress"` → `IN PROGRESS`; any irrecoverable `status="blocked"` →
+  `BLOCKED`; any `done` plus any absent/pending → `IN PROGRESS`; all tasks `status="done"`
+  plus schema-2 `Closeout: passed` → `DONE`; schema-2 all-done with closeout pending or absent
+  → `IN PROGRESS` with a "closeout required" note. For an unversioned/schema-1 legacy plan,
+  all tasks done → `DONE` through the historical compatibility path. An absent task status is
+  the legacy spelling of pending. Only `*-implementation.md` files get rows — RFCs and other
+  documents in the directory are never indexed.
 
 Do not auto-commit plans or the index; offer the commit with one question, user decides.
 
@@ -230,14 +235,17 @@ Do not auto-commit plans or the index; offer the commit with one question, user 
 `/arc:improve reconcile` processes what happened since the last session. Read the index and
 every indexed plan, then per status:
 
-- **DONE** — spot-check operationally, not by re-reading implement's own task markers.
-  Check that a task's `<commit>` message appears in `git log` for the touched files first —
-  it is the reliable signal that the work actually landed — then re-run one sample
-  `<verify>` command. (A verify command alone can false-positive: a happy-path test suite
-  may pass whether or not the fix exists.) On success, mark verified in Notes with the date.
-  **On failure** — commit absent, or the verify command fails — do not silently change the
-  status: flag the row in Notes ("spot-check failed: <what was observed>") and present it to
-  the user with a recommendation (usually reverting the row to `TODO`); the user decides.
+- **DONE** — spot-check operationally rather than re-reading implement's task markers.
+  - For schema-2 plans, require `Closeout: passed` and read persisted commit posture. When slice
+    commits were authorized, confirm a representative planned commit in `git log`, then rerun one
+    sample `<verify>`. When explicitly uncommitted, inspect the attributable worktree from the
+    persisted execution baseline instead; absence of a commit is not a failure.
+  - For unversioned/schema-1 plans, expect no implementation-state metadata. Use any available
+    planned commit plus the current implementation at declared task paths, rerun representative
+    verification, record "verified through legacy path" in index Notes, and do not rewrite the
+    plan to add retrospective state.
+  - On evidence failure, do not silently change status: flag the row in Notes and present a
+    recommendation; the user decides.
 - **BLOCKED** — read the reason, investigate the underlying obstacle in the codebase, and
   present options (refresh the plan around it, or mark `REJECTED` with rationale). Advisory
   only — never auto-retry or dispatch anything; the user decides.
@@ -245,10 +253,11 @@ every indexed plan, then per status:
   drifted: flag it in Notes and refresh the plan's stale content with the user's knowledge —
   never silently re-baseline the `Planned at:` SHA. If the finding was fixed independently,
   mark `REJECTED ("fixed independently")`.
-- **IN PROGRESS** with an old `Last touched` date — a session probably died mid-run. Flag it
-  to the user with what the plan's per-task `status` attributes show (which tasks are
-  `done`/`blocked`/unrun — see plan-lifecycle.md); do not change the status without their
-  input.
+- **IN PROGRESS** with an old `Last touched` date — a session probably died mid-slice. Flag it
+  to the user with what the plan's per-task `status` attributes show (`done`,
+  `in_progress`, `blocked`, and absent/pending), plus the implementation baseline and any
+  attributable worktree changes. Do not rewrite or discard the interrupted diff, and do not
+  change the plan status without user input. Resume through `references/plan-lifecycle.md`.
 
 Reconcile **never deletes files** — plan files and the index are the record; rows are
 corrected or marked `REJECTED`, files stay.

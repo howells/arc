@@ -35,7 +35,6 @@ BUILD_AGENTS=(
     "fixer"
     "implementer"
     "integration-test-writer"
-    "plan-completion-reviewer"
     "spec-reviewer"
     "test-runner"
     "unit-test-writer"

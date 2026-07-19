@@ -9,22 +9,30 @@ description: Use when implementation is complete, all tests pass, and you need t
 
 Guide completion of development work by presenting clear options and handling chosen workflow.
 
-**Core principle:** Verify tests → Present options → Execute choice.
+**Core principle:** Validate completion evidence → Present options → Execute choice.
 
 **Announce at start:** "I'm using the finishing-a-development-branch skill to complete this work."
 
 ## The Process
 
-### Step 1: Verify Tests
+### Step 1: Validate Verification
 
-**Before presenting options, verify tests pass:**
+Before presenting options, use the fresh closeout result or a valid unchanged session-local
+verification receipt from `references/implementation-assurance.md`.
+
+The receipt is valid only when command/cwd, HEAD, configuration, and attributable target
+fingerprint still match in the same uninterrupted session. An agent summary is not a receipt.
+If no valid receipt exists, run the repository verification set:
 
 ```bash
 # Run project's test suite
 npm test / cargo test / pytest / go test ./...
 ```
 
-**If tests fail:**
+Run the repository's production build separately when applicable and not already included in
+that verification set.
+
+**If verification fails:**
 ```
 Tests failing (<N> failures). Must fix before completing:
 
@@ -35,7 +43,9 @@ Cannot proceed with merge/PR until tests pass.
 
 Stop. Don't proceed to Step 2.
 
-**If tests pass:** Continue to Step 2.
+**If verification passes:** Continue to Step 2 without immediately repeating the same
+unchanged gate. A merge, rebase, later edit, or new session invalidates the receipt and requires
+fresh verification.
 
 ### Step 2: Determine Base Branch
 
@@ -159,9 +169,3 @@ git branch -D <feature-branch>
 - Verify tests before offering options
 - Present exactly 4 options
 - Get typed confirmation for Option 4
-
-## Integration
-
-**Called by:**
-- **subagent-driven-development** (Step 7) - After all tasks complete
-- **executing-plans** (Step 5) - After all batches complete
