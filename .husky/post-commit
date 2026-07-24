@@ -10,14 +10,19 @@ if [ "$ARC_BUMPING_VERSION" = "1" ]; then
 fi
 
 # Only bump if plugin-related files changed (not site/, hooks, or version files themselves).
+# Version files are whatever .version-bump.json declares, so release commits that touch
+# every manifest do not trigger another bump.
+declared_paths=$(jq -r '.files[].path' .version-bump.json 2>/dev/null | sort -u)
+if [ -z "$declared_paths" ]; then
+  exit 0
+fi
+
 changed_files=$(git diff-tree --no-commit-id --name-only -r HEAD)
 plugin_changes=$(echo "$changed_files" \
   | grep -v '^site/' \
   | grep -v '^\.husky/' \
-  | grep -v '^\.claude-plugin/plugin\.json$' \
-  | grep -v '^\.claude-plugin/marketplace\.json$' \
-  | grep -v '^package\.json$' \
   | grep -v '^\.version-bump\.json$' \
+  | grep -vxF "$declared_paths" \
   || true)
 
 if [ -z "$plugin_changes" ]; then
