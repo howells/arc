@@ -548,8 +548,18 @@ Flag any app/package missing a `lint` script, a `typecheck` script, or (for TS w
 5. Debug log audit
 6. Git status
 7. Secrets scan — run when a suitable scanner or safe grep fallback is available
+8. React scanner — optional, React projects only; see below
 
 Include the mechanical summary in reviewer context, then continue to reviewer selection.
+
+### Optional React Scanner (react-doctor)
+
+For React/Next.js/React Native projects, [react-doctor](https://github.com/millionco/react-doctor) provides a deterministic scan across state/effects, performance, architecture, security, and accessibility — the mechanized counterpart of `references/react-audit-signals.md`. It is an optional enhancement, never a dependency: the audit must produce the same scorecard without it.
+
+- **Availability**: use it when it is already wired into the project (a dependency, `doctor.config.ts`, or a react-doctor CI workflow). Otherwise offer it with one question — running `npx react-doctor@latest` downloads and executes third-party code and reports telemetry, so never start that silently. Skip without comment if declined or offline.
+- **Run**: `npx react-doctor@latest --no-telemetry` at the project root (omit `--no-telemetry` if the project's own config opts in).
+- **Findings are leads, not proof**: attach the scanner output to the mechanical summary and reviewer context. Reviewers confirm each lead against the code path before it becomes a finding, and skip re-deriving mechanical patterns the scanner already covers — their attention belongs on what static analysis cannot see (cross-file semantics, architecture, product intent).
+- **Scoring**: scanner output alone never moves a scorecard axis; only reviewer-confirmed findings do.
 
 ### External-Surface Checks
 
@@ -735,7 +745,10 @@ React audit signals:
 React signal guidance:
 [Paste only the relevant sections from references/react-audit-signals.md]
 
-Important: These are inspection prompts, not automatic findings. Report only concrete, reproducible issues with file/line evidence.
+Scanner leads (only when react-doctor ran):
+[Paste the scanner findings relevant to this reviewer's axis]
+
+Important: These are inspection prompts, not automatic findings. Report only concrete, reproducible issues with file/line evidence. When scanner leads are present, confirm or refute them instead of re-deriving the same mechanical patterns.
 ```
 
 **Include database lifecycle guidance in data-engineer prompts (projects with a database).**

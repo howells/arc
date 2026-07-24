@@ -5,6 +5,7 @@ Arc-native checklist for React, Next.js, TanStack Query, and React Native audits
 ## How To Use
 
 - Treat every item as a signal to inspect, not an automatic finding.
+- When the audit ran react-doctor (see the audit skill's optional scanner step), treat its output as the mechanical layer: confirm or refute its leads instead of re-deriving the same patterns, and spend reviewer attention on what the scanner cannot see.
 - Report only when there is a concrete file/line and the code path makes the issue real.
 - Consolidate repeated findings by pattern and count.
 - Respect generated, vendored, fixture, Storybook, and test-only files unless the issue can affect production behavior.
@@ -106,6 +107,37 @@ Arc-native checklist for React, Next.js, TanStack Query, and React Native audits
 - Avoid huge animated blurs and scale-from-zero entrances.
 - Avoid `z-index: 9999`; use a defined stacking scale.
 - Treat pure black backgrounds, default Tailwind palettes, gradient text, excessive glow, justified text, and redundant Tailwind axis shorthands as design-quality signals, not blockers.
+
+## Design Slop Signals
+
+Generated UI has recognizable tells. These are quality signals for frontend reviewers on marketing/product surfaces — advisory, deliberately overridable by an intentional design direction, and never scored as correctness findings.
+
+**Decoration without intent:**
+
+- Decorative blur orbs, glow fields, or repeating gradient blobs behind hero content.
+- Default purple/indigo page gradients and purple-blue icon gradients that no brand token asked for.
+- Gradient text on headings; decorative pulse/ping animations on static content.
+- Emoji as heading decoration or repeated emoji feature tiles.
+- Fake browser-chrome frames around screenshots; fabricated persona quotes and placeholder marketing copy ("Trusted by 10,000+ teams") presented as real.
+
+**Template structure:**
+
+- Hero eyebrow chip + oversized centered headline + two-button row as the default page opening.
+- Uniform feature-card grids where every card is an icon tile + heading + two lines.
+- Repeated glass/card surfaces and nested card-within-card shells; empty card shells wrapping a single element.
+- Numbered section markers and repeated kicker labels structuring every section identically.
+
+**Typography and spacing tells:**
+
+- Flat type scale (page renders as one or two sizes); all-caps body text; tiny uppercase tracked labels everywhere.
+- Crushed or overwide letter-spacing on display type; tight body leading; text measure wider than ~75ch.
+- Monotonous page spacing — every section identically padded regardless of content weight.
+
+**Interaction tells:**
+
+- Hover-only reveals of essential content; the same hover scale on every interactive element.
+- Layout-shifting interaction states (borders/size appearing on hover or focus).
+- Long transition durations on small interactions; ease-in on entrances; smooth scroll without a reduced-motion guard.
 
 ## React Native
 
