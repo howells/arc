@@ -40,7 +40,7 @@ export function RuleList({ rules, onRuleClick }: RuleListProps) {
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {categoryRules.map((rule) => (
                 <button
-                  className="group rounded-lg border border-neutral-200 px-4 py-3 text-left transition-all duration-200 hover:border-[var(--color-accent)]/40 hover:bg-[var(--color-accent)]/8"
+                  className="group rounded-lg border border-neutral-200 px-4 py-3 text-left transition-colors duration-200 hover:border-[var(--color-accent)]/40 hover:bg-[var(--color-accent)]/8"
                   key={rule.slug}
                   onClick={() => {
                     onRuleClick(rule);

@@ -153,9 +153,9 @@ function getInvokableSkills(): Set<string> {
     return new Set();
   }
   return new Set(
-    readdirSync(commandsDir)
-      .filter((f) => f.endsWith(".md"))
-      .map((f) => f.replace(MD_EXTENSION_REGEX, ""))
+    readdirSync(commandsDir).flatMap((f) =>
+      f.endsWith(".md") ? [f.replace(MD_EXTENSION_REGEX, "")] : []
+    )
   );
 }
 
@@ -351,10 +351,6 @@ export function getRules(): Rule[] {
   }
 
   return rules;
-}
-
-export function getSkillNames(): string[] {
-  return getSkills().map((s) => s.name);
 }
 
 export function getSkillByName(name: string): Skill | null {

@@ -1,6 +1,12 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import {
+  AnimatePresence,
+  domAnimation,
+  LazyMotion,
+  m,
+  useReducedMotion,
+} from "motion/react";
 import { useEffect, useState } from "react";
 
 interface AnimatedHeroProps {
@@ -13,18 +19,16 @@ export function AnimatedHero({ commandNames }: AnimatedHeroProps) {
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    const interval =
-      prefersReducedMotion === true
-        ? undefined
-        : setInterval(() => {
-            if (document.visibilityState === "visible") {
-              setIndex((prev) => (prev + 1) % commandNames.length);
-            }
-          }, 2000);
-    return () => {
-      if (interval !== undefined) {
-        clearInterval(interval);
+    const interval = setInterval(() => {
+      if (
+        prefersReducedMotion !== true &&
+        document.visibilityState === "visible"
+      ) {
+        setIndex((prev) => (prev + 1) % commandNames.length);
       }
+    }, 2000);
+    return () => {
+      clearInterval(interval);
     };
   }, [commandNames.length, prefersReducedMotion]);
 
@@ -33,26 +37,28 @@ export function AnimatedHero({ commandNames }: AnimatedHeroProps) {
       <span>/arc</span>
       <span className="text-[var(--color-accent)]">:</span>
       <span className="relative inline-block min-w-[180px] md:min-w-[240px]">
-        <AnimatePresence mode="wait">
-          <motion.span
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-block text-[var(--color-accent)]"
-            exit={
-              prefersReducedMotion === true
-                ? { opacity: 0 }
-                : { opacity: 0, y: -10 }
-            }
-            initial={
-              prefersReducedMotion === true
-                ? { opacity: 0 }
-                : { opacity: 0, y: 10 }
-            }
-            key={commandNames[index]}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-          >
-            {commandNames[index]}
-          </motion.span>
-        </AnimatePresence>
+        <LazyMotion features={domAnimation} strict>
+          <AnimatePresence mode="wait">
+            <m.span
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-block text-[var(--color-accent)]"
+              exit={
+                prefersReducedMotion === true
+                  ? { opacity: 0 }
+                  : { opacity: 0, y: -10 }
+              }
+              initial={
+                prefersReducedMotion === true
+                  ? { opacity: 0 }
+                  : { opacity: 0, y: 10 }
+              }
+              key={commandNames[index]}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+            >
+              {commandNames[index]}
+            </m.span>
+          </AnimatePresence>
+        </LazyMotion>
       </span>
     </h1>
   );

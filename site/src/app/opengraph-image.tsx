@@ -11,6 +11,11 @@ export default async function Image() {
   const fontResponse = await fetch(
     "https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n5ig.ttf"
   );
+  if (!fontResponse.ok) {
+    throw new Error(
+      `Failed to load IBM Plex Mono font: HTTP ${fontResponse.status}`
+    );
+  }
   const ibmPlexMono = await fontResponse.arrayBuffer();
 
   return new ImageResponse(

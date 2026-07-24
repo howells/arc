@@ -41,7 +41,7 @@ export interface Agent {
   why: string;
 }
 
-export const RULE_CATEGORIES = ["core", "workflow", "interface"] as const;
+const RULE_CATEGORIES = ["core", "workflow", "interface"] as const;
 export type RuleCategory = (typeof RULE_CATEGORIES)[number];
 
 export interface Rule {

@@ -40,7 +40,7 @@ export function AgentList({ agents, onAgentClick }: AgentListProps) {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {categoryAgents.map((agent) => (
                 <button
-                  className="group rounded-lg border border-neutral-200 p-4 text-left transition-all duration-200 hover:border-[var(--color-accent)]/40 hover:bg-[var(--color-accent)]/8"
+                  className="group rounded-lg border border-neutral-200 p-4 text-left transition-colors duration-200 hover:border-[var(--color-accent)]/40 hover:bg-[var(--color-accent)]/8"
                   key={agent.name}
                   onClick={() => {
                     onAgentClick(agent);
