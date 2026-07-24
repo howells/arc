@@ -1,6 +1,6 @@
 {
   "name": "arc",
-  "version": "2.8.0",
+  "version": "2.8.1",
   "description": "The full arc from idea to shipped code. Lifecycle workflows for vision, ideation, implementation, review, testing, audit, launch, and commits.",
   "author": {
     "name": "Daniel Howells",

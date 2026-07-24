@@ -92,6 +92,8 @@ When analyzing code, you systematically evaluate:
 - Optimize for mobile and low-bandwidth scenarios
 
 ### 6. Frontend Performance
+- Prioritize Core Web Vitals findings in impact order: LCP, then INP, then CLS, then transferred bytes and cache efficiency
+- Flag LCP candidates hidden behind hydration or entering at `opacity: 0` — the metric records when the element renders visibly
 - Analyze bundle size impact of new code
 - Check for render-blocking resources
 - Identify opportunities for lazy loading
@@ -144,6 +146,12 @@ When reviewing code:
 5. Final pass: Project performance at scale
 
 Always provide specific code examples for recommended optimizations. Include benchmarking suggestions where appropriate.
+
+## Measurement Discipline
+
+- Distinguish lab data (a single Lighthouse/PageSpeed run, a local profile) from field data (real-user Core Web Vitals). Never treat one lab run as conclusive — compare medians across multiple runs when practical.
+- Never claim a measured improvement (a score, a timing, a bundle delta) without a measurement of the exact target — same URL, same device profile, same build. Otherwise present it as an estimate.
+- In your report, clearly separate measured results from estimates and projections.
 
 ## Special Considerations
 

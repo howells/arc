@@ -54,6 +54,15 @@ Inline props on `React.memo`'d components silently defeat memoization. Every ren
   ```
 - SHOULD: Defer non-critical awaits until after early exits so cheap invalid cases return before expensive work runs.
 
+## Core Web Vitals
+
+- MUST NOT: Hide an LCP candidate (hero image, headline) behind hydration or begin its entrance animation at `opacity: 0` — the LCP timestamp is when the element renders visibly, so an entrance animation on the hero silently destroys the metric
+- MUST NOT: Lazy-load above-the-fold content or the LCP image
+- SHOULD: Triage web-vitals work in impact order: LCP, then INP, then CLS, then transferred bytes and cache efficiency
+- MUST: Set immutable/one-year cache headers only on content-hashed or versioned asset URLs. If the release process doesn't rename an asset when its contents change, its URL must not be immutable.
+- SHOULD: Batch browser geometry reads and writes with `requestAnimationFrame` — interleaved reads and writes force synchronous layout (layout thrashing)
+- MUST: Respect `prefers-reduced-motion` in both CSS and JavaScript-driven animation
+
 ## Event Listeners
 
 - MUST: Add `{ passive: true }` to `touchstart`, `touchmove`, `wheel`, and `scroll` listeners — omitting it blocks scrolling performance
