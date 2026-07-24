@@ -40,10 +40,7 @@
 
   body {
     font-family: var(--font-sans);
-    font-feature-settings:
-      "liga" 1,
-      "calt" 1,
-      "cv11" 1;
+    font-feature-settings: "cpsp", "cv01", "cv02", "cv11";
   }
 }
 
