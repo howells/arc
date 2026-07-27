@@ -18,8 +18,28 @@ index, and drift checks. Agent result mapping lives in `references/subagent-stat
 | Last touched | Date of the latest status write                          |
 | Notes        | One-line block, drift, verification, or concern context  |
 
-`BLOCKED` and `REJECTED` require a reason. Other index sections may record recommended order,
-dependency notes, rejected findings, and deferred findings.
+`BLOCKED` and `REJECTED` require a reason. The index may also record recommended order and
+dependency notes.
+
+### Rejected ledger
+
+A required section once anything has been rejected. It is what stops a dismissed finding
+resurfacing every time a new report is read, so it must survive as long as the index does.
+
+| Column   | Content                                                     |
+| -------- | ----------------------------------------------------------- |
+| Finding  | One-line description, enough to recognise a restatement of it |
+| Evidence | `file:line` as originally cited                              |
+| Reason   | Why it was rejected — by design, already fixed, not worth it |
+| Date     | When the verdict was recorded                                |
+
+Match new findings against this ledger before planning them. A finding that reappears with
+materially new evidence may be reopened; note that in the Reason column rather than deleting the row.
+
+### Deferred findings
+
+Real findings not being planned yet. Same shape as the rejected ledger, with Reason replaced by
+what would need to change for them to be picked up.
 
 ### Multi-writer discipline
 

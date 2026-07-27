@@ -12,13 +12,13 @@ metadata:
 website:
   order: 5
   desc: Get expert eyes
-  summary: Get feedback from specialized reviewers—security, performance, architecture, and more. Runs automatically during ideate, or on-demand for plans and implementation approaches.
+  summary: Get feedback from specialized reviewers—security, performance, architecture, and more. Run it on demand against any plan, spec, or implementation approach.
   what: |
     Review spins up specialized agents based on the plan, spec, or approach being evaluated—a new auth flow gets security and architecture reviewers, a database change gets the data engineer. Each agent reviews independently, then their feedback is consolidated into a prioritized list of concrete items: things to fix, questions to answer, risks to consider.
   why: |
-    No single perspective catches everything. Review gives you a panel of experts without the scheduling overhead. It runs automatically at the end of /arc:ideate, but you can also invoke it on a plan, spec, or approach you're unsure about.
+    No single perspective catches everything. Review gives you a panel of experts without the scheduling overhead. /arc:ideate runs its own inline reviewer passes as you shape a spec; use /arc:review on demand against any plan, spec, or approach you're unsure about.
   decisions:
-    - Runs during ideate automatically. You don't have to remember to ask for review.
+    - Runs on demand. Ideate has its own inline reviewer passes; /arc:review works against any plan, spec, or approach.
     - Agent selection is dynamic. It picks reviewers based on the plan scope.
     - Output is prioritized and concrete. Not vague concerns—specific items you can act on.
   agents:
@@ -29,29 +29,17 @@ website:
     - mastra-agent-engineer
     - senior-engineer
   workflow:
-    position: spine
-    after: ideate
+    position: branch
+    joins: ideate
 ---
 
 <tool_restrictions>
-
-# MANDATORY Tool Restrictions
-
-## BANNED TOOLS — calling these is a skill violation:
-
-- **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured process. Execute the steps below directly.
-- **`ExitPlanMode`** — BANNED. You are never in plan mode.
-  </tool_restrictions>
+`EnterPlanMode` and `ExitPlanMode` are banned. This skill is Arc's own structured process.
+</tool_restrictions>
 
 <arc_runtime>
-This workflow requires the full Arc bundle, not a prompts-only install.
-
-Paths in this skill use these conventions:
-
-- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
-- `./...` is local to this skill's directory.
-- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-  </arc_runtime>
+Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, `skills/`) resolve from the plugin root — the directory containing `agents/` and `skills/`. Everything else is the user's repository.
+</arc_runtime>
 
 <required_reading>
 **Read these reference files NOW:**
@@ -73,17 +61,20 @@ Paths in this skill use these conventions:
 
 **Pass relevant core rules to each reviewer:**
 
-| Reviewer                | Rules to Pass                                    |
-| ----------------------- | ------------------------------------------------ |
-| daniel-product-engineer | react.md, typescript.md, code-style.md           |
-| lee-nextjs-engineer     | nextjs.md, api.md                                |
-| senior-engineer         | code-style.md, typescript.md, react.md           |
-| architecture-engineer   | stack.md, turborepo.md                           |
-| mastra-agent-engineer   | api.md, integrations.md, typescript.md           |
-| security-engineer       | security.md, api.md, env.md                      |
-| data-engineer           | database.md, testing.md, api.md                  |
-| senior-engineer         | cloudflare-workers.md (if wrangler.toml exists)  |
-| accessibility-engineer  | (interface rules only — already in agent prompt) |
+| Reviewer                | Rules to Pass                                                                         |
+| ----------------------- | ------------------------------------------------------------------------------------- |
+| daniel-product-engineer | react.md, typescript.md, code-style.md                                                |
+| lee-nextjs-engineer     | nextjs.md, api.md                                                                     |
+| senior-engineer         | code-style.md, typescript.md, react.md; cloudflare-workers.md if wrangler.toml exists |
+| architecture-engineer   | stack.md, turborepo.md                                                                |
+| mastra-agent-engineer   | api.md, integrations.md, typescript.md                                                |
+| security-engineer       | security.md, api.md, env.md                                                           |
+| data-engineer           | database.md, testing.md, api.md                                                       |
+| performance-engineer    | react-performance.md, api.md                                                          |
+| test-quality-engineer   | testing.md                                                                            |
+| accessibility-engineer  | (interface rules only — already in agent prompt)                                      |
+
+The table names Arc's own `rules/` files. When `.ruler/` exists, glob it first and match by topic rather than by these filenames.
 
 </rules_context>
 
@@ -104,9 +95,9 @@ Reviewers must respect the plan's scope. This is non-negotiable:
 
 **If argument provided** (e.g., `daniel-product-engineer`):
 
-- Look for `agents/review/{argument}.md`
-- If found → use only this reviewer, skip Phase 2 detection
-- If not found → list available reviewers from `agents/review/` and ask user to pick
+- Treat the argument as a reviewer name only if it matches a file in `agents/review/*.md`
+- If it matches → use only this reviewer, skip Phase 2 detection
+- If it doesn't match → it isn't a reviewer name. Fall through to Phase 1 and treat it as a plan path or description
 
 **Available reviewers:**
 
@@ -119,6 +110,7 @@ Reviewers must respect the plan's scope. This is non-negotiable:
 - `data-engineer` — Migrations, transactions
 - `mastra-agent-engineer` — Mastra, agents, workflows, tools, memory/RAG, MCP, agent-readable surfaces
 - `accessibility-engineer` — WCAG conformance, keyboard navigation, screen-reader support (UI-facing plans)
+- `test-quality-engineer` — Assertion quality, test isolation, coverage gaps, mock hygiene
 
 ## Phase 1: Find the Plan
 
@@ -206,32 +198,28 @@ Reviewers must respect the plan's scope. This is non-negotiable:
 **Conditional addition (all project types):**
 
 - If `package.json` includes `@mastra/*` or the plan involves agents, tools, workflows, memory, RAG, MCP, model routing, browser/sandbox capabilities, or agent-readable software surfaces → add `agents/review/mastra-agent-engineer.md`
+- If the plan involves auth, secrets, permissions, payments, or user data → add `agents/review/security-engineer.md`
+- If the plan involves migrations, schema changes, or query patterns → add `agents/review/data-engineer.md`
+- If the plan involves hot paths, large data volumes, or rendering cost → add `agents/review/performance-engineer.md`
 
 ## Phase 3: Run Expert Review
 
 **If specific reviewer from Phase 0:** Spawn single reviewer agent.
 
-**Otherwise:** Spawn selected reviewer agents in parallel:
+**Otherwise:** Spawn every selected reviewer agent in parallel — one dispatch per reviewer, using
+this body for each:
 
 ```
-Task [reviewer-1] model: sonnet: "Review this plan for [specialty concerns].
+Task [reviewer] model: sonnet: "Review this plan for [specialty concerns].
 Plan:
 [plan content]
 
-Focus on: [specific area based on reviewer type]"
+Focus on: [specific area based on reviewer type]
 
-Task [reviewer-2] model: sonnet: "Review this plan for [specialty concerns]..."
-
-Task [reviewer-3] model: sonnet: "Review this plan for [specialty concerns]..."
-
-Task [conditional-reviewer] model: sonnet: "Review this plan for [specialty concerns]..."
+Respect the plan's scope. Flag scope concerns once, then commit to making the plan succeed."
 ```
 
 ## Phase 4: Consolidate and Present
-
-**Keep the two finding axes separate:**
-
-Spec-compliance findings (does the approach do what it was supposed to?) and code-quality findings (is it well-shaped regardless of spec?) stay under separate headings. Never merge them into one list or rerank one axis against the other — a sound approach does not offset quality problems, and vice versa.
 
 **Transform findings into Socratic questions:**
 
@@ -322,7 +310,7 @@ If reviewed an **implementation plan**:
 **Plan review** is complete when:
 
 - [ ] Plan located (conversation, file, or user-provided)
-- [ ] Project type detected and reviewers selected
+- [ ] Reviewers selected (project type detected, or a specific reviewer supplied)
 - [ ] Parallel expert review completed (selected agents)
 - [ ] All findings presented as Socratic questions
 - [ ] User made decisions on each finding

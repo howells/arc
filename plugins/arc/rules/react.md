@@ -122,3 +122,11 @@ For 57 detailed React/Next.js performance rules with code examples, agents can r
 
 For React-specific performance anti-patterns, agents can reference `react-performance.md`.
 For React correctness rules and common bugs, agents can reference `react-correctness.md`.
+
+Deeper background lives in Arc's references — load when the task needs it:
+
+| Reference | Use when |
+|-----------|----------|
+| `references/tanstack-query-trpc.md` | Wiring TanStack Query or tRPC data flow |
+| `references/tanstack-table.md` | Building data tables with TanStack Table v8 |
+| `references/component-design.md` | Designing component APIs |

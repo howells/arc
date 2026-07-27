@@ -28,7 +28,7 @@ website:
     - One fresh repository gate runs after final review fixes.
   workflow:
     position: spine
-    after: review
+    after: ideate
 ---
 
 <tool_restrictions>
@@ -39,8 +39,7 @@ banned because Arc owns its planning and execution process.
 </tool_restrictions>
 
 <arc_runtime>
-This workflow requires the full Arc bundle. Arc-owned paths resolve from the plugin root;
-project paths resolve from the user's repository.
+Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, `skills/`) resolve from the plugin root — the directory containing `agents/` and `skills/`. Everything else is the user's repository.
 </arc_runtime>
 
 <required_reading>
@@ -60,6 +59,7 @@ Load when relevant:
 - `disciplines/subagent-driven-development.md` before using slice owners.
 - `disciplines/verification-before-completion.md` before completion claims.
 - `disciplines/finishing-a-development-branch.md` before shipping.
+- `references/index.md` — the full reference catalogue, when the work needs background you can't name a file for.
   </required_reading>
 
 <available_agents>
@@ -72,6 +72,7 @@ Load when relevant:
 | `test-runner`, `e2e-runner`                                      | Verbose or iterative focused execution when useful.                        |
 | `spec-reviewer`                                                  | Sonnet whole-implementation spec/completion axis.                          |
 | `code-reviewer`                                                  | Sonnet whole-implementation standards/evidence axis.                       |
+| `agents/review/security-engineer.md`, `agents/review/data-engineer.md`, `agents/review/performance-engineer.md`, `agents/review/mastra-agent-engineer.md`, `agents/review/daniel-product-engineer.md`, `agents/review/accessibility-engineer.md` | **Conditional** Guarded specialists, matched to the risk that raised assurance. |
 
 Read an agent file before dispatching it. Never run multiple mutating owners in parallel when
 their declared paths or dependencies overlap.
@@ -182,6 +183,7 @@ authority in the current request or a dynamic action checkpoint immediately befo
 Missing mutation consent is `NEEDS_CONTEXT`, not an authentication failure. `AUTH_GATE` is
 reserved for credentials or authorization errors encountered while performing an already
 authorized action.
+
 Unattended instructions suppress routine waits only; they never bypass these gates.
 
 For UI slices, consume the feature spec, existing project pattern, or supplied visual source.
@@ -196,8 +198,8 @@ After all slices are built:
 2. Capture one review target from the implementation base through current HEAD plus attributable
    worktree changes, excluding unchanged pre-existing dirty paths.
 3. Run `spec-reviewer` and `code-reviewer` in parallel against that same target.
-4. Guarded work adds the relevant security, data, performance, Mastra, or product/browser
-   specialist and rechecks Guarded signals against the actual diff.
+4. Guarded work adds the relevant security, data, performance, Mastra, `daniel-product-engineer`,
+   or `accessibility-engineer` specialist and rechecks Guarded signals against the actual diff.
 5. Return findings to an implementation owner, fix root sources, regenerate artifacts, and rerun
    both axes. Rerun affected specialists when their scope changes.
 

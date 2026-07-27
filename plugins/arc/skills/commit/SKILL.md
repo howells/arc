@@ -28,21 +28,16 @@ website:
 ---
 
 <arc_runtime>
-This workflow requires the full Arc bundle, not a prompts-only install.
-
-Paths in this skill use these conventions:
-
-- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
-- `./...` is local to this skill's directory.
-- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-  </arc_runtime>
+Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, `skills/`) resolve from the plugin root — the directory containing `agents/` and `skills/`. Everything else is the user's repository.
+</arc_runtime>
 
 <rules_context>
 **Load before committing:**
 
 - `rules/git.md` — commit-message, husky, and lint-staged conventions this skill must respect.
 - `references/diff-review-checklist.md` — apply during the pre-commit review step (step 1).
-  </rules_context>
+
+</rules_context>
 
 # Commit Changes
 
@@ -54,7 +49,9 @@ Usage:
 - `/arc:commit push` - Commit, push, then publish changed npm packages if present
 - `/arc:commit publish` - Alias for the push-and-publish path
 
-Commit owns commits, push, and simple publishing of an already-versioned package. Version bumps, changelogs, and multi-package/coordinated releases belong to `/arc:release` — route there instead of bumping versions here.
+`/arc:commit` publishes a package whose version is already committed and not yet on the registry. `/arc:release` owns bumping versions, changelogs, and coordinated multi-package releases. Route version bumps there instead of doing them here.
+
+The canonical order across both skills is **commit → push → publish → tag**.
 
 Read the user's invocation: no argument means commit only; "push" or "publish" both mean the push-and-publish path.
 
@@ -74,7 +71,7 @@ If there are no changes, tell the user and stop.
 
 ### 1. Analyze Changes
 
-Review the git state above. If you need more detail on what changed, inspect the working tree — e.g. `git diff` for unstaged changes, `git diff --staged` for staged changes, or `git diff <path>` to focus on a file. Apply `references/diff-review-checklist.md` as you read the diff so obvious issues (debug logs, secrets, stray files) are caught before they land in a commit.
+Review the git state above. If you need more detail on what changed, inspect the working tree — e.g. `git diff` for unstaged changes, `git diff --staged` for staged changes, or `git diff <path>` to focus on a file. Apply `references/diff-review-checklist.md` as you read the diff so substantive defects (race conditions, trust-boundary gaps, data-safety and side-effect mistakes, stale references, test gaps, dead code, performance regressions) are caught before they land in a commit. Alongside it, scan the diff yourself for debug logs, secrets or credentials, and stray files that should not be committed.
 
 ### 2. Determine Commit Strategy
 
@@ -137,18 +134,18 @@ For each logical group:
 - Each commit should be atomic (single purpose)
 - If you need "and" in the message, consider splitting the commit
 
+**Repo version mechanics:** if the repo declares a multi-file version manifest (for example `.version-bump.json`) or ships a version-bump script, use that script rather than editing `version` fields directly, and re-read `HEAD` after committing in case a hook amended the commit and changed its hash.
+
 ### 5. Handle Pre-commit Hook Failures
 
 If TypeScript or lint errors block the commit:
 
-**CRITICAL RULES:**
+Fix the root cause. A hook failure is information about the code, so anything that silences it
+rather than resolving it — `--no-verify`, `as unknown as`/`as any`, `@ts-ignore`,
+`@ts-expect-error`, eslint-disable comments, empty catch blocks — leaves the defect in place and
+the commit dishonest.
 
-- NEVER use `--no-verify` or skip hooks
-- NEVER use force casting (e.g., `as unknown as`, `as any`)
-- NEVER use `@ts-ignore`, `@ts-expect-error`, or eslint-disable comments
-- NEVER use type assertions to bypass errors
-- NEVER add empty catch blocks or suppress errors
-- Fix the ROOT CAUSE of each error
+If the root cause genuinely can't be fixed here, stop and say so rather than suppressing it.
 
 **Fixing Process:**
 
@@ -189,7 +186,9 @@ If push fails (e.g., diverged history), report the issue - do NOT force push unl
 
 **Skip this step** unless the user asked to "push" or "publish".
 
-Publish only after commits and push have succeeded.
+Publish only after commits and push have succeeded — the canonical order is commit → push → publish → tag.
+
+Detect the repo's package manager (`pnpm`, `npm`, `yarn`, `bun`) from its lockfile or `packageManager` field first, and refer to it as `<pm>` in the commands below.
 
 **Detect candidate packages:**
 
@@ -212,15 +211,15 @@ Publish only after commits and push have succeeded.
    - If npm returns 404/not found, continue.
    - If npm auth/network fails, stop and report the blocker.
 
-4. Run package-local verification when scripts exist, using the repo's detected package manager consistently:
-   - `test` if a `test` script exists
-   - `build` if a `build` script exists
-   - `typecheck` if a `typecheck` script exists
+4. Run package-local verification when scripts exist, using `<pm>` consistently:
+   - `<pm> test` if a `test` script exists
+   - `<pm> build` if a `build` script exists
+   - `<pm> typecheck` if a `typecheck` script exists
 5. Publish from the package directory:
    ```bash
    npm publish
    ```
-   Use `npm publish --access public` for scoped public packages when `publishConfig.access` is `public` or the existing package is public.
+   Use `npm publish --access public` for scoped public packages when `publishConfig.access` is `public` or the existing package is public. Publishing itself uses `npm publish` regardless of the install-time package manager; only the verification scripts above run through `<pm>`.
 
 **Publishing rules:**
 

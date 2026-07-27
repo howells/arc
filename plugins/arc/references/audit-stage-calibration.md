@@ -10,6 +10,7 @@ This project is in PROTOTYPE stage — exploring ideas and validating concepts.
 Severity calibration:
 - Only flag issues that could cause data loss, credential leaks, or make the prototype non-functional
 - Do NOT flag: missing rate limiting, incomplete error handling, lack of input validation on non-auth flows, missing tests, architectural purity, performance optimization, accessibility, code organization
+- \* Exception: structural defects that carry a scorecard cap in `audit-scorecard.md` (god files, god page-clients, circular dependencies) are still **reported and still cap the axis** at every stage. Prototype calibration downgrades their severity; it does not suppress them. Dropping them would make the score silently disagree with the findings.
 - Compress what would normally be High/Medium findings down to Low/Suggestion
 - Focus: "Does this work?" and "Could this leak secrets?" — nothing else matters yet
 - Respect the experiment. The project may be exploring an unconventional idea. Don't penalize it for being impractical — just flag genuine dangers.
@@ -68,7 +69,7 @@ Use during consolidation to sanity-check reviewer findings:
 | Missing tests                       | Drop      | Low         | Medium     | High       |
 | Credential exposure                 | Critical  | Critical    | Critical   | Critical   |
 | SQL injection / XSS                 | Critical  | Critical    | Critical   | Critical   |
-| Architecture concerns               | Drop      | Low         | Medium     | High       |
+| Architecture concerns               | Drop*     | Low         | Medium     | High       |
 | Performance optimization            | Drop      | Low         | Medium     | High       |
 | Accessibility gaps                  | Drop      | Low         | Medium     | High       |
 

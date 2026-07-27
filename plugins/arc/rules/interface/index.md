@@ -34,6 +34,10 @@ UI/UX guidelines for building polished, accessible interfaces.
 | [component-design.md](../../references/component-design.md) | React component patterns |
 | [ascii-ui-patterns.md](../../references/ascii-ui-patterns.md) | ASCII wireframe patterns |
 | [tailwind-v4.md](../../references/tailwind-v4.md) | Tailwind v4 migration guide |
+| [ux-laws.md](../../references/ux-laws.md) | Fitts, Hick, and the rest of the usability laws |
+| [interaction-physics.md](../../references/interaction-physics.md) | Motion feel, easing, and perceived responsiveness |
+| [typography-opentype.md](../../references/typography-opentype.md) | Type scale and OpenType features |
+| [touch-targets.md](../../references/touch-targets.md) | Hit-area sizing for touch and pointer input |
 
 ## Quick Reference
 

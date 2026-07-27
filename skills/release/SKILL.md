@@ -22,48 +22,42 @@ website:
     - Every breaking change gets a migration note before it can publish.
     - Each package is packed and installed into a temp project before publishing.
     - Publishing, tagging, and pushing are always offered, never silent.
-    - Commit owns simple unversioned publish; release owns version bumps and changelogs.
+    - Commit publishes an already-committed version; release owns version bumps and changelogs.
   workflow:
     position: utility
 ---
 
 <arc_runtime>
-This workflow requires the full Arc bundle, not a prompts-only install.
-
-Paths in this skill use these conventions:
-
-- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
-- `./...` is local to this skill's directory.
-- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-  </arc_runtime>
-
-<required_reading>
-**Read this reference NOW:**
-
-1. `references/platform-tools.md`
-   </required_reading>
+Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, `skills/`) resolve from the plugin root — the directory containing `agents/` and `skills/`. Everything else is the user's repository.
+</arc_runtime>
 
 <platform_context>
 Adapt the workflow to the current harness instead of assuming Claude-specific tool names.
 
 - Use platform-native structured questions when available; otherwise ask one concise plain-text question at a time.
-- Use the repo's detected package manager (`pnpm`, `npm`, `yarn`, `bun`) consistently for every command below.
-  </platform_context>
+- Use the repo's detected package manager (`pnpm`, `npm`, `yarn`, `bun`) consistently for every command below. Commands are written with a `<pm>` placeholder — substitute the detected manager.
+- The changesets workspace-root install flag `-w` applies only under pnpm; drop it for npm, yarn, and bun.
+- Publishing itself uses `npm publish` regardless of the install-time package manager. Changeset-driven publishes run through the detected manager (`<pm> changeset publish`).
+
+</platform_context>
 
 # Release Workflow
 
-Cut a versioned release of one or more npm packages. Owns semver bumps, changelogs, and multi-package releases. Commits, pushes, and simple unversioned publishing belong to `/arc:commit`.
+Cut a versioned release of one or more npm packages. `/arc:commit` publishes a package whose version is already committed and not yet on the registry. `/arc:release` owns bumping versions, changelogs, and coordinated multi-package releases.
+
+The canonical order across both skills is **commit → push → publish → tag**. `/arc:commit` states the governing invariant — never publish before pushing the commit containing the package version — and this skill follows it.
 
 Usage:
 
-- `/arc:release` - Detect, propose bumps, author, verify, then gate publish.
-- `/arc:release dry-run` - Run everything up to and including `pnpm pack` verification, but never publish.
+- `/arc:release` - Detect, propose bumps, author, verify, commit and push, then gate publish.
+- `/arc:release dry-run` - Run everything up to and including `<pm> pack` verification, but never commit, publish, tag, or push.
 
 $ARGUMENTS will be empty or "dry-run". Treat "dry-run" as a hard stop before any `publish`.
 
 ## Boundary
 
 - Never bump a version, publish, tag, or push without an explicit user choice at the gate.
+- If no user response is available (an unattended or non-interactive run), fall back to `dry-run` behaviour: report what would be bumped and published, then stop without mutating anything. The gate stays absolute for attended runs.
 - Never publish a `private` package or a version already on the registry.
 - Never use `--force`, `--no-verify`, or delete published versions.
 - Do not invent changelog entries. Base them on actual commits and diffs.
@@ -90,9 +84,9 @@ test -f .changeset/config.json && echo "changesets present" || echo "no changese
 
 - If changesets are present, read pending intents and status:
   ```bash
-  pnpm changeset status --since=$(git describe --tags --abbrev=0 2>/dev/null || echo HEAD~20)
+  <pm> changeset status --since=$(git describe --tags --abbrev=0 2>/dev/null || echo HEAD~20)
   ```
-- If changesets are **absent** in a workspace repo, offer to scaffold on first run (`pnpm add -Dw @changesets/cli && pnpm changeset init`) via one question before continuing. Do not scaffold silently.
+- If changesets are **absent** in a workspace repo, offer to scaffold on first run (`<pm> add -Dw @changesets/cli && <pm> changeset init`, dropping `-w` outside pnpm) via one question before continuing. Do not scaffold silently.
 
 Identify which publishable packages changed since their last release. Prefer `changeset status`; fall back to diffing since the last tag filtered by each package's directory:
 
@@ -125,16 +119,22 @@ AskUserQuestion:
       description: "Cancel the release"
 ```
 
+A structured question returns only the chosen label, so "Override" carries no package or level. If the user selects Override, follow up with one question per package to collect its bump level before authoring anything.
+
+If no user response is available, treat it as `dry-run`: report the proposed bumps and stop without writing changesets, bumping versions, or touching `CHANGELOG.md`.
+
 ## Step 3: Author The Release
 
 Once bumps are confirmed:
 
 - **Changesets repo**: write a changeset file per package under `.changeset/` with the confirmed bump and a human summary, then run:
   ```bash
-  pnpm changeset version
+  <pm> changeset version
   ```
   This applies bumps and regenerates each `CHANGELOG.md`.
 - **Single package**: bump the `version` field manually to the confirmed level and prepend a dated entry to `CHANGELOG.md` (create it if absent), grouping changes as Added / Changed / Fixed / Breaking.
+
+If the repo declares a multi-file version manifest (for example `.version-bump.json`) or ships a version-bump script, run that script rather than editing `version` fields directly — hand-editing one file desynchronizes the rest.
 
 For **any** breaking change, write a short migration note — how to upgrade, before/after, and what to search-and-replace. Append it to `MIGRATIONS.md` at the package root (create if absent), keyed by the new version. Keep it to the minimum a consumer needs to update.
 
@@ -145,12 +145,12 @@ This step catches the failures a plain `npm publish` ships silently. Run it for 
 For each package:
 
 1. **Build**: run the package's `build` script if present. A failed build stops the release.
-2. **Pack**: create the real tarball and inspect its contents.
+2. **Pack**: create the real tarball and inspect its contents. Capture the filename pack prints and pass exactly that to `tar` — a `*.tgz` glob breaks once a second tarball exists in the directory.
    ```bash
-   pnpm pack
-   tar -tf *.tgz
+   TARBALL=$(<pm> pack | tail -1)
+   tar -tf "$TARBALL"
    ```
-3. **Install into a throwaway project**: create a temp dir, `npm init -y`, and install the tarball by path so you exercise the published shape, not the source.
+3. **Install into a throwaway project**: create a temp dir, `<pm> init -y`, and install the tarball by path so you exercise the published shape, not the source.
 4. **Import-smoke each entry point**: for every path in the `exports` map (and `main`/`module`/`types`), import it and confirm it resolves and loads without throwing.
 
 Then check the traps that only appear in the packed output:
@@ -162,9 +162,25 @@ Then check the traps that only appear in the packed output:
 
 Report every finding. Any hard failure (build fail, stripped directive, missing dist, unresolved export) blocks publish until fixed.
 
-If `$ARGUMENTS` is "dry-run", stop here and report the verification results. Do not proceed to publish.
+If `$ARGUMENTS` is "dry-run", stop here and report the verification results. Do not proceed to commit or publish.
 
-## Step 5: Publish
+## Step 5: Commit And Push The Release
+
+Step 3 wrote version bumps, `CHANGELOG.md` entries, and any migration note. Commit and push them before anything reaches the registry — publishing from a dirty tree leaves the released version uncommitted and any later tag pointing at a commit that does not contain it.
+
+```bash
+git add -A
+git commit -m "chore(release): vX.Y.Z"   # or "chore(release): <name>@<version>" per package
+git push
+```
+
+Re-read `HEAD` after committing — a repo hook may have amended the commit and changed its hash.
+
+Reaching this step means the user confirmed the bumps at the Step 2 gate, which authorizes committing and pushing that release. Publishing and tagging stay separately gated below.
+
+Publish is blocked until the release commit exists and has been pushed. If the commit or push fails, stop and report; do not fall through to Step 6.
+
+## Step 6: Publish
 
 Gate publishing behind one explicit question:
 
@@ -181,9 +197,11 @@ AskUserQuestion:
       description: "Leave the release authored but unpublished"
 ```
 
-On **Publish now**, publish each verified package from its directory using the detected package manager. For changesets repos prefer `pnpm changeset publish` (it publishes only bumped packages and skips already-published versions). For single packages use `npm publish`, adding `--access public` for scoped public packages.
+If no user response is available, treat it as `dry-run`: report what would be published and stop without publishing.
 
-After a successful publish, **offer** to tag and push — never do it silently:
+On **Publish now**, publish each verified package from its directory. For changesets repos prefer `<pm> changeset publish` (it publishes only bumped packages and skips already-published versions). For single packages use `npm publish`, adding `--access public` for scoped public packages.
+
+After a successful publish, **offer** to tag and push the tag — never do it silently:
 
 ```bash
 # offered, not automatic:
@@ -191,12 +209,13 @@ git tag <name>@<version>   # or vX.Y.Z for single-package repos
 git push --follow-tags
 ```
 
-## Step 6: Report
+## Step 7: Report
 
 Tell the user:
 
 - Which packages were released and at what versions, with the reason for each bump.
 - Migration notes written, if any.
 - Verification results per package (packed contents, entry-point smoke, the four traps).
+- The release commit and its push status.
 - Publish status per package: published, dry-run, skipped (already on registry), or blocked.
-- Tag/push status, or a reminder that tagging and pushing are still pending.
+- Tag status, or a reminder that tagging is still pending.

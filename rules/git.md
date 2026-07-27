@@ -2,8 +2,9 @@
 
 ## Commits
 
-- NEVER: Auto-commit changes; allow review first.
-- MUST: Stage and review changes before committing.
+- MUST: Review changes before committing. A commit is a claim about what changed, so read the diff first.
+- MUST: Stage deliberately — group related changes, don't `git add -A` by reflex.
+- Note: `/arc:commit` satisfies the review requirement — reading and grouping the diff *is* its first step. This rule targets committing without looking, not automation as such.
 - SHOULD: Use conventional commit messages when practical.
 - SHOULD: Use `gh` CLI for GitHub operations (PRs, issues, etc.).
 
@@ -13,7 +14,7 @@
 - MUST: lint-staged runs format only (`biome format --write`), not `biome check`. Lint and typecheck run separately on the full project.
 - SHOULD: Run typecheck (`tsc --noEmit`) on commit for small projects, pre-push for large ones (>200 files).
 - NEVER: Write manual `git stash push/pop` in hooks — lint-staged handles this safely.
-- NEVER: Disable hooks permanently; use `--no-verify` sparingly for WIP commits.
+- NEVER: Disable hooks permanently. `--no-verify` is for a local WIP commit you will amend before pushing — never for landing work, where it hides the defect the hook found.
 
 ## Claude Code Hooks
 

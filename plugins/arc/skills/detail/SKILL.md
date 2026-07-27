@@ -16,8 +16,7 @@ metadata:
 </tool_restrictions>
 
 <arc_runtime>
-This workflow requires the full Arc bundle. Arc-owned paths resolve from the plugin root;
-project paths resolve from the user's repository.
+Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, `skills/`) resolve from the plugin root — the directory containing `agents/` and `skills/`. Everything else is the user's repository.
 </arc_runtime>
 
 <required_reading>
@@ -37,9 +36,11 @@ Read before planning:
 
 `detail` accepts either:
 
-- a feature spec from `implement`, preferring `docs/arc/specs/*-spec.md`; or
+- a feature spec from `implement`, preferring `docs/arc/specs/*-spec.md`;
 - a vetted finding from `improve`, including evidence, impact, fix sketch, and out-of-scope
-  candidates.
+  candidates; or
+- a direct scoped request forwarded by `implement` with no spec behind it. Elicit the missing
+  scope through questions rather than substituting a stale spec.
 
 Never substitute an unrelated recent spec for a vetted finding. Derive the output filename in
 `docs/arc/plans/` using the canonical paths reference.
@@ -136,7 +137,8 @@ Then write:
 2. plan-level `<seams>`;
 3. dependency-ordered XML slices;
 4. an empty `## Implementation state` block using the lifecycle reference;
-5. an empty `## Decision log`.
+5. an empty `## Decision log`;
+6. the plan's row in `docs/arc/plans/INDEX.md` with status `TODO`, per `references/plan-lifecycle.md`.
 
 ## 9. Validate the plan document
 
@@ -144,10 +146,11 @@ Dispatch `agents/workflow/plan-document-reviewer.md`. It validates the seven can
 dimensions, including schema-2 checkpoint compatibility.
 Fix and re-review until it passes or five loops require user escalation.
 
-## 10. Offer the plan commit
+## 10. Offer approval and the plan commit
 
-Never commit silently. Ask one question: commit the plan, or leave it uncommitted. The caller
-continues to implementation only after the plan is approved.
+Never commit silently. Ask one question covering both decisions: approve the plan, approve and
+commit it, or revise it. The caller continues to implementation only after the plan is approved.
+If no user response is available, leave the plan uncommitted and return it unapproved.
 
 </process>
 

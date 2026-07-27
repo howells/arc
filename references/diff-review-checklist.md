@@ -1,10 +1,13 @@
 # Pre-Landing Diff Review Checklist
 
-Structural review of `git diff origin/main` for issues that pass CI but break in production.
+Structural review of a diff for issues that pass CI but break in production.
+
+Scope it to whatever change you are about to land: `git diff origin/main` before opening a PR,
+or the working tree and staged diff before a commit. `/arc:commit` applies it to the latter.
 
 ## How to Use
 
-1. Run `git fetch origin main --quiet && git diff origin/main` to get the full diff
+1. Get the full diff for the change you are landing (`git fetch origin main --quiet && git diff origin/main`, or `git diff` / `git diff --staged` pre-commit)
 2. **Read the FULL diff before flagging anything.** Do not flag issues already addressed in the diff.
 3. Apply Pass 1 (CRITICAL), then Pass 2 (INFORMATIONAL)
 4. Be terse: one line for the problem, one line for the fix
@@ -13,6 +16,8 @@ Structural review of `git diff origin/main` for issues that pass CI but break in
 
 ```
 Pre-Landing Diff Review: N issues (X critical, Y informational)
+# Emit this block when the checklist is the deliverable. When a workflow applies it inline
+# (as /arc:commit does), fold the findings into that workflow's own output instead.
 
 **CRITICAL** (blocking):
 - [file:line] Problem description

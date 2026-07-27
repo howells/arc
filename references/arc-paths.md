@@ -11,7 +11,6 @@ the repo root by convention.
 - Plans: `docs/arc/plans/YYYY-MM-DD-<slug>-implementation.md`
 - Plan index: `docs/arc/plans/INDEX.md` (schema and write rules in `references/plan-lifecycle.md`)
 - Audits: `docs/arc/audits/`
-- Archive: `docs/arc/archive/`
 - Decisions (ADRs): `docs/adr/`
 
 Decisions are the one artifact that does **not** live under `docs/arc/`. Architecture

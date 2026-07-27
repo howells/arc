@@ -93,46 +93,19 @@ if [ $tag_errors -eq 0 ] && [ $tag_checked -gt 0 ]; then
     pass "All $tag_checked agents with file refs have them properly tagged"
 fi
 
-# --- Test 4: Skills with references/rules paths have <required_reading> or <rules_context> ---
-echo ""
-echo "Checking skills that load references or rules files..."
-echo ""
-
-# Skills that reference references/ or rules/ paths for loading should have
-# <required_reading> or <rules_context> tags. Skills that only reference
-# agents/ paths contextually don't need these tags.
-
-skill_tag_errors=0
-skill_tag_checked=0
-
-for skill_file in "$PLUGIN_ROOT"/skills/*/SKILL.md; do
-    skill_name=$(basename "$(dirname "$skill_file")")
-    body=$(body_without_frontmatter "$skill_file")
-
-    # Only check skills that reference specific .md files in references/ or rules/ for loading.
-    # Exclude: cp commands (file copying), bare directory paths like rules/ (not doc
-    # loading), and > Reference: inline tips.
-    refs_to_check=$(echo "$body" \
-        | grep -E '(references|rules)/[a-zA-Z]' \
-        | grep '\.md' \
-        | grep -v 'cp -r' \
-        | grep -v '^[[:space:]]*-[[:space:]]*`rules/' \
-        | grep -v '> Reference:' \
-        2>/dev/null)
-    if [ -z "$refs_to_check" ]; then
-        continue
-    fi
-
-    ((skill_tag_checked++))
-
-    if echo "$body" | grep -q '<required_reading>\|<rules_context>'; then
-        pass "skill/$skill_name has required_reading/rules_context for loaded docs"
-    else
-        fail "skill/$skill_name loads references/rules but has no <required_reading> or <rules_context>"
-        ((skill_tag_errors++))
-    fi
-done
-
-if [ $skill_tag_errors -eq 0 ] && [ $skill_tag_checked -gt 0 ]; then
-    pass "All $skill_tag_checked skills loading docs have proper tags"
-fi
+# --- Skills: no structural tag requirement (intentionally removed) ---
+#
+# Skills used to be required to carry a <required_reading> or <rules_context> tag
+# whenever they cited a references/ or rules/ .md path. That requirement was dropped:
+# it enforced a shape, not a guarantee, and the shape it enforced was upfront loading.
+# Skills now cite references inline as "load X when you need Y" — progressive
+# disclosure, per skills/using-arc/SKILL.md.
+#
+# The real guarantee — every cited Arc path resolves on disk — is enforced by
+# tests/test-agents-and-refs.sh (extract_arc_refs / normalize_arc_ref). It is not
+# duplicated here.
+#
+# Test 3 above still enforces tag containment for agents/*/*.md. That is deliberate:
+# agents are dispatched as subagents, skip skills/using-arc/SKILL.md via <SUBAGENT-STOP>,
+# and so depend on their own structured blocks for path grounding. Do not relax it to
+# match the skills rule.

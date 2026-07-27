@@ -60,7 +60,8 @@ target:
 - **Standards axis:** maintainability, boundaries, repository conventions, test
   effectiveness, and evidence appropriate to each work kind.
 
-Guarded adds the relevant security, data, performance, Mastra, or product/browser specialist
+Guarded adds the relevant specialist from `agents/review/` — `security-engineer`, `data-engineer`,
+`performance-engineer`, `mastra-agent-engineer`, `daniel-product-engineer`, or `accessibility-engineer`
 and may review the risky seam earlier. Any later in-scope source, test, documentation,
 configuration, or generated change invalidates both axes. Rerun affected specialists when
 their scope changes.

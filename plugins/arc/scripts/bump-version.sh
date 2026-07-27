@@ -7,6 +7,7 @@
 #   bump-version.sh <new-version>   Bump all declared files to new version
 #   bump-version.sh --check         Report current versions (detect drift)
 #   bump-version.sh --audit         Check + grep repo for old version strings
+#   bump-version.sh --bump-patch    Bump patch version (used by the post-commit hook)
 #
 set -euo pipefail
 

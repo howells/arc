@@ -33,37 +33,29 @@ website:
 ---
 
 <tool_restrictions>
-
-# MANDATORY Tool Restrictions
-
-## BANNED TOOLS — calling these is a skill violation:
-
-- **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured process.
-- **`ExitPlanMode`** — BANNED. You are never in plan mode.
-  </tool_restrictions>
+`EnterPlanMode` and `ExitPlanMode` are banned. This skill is Arc's own structured process.
+</tool_restrictions>
 
 <arc_runtime>
-This workflow requires the full Arc bundle, not a prompts-only install.
-
-Paths in this skill use these conventions:
-
-- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
-- `./...` is local to this skill's directory.
-- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-  </arc_runtime>
+Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, `skills/`) resolve from the plugin root — the directory containing `agents/` and `skills/`. Everything else is the user's repository.
+</arc_runtime>
 
 <required_reading>
 Before starting, read these references:
 
 1. `references/architecture-patterns.md` — import depth rules, boundary violations
-2. `references/component-design.md` — compound vs simple component patterns
-3. `references/maintainability-review.md` — strict god-file, duplication, and structural simplification bar
-4. `references/complexity-optimization.md` — safe optimization patterns and behavior-preservation checks
+2. `references/maintainability-review.md` — strict god-file, duplication, and structural simplification bar
+3. `references/complexity-optimization.md` — safe optimization patterns and behavior-preservation checks
 
 Also read, when present in the target project:
 
 - `CONTEXT.md` or the relevant context from `CONTEXT-MAP.md`
 - `docs/adr/*.md` or area-specific ADRs
+
+Load when relevant:
+
+- `references/component-design.md` — compound vs simple component patterns, when the candidate is a god-component and the split will produce a new component API.
+- `references/index.md` — the full reference catalogue, when the refactor needs background you can't name a file for.
   </required_reading>
 
 # Architectural Refactoring
@@ -73,7 +65,7 @@ Discover structural friction, propose deep-module refactors, and create project-
 <boundary>
 This workflow reviews existing code with the explicit goal of creating a refactoring plan or RFC.
 
-- If the primary issue is reusable UI component cataloguing, missed shared UI package usage, or design-system component extraction, recommend the dedicated componentization workflow instead.
+- If the primary issue is reusable UI component cataloguing, missed shared UI package usage, or design-system component extraction, say so and stop: that work is out of scope for `/arc:refactor` and belongs with the project's own design-system tooling.
 - If the primary issue is an overgrown component, script, module, or duplicated implementation logic, keep it in `/arc:refactor`.
 - If the primary issue is broad codebase health, security, performance, or test coverage, recommend `/arc:audit`.
 - If the user wants implementation, stop at a clear plan unless they explicitly ask to start implementing.
@@ -147,14 +139,18 @@ The scanner is heuristic. It ranks likely candidates; it does not decide. Read t
 Also run the Arc-owned read-only codebase mapper when available:
 
 ```bash
-python3 scripts/codebase-map.py ${scope:-.} --format markdown
+python3 scripts/codebase-map.py . --format markdown
 ```
+
+`scripts/` resolves from the Arc plugin root; the positional `.` is the target repository. Narrow
+it to a subdirectory only when the user gave a path or focus area.
 
 Use the map to orient exploration around route surfaces, services, data layer, largest files, high fan-in/fan-out modules, and import cycles. The mapper output is not a finding by itself. Read the relevant files before proposing any refactor.
 
 Classify confirmed candidates:
 
 - `god-component` — React component doing rendering, data shaping, effects, mutations, validation, and subview control in one file.
+- `god-page-client` — Next.js page or layout that is a thin pass-through to one oversized `"use client"` component.
 - `god-script` — CLI/build/migration script mixing argument parsing, I/O, domain logic, formatting, and side effects.
 - `god-module` — non-UI module with multiple unrelated responsibilities.
 - `duplication` — repeated functions, schemas, UI fragments, query builders, scripts, or formatting logic.
@@ -193,7 +189,7 @@ Present a numbered list of refactoring opportunities. For each candidate:
 | Field                   | Description                                                                                                           |
 | ----------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | **Cluster**             | Which modules/concepts are involved                                                                                   |
-| **Type**                | shallow-module, package-extraction, god-component, god-script, god-module, duplication                                |
+| **Type**                | shallow-module, package-extraction, god-component, god-page-client, god-script, god-module, duplication               |
 | **Evidence**            | Line count, responsibility mix, duplicated blocks, import depth, call patterns, shared types                          |
 | **Problem**             | Why the current shape causes friction                                                                                 |
 | **Proposed direction**  | Plain-English description of what would change                                                                        |
@@ -270,57 +266,20 @@ removes, even if it scores well on flexibility.
 
 ### Step 8 — User picks an interface
 
+Ask which option to take forward — one of the presented options, or a hybrid if Step 7 proposed
+one. Record the choice and the reason it beat the alternatives; both go into the RFC.
+
+If no user response is available, proceed with the Step 7 recommendation and say so explicitly
+in the RFC, so the choice reads as unconfirmed rather than agreed.
+
 ### Step 9 — Write RFC
 
 Create a refactor RFC in `docs/arc/plans/YYYY-MM-DD-[scope]-refactor-rfc.md`:
 
-```markdown
-## Problem
+Use the RFC structure in `templates/refactor-rfc.md`.
 
-[Describe the architectural friction — which modules are shallow and coupled,
-what integration risk exists, why this makes the codebase harder to navigate]
-
-## Proposed Interface
-
-[The chosen interface option — signature, usage example, what it hides.
-A small ASCII before/after sketch is optional — include one only when it
-lends support the prose can't carry on its own. If the explanation reads
-clearly without it, leave it out.]
-
-## Package / Module Extraction
-
-[If applicable: where the new package/module lives, what it owns, what remains in callers, and how imports migrate]
-
-## Dependency Strategy
-
-[Which category applies and how dependencies are handled]
-
-## Testing Strategy
-
-- **Characterization tests to write first**: [current behaviours that must be pinned before splitting]
-- **New boundary tests to write**: [behaviours to verify at the interface]
-- **Old tests to delete**: [shallow module tests that become redundant]
-- **Test environment needs**: [local stand-ins or adapters required]
-
-## Decomposition Order
-
-1. [First safe extraction]
-2. [Second safe extraction]
-3. [Import migration / cleanup]
-
-[For a wide mechanical change — one whose blast radius fans across many call
-sites at once — sequence it as expand → migrate in batches → contract instead
-of a single edit. See Safe Split Order.]
-
-## Implementation Recommendations
-
-[Durable guidance NOT coupled to current file paths:
-
-- What the module should own (responsibilities)
-- What it should hide (implementation details)
-- What it should expose (the interface contract)
-- How callers should migrate]
-```
+If Step 5 concluded an ADR is warranted, write it to `docs/adr/` alongside the RFC — the
+load-bearing rejection belongs in the decision record, not only in the RFC's prose.
 
 Save the RFC and summarize the recommendation. Do not auto-commit it unless the user asks.
 
@@ -376,7 +335,8 @@ When a change is mechanical but its blast radius is large — one edit breaks ca
 
 ## Signals That Indicate Deepening Opportunities
 
-From the architecture patterns reference:
+Arc's consolidated signal list for this workflow — treat each row as a prompt to look, not as a
+finding on its own:
 
 | Signal                                                                  | What it means                                      |
 | ----------------------------------------------------------------------- | -------------------------------------------------- |

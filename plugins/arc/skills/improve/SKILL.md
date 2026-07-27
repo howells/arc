@@ -39,35 +39,18 @@ website:
 ---
 
 <tool_restrictions>
-
-# MANDATORY Tool Restrictions
-
-## BANNED TOOLS — calling these is a skill violation:
-
-- **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured process. Execute the steps below directly.
-- **`ExitPlanMode`** — BANNED. You are never in plan mode.
-  </tool_restrictions>
+`EnterPlanMode` and `ExitPlanMode` are banned. This skill is Arc's own structured process.
+</tool_restrictions>
 
 <arc_runtime>
-This workflow requires the full Arc bundle, not a prompts-only install.
-
-Paths in this skill use these conventions:
-
-- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
-- `./...` is local to this skill's directory.
-- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-  </arc_runtime>
+Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, `skills/`) resolve from the plugin root — the directory containing `agents/` and `skills/`. Everything else is the user's repository.
+</arc_runtime>
 
 <platform_context>
-**Read this reference NOW:**
-
-1. `references/platform-tools.md`
-
-Adapt the workflow to the current harness instead of assuming Claude-specific tool names.
-
-- Use platform-native structured questions when available; otherwise ask concise plain-text questions.
-- Use the platform's subagent/delegation primitives when available; otherwise run the scan steps locally.
-  </platform_context>
+Adapt to the current harness rather than assuming Claude tool names — structured questions and
+subagent delegation each degrade gracefully when absent. Load `references/platform-tools.md`
+when a mapping isn't obvious.
+</platform_context>
 
 <required_reading>
 **Read these reference files NOW:**
@@ -79,7 +62,6 @@ Adapt the workflow to the current harness instead of assuming Claude-specific to
 
 **Load when relevant:**
 
-- `disciplines/dispatching-parallel-agents.md` — when running the hotspot scan with parallel agents
 - `references/model-strategy.md` — when choosing scan-agent models
   </required_reading>
 
@@ -115,12 +97,26 @@ the rollup between them is defined in that reference.
 
 ## Step 1: Intake
 
-Find the findings source, in priority order:
+**First-run adoption comes first.** Before looking for findings, adopt any existing
+`docs/arc/plans/*-implementation.md` files that have no row in `docs/arc/plans/INDEX.md`,
+without rewriting the plans themselves — Step 3's cross-session duplicate check reads the
+index, so it has to be populated before vetting starts. Roll status up exactly as
+`references/subagent-statuses.md` defines it: all task statuses absent → `TODO`; any
+`status="in_progress"` and no irrecoverable blocker → `IN PROGRESS`; any irrecoverable
+`status="blocked"` → `BLOCKED`; any `done` plus any absent/pending → `IN PROGRESS`;
+all tasks `status="done"` plus schema-2 `Closeout: passed` → `DONE`;
+schema-2 all-done with closeout pending or absent → `IN PROGRESS` with a "closeout required"
+note. For an unversioned/schema-1 legacy plan, all tasks done → `DONE` through the historical
+compatibility path. An absent task status is the legacy spelling of pending. Only
+`*-implementation.md` files get rows — RFCs and other documents in the directory are never
+indexed.
 
-1. **Recent audit report** — `docs/arc/audits/*-audit.md`, newest first. If one exists and is
-   recent (same HEAD or a few commits old), offer to use it: its Critical/High findings are
-   already vetted by audit's Phase 4, so they skip straight to prioritization. Older reports
-   are still usable, but every finding must be re-vetted in Step 3.
+Then find the findings source, in priority order:
+
+1. **Recent audit report** — `docs/arc/audits/*-audit.md`, newest first. If one exists at the
+   current HEAD, offer to use it: its Critical/High findings were vetted by audit's Phase 4,
+   so they only need a spot-check in Step 3. Its Medium/Low findings — and every finding from
+   an older report — are fully vetted in Step 3.
 2. **Refactor RFCs** — `docs/arc/plans/*-refactor-rfc.md`. An RFC's problem statement and
    decomposition order can seed findings. Note: an RFC only becomes an index row after it
    passes through detail into an `*-implementation.md` plan.
@@ -170,8 +166,9 @@ Apply `references/finding-vetting.md` to every defect finding that could be plan
 - Hunt the three failure classes: by-design (ADR/CONTEXT-settled), mis-attributed
   (correct or dismiss), cross-session duplicate (already in the index or its rejected
   ledger).
-- Findings from a same-HEAD audit report are already vetted — spot-check rather than re-read
-  them all. Findings from stale reports and from scan agents are always fully vetted.
+- Critical/High findings from a same-HEAD audit report are spot-checked rather than re-read in
+  full. All Medium/Low findings, all findings from older reports, and all scan-agent findings
+  are fully vetted.
 
 ## Step 4: Present
 
@@ -217,16 +214,8 @@ Create or update `docs/arc/plans/INDEX.md` per the schema and write discipline i
 - **Deferred findings:** vetted findings the user did not select go to the index's Deferred
   findings section (title, evidence `file:line`, vet date) — not silently dropped. The next
   run's intake starts from them instead of re-deriving and re-vetting.
-- **First-run adoption:** existing `docs/arc/plans/*-implementation.md` files without index
-  rows are adopted without rewriting them. Roll status up exactly as
-  `references/plan-lifecycle.md` defines it: all task statuses absent → `TODO`; any
-  `status="in_progress"` → `IN PROGRESS`; any irrecoverable `status="blocked"` →
-  `BLOCKED`; any `done` plus any absent/pending → `IN PROGRESS`; all tasks `status="done"`
-  plus schema-2 `Closeout: passed` → `DONE`; schema-2 all-done with closeout pending or absent
-  → `IN PROGRESS` with a "closeout required" note. For an unversioned/schema-1 legacy plan,
-  all tasks done → `DONE` through the historical compatibility path. An absent task status is
-  the legacy spelling of pending. Only `*-implementation.md` files get rows — RFCs and other
-  documents in the directory are never indexed.
+- **Adopted plans:** rows created by the Step 1 first-run adoption stay as written — refresh
+  their status only if a plan changed during this run.
 
 Do not auto-commit plans or the index; offer the commit with one question, user decides.
 
@@ -258,6 +247,8 @@ every indexed plan, then per status:
   `in_progress`, `blocked`, and absent/pending), plus the implementation baseline and any
   attributable worktree changes. Do not rewrite or discard the interrupted diff, and do not
   change the plan status without user input. Resume through `references/plan-lifecycle.md`.
+- **REJECTED** — no action. The verdict is already recorded; skip the row unless the user asks
+  to revisit it.
 
 Reconcile **never deletes files** — plan files and the index are the record; rows are
 corrected or marked `REJECTED`, files stay.
@@ -271,7 +262,8 @@ now.
 An improve run is complete when:
 
 - [ ] Findings source identified (audit report, RFC, focus, or hotspot scan)
-- [ ] Every planned finding vetted against cited code (`references/finding-vetting.md`)
+- [ ] Every planned finding vetted against cited code (`references/finding-vetting.md`) —
+      Critical/High findings from a same-HEAD audit report spot-checked, everything else fully vetted
 - [ ] Defect findings presented by leverage; direction findings presented separately with evidence
 - [ ] User selected which findings become plans (one question)
 - [ ] Each selected defect finding has a detail-format plan with `Planned at:` and scope
