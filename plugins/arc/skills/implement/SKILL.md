@@ -39,8 +39,7 @@ banned because Arc owns its planning and execution process.
 </tool_restrictions>
 
 <arc_runtime>
-This workflow requires the full Arc bundle. Arc-owned paths resolve from the plugin root;
-project paths resolve from the user's repository.
+Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, `skills/`) resolve from the plugin root — the directory containing `agents/` and `skills/`. Everything else is the user's repository.
 </arc_runtime>
 
 <required_reading>
@@ -60,6 +59,7 @@ Load when relevant:
 - `disciplines/subagent-driven-development.md` before using slice owners.
 - `disciplines/verification-before-completion.md` before completion claims.
 - `disciplines/finishing-a-development-branch.md` before shipping.
+- `references/index.md` — the full reference catalogue, when the work needs background you can't name a file for.
   </required_reading>
 
 <available_agents>

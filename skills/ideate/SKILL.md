@@ -21,9 +21,11 @@ website:
     - Output is a feature spec. Implementation planning happens in /arc:implement.
     - Visual direction is an external input. Arc can record it, but Chiaroscuro/Figma/user-provided specs own it.
   agents:
-    - security-engineer
-    - performance-engineer
     - architecture-engineer
+    - senior-engineer
+    - security-engineer
+    - data-engineer
+    - mastra-agent-engineer
   workflow:
     position: spine
     after: vision
@@ -89,7 +91,7 @@ Four previous versions of this skill said "ask questions first" as advice. The m
 
 **REQUIRED interaction pattern — AskUserQuestion:**
 
-Every question MUST follow the `AskUserQuestion` interaction pattern. In Claude Code, use the tool. In Codex, ask the same single question directly in plain text unless a structured question tool is actually available in the current mode.
+Every question during Act 1 MUST follow the `AskUserQuestion` interaction pattern. In Claude Code, use the tool. In Codex, ask the same single question directly in plain text unless a structured question tool is actually available in the current mode. Act 3's section checkpoints ("Does this look right so far?") are plain-text questions and are not covered by this rule.
 
 Do not mention missing tools, unavailable tools, or fallback mechanics to the user.
 
@@ -126,14 +128,8 @@ That second example is EXACTLY the failure mode. The model thinks it's being hel
 </tool_restrictions>
 
 <arc_runtime>
-This workflow requires the full Arc bundle, not a prompts-only install.
-
-Paths in this skill use these conventions:
-
-- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
-- `./...` is local to this skill's directory.
-- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-  </arc_runtime>
+Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, `skills/`) resolve from the plugin root — the directory containing `agents/` and `skills/`. Everything else is the user's repository.
+</arc_runtime>
 
 <behavioral_mode>
 
@@ -173,7 +169,7 @@ Steps 2-8 each produce exactly: 0-2 sentences + AskUserQuestion. Nothing more.
 - **One AskUserQuestion per message** — if you need 3 things, that's 3 turns
 - **Multiple choice preferred** — 2-4 concrete options. Open-ended only when choices can't be reduced
 - **Look it up, don't ask it** — if a fact can be found in the codebase, find it rather than asking. Decisions belong to the user; facts belong to you. Before starting the question loop, read `references/question-loops.md` — the shared rules for one-question-at-a-time interviews
-- **Every question carries a recommendation** — mark the option you'd pick as recommended (the AskUserQuestion recommended-option convention) so the user can accept a default fast
+- **Every question carries a recommendation** — append "(Recommended)" to the label of the option you'd pick, so the user can accept a default fast
 - **YAGNI ruthlessly** — "Do we need this in v1?"
 - **Explore alternatives** — 2-3 approaches before settling (Act 2 only). Lead with your recommendation
 - **Incremental validation** — Present design in sections, check each before continuing (Act 3 only)
@@ -217,7 +213,7 @@ You won't need all of these. Some ideas arrive with context that makes certain q
 **Transition to Act 2:** After at least 3 questions answered, ask via AskUserQuestion:
 
 - "Ready for me to propose approaches, or is there more to clarify?"
-- Options: "Show me approaches" / "I want to clarify [specific thing]" / "Let me add more context first"
+- Options: "Show me approaches (Recommended)" / "I want to clarify [specific thing]" / "Let me add more context first"
 
 Only after the user says "show me approaches" (or equivalent) do you move to Act 2. The hard gate lifts at this point.
 
@@ -400,13 +396,14 @@ When user shares links, images, Figma, or external design specs during the conve
 
 Read these when relevant (not all at once — load what the conversation needs):
 
-1. `references/review-patterns.md` — How to transform reviewer findings into questions
-2. `references/model-strategy.md` — Which models for which agents
-3. `disciplines/dispatching-parallel-agents.md` — Agent orchestration
+1. `references/question-loops.md` — The one-question-at-a-time rules for Act 1
+2. `references/review-patterns.md` — How to transform reviewer findings into questions
+3. `references/model-strategy.md` — Which models for which agents
+4. `disciplines/dispatching-parallel-agents.md` — Agent orchestration
    </required_reading>
 
 <spec_flow_analysis>
-After the feature spec is written and committed, offer optional user flow analysis:
+After the feature spec is written, offer optional user flow analysis:
 
 "Would you like me to analyze this spec for missing user flows?"
 
@@ -429,6 +426,6 @@ Spec is complete when:
 - [ ] UI requirements and external visual source are captured if UI is involved
 - [ ] Spec presented in sections, each validated by user
 - [ ] Expert review completed, findings discussed as questions
-- [ ] Feature spec written and committed
+- [ ] Feature spec written; commit offered
 - [ ] User chose next step
       </success_criteria>

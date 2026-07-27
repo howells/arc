@@ -97,3 +97,12 @@ async function CachedComponent() {
 - SHOULD: Within a feature, organize by kind: `components/`, `hooks/`, `utils/`, `lib/`, `types/`.
 - SHOULD: Prefer feature-local state (Context or local Zustand) scoped to the feature tree.
 - SHOULD: Place shared components in `apps/<app>/components/` rather than a feature folder.
+
+## Further Reading
+
+Deeper background lives in Arc's references — load when the task needs it:
+
+| Reference | Use when |
+|-----------|----------|
+| `references/nextjs-app-router.md` | Working through App Router, RSC, and server-first patterns |
+| `references/prefetch-patterns.md` | Tuning navigation prefetch and perceived speed |

@@ -1,105 +1,55 @@
 # Arc Plugin
 
-The full arc from idea to shipped code. Arc's canonical product definition, domain language, and operating boundary live in `CONTEXT.md`. Treat this file as contributor guidance, not a competing definition.
+The full arc from idea to shipped code. Arc's canonical product definition, domain language, and
+operating boundary live in `CONTEXT.md` — treat this file as contributor guidance, not a competing
+definition.
 
-## Structure
+Each skill in `skills/<name>/SKILL.md` is one `/arc:<name>` command, routed by a thin
+`commands/<name>.md`. Skills draw on `agents/` (subagents), `references/` (domain knowledge,
+catalogued in `references/index.md`), `rules/`, `disciplines/` (methodologies), and `templates/`
+(output structures). `skills/using-arc/` is the session control plane; `skills/detail/` is
+internal to `implement`. Neither has a command router.
 
-```
-arc/
-├── .claude-plugin/
-│   ├── plugin.json         # Plugin metadata
-│   └── marketplace.json    # Claude Code marketplace manifest
-├── .codex/                 # Codex clone-and-symlink installer scripts
-├── .codex-plugin/          # Codex plugin manifest
-├── .cursor-plugin/         # Cursor plugin + marketplace manifests
-├── .cursor/                # Cursor install docs + local installer
-├── .agents/                # Codex skill symlinks
-├── .husky/                 # Git hooks (validate-plugin, version bump)
-├── commands/               # Slash command routers (invoke skills)
-├── skills/                 # Each skill = one /arc:* command
-│   ├── using-arc/SKILL.md  # Bootstrap control plane (internal)
-│   ├── vision/SKILL.md     # Foundation: goals + domain language → CONTEXT.md
-│   ├── ideate/SKILL.md     # Spec: idea → validated feature spec
-│   ├── detail/SKILL.md     # Plan (internal, invoked by implement)
-│   ├── review/SKILL.md     # Review: validate before execution
-│   ├── implement/SKILL.md  # Execute: plan + TDD implementation
-│   ├── testing/SKILL.md    # Test: safety-net backfill
-│   ├── launch/SKILL.md     # Launch: go-live checklist
-│   ├── refactor/SKILL.md   # Cross-cutting: structural refactor planning
-│   ├── audit/SKILL.md      # Cross-cutting: codebase audit
-│   ├── improve/SKILL.md    # Cross-cutting: findings → plan backlog + reconcile
-│   ├── commit/SKILL.md     # Cross-cutting: smart commits
-│   └── release/SKILL.md    # Cross-cutting: versioned package releases
-├── agents/                 # Specialized subagents
-│   ├── build/
-│   ├── review/
-│   ├── research/
-│   └── workflow/
-├── disciplines/            # Implementation methodologies
-├── references/             # Domain knowledge
-├── rules/                  # Internal rule corpus loaded by workflows
-├── templates/              # Output templates
-├── scripts/                # Build, version-bump, and analysis tooling
-├── tests/                  # Plugin test suite (bash)
-├── site/                   # Marketing/docs site (Next.js, pnpm workspace member)
-├── plugins/arc/            # GENERATED Codex marketplace payload — never edit by hand
-├── CONTEXT.md              # Canonical product definition and boundary
-├── AGENTS.md               # Agent operating instructions
-├── CLAUDE.md               # This file
-├── README.md               # Documentation
-└── LICENSE                 # MIT
-```
+The canonical flow is `ideate → (review) → implement`. `audit`, `improve`, `commit`, `release`,
+and `refactor` are cross-cutting and available anytime.
 
-## Command Workflow
+## Gotchas
 
-All commands use the `/arc:` namespace prefix. The typical workflow:
+**The Codex mirror must be rebuilt after any change to `skills/`, `agents/`, `references/`,
+`rules/`, `disciplines/`, `templates/`, `scripts/`, or `commands/`.** Run `pnpm build:codex`. The
+pre-commit hook and `tests/test-codex-mirror.sh` both fail on a stale mirror, and the failure
+message names the diffing file rather than the real cause.
 
-```
-FOUNDATION /arc:vision     → Define goals + domain language in CONTEXT.md (one-time setup)
-SPEC       /arc:ideate     → Turn idea into validated feature spec
-REVIEW     /arc:review     → Expert validation (cross-cutting: before or during execution)
-EXECUTE    /arc:implement  → Plan + TDD implementation
-TEST       /arc:testing    → Backfill safety-net tests for existing code
-SHIP       /arc:launch     → Go-live checklist
+**`plugins/arc/` is generated. Never edit it by hand** — `scripts/build-codex-plugin.sh` overwrites
+it wholesale.
 
-CROSS-CUTTING (available anytime):
-           /arc:audit      → Comprehensive codebase audit
-           /arc:improve    → Findings → vetted plan backlog; reconcile across sessions
-           /arc:commit     → Smart commits and push
-           /arc:release    → Version, changelog, verify, publish packages
-           /arc:refactor   → Discover friction, propose structural refactors
-```
+**Version bumps touch five manifests.** Use `bash scripts/bump-version.sh <version>`, never a
+manual edit: it updates `package.json`, `.claude-plugin/`, `.codex-plugin/`, `.cursor-plugin/`
+(plugin *and* marketplace), and the generated `plugins/arc/.codex-plugin/`. Verify with
+`bash scripts/bump-version.sh --check`. A post-commit hook auto-bumps the patch version and amends
+content commits.
 
-The canonical flow is `ideate → (review) → implement`; review is cross-cutting and optional. `detail` and `using-arc` are internal supporting skills, not public lifecycle stages.
+**Adding a skill needs more than a `SKILL.md`.** It also needs a `commands/<name>.md` router, a
+`.agents/skills/<name>` symlink, and entries in the plugin manifests — `tests/test-skill-loading.sh`
+hardcodes the expected skill list and fails on any unexpected directory.
+
+**Agents are not skills.** All 25 files in `agents/*/*.md` keep their own `<arc_runtime>` and
+unconditionally load `references/subagent-safety.md`. That is deliberate: agents are dispatched as
+subagents and skip `using-arc` via its `<SUBAGENT-STOP>` block, so those local blocks are their
+only path grounding and injection defence. `tests/test-xml-tags.sh` enforces tag containment for
+agents but not for skills, for the same reason.
+
+**Skills must stay self-sufficient.** `audit`, `improve`, and `refactor` carry `context: fork` and
+run isolated; command routers also invoke skills cold. Don't centralise a skill's `<arc_runtime>`
+into `using-arc` — path resolution would silently break.
 
 ## Development
 
-To test changes locally:
-1. Edit the skill in `skills/<command>/SKILL.md`
-2. Run the corresponding command (e.g. `/arc:ideate`)
-3. Iterate based on results
-4. Run `pnpm test` (the bash suite in `tests/`) before committing
-
-## Key Principles
-
-See `CONTEXT.md` for Arc's canonical principles. In contributor work, preserve the same boundary: Arc is self-contained, lifecycle-focused, and uses `using-arc` as a small control plane.
-
-## Optional External Plugins
-
-External plugins can provide useful extra checks, but they are not part of Arc's product definition and Arc should not depend on them for core behavior.
-
-- **[agent-skills](https://github.com/vercel-labs/agent-skills)** — `vercel-react-best-practices`, `vercel-composition-patterns`, `vercel-react-native-skills`
-
-When an external plugin is available, use it only as an optional enhancement. Keep Arc workflows understandable and usable without it.
-
-## Browser Tools
-
-- In Claude Code, prefer `mcp__claude-in-chrome__*` for rendered-page verification.
-- Outside Claude Code, prefer `agent-browser` for browser automation before dropping to Playwright.
+Edit the skill, run the command, iterate. Run `pnpm test` (the bash suite in `tests/`) before
+committing.
 
 ## Publishing
 
-1. Bump the version: `bash scripts/bump-version.sh <new-version>` — it updates all version fields across `package.json`, `.claude-plugin/`, `.codex-plugin/`, `.cursor-plugin/` (plugin + marketplace), and the generated `plugins/arc/.codex-plugin/`. Verify with `bash scripts/bump-version.sh --check`.
-2. Regenerate the Codex payload: `pnpm build:codex` (rebuilds `plugins/arc/` and `.agents/plugins/marketplace.json`). Required after ANY change to skills, agents, references, rules, disciplines, templates, or scripts — the pre-commit hook and `tests/test-codex-mirror.sh` will fail if the mirror is stale.
-3. Commit and push to GitHub.
-4. Users update via `claude plugins update` (Claude Code), `codex plugin marketplace upgrade` (Codex), or `git -C ~/.cursor/plugins/local/arc pull` / team marketplace refresh (Cursor).
+Bump the version, run `pnpm build:codex`, commit and push. Users update via
+`claude plugins update`, `codex plugin marketplace upgrade`, or
+`git -C ~/.cursor/plugins/local/arc pull`.

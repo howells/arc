@@ -126,14 +126,8 @@ That second example is EXACTLY the failure mode. The model thinks it's being hel
 </tool_restrictions>
 
 <arc_runtime>
-This workflow requires the full Arc bundle, not a prompts-only install.
-
-Paths in this skill use these conventions:
-
-- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
-- `./...` is local to this skill's directory.
-- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-  </arc_runtime>
+Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, `skills/`) resolve from the plugin root — the directory containing `agents/` and `skills/`. Everything else is the user's repository.
+</arc_runtime>
 
 <behavioral_mode>
 

@@ -16,8 +16,7 @@ metadata:
 </tool_restrictions>
 
 <arc_runtime>
-This workflow requires the full Arc bundle. Arc-owned paths resolve from the plugin root;
-project paths resolve from the user's repository.
+Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, `skills/`) resolve from the plugin root — the directory containing `agents/` and `skills/`. Everything else is the user's repository.
 </arc_runtime>
 
 <required_reading>

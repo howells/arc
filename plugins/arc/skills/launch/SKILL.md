@@ -17,22 +17,12 @@ website:
 ---
 
 <tool_restrictions>
-
-# MANDATORY Tool Restrictions
-
-## REQUIRED TOOLS — use these when specified in the process:
-
-- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available.
-  </tool_restrictions>
+Ask one question at a time. In Claude Code use `AskUserQuestion`; elsewhere ask a single concise plain-text question. Keep any lead-in to 2-3 sentences. Don't narrate missing tools or fallbacks.
+</tool_restrictions>
 
 <arc_runtime>
-This workflow requires the full Arc bundle, not a prompts-only install.
-
-Paths in this skill use these conventions:
-
-- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, and `skills/<name>/...` are Arc-owned files at the plugin root.
-- `.ruler/...`, `docs/...`, `src/...`, or the user's own project paths are relative to the user's repository.
-  </arc_runtime>
+Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, `skills/`) resolve from the plugin root — the directory containing `agents/` and `skills/`. Everything else is the user's repository.
+</arc_runtime>
 
 <required_reading>
 Read this reference before building the final status:

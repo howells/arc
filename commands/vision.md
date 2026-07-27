@@ -1,6 +1,6 @@
 ---
 name: vision
-description: Create or review a high-level vision document for your project.
+description: Create or maintain the project's root CONTEXT.md — goals, boundary, principles, and domain language.
 ---
 
 Invoke the vision skill with any arguments provided.

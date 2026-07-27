@@ -33,24 +33,12 @@ website:
 ---
 
 <tool_restrictions>
-
-# MANDATORY Tool Restrictions
-
-## BANNED TOOLS — calling these is a skill violation:
-
-- **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured process.
-- **`ExitPlanMode`** — BANNED. You are never in plan mode.
-  </tool_restrictions>
+`EnterPlanMode` and `ExitPlanMode` are banned. This skill is Arc's own structured process.
+</tool_restrictions>
 
 <arc_runtime>
-This workflow requires the full Arc bundle, not a prompts-only install.
-
-Paths in this skill use these conventions:
-
-- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
-- `./...` is local to this skill's directory.
-- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-  </arc_runtime>
+Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, `skills/`) resolve from the plugin root — the directory containing `agents/` and `skills/`. Everything else is the user's repository.
+</arc_runtime>
 
 <required_reading>
 Before starting, read these references:
@@ -64,6 +52,10 @@ Also read, when present in the target project:
 
 - `CONTEXT.md` or the relevant context from `CONTEXT-MAP.md`
 - `docs/adr/*.md` or area-specific ADRs
+
+Load when relevant:
+
+- `references/index.md` — the full reference catalogue, when the refactor needs background you can't name a file for.
   </required_reading>
 
 # Architectural Refactoring
@@ -274,53 +266,7 @@ removes, even if it scores well on flexibility.
 
 Create a refactor RFC in `docs/arc/plans/YYYY-MM-DD-[scope]-refactor-rfc.md`:
 
-```markdown
-## Problem
-
-[Describe the architectural friction — which modules are shallow and coupled,
-what integration risk exists, why this makes the codebase harder to navigate]
-
-## Proposed Interface
-
-[The chosen interface option — signature, usage example, what it hides.
-A small ASCII before/after sketch is optional — include one only when it
-lends support the prose can't carry on its own. If the explanation reads
-clearly without it, leave it out.]
-
-## Package / Module Extraction
-
-[If applicable: where the new package/module lives, what it owns, what remains in callers, and how imports migrate]
-
-## Dependency Strategy
-
-[Which category applies and how dependencies are handled]
-
-## Testing Strategy
-
-- **Characterization tests to write first**: [current behaviours that must be pinned before splitting]
-- **New boundary tests to write**: [behaviours to verify at the interface]
-- **Old tests to delete**: [shallow module tests that become redundant]
-- **Test environment needs**: [local stand-ins or adapters required]
-
-## Decomposition Order
-
-1. [First safe extraction]
-2. [Second safe extraction]
-3. [Import migration / cleanup]
-
-[For a wide mechanical change — one whose blast radius fans across many call
-sites at once — sequence it as expand → migrate in batches → contract instead
-of a single edit. See Safe Split Order.]
-
-## Implementation Recommendations
-
-[Durable guidance NOT coupled to current file paths:
-
-- What the module should own (responsibilities)
-- What it should hide (implementation details)
-- What it should expose (the interface contract)
-- How callers should migrate]
-```
+Use the RFC structure in `templates/refactor-rfc.md`.
 
 Save the RFC and summarize the recommendation. Do not auto-commit it unless the user asks.
 

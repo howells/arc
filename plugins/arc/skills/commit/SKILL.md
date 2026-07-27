@@ -28,14 +28,8 @@ website:
 ---
 
 <arc_runtime>
-This workflow requires the full Arc bundle, not a prompts-only install.
-
-Paths in this skill use these conventions:
-
-- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
-- `./...` is local to this skill's directory.
-- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-  </arc_runtime>
+Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, `skills/`) resolve from the plugin root — the directory containing `agents/` and `skills/`. Everything else is the user's repository.
+</arc_runtime>
 
 <rules_context>
 **Load before committing:**
@@ -141,14 +135,12 @@ For each logical group:
 
 If TypeScript or lint errors block the commit:
 
-**CRITICAL RULES:**
+Fix the root cause. A hook failure is information about the code, so anything that silences it
+rather than resolving it — `--no-verify`, `as unknown as`/`as any`, `@ts-ignore`,
+`@ts-expect-error`, eslint-disable comments, empty catch blocks — leaves the defect in place and
+the commit dishonest.
 
-- NEVER use `--no-verify` or skip hooks
-- NEVER use force casting (e.g., `as unknown as`, `as any`)
-- NEVER use `@ts-ignore`, `@ts-expect-error`, or eslint-disable comments
-- NEVER use type assertions to bypass errors
-- NEVER add empty catch blocks or suppress errors
-- Fix the ROOT CAUSE of each error
+If the root cause genuinely can't be fixed here, stop and say so rather than suppressing it.
 
 **Fixing Process:**
 

@@ -34,28 +34,14 @@ website:
 ---
 
 <tool_restrictions>
+Ask one question at a time. In Claude Code use `AskUserQuestion`; elsewhere ask a single concise plain-text question. Keep any lead-in to 2-3 sentences. Don't narrate missing tools or fallbacks.
 
-# MANDATORY Tool Restrictions
-
-## REQUIRED TOOLS — use these when indicated:
-
-- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Do not narrate missing tools or fallbacks to the user.
-
-## BANNED TOOLS — calling these is a skill violation:
-
-- **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured testing workflow. Execute it directly.
-- **`ExitPlanMode`** — BANNED. You are never in plan mode.
-  </tool_restrictions>
+`EnterPlanMode` and `ExitPlanMode` are banned. This skill is Arc's own structured testing process.
+</tool_restrictions>
 
 <arc_runtime>
-This workflow requires the full Arc bundle, not a prompts-only install.
-
-Paths in this skill use these conventions:
-
-- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
-- `./...` is local to this skill's directory.
-- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-  </arc_runtime>
+Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, `skills/`) resolve from the plugin root — the directory containing `agents/` and `skills/`. Everything else is the user's repository.
+</arc_runtime>
 
 # Characterization Testing Workflow
 
@@ -78,8 +64,8 @@ Do not use this skill as the normal new-feature workflow. For new work, use `/ar
 
 1. `references/testing-patterns.md` — Test philosophy, vitest/playwright patterns
 2. `references/testing-anti-patterns.md` — What weak or misleading tests look like
-3. `rules/testing.md` — Arc testing conventions
-4. `disciplines/change-impact-testing.md` — Blast radius analysis for code changes
+3. `rules/testing.md` — Arc testing conventions, when the project has no rules of its own (see `<rules_context>`)
+4. `disciplines/change-impact-testing.md` — loaded for its blast-radius framing only. It is a post-change discipline, so its revert-the-change sensitivity proof does not apply here; on a backfill run there is no change to revert, and the perturbation method in Step 4 is the sensitivity proof.
 5. `references/llm-api-testing.md` — If testing LLM integrations
 6. `references/maintainability-review.md` — If tests are being added before decomposing a god file or tangled module
 7. `references/complexity-optimization.md` — If tests are being added before optimizing algorithmic complexity, rendering churn, or N+1 behavior
@@ -102,16 +88,15 @@ Use specialist agents only when the slice is large enough to justify delegation:
 
 **Use Glob tool:** `.ruler/testing.md`
 
-If it exists, read it for MUST/SHOULD/NEVER constraints.
+- **If `.ruler/` exists:** Read rules from `.ruler/`, for MUST/SHOULD/NEVER constraints.
+- **If `.ruler/` doesn't exist:** Read rules from `rules/`.
 
-**Detect test framework:**
+Detected project tooling wins over a rule that names a different runner: if the repo runs jest,
+back the safety net with jest rather than converting the suite to satisfy the rule.
 
-| File                   | Framework                      |
-| ---------------------- | ------------------------------ |
-| `vitest.config.*`      | vitest                         |
-| `jest.config.*`        | jest                           |
-| `playwright.config.*`  | Playwright                     |
-| `package.json` scripts | Project-specific test commands |
+**Detect test framework and package manager:** use the detection tables in
+`references/testing-patterns.md`. Fall back to `package.json` scripts for project-specific test
+commands.
 
 </rules_context>
 
@@ -161,33 +146,14 @@ Do not silently fix production behavior during baseline work. If you discover an
 
 ### Step 3: Map Public Behavior
 
-List behavior in terms of callers or users, not internal implementation details:
+List behavior in terms of callers or users, not internal implementation details.
 
-```markdown
-## Safety Net: [Target]
-
-### Planned Change
-
-- [Refactor / bug fix / migration / cleanup]
-
-### Public Interfaces
-
-- [Function/component/API route/page/CLI command]
-
-### Current Observable Behavior
-
-| Behavior   | Evidence                                       | Risk              |
-| ---------- | ---------------------------------------------- | ----------------- |
-| [behavior] | [code path, existing test, manual observation] | [high/medium/low] |
-
-### Test Slices
-
-| Slice          | Level                  | Why this level         |
-| -------------- | ---------------------- | ---------------------- |
-| [one behavior] | [unit/integration/e2e] | [fastest useful proof] |
-```
+Record it using the **Safety Net** structure in `templates/safety-net.md`.
 
 ### Step 4: Add Tests One Vertical Slice At A Time
+
+Confirm the chosen seam with the user before writing any test against it. Agreeing the boundary
+up front keeps testing effort on the target the user actually cares about.
 
 For each slice:
 
@@ -202,8 +168,6 @@ For each slice:
 7. Move to the next slice only after the current slice is trustworthy.
 
 ### Step 5: Keep Test Seams Small
-
-Confirm the chosen seam with the user before writing any test against it. Agreeing the boundary up front keeps testing effort on the target the user actually cares about.
 
 If existing code is hard to test:
 
@@ -228,28 +192,9 @@ When E2E output is verbose or flaky, dispatch `e2e-runner` with the exact test f
 
 ### Step 7: Report The Safety Net
 
-End with a concise report:
+End with a concise report.
 
-```markdown
-## Safety Net Result
-
-**Target:** [code/feature]
-**Reason:** [refactor/bug fix/legacy coverage/launch risk]
-**Tests added:** [files]
-**Behavior characterized:**
-
-- [behavior]
-
-**Verification:**
-
-- [command] — [pass/fail]
-
-**Remaining risk:**
-
-- [untested behavior or reason it was deferred]
-
-**Ready for next change:** [yes/no]
-```
+Report using the **Safety Net Result** structure in `templates/safety-net.md`.
 
 ## Mastra Agent Surfaces
 

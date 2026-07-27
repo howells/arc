@@ -34,28 +34,14 @@ website:
 ---
 
 <tool_restrictions>
+Ask one question at a time. In Claude Code use `AskUserQuestion`; elsewhere ask a single concise plain-text question. Keep any lead-in to 2-3 sentences. Don't narrate missing tools or fallbacks.
 
-# MANDATORY Tool Restrictions
-
-## REQUIRED TOOLS — use these when indicated:
-
-- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Do not narrate missing tools or fallbacks to the user.
-
-## BANNED TOOLS — calling these is a skill violation:
-
-- **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured testing workflow. Execute it directly.
-- **`ExitPlanMode`** — BANNED. You are never in plan mode.
-  </tool_restrictions>
+`EnterPlanMode` and `ExitPlanMode` are banned. This skill is Arc's own structured testing process.
+</tool_restrictions>
 
 <arc_runtime>
-This workflow requires the full Arc bundle, not a prompts-only install.
-
-Paths in this skill use these conventions:
-
-- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
-- `./...` is local to this skill's directory.
-- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-  </arc_runtime>
+Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, `skills/`) resolve from the plugin root — the directory containing `agents/` and `skills/`. Everything else is the user's repository.
+</arc_runtime>
 
 # Characterization Testing Workflow
 
@@ -163,29 +149,7 @@ Do not silently fix production behavior during baseline work. If you discover an
 
 List behavior in terms of callers or users, not internal implementation details:
 
-```markdown
-## Safety Net: [Target]
-
-### Planned Change
-
-- [Refactor / bug fix / migration / cleanup]
-
-### Public Interfaces
-
-- [Function/component/API route/page/CLI command]
-
-### Current Observable Behavior
-
-| Behavior   | Evidence                                       | Risk              |
-| ---------- | ---------------------------------------------- | ----------------- |
-| [behavior] | [code path, existing test, manual observation] | [high/medium/low] |
-
-### Test Slices
-
-| Slice          | Level                  | Why this level         |
-| -------------- | ---------------------- | ---------------------- |
-| [one behavior] | [unit/integration/e2e] | [fastest useful proof] |
-```
+Record it using the **Safety Net** structure in `templates/safety-net.md`.
 
 ### Step 4: Add Tests One Vertical Slice At A Time
 
@@ -230,26 +194,7 @@ When E2E output is verbose or flaky, dispatch `e2e-runner` with the exact test f
 
 End with a concise report:
 
-```markdown
-## Safety Net Result
-
-**Target:** [code/feature]
-**Reason:** [refactor/bug fix/legacy coverage/launch risk]
-**Tests added:** [files]
-**Behavior characterized:**
-
-- [behavior]
-
-**Verification:**
-
-- [command] — [pass/fail]
-
-**Remaining risk:**
-
-- [untested behavior or reason it was deferred]
-
-**Ready for next change:** [yes/no]
-```
+Report using the **Safety Net Result** structure in `templates/safety-net.md`.
 
 ## Mastra Agent Surfaces
 

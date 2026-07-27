@@ -34,24 +34,12 @@ website:
 ---
 
 <tool_restrictions>
-
-# MANDATORY Tool Restrictions
-
-## BANNED TOOLS — calling these is a skill violation:
-
-- **`EnterPlanMode`** — BANNED. Do NOT call this tool. This skill has its own structured process. Execute the steps below directly.
-- **`ExitPlanMode`** — BANNED. You are never in plan mode.
-  </tool_restrictions>
+`EnterPlanMode` and `ExitPlanMode` are banned. This skill is Arc's own structured process.
+</tool_restrictions>
 
 <arc_runtime>
-This workflow requires the full Arc bundle, not a prompts-only install.
-
-Paths in this skill use these conventions:
-
-- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
-- `./...` is local to this skill's directory.
-- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-  </arc_runtime>
+Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, `skills/`) resolve from the plugin root — the directory containing `agents/` and `skills/`. Everything else is the user's repository.
+</arc_runtime>
 
 <required_reading>
 **Read these reference files NOW:**

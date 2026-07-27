@@ -28,23 +28,12 @@ website:
 ---
 
 <tool_restrictions>
-
-# MANDATORY Tool Restrictions
-
-## REQUIRED TOOLS:
-
-- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern for every question in this skill, including mode selection, missing context, and draft validation. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available in the current mode. Keep context before the question to 2-3 sentences max, and do not narrate missing tools or fallbacks to the user.
-  </tool_restrictions>
+Ask one question at a time. In Claude Code use `AskUserQuestion`; elsewhere ask a single concise plain-text question. Keep any lead-in to 2-3 sentences. Don't narrate missing tools or fallbacks.
+</tool_restrictions>
 
 <arc_runtime>
-This workflow requires the full Arc bundle, not a prompts-only install.
-
-Paths in this skill use these conventions:
-
-- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...` are Arc-owned files at the plugin root. Resolve the plugin root from this skill's filesystem location — it's the directory containing `agents/` and `skills/`.
-- `./...` is local to this skill's directory.
-- `.ruler/...`, `docs/...`, `src/...`, or any project-relative path refers to the user's project repository.
-  </arc_runtime>
+Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, `skills/`) resolve from the plugin root — the directory containing `agents/` and `skills/`. Everything else is the user's repository.
+</arc_runtime>
 
 # Vision Workflow
 
@@ -55,7 +44,7 @@ Create or maintain a project's root `CONTEXT.md`: its goals, product boundary, n
 When invoked:
 
 1. State that you are using `/arc:vision`.
-2. Determine whether the user wants to create, review, or revise the project's CONTEXT.md.
+2. Determine which mode applies to the project's CONTEXT.md: review, extend, or start fresh.
 3. Inspect existing project context before asking questions.
 4. Ask one focused question at a time only when the direction is still unclear.
 
@@ -87,6 +76,8 @@ AskUserQuestion:
     - label: "Start fresh"
       description: "Replace it with a new CONTEXT.md"
 ```
+
+If no user response is available (an unattended or non-interactive run), default to Review — the read-mostly mode — and say so in the output.
 
 If a legacy `docs/vision.md` exists but no `CONTEXT.md`, offer to fold it into a new root `CONTEXT.md`. If no foundation exists and the user's intent is clear, draft from available context. Do not force a long interview.
 
@@ -188,6 +179,10 @@ When extending an existing CONTEXT.md:
 5. Keep the document concise even when the project is complex.
 6. Save back to `CONTEXT.md` unless the user specified another path.
 
+## Start Fresh Mode
+
+When starting fresh — no CONTEXT.md exists, or the user chose to replace the existing one — write a new document using the structure in [Output](#output), then save it as described under [Save](#save).
+
 ## Save
 
 When creating or updating, write to root `CONTEXT.md` unless another path was requested. Fold any legacy `docs/vision.md` content into it rather than maintaining both.
@@ -208,7 +203,8 @@ AskUserQuestion:
 On "Commit":
 
 ```bash
-git add CONTEXT.md CONTEXT-MAP.md 2>/dev/null
+git add CONTEXT.md
+test -f CONTEXT-MAP.md && git add CONTEXT-MAP.md
 git commit -m "docs: update project context"
 ```
 
@@ -217,7 +213,6 @@ git commit -m "docs: update project context"
 The project foundation lives in root `CONTEXT.md`. Downstream Arc skills should read it for product goals, boundary, and domain language.
 
 - `/arc:ideate` reads CONTEXT.md for product and scope context.
-- `/arc:launch` checks whether launch posture still matches the project intent recorded in CONTEXT.md.
 
 <completion_check>
 Before finishing, verify that CONTEXT.md:
@@ -229,4 +224,5 @@ Before finishing, verify that CONTEXT.md:
 - Includes decision principles that can resolve tradeoffs.
 - Defines the domain terms the codebase uses.
 - Lists open questions when direction depends on unresolved assumptions.
-  </completion_check>
+
+</completion_check>

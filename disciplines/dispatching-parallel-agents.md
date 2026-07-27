@@ -1,180 +1,95 @@
 ---
 name: dispatching-parallel-agents
-description: Use when facing 2+ independent tasks that can be worked on without shared state or sequential dependencies
+description: Use when splitting work across concurrent subagents — what can run in parallel, how wide to fan out, and how to integrate results
 ---
 
 # Dispatching Parallel Agents
 
-## Overview
+Parallel dispatch buys wall-clock time and a clean context window per problem. It costs coordination: you must reconcile changes you did not watch happen. Parallelize when that trade favours you.
 
-When you have multiple unrelated failures (different test files, different subsystems, different bugs), investigating them sequentially wastes time. Each investigation is independent and can happen in parallel.
+## When parallel work pays
 
-**Core principle:** Dispatch one agent per independent problem domain. Let them work concurrently.
+Each piece has to be genuinely independent:
 
-## When to Use
+- **Disjoint file footprints** — you can name in advance the files each agent may write, with no overlap.
+- **No shared state** — no shared fixture, database, port, lockfile, or migration sequence.
+- **Self-contained understanding** — an agent can do its piece without the others' findings.
+- **Independent verification** — each piece has its own command that shows it working.
 
-```dot
-digraph when_to_use {
-    "Multiple failures?" [shape=diamond];
-    "Are they independent?" [shape=diamond];
-    "Single agent investigates all" [shape=box];
-    "One agent per problem domain" [shape=box];
-    "Can they work in parallel?" [shape=diamond];
-    "Sequential agents" [shape=box];
-    "Parallel dispatch" [shape=box];
+Read-only work is the easy case: reviewers and scanners never collide, so cost is the only constraint.
 
-    "Multiple failures?" -> "Are they independent?" [label="yes"];
-    "Are they independent?" -> "Single agent investigates all" [label="no - related"];
-    "Are they independent?" -> "Can they work in parallel?" [label="yes"];
-    "Can they work in parallel?" -> "Parallel dispatch" [label="yes"];
-    "Can they work in parallel?" -> "Sequential agents" [label="no - shared state"];
-}
+## When to keep it sequential
+
+- **Related symptoms.** Failures with one plausible common cause: investigate together first. Three agents fixing three symptoms of one bug produce three patches and no diagnosis.
+- **Whole-system judgment.** Work whose correctness depends on seeing the whole picture, like a boundary redesign, degrades when sliced.
+- **Exploratory work.** If you don't know the shape of the problem yet, you can't write the scopes. Explore first, then parallelize what that reveals.
+- **Overlapping writes.** See below.
+
+## File footprint is the safety rule
+
+Two agents writing the same file lose work — the later write lands on a file the earlier one already changed, or one agent undoes the other's edit while tidying. Neither summary will say so; both report success.
+
+Before dispatch, write down each agent's expected write set and check for overlap. Where sets overlap, pick one:
+
+- **Sequence them** — one after another, each seeing the previous result.
+- **Isolate them** — a worktree or branch per agent, merged deliberately afterwards.
+- **Re-cut the scopes** — often the overlap is one shared helper. Change it yourself first, then dispatch the rest in parallel.
+
+Shared non-file state collides the same way: two agents migrating one database, or both regenerating a lockfile.
+
+## How wide to fan out
+
+Concurrency is not free even when the work is independent: each agent holds its own context and competes for the same rate limits, CPU, and file handles. Unbounded fan-out on heavyweight work produces timeouts, truncated reads, and half-finished reports — slower than a batched run and harder to trust.
+
+Size the batch by how expensive each agent is, not by how many you have:
+
+- **Heavyweight** — reads broadly across a codebase and reasons at length (audit reviewers, architecture analysis, whole-repo research): about **two at a time**, waiting for each batch before starting the next. That is why `skills/audit/SKILL.md` runs its reviewers in batches of 2.
+- **Lightweight and bounded** — a named file or two, a short prompt, one verification command: 3-5 comfortably, more when tasks are trivial.
+
+Underneath both: batch size is the number of agents whose combined reading you can afford in flight at once. If you can't state an agent's footprint, treat it as heavyweight; if a batch returns truncated output or resource errors, halve the width.
+
+## What every dispatch prompt carries
+
+An agent that has to guess produces work you redo. Five things:
+
+1. **Scope** — the files, directory, or subsystem, and the boundary it must not cross.
+2. **Context** — error output, manifests, project stage, conventions. Paste it; the agent inherits neither your context nor your rules, so pass `references/subagent-safety.md` to anything reading a repository.
+3. **Constraints and non-goals** — "tests only, no production code", "leave the schema alone". The negative space keeps the footprint honest.
+4. **Output shape** — the headings, fields, and evidence lines you will consume. Uniform shape makes many results mergeable.
+5. **Verification** — the command that shows the work is done, and the instruction to run it.
+
+`references/audit-reviewer-prompts.md` is a worked example of all five. Pick each agent's model from `references/model-strategy.md`: parallelism multiplies cost.
+
+## Reviewing what comes back
+
+An agent's summary is a claim. The diff is the evidence.
+
+- Read the diff, not only the report. Agents overstate completion, understate what they touched, and — given the same prompt shape — make the same mistake at the same time.
+- Check for cross-agent conflicts: anyone writing outside their declared footprint, two changes cancelling out.
+- Re-run verification yourself over the whole target, not slice by slice: green in isolation and green together are different results.
+
+## Sending fixes back
+
+Return a wrong or incomplete result to the agent that produced it — it still holds the investigation: the reading, the discarded theories, the reason it chose this fix. Patching inline leaves a change nobody understands; a fresh agent re-covers the same ground and often decides differently.
+
+Redispatch only after changing the conditions — more context, narrower scope, a different constraint; the same prompt returns the same result. `references/subagent-statuses.md` maps result signals to controller behaviour.
+
+## Worked example: batched reviewer fan-out
+
+Six reviewers for a large-codebase audit, each reading broadly and writing nothing.
+
+```
+Batch 1: performance-engineer, architecture-engineer   → wait
+Batch 2: daniel-product-engineer, lee-nextjs-engineer  → wait
+Batch 3: security-engineer, senior-engineer            → wait
 ```
 
-**Use when:**
-- 3+ test files failing with different root causes
-- Multiple subsystems broken independently
-- Each problem can be understood without context from others
-- No shared state between investigations
+Two at a time because each reviewer holds a whole-codebase context. Footprint safety is not the constraint — nothing is written — so batch width is purely a resource decision. Findings are consolidated and vetted afterwards, not trusted on arrival.
 
-**Don't use when:**
-- Failures are related (fix one might fix others)
-- Need to understand full system state
-- Agents would interfere with each other
+## Worked example: independent task fan-out
 
-## The Pattern
+Six test failures across three files after a refactor, three distinct root causes.
 
-### 1. Identify Independent Domains
+One agent per file, each given its failing test names and output, a constraint against the other two files, and the command to verify that file. Footprints are disjoint by construction and each agent reads one test file and its subject, not the repo, so all three run at once.
 
-Group failures by what's broken:
-- File A tests: Tool approval flow
-- File B tests: Batch completion behavior
-- File C tests: Abort functionality
-
-Each domain is independent - fixing tool approval doesn't affect abort tests.
-
-### 2. Create Focused Agent Tasks
-
-Each agent gets:
-- **Specific scope:** One test file or subsystem
-- **Clear goal:** Make these tests pass
-- **Constraints:** Don't change other code
-- **Expected output:** Summary of what you found and fixed
-
-### 3. Dispatch in Parallel
-
-```typescript
-// In Claude Code / AI environment
-Task("Fix agent-tool-abort.test.ts failures")
-Task("Fix batch-completion-behavior.test.ts failures")
-Task("Fix tool-approval-race-conditions.test.ts failures")
-// All three run concurrently
-```
-
-### 4. Review and Integrate
-
-When agents return:
-- Read each summary
-- Verify fixes don't conflict
-- Run full test suite
-- Integrate all changes
-
-## Agent Prompt Structure
-
-Good agent prompts are:
-1. **Focused** - One clear problem domain
-2. **Self-contained** - All context needed to understand the problem
-3. **Specific about output** - What should the agent return?
-
-```markdown
-Fix the 3 failing tests in src/agents/agent-tool-abort.test.ts:
-
-1. "should abort tool with partial output capture" - expects 'interrupted at' in message
-2. "should handle mixed completed and aborted tools" - fast tool aborted instead of completed
-3. "should properly track pendingToolCount" - expects 3 results but gets 0
-
-These are timing/race condition issues. Your task:
-
-1. Read the test file and understand what each test verifies
-2. Identify root cause - timing issues or actual bugs?
-3. Fix by:
-   - Replacing arbitrary timeouts with event-based waiting
-   - Fixing bugs in abort implementation if found
-   - Adjusting test expectations if testing changed behavior
-
-Do NOT just increase timeouts - find the real issue.
-
-Return: Summary of what you found and what you fixed.
-```
-
-## Common Mistakes
-
-**❌ Too broad:** "Fix all the tests" - agent gets lost
-**✅ Specific:** "Fix agent-tool-abort.test.ts" - focused scope
-
-**❌ No context:** "Fix the race condition" - agent doesn't know where
-**✅ Context:** Paste the error messages and test names
-
-**❌ No constraints:** Agent might refactor everything
-**✅ Constraints:** "Do NOT change production code" or "Fix tests only"
-
-**❌ Vague output:** "Fix it" - you don't know what changed
-**✅ Specific:** "Return summary of root cause and changes"
-
-## When NOT to Use
-
-**Related failures:** Fixing one might fix others - investigate together first
-**Need full context:** Understanding requires seeing entire system
-**Exploratory debugging:** You don't know what's broken yet
-**Shared state:** Agents would interfere (editing same files, using same resources)
-
-## Real Example from Session
-
-**Scenario:** 6 test failures across 3 files after major refactoring
-
-**Failures:**
-- agent-tool-abort.test.ts: 3 failures (timing issues)
-- batch-completion-behavior.test.ts: 2 failures (tools not executing)
-- tool-approval-race-conditions.test.ts: 1 failure (execution count = 0)
-
-**Decision:** Independent domains - abort logic separate from batch completion separate from race conditions
-
-**Dispatch:**
-```
-Agent 1 → Fix agent-tool-abort.test.ts
-Agent 2 → Fix batch-completion-behavior.test.ts
-Agent 3 → Fix tool-approval-race-conditions.test.ts
-```
-
-**Results:**
-- Agent 1: Replaced timeouts with event-based waiting
-- Agent 2: Fixed event structure bug (threadId in wrong place)
-- Agent 3: Added wait for async tool execution to complete
-
-**Integration:** All fixes independent, no conflicts, full suite green
-
-**Time saved:** 3 problems solved in parallel vs sequentially
-
-## Key Benefits
-
-1. **Parallelization** - Multiple investigations happen simultaneously
-2. **Focus** - Each agent has narrow scope, less context to track
-3. **Independence** - Agents don't interfere with each other
-4. **Speed** - 3 problems solved in time of 1
-
-## Verification
-
-After agents return:
-1. **Review each summary** - Understand what changed
-2. **Check for conflicts** - Did agents edit same code?
-3. **Run full suite** - Verify all fixes work together
-4. **Spot check** - Agents can make systematic errors
-
-## Real-World Impact
-
-From debugging session (2025-10-03):
-- 6 failures across 3 files
-- 3 agents dispatched in parallel
-- All investigations completed concurrently
-- All fixes integrated successfully
-- Zero conflicts between agent changes
+On return: read all three diffs, confirm nobody strayed into a shared helper, run the full suite.

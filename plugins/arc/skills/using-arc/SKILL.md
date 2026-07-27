@@ -8,11 +8,9 @@ If you were dispatched as a subagent to execute a specific task, skip this skill
 </SUBAGENT-STOP>
 
 <arc_runtime>
-Arc-owned files live at the Arc plugin root for full-runtime installs.
+Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, `skills/`) resolve from the plugin root — the directory containing `agents/` and `skills/`. Everything else is the user's repository.
 
-Skills and agents reference Arc-owned files using bare relative paths from the plugin root: `agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, and `skills/<name>/`. Resolve the plugin root by walking up from a SKILL.md or agent file's location (it's the directory containing `agents/` and `skills/`).
-
-Project-local files stay relative to the user's repository (`.ruler/`, `docs/`, `src/`, etc.).
+Prompt-only installers (`skills.sh` and similar) copy `SKILL.md` files without Arc's bundled material. If a workflow needs Arc-owned files and only prompt-only skills are present, stop early and tell the user to upgrade to the full Claude, Codex, or Cursor plugin install.
 </arc_runtime>
 
 # Using Arc
@@ -67,17 +65,6 @@ In Codex, ask one concise plain-text question at a time unless a structured ques
 In Cursor, ask one concise question at a time (structured prompts when the harness supports them; otherwise plain text).
 Do not narrate tool fallbacks or tell the user that a question tool is unavailable.
 
-## Arc Runtime
-
-Arc supports two install classes:
-
-- **Full-runtime installs**: Claude plugin, Codex plugin (or Codex installer), and Cursor plugin. These include Arc-owned `agents/`, `references/`, `disciplines/`, `templates/`, and `scripts/`.
-- **Prompt-only installs**: `skills.sh` and similar prompt distributors. These copy `SKILL.md` files only.
-
-When a workflow needs Arc-owned files, resolve the Arc plugin root by walking up from the loaded skill's filesystem location (it's the directory containing `agents/` and `skills/`). Skills reference Arc-owned files using bare relative paths from that root: `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, `skills/<name>/...`. Project-local paths such as `.ruler/`, `docs/`, `src/`, or the user's own `rules/` stay scoped to the user's repository.
-
-If the requested workflow depends on Arc-owned files and the environment only has prompt-only skills, stop early and tell the user to upgrade to the full Claude, Codex, or Cursor plugin install.
-
 For UI work, keep these roles separate:
 
 - WireText -> low-fidelity wireframes and layout exploration
@@ -93,6 +80,9 @@ Do not preload large Arc workflows.
 - Start with the smallest relevant skill
 - Load reference files only when the active task actually needs them
 - Prefer targeted rules and references over broad up-front reading
+
+`references/index.md` catalogues every Arc reference by concern. Consult it when a task
+needs background you can't name a file for.
 
 ## Workflow Routing
 

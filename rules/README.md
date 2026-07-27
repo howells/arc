@@ -71,3 +71,5 @@ If a project intentionally adopts these rules, adapt them before use:
 ## Notes
 
 - Internationalization: Intentionally out-of-scope (add if needed)
+- Deployment: `vercel.md` covers Vercel project and deployment conventions
+- Background reading beyond these enforceable rules is catalogued in `references/index.md`

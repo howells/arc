@@ -17,22 +17,12 @@ website:
 ---
 
 <tool_restrictions>
-
-# MANDATORY Tool Restrictions
-
-## REQUIRED TOOLS — use these when specified in the process:
-
-- **`AskUserQuestion`** — Preserve the one-question-at-a-time interaction pattern. In Claude Code, use the tool. In Codex, ask one concise plain-text question at a time unless a structured question tool is actually available.
-  </tool_restrictions>
+Ask one question at a time. In Claude Code use `AskUserQuestion`; elsewhere ask a single concise plain-text question. Keep any lead-in to 2-3 sentences. Don't narrate missing tools or fallbacks.
+</tool_restrictions>
 
 <arc_runtime>
-This workflow requires the full Arc bundle, not a prompts-only install.
-
-Paths in this skill use these conventions:
-
-- `agents/...`, `references/...`, `disciplines/...`, `templates/...`, `scripts/...`, `rules/...`, and `skills/<name>/...` are Arc-owned files at the plugin root.
-- `.ruler/...`, `docs/...`, `src/...`, or the user's own project paths are relative to the user's repository.
-  </arc_runtime>
+Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `disciplines/`, `templates/`, `scripts/`, `rules/`, `skills/`) resolve from the plugin root — the directory containing `agents/` and `skills/`. Everything else is the user's repository.
+</arc_runtime>
 
 <required_reading>
 Read this reference before building the final status:
@@ -64,9 +54,9 @@ Launch should answer:
 - Are accidental launch blockers such as `noindex`, disallow rules, maintenance mode, or preview passwords absent or intentional?
 - Have deeper checks been run or intentionally deferred?
 
-If the work turns into deep code health, safety-net test backfill, mobile layout, security remediation, or deep search optimization, route outside launch instead:
+If the work turns into deep code health, security remediation, or safety-net test backfill, route outside launch instead:
 
-- Codebase health and risk -> `/arc:audit`
+- Codebase health, risk, and security remediation -> `/arc:audit`
 - Untested behavior that needs a safety net -> `/arc:testing`
 
 ## Process
@@ -126,11 +116,23 @@ Use this shape:
 
 - [status] Item — evidence or next step
 
+### Basic Content Readiness
+
+- [status] Item — evidence or next step
+
 ### Detected Services
 
 - [status] Item — evidence or next step
 
-### Before Sharing
+### Operations Readiness
+
+- [status] Item — evidence or next step
+
+### Agent & Bundle Surfaces
+
+- [status] Item — evidence or next step
+
+### Deeper Checks
 
 - [status] Item — evidence or next step
 ```
@@ -163,9 +165,9 @@ Use this shape:
 - Placeholder copy is removed.
 - TODO/FIXME/demo labels are not visible in user-facing screens.
 - Product name casing is consistent.
-- Primary CTA works.
+- The primary CTA's target is known from existing evidence (route, handler, or link destination exists), or checking it is listed as the next verification step.
 - Contact, support, or feedback path exists when the project expects real users.
-- 404/error pages are acceptable for a first audience.
+- 404/error pages exist in the codebase and their content is acceptable for a first audience, or reviewing them rendered is listed as the next verification step.
 
 ### Detected Services
 
@@ -205,6 +207,8 @@ Do not run every specialist workflow automatically. Record whether each is done,
 ## Launch Scorecard
 
 After building the checklist, score launch readiness using `references/launch-scorecard.md`.
+
+Operations Readiness and Agent & Bundle Surfaces are advisory sections with no scorecard axis. They never move the score, so a high total does not mean they passed — surface their failures in the output alongside the score, and name them in Blockers or Deferred as appropriate.
 
 Score only what has concrete evidence from the repository, user-provided facts, or existing reports. Do not give full credit for DNS, dashboards, credentials, social preview validators, production env vars, auth callbacks, payment webhooks, or monitoring settings unless they were verified or explicitly supplied by the user.
 
