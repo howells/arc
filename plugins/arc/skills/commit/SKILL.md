@@ -34,7 +34,7 @@ Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `discip
 <rules_context>
 **Load before committing:**
 
-- `rules/git.md` — commit-message, husky, and lint-staged conventions this skill must respect.
+- `rules/git.md` — commit-message, husky, and lint-staged conventions this skill must respect. Its Hooks section describes repo setup (audit/launch territory), not a commit-time obligation — an unsatisfied MUST there is a note, not a task.
 - `references/diff-review-checklist.md` — apply during the pre-commit review step (step 1).
 
 </rules_context>
@@ -49,7 +49,7 @@ Usage:
 - `/arc:commit push` - Commit, push, then publish changed npm packages if present
 - `/arc:commit publish` - Alias for the push-and-publish path
 
-`/arc:commit` publishes a package whose version is already committed and not yet on the registry. `/arc:release` owns bumping versions, changelogs, and coordinated multi-package releases. Route version bumps there instead of doing them here.
+On the push/publish path, `/arc:commit` publishes a package whose version is already committed and not yet on the registry. `/arc:release` owns bumping versions, changelogs, and coordinated multi-package releases. Route version bumps there instead of doing them here.
 
 The canonical order across both skills is **commit → push → publish → tag**.
 
@@ -65,13 +65,17 @@ git diff --stat 2>/dev/null | head -20 || echo "(no diff)"
 git log --oneline -5 2>/dev/null || echo "(no commits)"   # style reference
 ```
 
+`git status --porcelain` is the authoritative file list (the stat is a preview, and it truncates); read the contents of untracked files before judging them stray.
+
 If there are no changes, tell the user and stop.
 
 ## Instructions
 
+If no user response is available at any decision point, take the conservative path — exclude rather than commit, stop rather than push or publish — and report what needs a human.
+
 ### 1. Analyze Changes
 
-Review the git state above. If you need more detail on what changed, inspect the working tree — e.g. `git diff` for unstaged changes, `git diff --staged` for staged changes, or `git diff <path>` to focus on a file. Apply `references/diff-review-checklist.md` as you read the diff so substantive defects (race conditions, trust-boundary gaps, data-safety and side-effect mistakes, stale references, test gaps, dead code, performance regressions) are caught before they land in a commit. Alongside it, scan the diff yourself for debug logs, secrets or credentials, and stray files that should not be committed.
+Review the git state above. If you need more detail on what changed, inspect the working tree — e.g. `git diff` for unstaged changes, `git diff --staged` for staged changes, or `git diff <path>` to focus on a file. Apply `references/diff-review-checklist.md` as you read the diff so substantive defects (race conditions, trust-boundary gaps, data-safety and side-effect mistakes, stale references, test gaps, dead code, performance regressions) are caught before they land in a commit. Alongside it, scan the diff yourself for debug logs, secrets or credentials, and stray files that should not be committed. A hit blocks those lines from landing: exclude the file (or the hunk, via `git add -p`) from every commit, leave the working-tree content untouched, and report each hit. Never delete user work to make a commit clean. Never commit a suspected secret; if one may already be in history, say so — committed secrets need rotation, not just removal.
 
 ### 2. Determine Commit Strategy
 
@@ -93,15 +97,20 @@ Common groupings:
 
 - `packages/<name>/**` - Package-specific changes
 - `apps/<name>/**` - App-specific changes
+- `app/**` - Route or feature changes, grouped by route/feature
+- `components/**` - Shared UI changes
+- `lib/**` / `utils/**` - Shared logic and helpers
 - Root config files (`.eslintrc`, `turbo.json`, etc.) - Config
 - `*.stories.tsx` with their component - Same commit as component
 - `*.test.ts` with their source - Same commit as source
+
+In a flat repo, group by top-level directory unless changes are coupled across them.
 
 ### 4. Create Commits
 
 For each logical group:
 
-1. Stage only files for that group:
+1. Stage only files for that group, including untracked files that belong to the group:
 
    ```bash
    git add [files...]
@@ -134,16 +143,19 @@ For each logical group:
 - Each commit should be atomic (single purpose)
 - If you need "and" in the message, consider splitting the commit
 
-**Repo version mechanics:** if the repo declares a multi-file version manifest (for example `.version-bump.json`) or ships a version-bump script, use that script rather than editing `version` fields directly, and re-read `HEAD` after committing in case a hook amended the commit and changed its hash.
+After each commit, re-read `HEAD` before reporting hashes — a hook may have amended the commit.
+
+**Repo version mechanics:** if the repo ships a version-bump script (often paired with a manifest such as `.version-bump.json`), use that script rather than editing `version` fields directly.
 
 ### 5. Handle Pre-commit Hook Failures
 
 If TypeScript or lint errors block the commit:
 
 Fix the root cause. A hook failure is information about the code, so anything that silences it
-rather than resolving it — `--no-verify`, `as unknown as`/`as any`, `@ts-ignore`,
-`@ts-expect-error`, eslint-disable comments, empty catch blocks — leaves the defect in place and
-the commit dishonest.
+rather than resolving it — `--no-verify` on work you are landing (the one exception — a local WIP
+commit you will amend before pushing — is `rules/git.md`'s, and never applies to this skill's
+output), `as unknown as`/`as any`, `@ts-ignore`, `@ts-expect-error`, eslint-disable comments,
+empty catch blocks — leaves the defect in place and the commit dishonest.
 
 If the root cause genuinely can't be fixed here, stop and say so rather than suppressing it.
 
@@ -226,7 +238,7 @@ Detect the repo's package manager (`pnpm`, `npm`, `yarn`, `bun`) from its lockfi
 - NEVER publish a private package.
 - NEVER publish before pushing the commit containing the package version.
 - NEVER bump a package version unless the user explicitly asked for a version bump.
-- NEVER publish if the working tree has uncommitted files that belong to that package.
+- NEVER publish if the working tree has uncommitted files that belong to that package. When the uncommitted files are step 1's own exclusions (a quarantined secret or debug line), say that explicitly — the block is the scan working, not an oversight.
 - NEVER use `--force` or delete registry versions.
 - If multiple changed packages exist, publish each confirmed publishable package once.
 

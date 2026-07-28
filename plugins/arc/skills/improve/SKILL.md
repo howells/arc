@@ -100,11 +100,13 @@ the rollup between them is defined in that reference.
 **First-run adoption comes first.** Before looking for findings, adopt any existing
 `docs/arc/plans/*-implementation.md` files that have no row in `docs/arc/plans/INDEX.md`,
 without rewriting the plans themselves — Step 3's cross-session duplicate check reads the
-index, so it has to be populated before vetting starts. Roll status up exactly as
-`references/subagent-statuses.md` defines it: all task statuses absent → `TODO`; any
-`status="in_progress"` and no irrecoverable blocker → `IN PROGRESS`; any irrecoverable
-`status="blocked"` → `BLOCKED`; any `done` plus any absent/pending → `IN PROGRESS`;
-all tasks `status="done"` plus schema-2 `Closeout: passed` → `DONE`;
+index, so it has to be populated before vetting starts. Roll status up per
+`references/subagent-statuses.md`, extended by the schema-aware clauses below: all task
+statuses absent → `TODO`; any `status="in_progress"` and no irrecoverable blocker →
+`IN PROGRESS`; any irrecoverable `status="blocked"` → `BLOCKED`;
+any `done` plus any absent/pending and no irrecoverable blocker → `IN PROGRESS`;
+all tasks `status="done"` plus schema-2 (plan schema versions are defined in
+`references/task-granularity.md`) `Closeout: passed` → `DONE`;
 schema-2 all-done with closeout pending or absent → `IN PROGRESS` with a "closeout required"
 note. For an unversioned/schema-1 legacy plan, all tasks done → `DONE` through the historical
 compatibility path. An absent task status is the legacy spelling of pending. Only
@@ -113,10 +115,17 @@ indexed.
 
 Then find the findings source, in priority order:
 
-1. **Recent audit report** — `docs/arc/audits/*-audit.md`, newest first. If one exists at the
-   current HEAD, offer to use it: its Critical/High findings were vetted by audit's Phase 4,
-   so they only need a spot-check in Step 3. Its Medium/Low findings — and every finding from
-   an older report — are fully vetted in Step 3.
+1. **Recent audit report** — `docs/arc/audits/*-audit.md`, newest first. A report is same-HEAD
+   when its `**Audited at:**` short SHA matches `git rev-parse --short HEAD`; a report without
+   that stamp, or carrying a different SHA, gets the full vet. If a same-HEAD report exists,
+   offer to use it: its Critical/High findings were vetted by audit's Phase 4, so they only
+   need a spot-check in Step 3. Its Medium/Low findings — and every finding from an older
+   report — are fully vetted in Step 3. If no user response is available, take the newest
+   same-HEAD report without asking. Carry the report's own **Dismissed findings** block into
+   the index's rejected ledger with an attribution note ("dismissed by audit `<date>`"), so
+   those findings do not resurface in a later intake. When a report's section headings and
+   cluster tables disagree on a finding's severity, the section headings are authoritative —
+   they carry the stage calibration.
 2. **Refactor RFCs** — `docs/arc/plans/*-refactor-rfc.md`. An RFC's problem statement and
    decomposition order can seed findings. Note: an RFC only becomes an index row after it
    passes through detail into an `*-implementation.md` plan.
@@ -181,43 +190,53 @@ Then present direction findings **separately, after the table** — they are opt
 maintainer to weigh, not problems ranked against bugs. 2-4 at most, each with its evidence
 and trade-offs in two or three sentences.
 
-State the vet scope (what was re-read, what wasn't). Record "not worth doing" verdicts —
+State the vet scope (what was re-read, what wasn't). Record every dismissal verdict — not-worth-doing, by-design, duplicate —
 they go to the index's rejected ledger in Step 6.
 
 Then ask ONE question: which findings to turn into plans (suggest the top 3-5 by leverage).
-Wait for the selection. Do not write plans nobody asked for.
+Wait for the selection. Do not write plans nobody asked for. If no user response is available,
+present the ordered findings in the report and stop before writing any plans — an unattended
+run selects nothing.
 
 ## Step 5: Write plans
 
-For each selected **defect** finding, invoke the detail skill in its finding mode:
+For each selected **defect** finding, invoke the detail skill with the vetted finding as its
+scope input (one of detail's three accepted inputs):
 
 ```
 Read: skills/detail/SKILL.md — pass the vetted finding as the scope input
 ```
 
 Pass the finding whole: title, evidence (`file:line` + excerpts), impact, fix sketch, and
-out-of-scope candidates. Detail owns the plan format — XML tasks, `Planned at:` SHA,
-`Out of scope:` header — and writes `docs/arc/plans/YYYY-MM-DD-<finding-slug>-implementation.md`.
+out-of-scope candidates. Derive the out-of-scope candidates from the finding's vet notes —
+what the vet ruled adjacent but separate — plus any deferred findings touching the same files.
+Detail owns the plan format — XML tasks, `Planned at:` SHA, `Out of scope:` header — and writes `docs/arc/plans/YYYY-MM-DD-<finding-slug>-implementation.md`.
 
 For each selected **direction** finding, do NOT write an implementation plan. Offer the
 `/arc:ideate` handoff — the finding's evidence becomes ideate's input, and ideate owns
-shaping it into a spec.
+shaping it into a spec. If no user response is available, record the direction findings in the
+index instead of handing off.
 
 ## Step 6: Update the index
 
 Create or update `docs/arc/plans/INDEX.md` per the schema and write discipline in
 `references/plan-lifecycle.md`:
 
-- One `TODO` row per plan written in Step 5, with priority, effort, and dependencies.
+- Detail creates each plan's `TODO` row as it writes the plan (its step 8). Improve completes
+  the priority, effort, and depends-on columns on the rows detail created — change only the row
+  the current workflow owns.
 - Recommended execution order and dependency notes.
-- Rejected ledger entries for every "not worth doing" verdict from Step 4.
+- Rejected ledger entries for every dismissal, whatever produced it: "not worth doing" verdicts
+  from Step 4, and Step 3's by-design and cross-session-duplicate dismissals. Every dismissed
+  finding is recorded so none of them resurfaces in a later intake.
 - **Deferred findings:** vetted findings the user did not select go to the index's Deferred
   findings section (title, evidence `file:line`, vet date) — not silently dropped. The next
   run's intake starts from them instead of re-deriving and re-vetting.
 - **Adopted plans:** rows created by the Step 1 first-run adoption stay as written — refresh
   their status only if a plan changed during this run.
 
-Do not auto-commit plans or the index; offer the commit with one question, user decides.
+Do not auto-commit plans or the index; offer the commit with one question, user decides. If no
+user response is available, leave everything uncommitted.
 
 ## Reconcile
 
@@ -242,7 +261,8 @@ every indexed plan, then per status:
   drifted: flag it in Notes and refresh the plan's stale content with the user's knowledge —
   never silently re-baseline the `Planned at:` SHA. If the finding was fixed independently,
   mark `REJECTED ("fixed independently")`.
-- **IN PROGRESS** with an old `Last touched` date — a session probably died mid-slice. Flag it
+- **IN PROGRESS** with an old `Last touched` date — older than the most recent commit that
+  touched the plan's target files — a session probably died mid-slice. Flag it
   to the user with what the plan's per-task `status` attributes show (`done`,
   `in_progress`, `blocked`, and absent/pending), plus the implementation baseline and any
   attributable worktree changes. Do not rewrite or discard the interrupted diff, and do not

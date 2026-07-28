@@ -6,7 +6,7 @@ Use this reference when judging whether code is becoming harder to change, harde
 
 Do not approve or normalize changes that introduce obvious maintainability debt when a cleaner structure is visible. Treat these as presumptive blockers until justified:
 
-- An authored source-code file crosses 600 lines (presumptive god file; severe past 1000; strongest signal past 2000). Size sets how hard to look, not the verdict — read the file and report whether responsibilities are actually mixed. Generated, vendored, and data-only files are exempt.
+- An authored source-code file crosses 600 lines (presumptive god file at 600+, severe at 1000+, strongest signal at 2000+). Size sets how hard to look, not the verdict — read the file and report whether responsibilities are actually mixed. Generated, vendored, and data-only files are exempt.
 - A change adds ad-hoc branches or feature checks into unrelated flows.
 - A feature leaks implementation logic into a shared or canonical layer.
 - A new abstraction hides little and forces callers to understand the same complexity.

@@ -33,6 +33,8 @@ website:
     - mastra-agent-engineer
     - senior-engineer
     - data-engineer
+    - accessibility-engineer
+    - test-quality-engineer
   workflow:
     position: utility
 ---
@@ -150,8 +152,8 @@ Security gate: [full reviewer / lightweight only] ([reason])
 Has database: [yes/no]
 Has tests: [yes/no]
 Dead code: [X unused files, Y unused exports, Z unused deps] or "N/A (not JS/TS)"
-Structural hotspots: [X long files >600 LOC, Y severe >1000 LOC, Z >2000 LOC, V suspicious boundary files, W suspicious+long overlap]
-Page shape: [X thin page/layout pass-throughs, Y to god clients >600 LOC, Z to god clients >1000 LOC] or "N/A (not React/Next)"
+Structural hotspots: [X long files 600+ LOC, Y severe 1000+ LOC, Z at 2000+ LOC, V suspicious boundary files, W suspicious+long overlap]
+Page shape: [X thin page/layout pass-throughs, Y to god clients 600+ LOC, Z to god clients 1000+ LOC] or "N/A (not React/Next)"
 Code policy: [X useless barrels, env-typing: yes/no, Y dynamic imports, Z generic-suffix components] or "N/A (not JS/TS)"
 Determinism: [X env-default fallbacks, Y swallowed catches, Z legacy/compat aliases] or "N/A (not JS/TS)"
 Pipeline coverage: [X/Y workspaces with lint+typecheck configured]
@@ -266,7 +268,8 @@ When the project exposes an agent-facing surface or ships published bundles, add
 **Final reviewer list:**
 
 These are typical counts, not caps — the selection rules above decide. A medium Next.js project
-with a database and a security gate legitimately reaches six.
+with a database and a security gate legitimately reaches seven — `accessibility-engineer` joins
+any frontend-heavy medium/large project.
 
 - Small projects: typically 2-3 reviewers
 - Medium projects: typically 3-4 reviewers
@@ -311,6 +314,8 @@ If the security gate skipped `security-engineer`, omit that reviewer from the ba
 | mastra-agent-engineer   | sonnet | Mastra API verification and agent-system judgment                      |
 | senior-engineer         | sonnet | Code review reasoning                                                  |
 | data-engineer           | sonnet | Data safety reasoning                                                  |
+| accessibility-engineer  | sonnet | WCAG and interaction-hygiene review                                    |
+| test-quality-engineer   | sonnet | Assertion and coverage judgment                                        |
 
 **Compose each prompt from `references/audit-reviewer-prompts.md`.** It covers what every
 reviewer receives — project stage and its calibration block, the structural hotspot manifest, the
@@ -502,8 +507,8 @@ Present these options (include all that apply):
 **If user selects "Build an improvement backlog":**
 
 - Invoke the improve skill (`skills/improve/SKILL.md`) with this session's audit report as
-  its intake source — the findings are already vetted (Phase 4), so improve can skip
-  straight to prioritization and selection.
+  its intake source — its Critical/High findings arrive pre-vetted from Phase 4, so improve
+  spot-checks those; Medium/Low findings still need improve's full vet.
 - Improve owns everything from there: leverage ordering, plan writing via detail, and the
   index. Do not also write a separate task plan from this skill.
 

@@ -58,7 +58,7 @@ npx -y knip --no-progress --reporter compact 2>/dev/null | head -40
 
 `npx -y` downloads and executes third-party code. Use it without asking only when knip is already
 a project dependency or is configured in the repo; otherwise offer it in one question first, and
-skip without comment if declined or offline. Record `Dead code: skipped (not installed)` in the
+skip without comment if declined, offline, or no user is available to ask. Record `Dead code: skipped (not installed)` in the
 detection summary. This matches the consent rule the react-doctor scanner follows — the two
 should not disagree.
 
@@ -105,16 +105,16 @@ conclude. Size correlates with mixed responsibility; it does not establish it. O
 judge whether it has one coherent responsibility, then report what you found — a 2000-line file
 with one job is fine, and a 300-line file doing four things is not.
 
-Bands are non-overlapping; the upper bound of each is exclusive, matching the scorecard's
-`600–1000 LOC band` and `> 1000 LOC` criteria.
+Bands are non-overlapping and a boundary count belongs to the higher band — a 1000-line file
+is Severe. Thresholds are inclusive everywhere these numbers appear: 600+, 1000+, 2000+.
 
 | Band | How hard to look |
 | ---- | ---------------- |
 | ≤ 300 LOC | Normal. No attention needed on size alone. |
-| 301–600 LOC | Hotspot. Confirm one coherent responsibility. |
-| 601–1000 LOC | Presumptive god file. Read it; expect to justify keeping it whole. |
-| 1001–2000 LOC | Severe. Near-certain god file — say so unless the code refutes it. |
-| over 2000 LOC | Strongest signal available. Default finding is "split this"; argue the exception in the writeup if the file earns it. |
+| 301–599 LOC | Hotspot. Confirm one coherent responsibility. |
+| 600–999 LOC | Presumptive god file. Read it; expect to justify keeping it whole. |
+| 1000–1999 LOC | Severe. Near-certain god file — say so unless the code refutes it. |
+| 2000+ LOC | Strongest signal available. Default finding is "split this"; argue the exception in the writeup if the file earns it. |
 
 Standing exemptions at every band: generated, vendored, data-only, or a structure the codebase
 demonstrably needs.
@@ -130,9 +130,9 @@ band edge, `wc -l` is authoritative for the ladder.
 
 Store a **structural hotspot manifest** with:
 
-- Long files over 600 LOC
-- Severe long files over 1000 LOC
-- Files over 2000 LOC (strongest signal)
+- Long files (600+ LOC)
+- Severe long files (1000+ LOC)
+- Files at 2000+ LOC (strongest signal)
 - Suspicious boundary files matching `*-client`, `*-wrapper`, `*-content`, `*-shell`, `*-ui`
 - Overlap set: suspiciously named files that are also long
 - `"use client"` overlap: suspiciously named files that also opt into a client boundary

@@ -28,7 +28,8 @@ Requires the full Arc bundle. Arc-owned paths (`agents/`, `references/`, `discip
 Read this reference before building the final status:
 
 1. `references/launch-scorecard.md`
-   </required_reading>
+
+</required_reading>
 
 # Launch Workflow
 
@@ -43,7 +44,8 @@ Launch is a passive readiness checklist unless the user explicitly asks for acti
 - Do not change DNS, environment variables, provider dashboard settings, auth callbacks, payment webhooks, robots policy, or metadata unless the user explicitly asks.
 - If a local or public URL is already provided, you may record it as evidence. If none is known, mark the public URL as `Missing` or `Needs user`.
 - If rendered verification would be useful, list it as a next action instead of doing it automatically.
-  </boundary>
+
+</boundary>
 
 Launch should answer:
 
@@ -77,10 +79,13 @@ Database: Prisma, Drizzle, Supabase, Neon, PlanetScale
 Analytics/monitoring: PostHog, Plausible, GA, Sentry
 Share assets: metadata, OG images, favicon, app icons, manifest
 Content: TODOs, lorem ipsum, placeholder URLs, example copy, support/contact links
-Legal/compliance: privacy policy, terms, cookie notice only when the project collects data, tracks visitors, or takes payments (Arc ships fill-in templates under `templates/` for any that are missing)
+Legal/compliance: privacy policy, terms, cookie notice (Arc ships fill-in templates under `templates/` for any that are missing; when one is required is decided once, under Detected Services)
+Prior Arc reports: docs/arc/audits/*-audit.md (newest first), read for outcome
 ```
 
 Report what was found in 5-10 bullets. Keep it factual. Do not start the app to gather these facts unless the user explicitly asked you to run or inspect the app.
+
+For a prior audit report, read its outcome rather than noting that it exists: Critical/High findings with no evidence of remediation are launch Blockers, and the Deeper Checks item records that outcome — not the mere fact a report was found.
 
 ### Step 2: Ask Missing Launch Facts
 
@@ -94,9 +99,15 @@ Prioritize:
 4. Whether analytics or error monitoring are required before sharing.
 5. Whether the launch collects personal data, tracks visitors, or takes payments.
 
+If no user response is available (an unattended or non-interactive run), answer conservatively and say which answers were assumed:
+
+- Launch type: assume a public launch and score against that bar.
+- Analytics or error monitoring: assume required for anything reaching a real audience.
+- Email/auth/payments active: answer from code evidence, and treat a wired service as active when the evidence is ambiguous.
+
 ### Step 3: Build The Checklist
 
-Generate only relevant checklist sections. Mark each item:
+Emit all seven sections; a section with nothing applicable says so in one line rather than disappearing. Mark each item:
 
 - `Done` when verified in the project.
 - `Missing` when required and absent.
@@ -137,6 +148,8 @@ Use this shape:
 - [status] Item — evidence or next step
 ```
 
+Then offer, in one question, to write the checklist to `docs/arc/launch/YYYY-MM-DD-launch-checklist.md`, creating `docs/arc/launch/` if it does not exist. If no user response is available, write it and say where it went.
+
 ## Checklist Areas
 
 ### Public URL
@@ -158,12 +171,13 @@ Use this shape:
 - Twitter/X card metadata is set when relevant.
 - Favicon and touch icon exist.
 - `robots.txt`, route metadata, and headers do not accidentally block public indexing when public discovery matters.
-- Social preview has been checked or is ready to check in external validators.
+- Open Graph/Twitter metadata is present in code — that is what is verifiable statically — and the external-validator pass is recorded as a post-deploy next action.
 
 ### Basic Content Readiness
 
 - Placeholder copy is removed.
 - TODO/FIXME/demo labels are not visible in user-facing screens.
+- Demo/seed/fixture data is not what real visitors will see — module-scope generated data counts even when no TODO/lorem strings exist.
 - Product name casing is consistent.
 - The primary CTA's target is known from existing evidence (route, handler, or link destination exists), or checking it is listed as the next verification step.
 - Contact, support, or feedback path exists when the project expects real users.
@@ -178,11 +192,12 @@ Only include sections for services the project actually uses:
 - Email: sending domain, SPF/DKIM/DMARC, verified From address.
 - Database: production connection string, migrations applied. Backup posture verified — PITR or a scheduled dump — and a migration journal exists (see `references/database-lifecycle.md`).
 - Analytics/monitoring: provider key, environment separation, basic event/error capture.
-- Legal/support: privacy policy, terms, cookie notice, refund/support links only when the detected services or launch type require them. When one is missing but required, offer to generate it from Arc's ready-made templates — `templates/privacy-policy.md`, `templates/terms-of-service.md`, `templates/cookie-policy.md` — filling the placeholders from detected facts (product name, company, contact email, data collected, payment/analytics providers) and asking only for the facts that cannot be discovered.
+- Legal/support: privacy policy, terms, cookie notice, refund/support links. This is the one place legal gating is decided. A document is REQUIRED on current behaviour — the project collects personal data, tracks visitors, or takes payments today. Intent without behaviour (payment keys wired but no checkout, an `identify()` call with no live endpoint) is not yet a requirement: record it as a pending trigger that flips the moment real data arrives. Generate legal documents only with a user present — placeholders like company name and contact email are undiscoverable from a repo. When one is missing but required and a user is present, offer to generate it from Arc's ready-made templates — `templates/privacy-policy.md`, `templates/terms-of-service.md`, `templates/cookie-policy.md` — filling the placeholders from detected facts (product name, company, contact email, data collected, payment/analytics providers) and asking only for the facts that cannot be discovered. In an unattended run, record the document as `Needs user` ("requires user input") and move on.
+- (Emit this item even when no services are detected — env fallbacks are a launch risk on their own.) No service or config is wired to a hardcoded fallback that would silently "work" in production (`process.env.X || default`, placeholder keys) — a missing env var should fail loudly, not point at localhost.
 
 ### Operations Readiness
 
-Include only when the project has a pipeline or scheduled work. Check against `references/operations-playbook.md`:
+Check against `references/operations-playbook.md`. Absence of CI or gates is a finding, not a reason to skip the section:
 
 - CI exists and runs the repo's check gate (e.g. `pnpm check` / `check:affected`).
 - Gates are enforced (husky pre-push, fail-on-red, boundary checks).
@@ -192,23 +207,25 @@ Include only when the project has a pipeline or scheduled work. Check against `r
 
 ### Agent & Bundle Surfaces
 
-Include only when the project exposes an agent-facing surface or ships published bundles:
+When the project exposes no agent surface and publishes nothing, the section is a one-line `Deferred — not applicable`. Otherwise:
 
 - Is the agent-facing surface (API / MCP / `llms.txt`) current with shipped behavior?
 - Have published component bundles been verified post-build (the built artifact, not just source)?
 
 ### Deeper Checks
 
-Do not run every specialist workflow automatically. Record whether each is done, missing, or intentionally deferred:
+Do not run every specialist workflow automatically. Record each one's outcome — done and clean, done with findings still open, missing, or intentionally deferred — not merely whether a report exists:
 
 - `/arc:testing`
-- `/arc:audit`
+- `/arc:audit` — read the newest `docs/arc/audits/*-audit.md`; unremediated Critical/High findings are launch Blockers.
 
 ## Launch Scorecard
 
 After building the checklist, score launch readiness using `references/launch-scorecard.md`.
 
 Operations Readiness and Agent & Bundle Surfaces are advisory sections with no scorecard axis. They never move the score, so a high total does not mean they passed — surface their failures in the output alongside the score, and name them in Blockers or Deferred as appropriate.
+
+Advisory failures never change the number, but they qualify the verdict: a wholly failing advisory section makes the status `Ready, with operations caveats`, never a bare `Ready`.
 
 Score only what has concrete evidence from the repository, user-provided facts, or existing reports. Do not give full credit for DNS, dashboards, credentials, social preview validators, production env vars, auth callbacks, payment webhooks, or monitoring settings unless they were verified or explicitly supplied by the user.
 
@@ -224,7 +241,7 @@ Use this shape:
 | Content Readiness |   X/3    | [placeholder/CTA/contact/error-state evidence or gap]            |
 | Detected Services |   X/3    | [auth/payment/email/db/analytics public-setting evidence or gap] |
 | Deeper Checks     |   X/3    | [`/arc:testing` and `/arc:audit` status or deferral]             |
-| **Total**         | **X/15** | **Ready / Blocked / Shareable with caveats**                     |
+| **Total**         | **X/15** | **Ready / Ready, with operations caveats / Shareable with caveats / Blocked**                     |
 ```
 
 ## Output
@@ -234,9 +251,10 @@ End with:
 ```markdown
 ## Launch Status
 
-Status: Ready / Blocked / Shareable with caveats
+Status: Ready / Ready, with operations caveats / Blocked / Shareable with caveats
 Readiness Score: X/15
 Public URL: [url or missing]
+Advisory: [Operations Readiness and Agent & Bundle Surfaces verdicts]
 Blockers: [short list]
 Deferred: [short list]
 Next action: [one concrete next step]
@@ -255,4 +273,5 @@ Launch is complete when:
 - [ ] Detected services have public-URL settings checked
 - [ ] Deeper checks are recorded as done, missing, or deferred
 - [ ] Final launch status is presented with one next action
-      </success_criteria>
+
+</success_criteria>

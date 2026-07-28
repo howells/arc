@@ -41,6 +41,12 @@ materially new evidence may be reopened; note that in the Reason column rather t
 Real findings not being planned yet. Same shape as the rejected ledger, with Reason replaced by
 what would need to change for them to be picked up.
 
+### Creating the index
+
+When no index exists, create it: an H1 (`# Plan Index`), a one-line preamble, and the
+8-column table. The Rejected ledger and Deferred findings sections are created on first
+use — not empty at birth.
+
 ### Multi-writer discipline
 
 - Re-read the index immediately before a write.

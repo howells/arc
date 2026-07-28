@@ -1,6 +1,6 @@
 # Model Strategy for Agents
 
-**Always specify a model when spawning agents.** This optimizes cost and speed without sacrificing quality where it matters.
+**Specify a model when spawning agents, or rely on the agent file's declared `model:` — never leave both unset.** This optimizes cost and speed without sacrificing quality where it matters.
 
 ## Quick Reference
 

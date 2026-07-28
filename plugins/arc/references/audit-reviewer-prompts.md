@@ -93,9 +93,9 @@ Include:
 
 ```
 Structural hotspots:
-- Long files >600 LOC: [list]
-- Severe long files >1000 LOC: [list]
-- Files >2000 LOC (strongest signal): [list]
+- Long files 600+ LOC: [list]
+- Severe long files 1000+ LOC: [list]
+- Files 2000+ LOC (strongest signal): [list]
 - Suspicious boundary files: [list]
 - Suspicious + long overlap: [list]
 - Suspicious + "use client" overlap: [list]

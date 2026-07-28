@@ -33,7 +33,7 @@ website:
 
 <tool_restrictions>
 
-Use the available user-question mechanism for decisions. `EnterPlanMode` and `ExitPlanMode` are
+Use the available user-question mechanism for decisions; unattended, the documented fallbacks in each step govern. `EnterPlanMode` and `ExitPlanMode` are
 banned because Arc owns its planning and execution process.
 
 </tool_restrictions>
@@ -66,15 +66,15 @@ Load when relevant:
 
 | Agent                                                            | Default use                                                                |
 | ---------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `implementer`                                                    | Own a coherent implementation slice end-to-end.                            |
+| `agents/build/implementer.md`                                    | Own a coherent implementation slice end-to-end.                            |
 | `unit-test-writer`, `integration-test-writer`, `e2e-test-writer` | **Conditional** complex harness, fixture, browser/E2E, or test-suite work. |
 | `debugger`, `fixer`                                              | An observed failing test, typecheck, or lint result.                       |
 | `test-runner`, `e2e-runner`                                      | Verbose or iterative focused execution when useful.                        |
-| `spec-reviewer`                                                  | Sonnet whole-implementation spec/completion axis.                          |
-| `code-reviewer`                                                  | Sonnet whole-implementation standards/evidence axis.                       |
+| `agents/build/spec-reviewer.md`                                  | Sonnet whole-implementation spec/completion axis.                          |
+| `agents/build/code-reviewer.md`                                  | Sonnet whole-implementation standards/evidence axis.                       |
 | `agents/review/security-engineer.md`, `agents/review/data-engineer.md`, `agents/review/performance-engineer.md`, `agents/review/mastra-agent-engineer.md`, `agents/review/daniel-product-engineer.md`, `agents/review/accessibility-engineer.md` | **Conditional** Guarded specialists, matched to the risk that raised assurance. |
 
-Read an agent file before dispatching it. Never run multiple mutating owners in parallel when
+All build agents live in `agents/build/`; specialists in `agents/review/`. Read an agent file before dispatching it. Never run multiple mutating owners in parallel when
 their declared paths or dependencies overlap.
 </available_agents>
 
@@ -89,9 +89,17 @@ If the user provided a saved plan or an approved plan in conversation, use it. O
 - create an inline plan for bounded work using the same header, seam registry, and XML task
   representation as a saved plan.
 
+An environment-blocked `<verify>` command (missing dependencies, no network) is recorded as
+environment-blocked in the receipt and reported as a prerequisite — it neither blocks the task
+nor silently passes. A task may be marked `done` with unsatisfied `<done>` clauses only when
+every unsatisfied clause is environment-blocked and recorded in the decision log and index
+Notes; any other unsatisfied clause keeps the task open.
+
 Do not invent a separate small-scope schema. Before implementation, ensure new auto tasks have
 valid kinds and evidence, checkpoint tasks require human input, dependencies resolve, and verify
-commands are concrete.
+commands are concrete. When validation fails: fix the plan field in place if the correction is
+mechanical (recording it in the decision log); bounce to the detail skill when the fix would
+change intent.
 
 ### Legacy plans
 
@@ -116,8 +124,12 @@ header before risky execution and append the rationale to the decision log. Neve
 Check project rules and the current branch. Do not alter unrelated user changes.
 
 Ask once whether per-slice commits are authorized. If the user already gave explicit commit
-instructions, follow them. Otherwise leave work uncommitted. Never infer push, PR, amend, or
-history-rewrite authority.
+instructions, follow them. If the user declines — or no user is available to ask — leave work
+uncommitted. Never infer push, PR, amend, or history-rewrite authority.
+
+When a plan finishes with its work uncommitted, say so prominently in the report and the index
+Notes: the implementation exists only in the worktree, one reset away from loss, even though the
+index says `DONE`.
 
 Persist the **Implementation baseline** in `## Implementation state` before edits:
 
@@ -133,7 +145,7 @@ If a task overlaps a pre-existing dirty path, report `NEEDS_CONTEXT`; never over
 or guess ownership. Run affected baseline checks only. Stop on unexplained affected failures
 unless fixing them is the task.
 
-For saved plans, run the canonical drift check and mark the owned index row `IN PROGRESS` using
+For saved plans, run the canonical drift check and mark the owned index row `IN PROGRESS` **before** persisting the baseline below — the row claim is what signals ownership to concurrent writers — using
 the per-row write discipline.
 
 ## 3. Execute coherent slices
@@ -196,8 +208,9 @@ After all slices are built:
 
 1. Regenerate required packaging/generated artifacts from root sources.
 2. Capture one review target from the implementation base through current HEAD plus attributable
-   worktree changes, excluding unchanged pre-existing dirty paths.
-3. Run `spec-reviewer` and `code-reviewer` in parallel against that same target.
+   worktree changes — including non-ignored untracked files — excluding unchanged pre-existing
+   dirty paths.
+3. Run `spec-reviewer` and `code-reviewer` in parallel against that same target. (On a platform without delegation, run the same roles locally in sequence from their agent files — owner work first, then each review axis; sequential local review substitutes for parallel dispatch.)
 4. Guarded work adds the relevant security, data, performance, Mastra, `daniel-product-engineer`,
    or `accessibility-engineer` specialist and rechecks Guarded signals against the actual diff.
 5. Return findings to an implementation owner, fix root sources, regenerate artifacts, and rerun
@@ -206,10 +219,17 @@ After all slices are built:
 Any in-scope source, test, documentation, configuration, or generated change invalidates both
 whole-implementation axes.
 
+When an owner returns `DONE_WITH_CONCERNS`, the acceptance or resolution of each concern is
+recorded in the plan's decision log — that is the canonical location; mirror a one-line note
+in the index row when the concern survives to `DONE`.
+
 ## 6. Fresh closeout gate
 
 After final review fixes and regeneration, run one fresh repository verification set on the
-unchanged target. Run a separate production build once when applicable and not already part of
+unchanged target — the repository's own gate scripts (check/test/typecheck/build, whichever
+exist) plus the plan's verify commands. Name the exact commands in the closeout record. When
+environment limits collapse the set to nothing beyond the slice-level commands already run,
+record `Closeout: passed (degenerate gate)` so the weaker assurance stays visible. Run a separate production build once when applicable and not already part of
 that set. Run targeted E2E/browser/smoke checks only when the feature or Guarded risk justifies them.
 
 A failed closeout command may be fixed and rerun. Any in-scope fix returns through both review
@@ -218,7 +238,9 @@ axes before the next planned green closeout attempt.
 Record a session-local verification receipt using `references/implementation-assurance.md`.
 Immediate completion/branch workflows may reuse it only while the exact command, cwd, HEAD,
 configuration, and attributable fingerprint remain unchanged in the same uninterrupted session.
-After the gate succeeds, persist `Closeout: passed` with the date, target fingerprint, and exact
+After the gate succeeds, persist `Closeout: passed` with the date, target fingerprint (sha256
+over the sorted list of `path:file-sha256` pairs for the attributable target — the one
+fingerprint convention, so runs stay comparable), and exact
 commands in `## Implementation state`. The marker records that closeout occurred but never
 substitutes for a valid session-local receipt.
 

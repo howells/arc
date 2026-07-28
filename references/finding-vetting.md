@@ -11,6 +11,11 @@ Before a finding is presented as Critical/High (audit) or selected for planning 
 the orchestrator MUST re-open the cited `file:line` and confirm the finding against the
 current code. Never present or plan from a subagent's citation alone.
 
+One exception: findings audit's own vet pass already re-read (its Critical/High) may be
+spot-checked rather than fully re-read when the report's `Audited at` SHA matches the current
+HEAD. Everything else — Medium/Low findings, findings from older or unstamped reports, and raw
+scan-agent output — gets the full vet.
+
 To make this comparison honest, Critical/High findings must carry an excerpt:
 
 ```
@@ -69,6 +74,7 @@ future run.
 
 ## Say what was vetted
 
-The presented output must state the vet scope explicitly. If only Critical/High findings were
-re-read, say so — e.g. "Medium/Low findings are unverified citations." A reader must never
+The presented output must state the vet scope explicitly. Audit's report says which findings
+were re-read — e.g. "Critical/High re-verified; Medium/Low findings are unverified citations."
+Improve's output says which arrived pre-vetted and which it vetted itself. A reader must never
 assume "vetted" applies uniformly when it doesn't.

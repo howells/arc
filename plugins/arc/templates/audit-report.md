@@ -12,6 +12,7 @@ Bracketed values are placeholders to fill, not text to reproduce.
 **Scope:** [path or "full codebase"]
 **Project Type:** [detected type]
 **Project Stage:** [prototype / development / pre-launch / production]
+**Audited at:** [short commit SHA from `git rev-parse --short HEAD`, or "uncommitted tree"]
 
 > Severity ratings have been calibrated for the **[stage]** stage. Issues marked with ↓ were downgraded from their production-level severity.
 
@@ -19,7 +20,7 @@ Bracketed values are placeholders to fill, not text to reproduce.
 
 - **Long files >600 LOC:** [count]
 - **Severe long files >1000 LOC:** [count]
-- **Files >2000 LOC (strongest signal):** [count]
+- **Files 2000+ LOC (strongest signal):** [count]
 - **Suspicious boundary files:** [count]
 - **Suspicious + long overlap:** [count]
 - **Page-shape findings (thin page/layout → god client):** [count]
@@ -49,6 +50,11 @@ Bracketed values are placeholders to fill, not text to reproduce.
 | ------------- | :------: | ----------- |
 | Accessibility |   X/3    | [rationale] |
 | **Bonus**     | **+X/3** |             |
+
+## Vet Scope
+
+[Which findings were re-verified at the cited lines (Critical/High) and which are unverified
+citations (Medium/Low). One or two sentences.]
 
 ## Executive Summary
 

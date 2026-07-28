@@ -40,7 +40,10 @@ Read before planning:
 - a vetted finding from `improve`, including evidence, impact, fix sketch, and out-of-scope
   candidates; or
 - a direct scoped request forwarded by `implement` with no spec behind it. Elicit the missing
-  scope through questions rather than substituting a stale spec.
+  scope through questions (per `references/question-loops.md`) rather than substituting a stale
+  spec. If no user is available, resolve what you can from the request's own constraints and
+  repo evidence, record every unanswered question in the Decision log, and mark the plan
+  unconfirmed.
 
 Never substitute an unrelated recent spec for a vetted finding. Derive the output filename in
 `docs/arc/plans/` using the canonical paths reference.
@@ -48,7 +51,11 @@ Never substitute an unrelated recent spec for a vetted finding. Derive the outpu
 ## 2. Detect the project and baseline
 
 Detect package manager, framework, test commands, and repository verification commands from
-project files. If no test runner exists, use the repository's documented `test` entry point.
+project files (`packageManager` field, then lockfile, then default `npm`). If no test runner
+exists, use the repository's documented `test` entry point; if there is no `test` entry but
+other verification scripts exist (`typecheck`, `build`, `lint`), use those. A documented
+command that cannot run in the current environment (missing `node_modules`) is recorded as an
+environment prerequisite, never replaced with an invented one.
 When no automated verification entry point exists, specify a concrete observable state rather
 than inventing a command.
 
@@ -76,7 +83,7 @@ Record:
 
 ```markdown
 **Planned assurance:** Lean | Standard | Guarded
-**Effective assurance:** same as planned at plan creation
+**Effective assurance:** [posture]
 **Assurance rationale:** [specific applicable signals]
 ```
 
@@ -84,7 +91,19 @@ Highest applicable risk wins. Guarded signals cannot be overridden below their r
 
 ## 5. Agree seams
 
-Create the plan-level `<seams>` registry before tasks. Use an approved boundary, an existing
+Three rules for `<verify>` and `<done>` (each one cost a real execution run):
+test imports must follow the chosen runner's resolution rules (Node ESM needs the file
+extension — an extensionless specifier fails under the very `node --test` command the plan
+prescribes); never make a command the plan's own environment note says cannot run a
+load-bearing `<verify>` or `<done>` clause — record it as a prerequisite instead; and every
+`<done>` clause must be observable through the task's seam, or name the out-of-band probe that
+checks it.
+
+Create the plan-level `<seams>` registry before tasks — when any task's kind requires a seam
+(refactor/artifact/deployment/documentation tasks may not). Where no test infrastructure
+exists, a seam's `<test>` may name a non-test verification artifact; say so explicitly. When a
+refactor plan needs a safety net the repo lacks, `/arc:testing` is the dedicated backfill
+workflow — recommend it, or justify inline coverage. Use an approved boundary, an existing
 observable interface declared before implementation, or user confirmation for a genuinely new
 public/architectural boundary. Do not introduce a public API solely to make testing convenient.
 
@@ -136,15 +155,18 @@ Then write:
 1. file structure;
 2. plan-level `<seams>`;
 3. dependency-ordered XML slices;
-4. an empty `## Implementation state` block using the lifecycle reference;
+4. an `## Implementation state` block with every field present and marked `pending` — implement completes `Execution base` and `Commit posture` before the first task starts, per the lifecycle reference;
 5. an empty `## Decision log`;
-6. the plan's row in `docs/arc/plans/INDEX.md` with status `TODO`, per `references/plan-lifecycle.md`.
+6. the plan's row in `docs/arc/plans/INDEX.md` with status `TODO`, per
+   `references/plan-lifecycle.md`. Priority comes from upstream severity/leverage when
+   supplied, else P2; Effort from the plan's own scope (S single-file, M multi-file,
+   L cross-cutting). Note the basis in the row's Notes.
 
 ## 9. Validate the plan document
 
 Dispatch `agents/workflow/plan-document-reviewer.md`. It validates the seven canonical contract
 dimensions, including schema-2 checkpoint compatibility.
-Fix and re-review until it passes or five loops require user escalation.
+Fix and re-review until it passes or five loops require user escalation. Unattended: stop, record the unresolved findings in the plan, and return it unapproved.
 
 ## 10. Offer approval and the plan commit
 

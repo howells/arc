@@ -16,4 +16,9 @@ Every question names the option you'd pick, so the user can accept a sensible de
 
 <confirmation_stop_gate>
 **Do not enact the plan until the user confirms shared understanding.** The loop ends when the user agrees the plan is right, not when you run out of questions. Presenting options, tables, or competing proposals for the user to decide on is part of the loop; enacting the outcome — writing the spec, plan, or code, or making changes — before that confirmation jumps the gate.
+
+Unattended runs are the exception: when no user is available, this gate cannot be satisfied,
+and the invoking workflow's own documented unattended fallback governs instead. The output must
+name every confirmation that was skipped, so the artifact reads as unconfirmed rather than
+agreed.
 </confirmation_stop_gate>

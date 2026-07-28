@@ -26,8 +26,6 @@ website:
     Most refactoring is reactive — fixing pain after it's acute. This workflow is proactive: it finds
     architectural friction before it compounds, and produces actionable proposals rather than vague
     "we should clean this up" comments.
-  agents:
-    - architecture-engineer
   workflow:
     position: utility
 ---
@@ -51,6 +49,7 @@ Also read, when present in the target project:
 
 - `CONTEXT.md` or the relevant context from `CONTEXT-MAP.md`
 - `docs/adr/*.md` or area-specific ADRs
+- the most recent `docs/arc/audits/*-audit.md` — prior classifications and dismissed findings
 
 Load when relevant:
 
@@ -107,10 +106,16 @@ This workflow adds structure — extracting, deepening, creating packages. Its n
 
 - **Does the new structure earn its name?** Extracting a helper or module only pays off if it gives a concept a name a reader will reach for. An extraction that just relocates code without making either side easier to understand is churn — drop it.
 - **Fewer files and fewer lines are not the goal; faster comprehension is.** If a proposed split would be harder to follow than the original, or would scatter one concept across more files, it is over-decomposition. Reject it the same way you'd reject a god file.
-- **Verify intent before proposing removal or consolidation (Chesterton's Fence).** If a candidate hinges on deleting or merging existing code, check why it exists first — `git blame`, the originating ADR, or the test that pins it. If you can't establish the original intent, mark the candidate low-confidence rather than guessing.
+- **Verify intent before proposing removal or consolidation (Chesterton's Fence).** If a candidate hinges on deleting or merging existing code, check why it exists first — `git blame`, the originating ADR, or the test that pins it. If you can't establish the original intent, mark that candidate low-confidence rather than guessing. The penalty is scoped to deletion and consolidation candidates only: absent history is not obscured intent, and a candidate carrying its own intrinsic evidence — read the file, count the responsibilities — stands on that evidence regardless of how young the repository is.
 - **Never refactor away a safety boundary.** Input validation at trust boundaries, error handling that prevents data loss, authorization/escaping/sanitization, and accessibility affordances are not "duplication" or "shallow indirection" to be consolidated away. Preserve them even when a restructuring would otherwise be cleaner.
 
 ## Process
+
+**Unattended runs.** When no user response is available, take the documented default at each
+ask-point and mark every skipped confirmation in the RFC — Step 4: explore the highest-severity
+candidate; Step 5: skip the grilling loop and record its open questions in the RFC instead;
+Step 6: proceed; Step 8: take the Step 7 recommendation; Step 9: leave the RFC uncommitted and
+unregistered. Per `references/question-loops.md`, the RFC must read as unconfirmed, not agreed.
 
 ### Step 1 — Load domain and decision context
 
@@ -119,6 +124,7 @@ Read the project context before judging architecture:
 - If `CONTEXT-MAP.md` exists, use it to find the relevant `CONTEXT.md`.
 - Otherwise read root `CONTEXT.md` if present.
 - Read ADRs in `docs/adr/` or the relevant area if the candidate touches a documented decision.
+- Read the most recent `docs/arc/audits/*-audit.md` if any exist. Take its prior classifications (a god file it already named and categorised is not a fresh finding) and its dismissed-findings table, which is a rejection record in the same sense as an ADR — don't re-propose what it already turned down without new observed friction.
 
 Use the project's domain vocabulary when naming candidate modules. If a better module name uses a concept not in `CONTEXT.md`, note that the context should be updated during the grilling loop.
 
@@ -129,7 +135,8 @@ Use the project's domain vocabulary when naming candidate modules. If a better m
 For JavaScript/TypeScript projects, run the Arc-owned god-file and duplication scanner when available:
 
 ```bash
-python3 scripts/find-god-files.py . --max-files 40
+# ARC_ROOT = the Arc plugin root (the directory containing agents/ and skills/)
+python3 "$ARC_ROOT/scripts/find-god-files.py" . --max-files 40
 ```
 
 Use `--include-tests` only when the user asks about duplicated tests or test-suite cleanup.
@@ -139,7 +146,8 @@ The scanner is heuristic. It ranks likely candidates; it does not decide. Read t
 Also run the Arc-owned read-only codebase mapper when available:
 
 ```bash
-python3 scripts/codebase-map.py . --format markdown
+# ARC_ROOT = the Arc plugin root (the directory containing agents/ and skills/)
+python3 "$ARC_ROOT/scripts/codebase-map.py" . --format markdown
 ```
 
 `scripts/` resolves from the Arc plugin root; the positional `.` is the target repository. Narrow
@@ -186,19 +194,19 @@ The friction you encounter IS the signal.
 
 Present a numbered list of refactoring opportunities. For each candidate:
 
-| Field                   | Description                                                                                                           |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| **Cluster**             | Which modules/concepts are involved                                                                                   |
-| **Type**                | shallow-module, package-extraction, god-component, god-page-client, god-script, god-module, duplication               |
-| **Evidence**            | Line count, responsibility mix, duplicated blocks, import depth, call patterns, shared types                          |
-| **Problem**             | Why the current shape causes friction                                                                                 |
-| **Proposed direction**  | Plain-English description of what would change                                                                        |
-| **Dependency category** | See categories below                                                                                                  |
-| **Locality / leverage** | What change gets concentrated, and what callers gain                                                                  |
-| **Test impact**         | What existing tests would be replaced by boundary tests, or what characterization tests are needed first              |
-| **Complexity impact**   | Current complexity, proposed complexity, and behavior-preservation risk when performance is part of the refactor      |
-| **Severity**            | How much this costs day-to-day                                                                                        |
-| **Confidence**          | How sure you are the friction is real and the direction is right — lower it when intent is unverified (see Restraint) |
+| Field                   | Description                                                                                                                                                     |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Cluster**             | Which modules/concepts are involved                                                                                                                             |
+| **Type**                | shallow-module, package-extraction, god-component, god-page-client, god-script, god-module, duplication                                                         |
+| **Evidence**            | Line count, responsibility mix, duplicated blocks, import depth, call patterns, shared types                                                                    |
+| **Problem**             | Why the current shape causes friction                                                                                                                           |
+| **Proposed direction**  | Plain-English description of what would change                                                                                                                  |
+| **Dependency category** | See categories below                                                                                                                                            |
+| **Locality / leverage** | What change gets concentrated, and what callers gain                                                                                                            |
+| **Test impact**         | What existing tests would be replaced by boundary tests, or what characterization tests are needed first                                                        |
+| **Complexity impact**   | Current complexity, proposed complexity, and behavior-preservation risk — include this row only when performance is part of the stated focus; otherwise omit it |
+| **Severity**            | How much this costs day-to-day                                                                                                                                  |
+| **Confidence**          | How sure you are the friction is real and the direction is right — lower it when intent is unverified (see Restraint)                                           |
 
 Before listing a candidate, run it through the **Restraint** gates above. Drop candidates that add structure without improving comprehension; mark candidates whose intent you couldn't verify as low confidence rather than omitting the caveat. A candidate a prior ADR already rejected stays off the list unless observed friction justifies proposing to reopen that ADR — and when you do surface it, its row must say so explicitly (which ADR it contradicts, and why the friction warrants revisiting it).
 
@@ -221,7 +229,9 @@ Use a grilling loop before writing the RFC. Before starting it, read `references
 - Whether `CONTEXT.md` should gain or sharpen a term.
 - Whether an ADR should record a rejected or surprising direction. Record load-bearing rejections — the ones a future refactor pass would otherwise re-suggest — so the same candidate doesn't resurface every time someone explores this area.
 
-Update project context inline only for durable domain language, not temporary implementation details.
+Update project context inline only for durable domain language, not temporary implementation
+details. If no `CONTEXT.md` exists, record new domain terms in the RFC (or the ADR) instead;
+creating `CONTEXT.md` is `/arc:vision`'s job, not this skill's.
 
 ### Step 6 — Frame the problem space
 
@@ -248,6 +258,10 @@ interface constraint:
 | Agent 2                 | "Maximise flexibility — support many use cases and extension"                                 |
 | Agent 3                 | "Optimise for the most common caller — make the default case trivial"                         |
 | Agent 4 (if applicable) | "Use ports & adapters for cross-boundary dependencies"                                        |
+
+Dispatch Agent 4 when the candidate touches external dependencies (category 3/4) or when a
+framework-free core is plausible. Even when the port itself loses, its dependency-free core is
+often worth harvesting into the chosen design — say so in the comparison.
 
 Each sub-agent outputs:
 
@@ -279,14 +293,16 @@ Create a refactor RFC in `docs/arc/plans/YYYY-MM-DD-[scope]-refactor-rfc.md`:
 Use the RFC structure in `templates/refactor-rfc.md`.
 
 If Step 5 concluded an ADR is warranted, write it to `docs/adr/` alongside the RFC — the
-load-bearing rejection belongs in the decision record, not only in the RFC's prose.
+load-bearing rejection belongs in the decision record, not only in the RFC's prose. Name it
+`docs/adr/NNNN-<slug>.md`, where `NNNN` is the next number in sequence zero-padded to four digits;
+create the directory if it doesn't exist. Give it three sections, a paragraph each: **Context**
+(the friction and constraints that forced a decision), **Decision** (what was chosen, stated
+actively), **Consequences** (what this makes easier, what it makes harder, and what it rules out).
 
 Save the RFC and summarize the recommendation. Do not auto-commit it unless the user asks.
 
-If the project keeps a plan index (`docs/arc/plans/INDEX.md` — see `/arc:improve`), offer to
-register this RFC in the backlog. Note the boundary: an RFC gets an index row only after it
-passes through the detail skill into an `*-implementation.md` plan — the offer routes through
-`/arc:improve`, which owns that step; the RFC file itself is never indexed directly.
+Note the `/arc:improve` follow-up in the RFC — improve turns accepted RFCs into indexed
+implementation plans.
 
 ## Dependency Categories
 

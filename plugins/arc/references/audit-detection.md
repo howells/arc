@@ -81,4 +81,5 @@ After detection, briefly confirm:
 Detected project stage: [stage] (based on [key signals])
 ```
 
-If the user corrects it, use their override.
+If the user corrects it, use their override. With no user response available, proceed with the
+detected stage and mark it unconfirmed in the report header — stage drives every severity rating.

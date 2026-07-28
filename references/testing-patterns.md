@@ -27,13 +27,20 @@ public or architectural boundary. New plans register seams using the XML contrac
 | `behavior`      | Write an assertion at an agreed seam, watch it fail for the missing behavior, implement, then watch it pass.                                                                                                                     |
 | `bugfix`        | Reproduce the defect at the seam, verify the expected failure, fix it, then keep the regression green.                                                                                                                           |
 | `integration`   | Use observable contract/integration evidence at a named seam. Require red only when local behavior changes and a meaningful pre-change failure can be demonstrated. Otherwise record the baseline and targeted passing evidence. |
-| `refactor`      | Run affected tests before and after. Add characterization coverage only where behavior lacks a safety net.                                                                                                                       |
+| `refactor`      | Run affected tests before and after. Add characterization coverage only where behavior lacks a safety net (see the proportionality note below).                                                                                                                       |
 | `artifact`      | Use build, package, generation, schema, or mechanical verification.                                                                                                                                                              |
 | `deployment`    | Use authorized read-only smoke evidence. External mutation still requires authority.                                                                                                                                             |
 | `documentation` | Use content and link validation where applicable.                                                                                                                                                                                |
 
 Legacy auto tasks without `kind` use their existing verify/test guidance. Do not manufacture
 a seam or red run solely because a legacy task lacks classification.
+
+Proportionality note (refactor): on a Lean-assurance plan, when the cheapest honest
+characterization harness would still exceed the change itself, the plan may substitute
+mechanical verification plus a recorded before/after comparison — stating that choice and its
+reason so the plan reviewer judges the tradeoff rather than the omission. Check runtime
+built-ins first (`node:test`, `python -m unittest`): a harness they can carry costs nothing
+and is not an exemption case.
 </evidence_by_kind>
 
 <detection>

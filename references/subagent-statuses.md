@@ -28,6 +28,11 @@ conditions. `AUTH_GATE` and `NEEDS_CONTEXT` are resumable, not terminal blockers
 
 `implement` writes this mapping; `improve` reads it. Neither invents another rollup.
 
+Plan-level extensions: the schema-2 closeout clauses and the legacy schema-1 compatibility
+path (stated identically in `implement` and `improve`, schema versions defined in
+`references/task-granularity.md`) refine this mapping at the plan level; they do not replace
+the rules above, and the no-irrecoverable-blocker guard applies to every IN PROGRESS clause.
+
 ## AUTH_GATE protocol
 
 An auth gate report includes the attempted command, error, required human action, verify

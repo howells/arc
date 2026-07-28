@@ -59,8 +59,8 @@ Is the codebase organized for change?
 
 | Score | Criteria                                                                                                                                                                                                                                                  |
 | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0     | God files (authored source >1000 LOC, or any file >2000 LOC), god page-clients (thin page/layout passing through to one giant `"use client"` component), circular dependencies, barrel files, cross-workspace app imports, business logic tangled with UI |
-| 1     | Some structure but boundaries are leaky — mixed concerns, server/client boundary hacks (`*-wrapper`, `*-client`, client boundaries hoisted too high), files in the 600–1000 LOC band, deep coupling between modules                                       |
+| 0     | God files (authored source 1000+ LOC, or any file 2000+ LOC), god page-clients (thin page/layout passing through to one giant `"use client"` component), circular dependencies, barrel files, cross-workspace app imports, business logic tangled with UI |
+| 1     | Some structure but boundaries are leaky — mixed concerns, server/client boundary hacks (`*-wrapper`, `*-client`, client boundaries hoisted too high), files in the 600–999 LOC band, deep coupling between modules                                       |
 | 2     | Clear module boundaries and proper server/client split. Some areas of high coupling or unclear ownership remain                                                                                                                                           |
 | 3     | Clean separation of concerns, well-defined interfaces, dependency direction enforced. Adding features doesn't require touching unrelated code                                                                                                             |
 
@@ -72,7 +72,7 @@ Is the code readable, correct, and maintainable?
 | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 0     | No type safety or `any` throughout, no linting, dead code everywhere, inconsistent patterns                                                                                                |
 | 1     | Types exist but gaps — some `any`/casts, lint warnings, direct `process.env` reads with no typed env strategy, useless barrel files, runtime `import()`, inconsistent naming, dead exports |
-| 2     | Strong types, lint-clean, env via a typed strategy, no useless barrels, consistent patterns, minimal dead code. Some files in the 600–1000 LOC band                                        |
+| 2     | Strong types, lint-clean, env via a typed strategy, no useless barrels, consistent patterns, minimal dead code. Some files in the 600–999 LOC band                                        |
 | 3     | Strict types throughout, zero lint issues, no file over the 600 LOC ceiling, no barrel/dynamic-import smells, consistent patterns, no dead code, complexity under control                  |
 
 ### 5. Test Health
@@ -139,8 +139,8 @@ Can everyone use this?
    - Type errors without build failure -> Operations capped at 1
    - No test files found -> Test Health capped at 0
    - Test failures -> Test Health capped at 1
-   - Any authored source file > 2000 LOC -> Architecture capped at 1 (strong signal / presumptive blocker). A genuine reason can be argued in the writeup, but the default verdict is "split it"; this cap does not on its own force the overall rating down.
-   - God page-client (a thin `page.tsx`/`layout.tsx` passing through to a single `"use client"` component over 1000 LOC) -> Architecture capped at 1
+   - Any authored source file at 2000+ LOC -> Architecture capped at 1 (strong signal / presumptive blocker). A genuine reason can be argued in the writeup, but the default verdict is "split it"; this cap does not on its own force the overall rating down.
+   - God page-client (a thin `page.tsx`/`layout.tsx` passing through to a single `"use client"` component at 1000+ LOC) -> Architecture capped at 1
    - Pervasive code-policy violations (useless barrel files, direct `process.env` reads with no typed env strategy, excessive runtime `import()`) -> Code Quality capped at 2. Isolated cases are reported as findings without a cap.
    - Any app or package without a configured lint **and** typecheck pipeline -> Operations capped at 2 (every workspace must be checkable, not just the repo root).
 4. **Stage context is interpretation, not scoring.** A prototype scoring 10/21 is expected and healthy. A production app scoring 10/21 needs attention. The score is absolute; stage context goes in the written interpretation.
