@@ -6,24 +6,24 @@ import { mono, sans } from "@/lib/fonts";
 
 export const metadata: Metadata = {
   description:
-    "A software development workflow for Claude Code, Codex, and Cursor. Commands and agents that handle vision, ideation, implementation, testing, review, refactoring, audit, launch, and commit.",
+    "Arc is a deprecated software development workflow archive. For maintained, focused agent skills, use Howells Skills.",
   metadataBase: new URL("https://usearc.dev"),
   openGraph: {
     description:
-      "A software development workflow for Claude Code, Codex, and Cursor. Commands and agents that handle vision, ideation, implementation, testing, review, refactoring, audit, launch, and commit.",
+      "Arc is a deprecated software development workflow archive. For maintained, focused agent skills, use Howells Skills.",
     locale: "en_US",
     siteName: "Arc",
-    title: "Arc – The full arc from idea to shipped code",
+    title: "Arc – Deprecated workflow archive",
     type: "website",
     url: "https://usearc.dev",
   },
-  title: "Arc – The full arc from idea to shipped code",
+  title: "Arc – Deprecated workflow archive",
   twitter: {
     card: "summary_large_image",
     creator: "@howells",
     description:
-      "A software development workflow for Claude Code, Codex, and Cursor. Commands and agents that handle vision, ideation, implementation, testing, review, refactoring, audit, launch, and commit.",
-    title: "Arc – The full arc from idea to shipped code",
+      "Arc is a deprecated software development workflow archive. For maintained, focused agent skills, use Howells Skills.",
+    title: "Arc – Deprecated workflow archive",
   },
 };
 
@@ -34,6 +34,20 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       lang="en"
     >
       <body className="isolate break-words bg-neutral-100 text-neutral-950 antialiased">
+        <aside className="bg-neutral-950 px-5 py-3 text-center text-neutral-200 text-sm leading-relaxed">
+          <strong className="font-medium text-white">Arc is deprecated.</strong>{" "}
+          It remains available as an archive, but is no longer maintained. For
+          maintained, focused agent skills, use{" "}
+          <a
+            className="underline decoration-neutral-500 underline-offset-4 transition-colors hover:decoration-neutral-200"
+            href="https://github.com/howells/skills"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Howells Skills
+          </a>
+          .
+        </aside>
         {children}
       </body>
     </html>

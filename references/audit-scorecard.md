@@ -60,7 +60,7 @@ Is the codebase organized for change?
 | Score | Criteria                                                                                                                                                                                                                                                  |
 | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 0     | God files (authored source 1000+ LOC, or any file 2000+ LOC), god page-clients (thin page/layout passing through to one giant `"use client"` component), circular dependencies, barrel files, cross-workspace app imports, business logic tangled with UI |
-| 1     | Some structure but boundaries are leaky — mixed concerns, server/client boundary hacks (`*-wrapper`, `*-client`, client boundaries hoisted too high), files in the 600–999 LOC band, deep coupling between modules                                       |
+| 1     | Some structure but boundaries are leaky — mixed concerns, server/client boundary hacks (`*-wrapper`, `*-client`, client boundaries hoisted too high), files in the 600–999 LOC band, deep coupling between modules                                        |
 | 2     | Clear module boundaries and proper server/client split. Some areas of high coupling or unclear ownership remain                                                                                                                                           |
 | 3     | Clean separation of concerns, well-defined interfaces, dependency direction enforced. Adding features doesn't require touching unrelated code                                                                                                             |
 
@@ -72,7 +72,7 @@ Is the code readable, correct, and maintainable?
 | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 0     | No type safety or `any` throughout, no linting, dead code everywhere, inconsistent patterns                                                                                                |
 | 1     | Types exist but gaps — some `any`/casts, lint warnings, direct `process.env` reads with no typed env strategy, useless barrel files, runtime `import()`, inconsistent naming, dead exports |
-| 2     | Strong types, lint-clean, env via a typed strategy, no useless barrels, consistent patterns, minimal dead code. Some files in the 600–999 LOC band                                        |
+| 2     | Strong types, lint-clean, env via a typed strategy, no useless barrels, consistent patterns, minimal dead code. Some files in the 600–999 LOC band                                         |
 | 3     | Strict types throughout, zero lint issues, no file over the 600 LOC ceiling, no barrel/dynamic-import smells, consistent patterns, no dead code, complexity under control                  |
 
 ### 5. Test Health

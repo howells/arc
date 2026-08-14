@@ -59,13 +59,13 @@ Where native task tracking exists, check for an existing task for this audit and
 <required_reading>
 Load each at the phase that needs it, not up front:
 
-| Phase | Load |
-| ----- | ---- |
-| 1 — detect | `references/audit-detection.md`, `references/audit-signals.md` |
-| 3 — dispatch | `references/audit-reviewer-rules.md`, `references/audit-reviewer-prompts.md`, `disciplines/dispatching-parallel-agents.md`, `references/maintainability-review.md` |
-| 3 and 4 — score and calibrate | `references/audit-scorecard.md`, `references/audit-stage-calibration.md` |
-| 4 — vet | `references/finding-vetting.md` |
-| 5 — report | `templates/audit-report.md` |
+| Phase                         | Load                                                                                                                                                               |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1 — detect                    | `references/audit-detection.md`, `references/audit-signals.md`                                                                                                     |
+| 3 — dispatch                  | `references/audit-reviewer-rules.md`, `references/audit-reviewer-prompts.md`, `disciplines/dispatching-parallel-agents.md`, `references/maintainability-review.md` |
+| 3 and 4 — score and calibrate | `references/audit-scorecard.md`, `references/audit-stage-calibration.md`                                                                                           |
+| 4 — vet                       | `references/finding-vetting.md`                                                                                                                                    |
+| 5 — report                    | `templates/audit-report.md`                                                                                                                                        |
 
 Load when relevant:
 

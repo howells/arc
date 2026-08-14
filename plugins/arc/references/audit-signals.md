@@ -108,13 +108,13 @@ with one job is fine, and a 300-line file doing four things is not.
 Bands are non-overlapping and a boundary count belongs to the higher band — a 1000-line file
 is Severe. Thresholds are inclusive everywhere these numbers appear: 600+, 1000+, 2000+.
 
-| Band | How hard to look |
-| ---- | ---------------- |
-| ≤ 300 LOC | Normal. No attention needed on size alone. |
-| 301–599 LOC | Hotspot. Confirm one coherent responsibility. |
-| 600–999 LOC | Presumptive god file. Read it; expect to justify keeping it whole. |
-| 1000–1999 LOC | Severe. Near-certain god file — say so unless the code refutes it. |
-| 2000+ LOC | Strongest signal available. Default finding is "split this"; argue the exception in the writeup if the file earns it. |
+| Band          | How hard to look                                                                                                      |
+| ------------- | --------------------------------------------------------------------------------------------------------------------- |
+| ≤ 300 LOC     | Normal. No attention needed on size alone.                                                                            |
+| 301–599 LOC   | Hotspot. Confirm one coherent responsibility.                                                                         |
+| 600–999 LOC   | Presumptive god file. Read it; expect to justify keeping it whole.                                                    |
+| 1000–1999 LOC | Severe. Near-certain god file — say so unless the code refutes it.                                                    |
+| 2000+ LOC     | Strongest signal available. Default finding is "split this"; argue the exception in the writeup if the file earns it. |
 
 Standing exemptions at every band: generated, vendored, data-only, or a structure the codebase
 demonstrably needs.
@@ -236,4 +236,3 @@ python3 scripts/codebase-map.py ${scope:-.} --format markdown
 If it succeeds, store the output as the **codebase map manifest**. If it fails or the script is unavailable in a prompt-only install, record `Codebase map: unavailable` and continue with the existing detection passes.
 
 Treat the map as orientation, not evidence by itself. Reviewers must still inspect files before reporting findings.
-

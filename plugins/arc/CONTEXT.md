@@ -1,5 +1,7 @@
 # Arc Context
 
+> **Deprecated:** Arc is preserved as an archive and remains available, but it is no longer maintained. Maintained, focused agent skills live in [Howells Skills](https://github.com/howells/skills).
+
 This is the canonical source for Arc's product definition, domain language, and operating boundary. README, agent instructions, website copy, and individual skills may summarize Arc, but they should not introduce competing definitions.
 
 Arc is a self-contained software development lifecycle for coding agents. It helps move work from idea to shipped code through explicit workflows for vision, ideation, implementation, review, testing, launch readiness, commit hygiene, and versioned package releases when a change includes a publishable package.

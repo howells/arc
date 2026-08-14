@@ -59,14 +59,12 @@ Focus on: N+1 queries, missing indexes, memory leaks, bundle size, render perfor
 
 ```
 
-
 ---
 
 ## What Every Reviewer Prompt Carries
 
 Context to pass at dispatch, and the per-reviewer emphasis that makes each manifest
 actionable in that reviewer's domain.
-
 
 **Include project stage in every reviewer prompt.**
 

@@ -64,14 +64,14 @@ Load when relevant:
 
 <available_agents>
 
-| Agent                                                            | Default use                                                                |
-| ---------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `agents/build/implementer.md`                                    | Own a coherent implementation slice end-to-end.                            |
-| `unit-test-writer`, `integration-test-writer`, `e2e-test-writer` | **Conditional** complex harness, fixture, browser/E2E, or test-suite work. |
-| `debugger`, `fixer`                                              | An observed failing test, typecheck, or lint result.                       |
-| `test-runner`, `e2e-runner`                                      | Verbose or iterative focused execution when useful.                        |
-| `agents/build/spec-reviewer.md`                                  | Sonnet whole-implementation spec/completion axis.                          |
-| `agents/build/code-reviewer.md`                                  | Sonnet whole-implementation standards/evidence axis.                       |
+| Agent                                                                                                                                                                                                                                            | Default use                                                                     |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------- |
+| `agents/build/implementer.md`                                                                                                                                                                                                                    | Own a coherent implementation slice end-to-end.                                 |
+| `unit-test-writer`, `integration-test-writer`, `e2e-test-writer`                                                                                                                                                                                 | **Conditional** complex harness, fixture, browser/E2E, or test-suite work.      |
+| `debugger`, `fixer`                                                                                                                                                                                                                              | An observed failing test, typecheck, or lint result.                            |
+| `test-runner`, `e2e-runner`                                                                                                                                                                                                                      | Verbose or iterative focused execution when useful.                             |
+| `agents/build/spec-reviewer.md`                                                                                                                                                                                                                  | Sonnet whole-implementation spec/completion axis.                               |
+| `agents/build/code-reviewer.md`                                                                                                                                                                                                                  | Sonnet whole-implementation standards/evidence axis.                            |
 | `agents/review/security-engineer.md`, `agents/review/data-engineer.md`, `agents/review/performance-engineer.md`, `agents/review/mastra-agent-engineer.md`, `agents/review/daniel-product-engineer.md`, `agents/review/accessibility-engineer.md` | **Conditional** Guarded specialists, matched to the risk that raised assurance. |
 
 All build agents live in `agents/build/`; specialists in `agents/review/`. Read an agent file before dispatching it. Never run multiple mutating owners in parallel when

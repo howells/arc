@@ -28,17 +28,17 @@ find . -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx"
 
 Infer the project stage from heuristic signals:
 
-| Signal                                                                             | Tool                                 | Indicates       |
-| ---------------------------------------------------------------------------------- | ------------------------------------ | --------------- |
-| CI/CD config (`.github/workflows/*`, `Jenkinsfile`, `.gitlab-ci.yml`)              | Glob                                 | pre-launch+     |
-| Deployment config (`vercel.json`, `Dockerfile`, `fly.toml`, `render.yaml`, `k8s/`) | Glob                                 | pre-launch+     |
-| Monitoring/observability (`sentry`, `datadog`, `newrelic` in deps)                 | Grep in package.json                 | production      |
-| Production env references (`.env.production`, `NODE_ENV` guards)                   | Glob + Grep                          | pre-launch+     |
-| Test coverage > 0 (test files exist)                                               | Glob (`**/*.test.*`, `**/*.spec.*`)  | development+    |
-| Git history depth                                                                  | `git rev-list --count HEAD`          | maturity signal |
+| Signal                                                                             | Tool                                 | Indicates                                                                     |
+| ---------------------------------------------------------------------------------- | ------------------------------------ | ----------------------------------------------------------------------------- |
+| CI/CD config (`.github/workflows/*`, `Jenkinsfile`, `.gitlab-ci.yml`)              | Glob                                 | pre-launch+                                                                   |
+| Deployment config (`vercel.json`, `Dockerfile`, `fly.toml`, `render.yaml`, `k8s/`) | Glob                                 | pre-launch+                                                                   |
+| Monitoring/observability (`sentry`, `datadog`, `newrelic` in deps)                 | Grep in package.json                 | production                                                                    |
+| Production env references (`.env.production`, `NODE_ENV` guards)                   | Glob + Grep                          | pre-launch+                                                                   |
+| Test coverage > 0 (test files exist)                                               | Glob (`**/*.test.*`, `**/*.spec.*`)  | development+                                                                  |
+| Git history depth                                                                  | `git rev-list --count HEAD`          | maturity signal                                                               |
 | Not a git repository (command errors)                                              | `git rev-parse --git-dir`            | treat as unknown, not as shallow history — do not count it toward `prototype` |
-| Custom domain / production URL in config                                           | Grep                                 | production      |
-| Rate limiting, caching, or queue deps in package.json                              | Grep (`rate-limit`, `redis`, `bull`) | production      |
+| Custom domain / production URL in config                                           | Grep                                 | production                                                                    |
+| Rate limiting, caching, or queue deps in package.json                              | Grep (`rate-limit`, `redis`, `bull`) | production                                                                    |
 
 **Stage classification:**
 

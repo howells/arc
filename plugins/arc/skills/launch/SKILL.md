@@ -234,14 +234,14 @@ Use this shape:
 ```markdown
 ## Launch Scorecard
 
-| Axis              |  Score   | Evidence                                                         |
-| ----------------- | :------: | ---------------------------------------------------------------- |
-| Public URL        |   X/3    | [verified URL/DNS/HTTPS/access-gate evidence or gap]             |
-| Shareability      |   X/3    | [metadata, OG image, favicon, canonical, robots evidence or gap] |
-| Content Readiness |   X/3    | [placeholder/CTA/contact/error-state evidence or gap]            |
-| Detected Services |   X/3    | [auth/payment/email/db/analytics public-setting evidence or gap] |
-| Deeper Checks     |   X/3    | [`/arc:testing` and `/arc:audit` status or deferral]             |
-| **Total**         | **X/15** | **Ready / Ready, with operations caveats / Shareable with caveats / Blocked**                     |
+| Axis              |  Score   | Evidence                                                                      |
+| ----------------- | :------: | ----------------------------------------------------------------------------- |
+| Public URL        |   X/3    | [verified URL/DNS/HTTPS/access-gate evidence or gap]                          |
+| Shareability      |   X/3    | [metadata, OG image, favicon, canonical, robots evidence or gap]              |
+| Content Readiness |   X/3    | [placeholder/CTA/contact/error-state evidence or gap]                         |
+| Detected Services |   X/3    | [auth/payment/email/db/analytics public-setting evidence or gap]              |
+| Deeper Checks     |   X/3    | [`/arc:testing` and `/arc:audit` status or deferral]                          |
+| **Total**         | **X/15** | **Ready / Ready, with operations caveats / Shareable with caveats / Blocked** |
 ```
 
 ## Output
