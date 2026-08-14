@@ -98,7 +98,7 @@ If user says "I'm not sure, but I think we need it":
 - Present reviewer feedback as mandates
 - Use "should" or "must" for simplification suggestions
 - Make the user defend their choices
-- Batch all feedback at the end of a *conversational* design review (present as you go). A
+- Batch all feedback at the end of a _conversational_ design review (present as you go). A
   consolidated panel review — independent reviewers, then one merged pass — is a different
   shape and legitimately presents after collection.
 - Assume reviewers are right and user is wrong

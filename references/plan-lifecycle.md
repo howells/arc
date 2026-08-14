@@ -26,12 +26,12 @@ dependency notes.
 A required section once anything has been rejected. It is what stops a dismissed finding
 resurfacing every time a new report is read, so it must survive as long as the index does.
 
-| Column   | Content                                                     |
-| -------- | ----------------------------------------------------------- |
+| Column   | Content                                                       |
+| -------- | ------------------------------------------------------------- |
 | Finding  | One-line description, enough to recognise a restatement of it |
-| Evidence | `file:line` as originally cited                              |
-| Reason   | Why it was rejected — by design, already fixed, not worth it |
-| Date     | When the verdict was recorded                                |
+| Evidence | `file:line` as originally cited                               |
+| Reason   | Why it was rejected — by design, already fixed, not worth it  |
+| Date     | When the verdict was recorded                                 |
 
 Match new findings against this ledger before planning them. A finding that reappears with
 materially new evidence may be reopened; note that in the Reason column rather than deleting the row.

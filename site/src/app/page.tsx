@@ -17,8 +17,8 @@ import { PageContent } from "./page-content";
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
   description:
-    "A software development workflow for Claude Code, Codex, and Cursor. Commands and agents that handle vision, ideation, implementation, testing, review, refactoring, audit, launch, and commit.",
-  title: "Arc – The full arc from idea to shipped code",
+    "Arc is a deprecated software development workflow archive. For maintained, focused agent skills, use Howells Skills.",
+  title: "Arc – Deprecated workflow archive",
 };
 
 function TopNav({ version }: { version: string | null }) {

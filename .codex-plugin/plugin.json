@@ -1,7 +1,7 @@
 {
   "name": "arc",
-  "version": "2.11.3",
-  "description": "The full arc from idea to shipped code. Lifecycle workflows for vision, ideation, implementation, review, testing, audit, launch, and commits.",
+  "version": "2.11.4",
+  "description": "Deprecated and no longer maintained. Arc remains available as an archive; use github.com/howells/skills for focused agent skills.",
   "author": {
     "name": "Daniel Howells",
     "url": "https://github.com/howells"
@@ -25,19 +25,14 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Arc",
-    "shortDescription": "Software development lifecycle workflows",
-    "longDescription": "Arc packages a self-contained software development lifecycle for coding agents, from vision and ideation through implementation, testing, review, audit, launch readiness, and commit hygiene.",
+    "shortDescription": "Deprecated lifecycle workflow archive",
+    "longDescription": "Arc is deprecated and no longer maintained. It remains available as an archive for existing users. For maintained, focused agent skills, use https://github.com/howells/skills.",
     "developerName": "Daniel Howells",
     "category": "Productivity",
     "capabilities": [
       "Interactive",
       "Write"
     ],
-    "websiteURL": "https://usearc.dev",
-    "defaultPrompt": [
-      "Use Arc to turn this idea into shipped code.",
-      "Use Arc to audit this codebase.",
-      "Use Arc to prepare this project for launch."
-    ]
+    "websiteURL": "https://usearc.dev"
   }
 }

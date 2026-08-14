@@ -69,7 +69,7 @@ Use during consolidation to sanity-check reviewer findings:
 | Missing tests                       | Drop      | Low         | Medium     | High       |
 | Credential exposure                 | Critical  | Critical    | Critical   | Critical   |
 | SQL injection / XSS                 | Critical  | Critical    | Critical   | Critical   |
-| Architecture concerns               | Drop*     | Low         | Medium     | High       |
+| Architecture concerns               | Drop\*    | Low         | Medium     | High       |
 | Performance optimization            | Drop      | Low         | Medium     | High       |
 | Accessibility gaps                  | Drop      | Low         | Medium     | High       |
 

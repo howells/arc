@@ -9,6 +9,8 @@ export function GET() {
   const lines = [
     "# Arc",
     "",
+    "> DEPRECATED: Arc is preserved as an archive and remains available, but it is no longer maintained. Use https://github.com/howells/skills for maintained, focused agent skills.",
+    "",
     `> The full arc from idea to shipped code. For Claude Code, Codex, and Cursor, with ${skills.length} skills, ${agents.length} agents, and ${rules.length} rules.${version !== null && version !== "" ? ` v${version}.` : ""}`,
     "",
     "## Skills",

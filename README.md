@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> **Arc is deprecated and no longer maintained.** It remains available as an archive, but I won't be updating it. For maintained, focused agent skills, use [Howells Skills](https://github.com/howells/skills).
+
 <p align="center">
   <img alt="Arc" src="./assets/logo-light.svg#gh-light-mode-only" width="48" height="48">
   <img alt="Arc" src="./assets/logo-dark.svg#gh-dark-mode-only" width="48" height="48">

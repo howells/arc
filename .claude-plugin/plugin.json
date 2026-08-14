@@ -1,7 +1,7 @@
 {
   "name": "arc",
-  "version": "2.11.3",
-  "description": "The full arc from idea to shipped code. Lifecycle workflows for vision, ideation, implementation, review, testing, audit, launch, and commits.",
+  "version": "2.11.4",
+  "description": "Deprecated and no longer maintained. Arc remains available as an archive; use github.com/howells/skills for focused agent skills.",
   "skills": "./skills/",
   "commands": "./commands/",
   "author": {
